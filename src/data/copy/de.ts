@@ -50,9 +50,6 @@ export const ui: UiCopy = {
   printTitle: "Lebenslauf",
   printHint: "Im Druckdialog als PDF speichern.",
   caseStudy: "Fallstudie",
-  problem: "Problem",
-  approach: "Vorgehen",
-  result: "Ergebnis",
   atticTitle: "Mehr",
   hits: [
     "Mehr als sieben Jahre",

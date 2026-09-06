@@ -1,8 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { careerBreak, contact, copy, education, experience, languages } from "@/data/copy";
-import { CASE_STUDIES } from "@/data/caseStudies";
+import { caseStudyBySlug, listCaseStudySlugs } from "@/data/caseStudies";
 import { featured, lab } from "@/data/projects";
+import { LOCALES } from "@/lib/locale";
 import { BANNED_PUBLIC_PATTERNS, DEV_EMAIL, SITE_HOST, SITE_REPO, SITE_URL } from "@/lib/site";
+
+// Case-study prose itself lives in content/**/*.mdx, outside any TS import —
+// scripts/check-privacy.mjs greps that directory directly. This corpus still
+// carries every case study's frontmatter (project/stack/live/repo/description)
+// for every locale, for defense in depth.
+const caseStudyFrontmatter = listCaseStudySlugs().flatMap((slug) =>
+  LOCALES.map((locale) => caseStudyBySlug(slug, locale)),
+);
 
 function corpus(): string {
   return JSON.stringify({
@@ -14,7 +23,7 @@ function corpus(): string {
     languages,
     featured,
     lab,
-    CASE_STUDIES,
+    caseStudyFrontmatter,
     SITE_HOST,
     SITE_URL,
     SITE_REPO,

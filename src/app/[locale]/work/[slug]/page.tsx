@@ -3,15 +3,19 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BrandMark } from "@/components/BrandMark";
 import { WordAtlas } from "@/components/WordAtlas";
-import { CASE_STUDIES, caseStudyBySlug } from "@/data/caseStudies";
+import { caseStudyBySlug, listCaseStudySlugs } from "@/data/caseStudies";
 import { copy } from "@/data/copy";
 import { ATLAS_COPY } from "@/data/wordAtlas";
 import { isLocale, languageAlternates, LOCALES, localeUrl, withLocale } from "@/lib/locale";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
-  return LOCALES.flatMap((locale) => CASE_STUDIES.map((study) => ({ locale, slug: study.slug })));
+  return LOCALES.flatMap((locale) => listCaseStudySlugs().map((slug) => ({ locale, slug })));
 }
+
+// Every case study is enumerated above; a slug outside that set 404s instead
+// of falling through to on-demand rendering, which would undo static export.
+export const dynamicParams = false;
 
 export async function generateMetadata({
   params,
@@ -20,11 +24,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, slug } = await params;
   if (!isLocale(locale)) notFound();
-  const study = caseStudyBySlug(slug);
+  const study = caseStudyBySlug(slug, locale);
   if (!study) notFound();
   return {
     title: `${study.project} — ${copy[locale].caseStudy} — ${SITE_NAME}`,
-    description: study.result[locale],
+    description: study.description,
     alternates: {
       canonical: localeUrl(locale, `/work/${slug}`, SITE_URL),
       languages: languageAlternates(`/work/${slug}`, SITE_URL),
@@ -39,9 +43,13 @@ export default async function CaseStudyPage({
 }) {
   const { locale, slug } = await params;
   if (!isLocale(locale)) notFound();
-  const study = caseStudyBySlug(slug);
+  const study = caseStudyBySlug(slug, locale);
   if (!study) notFound();
   const t = copy[locale];
+  // The prose body is compiled MDX; the slug is one of the fixed set
+  // `generateStaticParams` just enumerated from the same content directory,
+  // never request-controlled, so this dynamic specifier is safe.
+  const { default: Content } = await import(`@content/work/${slug}/${locale}.mdx`);
 
   return (
     <div className="wrap">
@@ -62,18 +70,9 @@ export default async function CaseStudyPage({
             </span>
           ))}
         </div>
-        <section>
-          <h2>{t.problem}</h2>
-          <p className="lede">{study.problem[locale]}</p>
-        </section>
-        <section>
-          <h2>{t.approach}</h2>
-          <p className="lede">{study.approach[locale]}</p>
-        </section>
-        <section>
-          <h2>{t.result}</h2>
-          <p className="lede">{study.result[locale]}</p>
-        </section>
+        <div className="case-body">
+          <Content />
+        </div>
         <div className="links">
           {study.live ? (
             <a href={study.live} target="_blank" rel="noopener noreferrer">

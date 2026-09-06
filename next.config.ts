@@ -1,3 +1,4 @@
+import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
 import { CONTENT_SECURITY_POLICY_DEV, SECURITY_HEADERS } from "./src/lib/securityHeaders";
 
@@ -33,4 +34,18 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Case study prose lives in content/work/<slug>/<locale>.mdx, loaded via a
+// dynamic `import()` in work/[slug]/page.tsx (never as a routed page.mdx), so
+// `pageExtensions` doesn't need to grow — this only registers the bundler
+// loader for `.mdx` imports. Frontmatter is a leading `---` YAML block:
+// remark-frontmatter parses it, remark-mdx-frontmatter turns it into the
+// compiled module's `frontmatter` export and strips it from the rendered
+// body. Plugins are passed by string name (not imported function references)
+// because Turbopack can't cross a JS function into its Rust compiler.
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: ["remark-frontmatter", "remark-mdx-frontmatter", "remark-gfm"],
+  },
+});
+
+export default withMDX(nextConfig);
