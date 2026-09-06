@@ -50,9 +50,6 @@ export const ui: UiCopy = {
   printTitle: "Currículum",
   printHint: "Fes servir el diàleg d'impressió per desar un PDF.",
   caseStudy: "Estudi de cas",
-  problem: "Problema",
-  approach: "Enfocament",
-  result: "Resultat",
   atticTitle: "Més",
   hits: [
     "Més de set anys",

@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import sitemap from "@/app/sitemap";
-import { CASE_STUDIES } from "@/data/caseStudies";
+import { listCaseStudySlugs } from "@/data/caseStudies";
 import { LOCALES } from "@/lib/locale";
 import { RELEASE_DATE, SITE_URL } from "@/lib/site";
+
+const slugs = listCaseStudySlugs();
 
 describe("sitemap", () => {
   it("stamps a stable lastModified from RELEASE_DATE, not the request time", () => {
@@ -18,7 +20,7 @@ describe("sitemap", () => {
 
   it("covers the home page and every case study in every locale", () => {
     const entries = sitemap();
-    const pages = 1 + CASE_STUDIES.length;
+    const pages = 1 + slugs.length;
     expect(entries).toHaveLength(LOCALES.length * pages);
 
     for (const locale of LOCALES) {
@@ -26,8 +28,8 @@ describe("sitemap", () => {
       const homeEntry = entries.find((entry) => entry.url === home);
       expect(homeEntry, `home for ${locale}`).toBeDefined();
       expect(homeEntry?.priority).toBe(1);
-      for (const study of CASE_STUDIES) {
-        const path = locale === "en" ? `/work/${study.slug}` : `/${locale}/work/${study.slug}`;
+      for (const slug of slugs) {
+        const path = locale === "en" ? `/work/${slug}` : `/${locale}/work/${slug}`;
         expect(entries.some((entry) => entry.url === `${SITE_URL}${path}`)).toBe(true);
       }
     }
@@ -41,7 +43,7 @@ describe("sitemap", () => {
     expect(langs["x-default"]).toBe(SITE_URL);
     expect(langs.de).toBe(`${SITE_URL}/de`);
 
-    const study = entries.find((e) => e.url === `${SITE_URL}/de/work/${CASE_STUDIES[0].slug}`)!;
-    expect(study.alternates?.languages?.es).toBe(`${SITE_URL}/es/work/${CASE_STUDIES[0].slug}`);
+    const study = entries.find((e) => e.url === `${SITE_URL}/de/work/${slugs[0]}`)!;
+    expect(study.alternates?.languages?.es).toBe(`${SITE_URL}/es/work/${slugs[0]}`);
   });
 });

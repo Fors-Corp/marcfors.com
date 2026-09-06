@@ -848,6 +848,64 @@ footer {
   margin: 28px 0;
 }
 
+/* ---- Case-study MDX prose ---- */
+.case-body h2 {
+  margin: 28px 0 8px;
+}
+.case-body h2:first-child {
+  margin-top: 0;
+}
+.case-body p {
+  margin: 0;
+}
+.case-body ul,
+.case-body ol {
+  max-width: 58ch;
+  margin: 0;
+  padding-left: 1.3em;
+  color: var(--paper);
+  font-size: 17px;
+  line-height: 1.7;
+}
+.case-body li + li {
+  margin-top: 6px;
+}
+.case-body a {
+  color: var(--signal);
+  text-underline-offset: 3px;
+}
+.case-body a:hover {
+  color: var(--brass);
+}
+.case-body code {
+  padding: 0.15em 0.4em;
+  border-radius: var(--r-2xs);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  font-family: var(--mono);
+  font-size: 0.88em;
+}
+.case-body pre {
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  overflow-x: auto;
+}
+.case-body pre code {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.case-body blockquote {
+  margin: 0;
+  padding: 4px 16px;
+  border-left: 3px solid var(--brass);
+  color: var(--paper-dim);
+  font-style: italic;
+}
+
 /* ---- Wordkeep Atlas embed ---- */
 .atlas-block {
   margin: 44px 0 8px;

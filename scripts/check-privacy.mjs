@@ -4,6 +4,7 @@ import { execFileSync } from "node:child_process";
 const patterns = ["@gmail.com", "marcfors.me"];
 const paths = [
   "src",
+  "content",
   "README.md",
   "CHANGELOG.md",
   "package.json",

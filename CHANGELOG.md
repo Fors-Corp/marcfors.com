@@ -2,6 +2,53 @@
 
 All notable changes to this project are versioned with [SemVer](https://semver.org/).
 
+## 0.12.0 — 2026-09-06
+
+### MDX case studies
+
+- Case-study prose moves from hand-written TS objects into MDX:
+  `content/work/<slug>/<locale>.mdx`, one self-contained file per locale —
+  YAML frontmatter (`project`, `stack`, `live`, `repo`, `order`, `description`)
+  plus a free-form prose body. `problem`/`approach`/`result` are no longer
+  fixed fields; they're just headings a study writes for itself; the
+  `wordkeep`/`habit-breaker`/`iterm-studio` studies migrated verbatim,
+  including their headings translated into all six locales.
+- `@next/mdx` (+ `remark-frontmatter`, `remark-mdx-frontmatter`, `remark-gfm`,
+  all as Turbopack-compatible string plugin refs) compiles MDX at build time —
+  confirmed on the production build: every locale of every case study still
+  prerenders (`x-nextjs-prerender: 1`), and the strict CSP still ships with no
+  `unsafe-eval`. `src/mdx-components.tsx` themes the compiled output to the
+  desk (paragraphs get the existing `.lede` treatment; headings need no
+  override, `h2` was already styled); new `.case-body` rules in `globals.css`
+  cover lists, links, code and blockquotes for any study that wants them.
+- `src/data/caseStudies.ts` is now a thin index over the content directory:
+  `listCaseStudySlugs()` enumerates it (`generateStaticParams` no longer holds
+  a hardcoded list) and `caseStudyBySlug()` reads a locale's frontmatter via
+  `gray-matter` — no MDX compilation needed just to list or link a study.
+  `work/[slug]/page.tsx` dynamically `import()`s the matching `.mdx` file for
+  the body; `dynamicParams = false` keeps an unknown slug a real 404 rather
+  than falling through to on-demand rendering.
+- Adding a study is now "add a directory": six `.mdx` files, nothing else to
+  wire up. `caseStudies.test.ts` fails if a locale's frontmatter drifts from
+  English (project/stack/live/repo/order must match; only `description` and
+  the body should differ) or if a locale's body is left identical to English.
+  `scripts/check-privacy.mjs` now also scans `content/`.
+- The three `problem`/`approach`/`result` `UiCopy` keys are gone — the page no
+  longer needs them now that MDX supplies its own headings; caught by
+  `copyUsage.test.ts` (added in v0.11.1) before it could ship as dead copy.
+- `@next/mdx`, `@mdx-js/loader`, and the three remark plugins are
+  devDependencies (build-time compiler tooling, never bundled); `@mdx-js/react`
+  and `gray-matter` are production dependencies (imported by runtime app code).
+  `remark-mdx-frontmatter` pulls in a `toml` package with an open, unfixed high
+  severity advisory (prototype pollution / uncontrolled recursion) — it's a
+  build-time-only transitive dependency exercised only for TOML frontmatter,
+  which this repo never uses (YAML only), and `npm run audit` already scopes
+  to `--omit=dev` for exactly this class of tooling dependency.
+- Verified: `npm run ci` and `npm run test:e2e` green; `npx @lhci/cli autorun`
+  budgets (performance/a11y/SEO/CLS/LCP/TBT) hold on both `/` and a case-study
+  page; browser-checked frontmatter never leaks into the rendered body, and
+  the Wordkeep Atlas embed still works.
+
 ## 0.11.1 — 2026-09-06
 
 ### Fixed

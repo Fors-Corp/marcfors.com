@@ -47,9 +47,6 @@ export type UiCopy = {
   printTitle: string;
   printHint: string;
   caseStudy: string;
-  problem: string;
-  approach: string;
-  result: string;
   atticTitle: string;
   hits: readonly string[];
   vitalGood: string;
