@@ -2,6 +2,33 @@
 
 All notable changes to this project are versioned with [SemVer](https://semver.org/).
 
+## 0.12.1 — 2026-09-08
+
+### Vitest 5
+
+- `vitest` and `@vitest/coverage-v8` 3.2.7 → 5.0.0 (Dependabot #24/#25). Root
+  cause of the coverage regression Dependabot's bump kept tripping (held at
+  the v4 line too, in #3/#13): `@vitest/coverage-v8`'s v8-to-istanbul
+  remapping got substantially more granular between v3 and v4/5 — confirmed
+  by diffing raw `coverage-final.json` branch/function/statement counts
+  file-by-file across both versions, not just the aggregate percentages.
+  Most files shifted a little in either direction and roughly cancelled out;
+  `WordAtlas.tsx` alone didn't — its branch-point count went from 6 to 91 for
+  the same source, because the newer tooling now separately instruments
+  closures inside `useEffect` that the old remapping counted far more
+  coarsely. That's the exact code this project's own `vitest.config.ts`
+  comment already flagged as real-canvas-only and meant to be verified by
+  Playwright, not vitest — so it moves from "sits a little below the other
+  metrics" to an explicit `coverage.exclude` entry, with the reasoning kept
+  in the config comment. Coverage thresholds are recalibrated against the
+  real (more accurate) v5 baseline: lines 75, statements 80, functions 78,
+  branches 76 — all with real margin, not shipped at the edge.
+- `vitest.config.ts`: `__dirname` → `import.meta.dirname` (vitest 5's native
+  config loader deprecation warning).
+- Verified: `npm run ci` and `npm run test:e2e` green; the Wordkeep Atlas's
+  actual click/drag/touch behavior is still covered — by the e2e suite, which
+  is what was already exercising it.
+
 ## 0.12.0 — 2026-09-06
 
 ### MDX case studies
