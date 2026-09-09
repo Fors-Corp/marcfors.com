@@ -29,11 +29,15 @@ describe("security headers", () => {
     expect(CONTENT_SECURITY_POLICY).not.toMatch(/google-analytics|googletagmanager|facebook/i);
   });
 
-  it("only loosens script-src with 'unsafe-eval' in the dev-only CSP variant", () => {
-    // The dev variant exists so `next dev`'s eval-based stack reconstruction
-    // doesn't trip the policy; it must never reach a production build.
-    expect(CONTENT_SECURITY_POLICY_DEV).toContain("script-src 'self' 'unsafe-inline' 'unsafe-eval'");
-    const strippedDev = CONTENT_SECURITY_POLICY_DEV.replace(" 'unsafe-eval'", "");
+  it("only loosens script-src for eval and the analytics debug script in the dev-only CSP variant", () => {
+    // The dev variant exists so `next dev`'s eval-based stack reconstruction and
+    // @vercel/analytics's debug build (only used off a real Vercel deployment,
+    // where it instead loads from the same-origin `/_vercel/insights/script.js`)
+    // don't trip the policy; neither addition must ever reach a production build.
+    expect(CONTENT_SECURITY_POLICY_DEV).toContain(
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com",
+    );
+    const strippedDev = CONTENT_SECURITY_POLICY_DEV.replace(" 'unsafe-eval' https://va.vercel-scripts.com", "");
     expect(strippedDev).toBe(CONTENT_SECURITY_POLICY);
   });
 });

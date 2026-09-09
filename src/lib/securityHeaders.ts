@@ -15,11 +15,15 @@ const CSP_DIRECTIVES = [
 export const CONTENT_SECURITY_POLICY = CSP_DIRECTIVES.join("; ");
 
 // `next dev` only: React 19 / Next 16 in development call eval() for debugging
-// features (reconstructing call stacks across environments). Production builds
-// never do, so the shipped policy above stays strict — this relaxed variant is
-// wired up in next.config.ts solely when NODE_ENV !== "production".
+// features (reconstructing call stacks across environments), and @vercel/analytics
+// loads its debug build from va.vercel-scripts.com instead of the same-origin
+// `/_vercel/insights/script.js` path a real Vercel deployment proxies it through.
+// Production builds hit neither case, so the shipped policy above stays strict —
+// this relaxed variant is wired up in next.config.ts solely when NODE_ENV !== "production".
 export const CONTENT_SECURITY_POLICY_DEV = CSP_DIRECTIVES.map((directive) =>
-  directive.startsWith("script-src ") ? `${directive} 'unsafe-eval'` : directive,
+  directive.startsWith("script-src ")
+    ? `${directive} 'unsafe-eval' https://va.vercel-scripts.com`
+    : directive,
 ).join("; ");
 
 export const SECURITY_HEADERS: { key: string; value: string }[] = [

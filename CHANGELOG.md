@@ -2,6 +2,26 @@
 
 All notable changes to this project are versioned with [SemVer](https://semver.org/).
 
+## 0.13.0 — 2026-09-09
+
+### Vercel Web Analytics
+
+- Added `@vercel/analytics` (zero transitive dependencies) and mounted
+  `<Analytics />` in `app/[locale]/layout.tsx`, next to the existing
+  `ANTI_FLASH_SCRIPT`/JSON-LD tags. In production it only ever talks to the
+  same-origin `/_vercel/insights/*` paths Vercel's edge proxies, so the
+  strict production CSP (`src/lib/securityHeaders.ts`) is untouched — no
+  third-party origin is allowed there. `next dev` is the one case that
+  differs: outside a real Vercel deployment the package falls back to loading
+  its debug build from `va.vercel-scripts.com`, so that host is allowlisted
+  only in the existing dev-only CSP variant, alongside the pre-existing
+  `unsafe-eval` allowance for React's dev stack reconstruction.
+- This is Vercel's own first-party analytics (enabled per-project on Vercel,
+  not a third-party pixel), so it doesn't conflict with the existing
+  first-party `/api/vitals` reporting or the no-third-party-trackers rule.
+- Verified: `npm run ci` green; manually checked in the dev preview that the
+  CSP no longer blocks the analytics script and no console errors remain.
+
 ## 0.12.1 — 2026-09-08
 
 ### Vitest 5

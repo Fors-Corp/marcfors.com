@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import { Fraunces, IBM_Plex_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { isLocale, languageAlternates, LOCALES, localeUrl, OG_LOCALES, type Locale } from "@/lib/locale";
 import { DEV_EMAIL, GITHUB_URL, LINKEDIN_URL, SITE_NAME, SITE_URL } from "@/lib/site";
 import { ANTI_FLASH_SCRIPT } from "@/lib/theme";
@@ -115,6 +116,7 @@ export default async function LocaleLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd(locale)) }}
         />
         {children}
+        <Analytics />
       </body>
     </html>
   );
