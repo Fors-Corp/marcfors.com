@@ -38,6 +38,12 @@ describe("static rendering invariants", () => {
     expect(localeLayout).toContain("generateStaticParams");
   });
 
+  it("wires up first-party Vercel Web Analytics from the [locale] layout", () => {
+    const localeLayout = read("app/[locale]/layout.tsx");
+    expect(localeLayout).toContain('from "@vercel/analytics/next"');
+    expect(localeLayout).toMatch(/<Analytics\s*\/>/);
+  });
+
   it("exports an adaptive theme-color viewport", () => {
     const localeLayout = read("app/[locale]/layout.tsx");
     expect(localeLayout).toMatch(/export const viewport: Viewport/);
