@@ -53,5 +53,8 @@
     "typescript": "^5",
     "vitest": "^5.0.0",
     "vitest-axe": "^0.1.0"
+  },
+  "overrides": {
+    "toml": "^5.0.0"
   }
 }
