@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { linkLabel } from "@/lib/labels";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BrandMark } from "@/components/BrandMark";
@@ -75,12 +76,22 @@ export default async function CaseStudyPage({
         </div>
         <div className="links">
           {study.live ? (
-            <a href={study.live} target="_blank" rel="noopener noreferrer">
+            <a
+              href={study.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={linkLabel(t.liveFor, study.project)}
+            >
               {t.live}
             </a>
           ) : null}
           {study.repo ? (
-            <a href={study.repo} target="_blank" rel="noopener noreferrer">
+            <a
+              href={study.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={linkLabel(t.sourceFor, study.project)}
+            >
               {t.source}
             </a>
           ) : null}

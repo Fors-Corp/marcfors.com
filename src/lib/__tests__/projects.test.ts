@@ -8,7 +8,7 @@ function repo(partial: Partial<GhRepo> & Pick<GhRepo, "name">): GhRepo {
     description: "ok",
     language: "TypeScript",
     stargazers_count: 0,
-    homepage: null,
+    homepage: "https://example.vercel.app",
     pushed_at: "2026-01-01",
     fork: false,
     ...partial,
@@ -75,6 +75,14 @@ describe("public repo listing", () => {
     expect(isListedRepo(repo({ name: "TicketApp" }))).toBe(false);
     expect(isListedRepo(repo({ name: "fileshelf", fork: true }))).toBe(false);
     expect(isListedRepo(repo({ name: "gifs-app", description: null, language: null }))).toBe(false);
+  });
+
+  it("only auto-lists repos that serve something live", () => {
+    expect(isListedRepo(repo({ name: "hyper-top", homepage: null }))).toBe(false);
+    expect(isListedRepo(repo({ name: "hyper-top", homepage: "" }))).toBe(false);
+    expect(isListedRepo(repo({ name: "forsight", homepage: "https://marcfs31.github.io/forsight/" }))).toBe(
+      true,
+    );
   });
 
   it("keeps the homework skip list populated", () => {

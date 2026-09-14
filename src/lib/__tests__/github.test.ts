@@ -10,7 +10,7 @@ function repo(overrides: Partial<GhRepo> = {}): GhRepo {
     description: "a thing",
     language: "TypeScript",
     stargazers_count: 0,
-    homepage: null,
+    homepage: "https://some-lib.vercel.app",
     pushed_at: "2026-01-01T00:00:00Z",
     fork: false,
     ...overrides,
@@ -20,17 +20,19 @@ function repo(overrides: Partial<GhRepo> = {}): GhRepo {
 afterEach(() => vi.unstubAllGlobals());
 
 describe("isListedRepo", () => {
-  it("keeps a non-fork repo that has a description or a language", () => {
+  it("keeps a non-fork, homepage-having repo that has a description or a language", () => {
     expect(isListedRepo(repo())).toBe(true);
     expect(isListedRepo(repo({ description: null }))).toBe(true); // still has language
   });
 
-  it("drops forks, skip-listed names, and empty shells", () => {
+  it("drops forks, skip-listed names, empty shells, and repos with nothing live", () => {
     expect(isListedRepo(repo({ fork: true }))).toBe(false);
     const skipped = [...skipRepos][0];
     expect(skipped, "skip list is populated").toBeTruthy();
     expect(isListedRepo(repo({ name: skipped }))).toBe(false);
     expect(isListedRepo(repo({ description: null, language: null }))).toBe(false);
+    expect(isListedRepo(repo({ homepage: null }))).toBe(false);
+    expect(isListedRepo(repo({ homepage: "" }))).toBe(false);
   });
 });
 
