@@ -78,6 +78,28 @@ describe("Desk", () => {
     expect(bolded).toContain("Barcellona");
   });
 
+  // WCAG 2.4.9 — the desk repeats SOURCE / LIVE / CASE STUDY once per project,
+  // so before the aria-labels landed seven "Source" links shared one accessible
+  // name across four different repos. axe reports this as `incomplete` rather
+  // than a violation (it cannot know whether same-name links are same-purpose),
+  // so the blanket axe scan below would not have caught it. This pins the actual
+  // invariant instead: same accessible name implies same destination.
+  it("gives every same-named link the same destination", () => {
+    const { container } = renderDesk();
+    const byName = new Map<string, Set<string>>();
+    for (const link of container.querySelectorAll<HTMLAnchorElement>("a[href]")) {
+      const name = (link.getAttribute("aria-label") ?? link.textContent ?? "").trim().toLowerCase();
+      if (!name) continue;
+      const dest = byName.get(name) ?? new Set<string>();
+      dest.add(link.getAttribute("href") as string);
+      byName.set(name, dest);
+    }
+    const collisions = [...byName.entries()]
+      .filter(([, dests]) => dests.size > 1)
+      .map(([name, dests]) => `"${name}" -> ${[...dests].join(", ")}`);
+    expect(collisions).toEqual([]);
+  });
+
   it(
     "has no axe violations",
     async () => {

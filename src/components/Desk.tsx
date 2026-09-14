@@ -11,7 +11,8 @@ import type { GhRepo } from "@/lib/github";
 import { mailTo } from "@/lib/mail";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
-import { SITE_NAME, SITE_REPO } from "@/lib/site";
+import { linkLabel } from "@/lib/labels";
+import { SITE_HOST, SITE_NAME, SITE_REPO } from "@/lib/site";
 import { SpotlightLayer } from "@/components/SpotlightLayer";
 import { SignalBoard, type SignalStrings } from "@/components/SignalBoard";
 
@@ -20,16 +21,35 @@ function projectLinks(project: Project, locale: Locale) {
   return (
     <div className="links">
       {project.live ? (
-        <a href={project.live} target="_blank" rel="noopener noreferrer">
+        <a
+          href={project.live}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={linkLabel(t.liveFor, project.name)}
+        >
           {t.live}
         </a>
       ) : null}
-      {project.href ? <Link href={withLocale(locale, project.href)}>{t.live}</Link> : null}
+      {project.href ? (
+        <Link href={withLocale(locale, project.href)} aria-label={linkLabel(t.liveFor, project.name)}>
+          {t.live}
+        </Link>
+      ) : null}
       {project.caseStudy ? (
-        <Link href={withLocale(locale, `/work/${project.caseStudy}`)}>{t.caseStudy}</Link>
+        <Link
+          href={withLocale(locale, `/work/${project.caseStudy}`)}
+          aria-label={linkLabel(t.caseStudyFor, project.name)}
+        >
+          {t.caseStudy}
+        </Link>
       ) : null}
       {project.repo && !project.private ? (
-        <a href={project.repo} target="_blank" rel="noopener noreferrer">
+        <a
+          href={project.repo}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={linkLabel(t.sourceFor, project.name)}
+        >
           {t.source}
         </a>
       ) : project.private ? (
@@ -110,7 +130,12 @@ export function Desk({
             <a href="#projects">{t.projectsTitle}</a>
             <a href="#work">{t.workTitle}</a>
             <a href="#contact">{t.contactTitle}</a>
-            <a href={SITE_REPO} target="_blank" rel="noopener noreferrer">
+            <a
+              href={SITE_REPO}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={linkLabel(t.sourceFor, SITE_HOST)}
+            >
               {t.source}
             </a>
             <a className="nav-hire" href={mailTo(t.hireSubject)}>
@@ -344,7 +369,12 @@ export function Desk({
           {" · "}
           <Link href={withLocale(locale, "/print")}>{t.printCta}</Link>
           {" · "}
-          <a href={SITE_REPO} target="_blank" rel="noopener noreferrer">
+          <a
+            href={SITE_REPO}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={linkLabel(t.sourceFor, SITE_HOST)}
+          >
             {t.source}
           </a>
         </footer>

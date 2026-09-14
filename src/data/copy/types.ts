@@ -34,6 +34,10 @@ export type UiCopy = {
   hireSubject: string;
   buildSubject: string;
   source: string;
+  /** aria-label templates; `{project}` is filled by `linkLabel()` (WCAG 2.4.9). */
+  sourceFor: string;
+  liveFor: string;
+  caseStudyFor: string;
   live: string;
   private: string;
   public: string;

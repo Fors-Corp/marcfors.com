@@ -2,6 +2,75 @@
 
 All notable changes to this project are versioned with [SemVer](https://semver.org/).
 
+## 0.13.1 — 2026-09-10
+
+### Lighthouse pass: font preload weight and repeated link names
+
+Triaged the full mobile Lighthouse report (13.4.1) against the live site.
+Seven flagged dimensions, five of which are deliberately left alone — the
+reasoning is recorded here so they don't get "fixed" again later:
+
+- **Font preload trimmed to the `latin` subset.** `app/[locale]/layout.tsx`
+  asked `next/font` for `["latin", "latin-ext"]` on both Fraunces and IBM
+  Plex Mono, which preloaded six woff2 files (108,020 B) at High priority
+  ahead of the JS chunks. Every glyph the six shipped locales actually render
+  — es/ca/it/pt/de accents, Catalan's U+00B7 middot — lives in `latin`;
+  `latin-ext` is Central/Eastern European. Verified by scanning every string
+  in `src/data/copy/**`, `src/data/projects.ts` and `content/work/**/*.mdx`
+  for codepoints in `latin-ext` but not `latin`: zero hits across 129 files.
+  Now 3 preloads / 56,672 B, a 51,348 B cut to the critical path, which is
+  where the LCP score loss lives (LCP 2029 ms was 466 ms element render
+  delay). Fail-safe rather than a gamble: `next/font` still emits the
+  `latin-ext` `@font-face` rules with their `unicode-range`, so a stray
+  character degrades to a lazy fetch instead of tofu. Guarded by
+  `src/lib/__tests__/fontSubset.test.ts`.
+- **Kept IBM Plex Mono weight 500.** Dropping it would have removed two more
+  files, but `globals.css` sets `body { font-family: var(--mono) }` with
+  `font-synthesis: none`, so a missing 500 renders as 400 with no faux-bold —
+  a silent visual regression, not an optimisation. The guard test pins this.
+- **Per-project accessible names on repeated links (WCAG 2.4.9).** `SOURCE`,
+  `LIVE` and `CASE STUDY` are re-rendered once per project, so seven "Source"
+  links pointed at four different repos under one accessible name (axe reports
+  this as `incomplete`, which is why the existing blanket axe scan never
+  caught it). Added `sourceFor`/`liveFor`/`caseStudyFor` aria-label templates
+  to all six locale files plus `linkLabel()` in `src/lib/labels.ts`. Visible
+  copy, DOM text and layout are untouched, and each template keeps the visible
+  word inside the accessible name so WCAG 2.5.3 (Label in Name) still holds —
+  pinned per locale by `src/lib/__tests__/labels.test.ts`. `Desk.test.tsx`
+  gains the real invariant (same accessible name implies same destination),
+  verified to fail without the labels.
+
+Deliberately not changed:
+
+- **`legacy-javascript` (est. 14,010 B).** The flagged polyfills are
+  `next/dist/build/polyfills/polyfill-module.js`, `require()`d unconditionally
+  by Next's own App Router client entry (`next/dist/client/app-globals.js`) —
+  not app code, and not the `nomodule` bundle (that is a separate chunk).
+  A `browserslist` key cannot remove it: with no config Next already uses
+  `MODERN_BROWSERSLIST_TARGET` (chrome 111 / edge 111 / firefox 111 /
+  safari 16.4, i.e. "baseline widely available"), so pinning it changes
+  nothing today and only stops future Next baseline advances reaching this
+  project. Two builds with different browserslist targets produced a
+  byte-identical JS chunk. The real block is 1,376 B raw / 440 B gzip, not
+  14,010 B — Lighthouse quotes a fixed per-signature core-js cost table. It
+  also defines `URL.canParse` (Chrome 120+/Safari 17+), so aliasing it away
+  would break Chrome 111–119 and Safari 16.4, inside Next's own support matrix.
+- **CSP `script-src 'unsafe-inline'`.** Removing it needs a per-request nonce,
+  which would convert all 58 prerendered pages to on-demand SSR. Hashes are
+  impractical because Next emits per-page `self.__next_f.push(...)` flight
+  payload scripts. `csp-xss` is zero-weighted and best-practices already
+  scores 1.0.
+- **Trusted Types.** Informative, weight 0, and the site injects the
+  anti-flash theme script and JSON-LD via `dangerouslySetInnerHTML`; the
+  directive risks breaking hydration in Chrome for no score movement.
+- **Render-blocking CSS / critical chain.** Both audits report zero FCP and
+  zero LCP savings. Inlining the two stylesheets measured *worse*
+  (+4,987 B brotli per document, ~+24 ms on Lighthouse's mobile throttle).
+- **Total Blocking Time 264 ms.** ~232 ms of it is a Bitwarden extension in
+  the auditing browser, not the site; the CI configuration measures 0 ms with
+  zero long tasks. The `unminified-javascript` and `unused-javascript` audits
+  are 100% that same extension.
+
 ## 0.13.0 — 2026-09-09
 
 ### Vercel Web Analytics
