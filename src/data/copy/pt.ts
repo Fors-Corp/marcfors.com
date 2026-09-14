@@ -8,7 +8,7 @@ export const ui: UiCopy = {
   headline: "Engenheiro de software IA",
   tagline: "Construo interfaces que se mantêm calmas sob carga.",
   lede: "Mais de sete anos em observabilidade, fintech, banca e administração, agora a construir produtos completos com agentes LLM como equipa de entrega. Corro Claude Code, Codex, Cursor e Grok contra regras versionadas, ligo servidores MCP a cada repositório, atribuo cada tarefa ao modelo certo, e tudo o que produzem passa pela CI antes de integrar.",
-  proofLine: "Dynatrace Dashboards · React · TypeScript · Angular · Barcelona",
+  proofLine: "mlaas · Claude Code · Go · React · TypeScript · Barcelona",
   workTitle: "Experiência",
   breakTitle: "Prática independente",
   projectsTitle: "Trabalho selecionado",
