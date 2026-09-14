@@ -2,6 +2,32 @@
 
 All notable changes to this project are versioned with [SemVer](https://semver.org/).
 
+## 0.14.0 — 2026-09-14
+
+### AI positioning and automatic project discovery
+
+Repositioned the site from "frontend software engineer" to "AI software
+engineer" across all six locales (`src/data/copy/*.ts`) — the pitch is now
+running an LLM-agent delivery team (Claude Code, Codex, Cursor, Grok) against
+versioned rules and MCP servers, not just shipping React. `now`, `headline`,
+`lede`, `hits`, `hirePathLede` and `careerBreak.body` all updated in parallel
+across locales; unchanged by `copyUsage.test.ts` and `clientBundle.test.ts`.
+
+- **Four new featured projects** (`src/data/projects.ts`), backing the new
+  pitch with evidence instead of just claiming it: `mlaas` (a self-retraining
+  ML-as-a-Service behind a Go API, private, spotlight), `forsight` (the
+  observability design system these products share, public, spotlight),
+  `GH Dashboard` and `Business Manager` (private, supporting tier). Private
+  entries get `live` + `private: true` with no `repo`, matching the existing
+  rule that private repos are never linked.
+- **The public-repo feed now requires a live homepage.** `isListedRepo`
+  (`src/lib/github.ts`) previously auto-listed any non-fork, non-skipped
+  repo with a description or language — including one-off CLI experiments
+  and coursework with nothing running anywhere. It now also requires
+  `repo.homepage`, so the auto-discovered "Attic" feed only ever surfaces
+  repos that actually serve something live, the same bar the hand-curated
+  `featured` list already held itself to.
+
 ## 0.13.1 — 2026-09-10
 
 ### Lighthouse pass: font preload weight and repeated link names
