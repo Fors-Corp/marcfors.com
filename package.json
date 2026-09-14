@@ -50,7 +50,7 @@
     "remark-frontmatter": "^5.0.0",
     "remark-gfm": "^4.0.1",
     "remark-mdx-frontmatter": "^5.2.0",
-    "typescript": "^5",
+    "typescript": "^7",
     "vitest": "^5.0.0",
     "vitest-axe": "^0.1.0"
   },
