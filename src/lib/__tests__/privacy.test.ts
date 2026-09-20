@@ -41,7 +41,7 @@ describe("public surface privacy", () => {
   it("is hosted on marcfors.com", () => {
     expect(SITE_HOST).toBe("marcfors.com");
     expect(SITE_URL).toBe("https://marcfors.com");
-    expect(SITE_REPO).toBe("https://github.com/marcfs31/marcfors.com");
+    expect(SITE_REPO).toBe("https://github.com/Fors-Corp/marcfors.com");
     expect(copy.en.footer).toContain(SITE_HOST);
     expect(copy.es.footer).toContain(SITE_HOST);
     expect(copy.en.hireSubject).toContain(SITE_HOST);

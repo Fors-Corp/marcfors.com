@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Fraunces, IBM_Plex_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { isLocale, languageAlternates, LOCALES, localeUrl, OG_LOCALES, type Locale } from "@/lib/locale";
-import { DEV_EMAIL, GITHUB_URL, LINKEDIN_URL, SITE_NAME, SITE_URL } from "@/lib/site";
+import { DEV_EMAIL, GITHUB_ORG_URL, GITHUB_URL, LINKEDIN_URL, SITE_NAME, SITE_URL } from "@/lib/site";
 import { ANTI_FLASH_SCRIPT } from "@/lib/theme";
 
 export function generateStaticParams() {
@@ -39,9 +39,9 @@ const mono = IBM_Plex_Mono({
   adjustFontFallback: true,
 });
 
-const title = `${SITE_NAME} — Frontend software engineer`;
+const title = `${SITE_NAME} — AI software engineer`;
 const description =
-  "Frontend software engineer in Barcelona. React, TypeScript, Angular. Previously Dynatrace Dashboards and Notebooks, CREALOGIX banking, T-Systems Justice.";
+  "AI software engineer in Barcelona, building complete products with LLM agents. React, TypeScript, Go. Previously Dynatrace Dashboards and Notebooks, CREALOGIX banking, T-Systems Justice.";
 
 // Match the paper/ink palette backgrounds (src/lib/themePalettes.ts) so the mobile
 // browser chrome tracks the active theme instead of a single hard-coded colour.
@@ -72,7 +72,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description:
-        "Seven-plus years in observability, fintech, banking and government. Based in Barcelona. Open to frontend software engineer roles.",
+        "Seven-plus years in observability, fintech, banking and government, now shipping products with LLM agents. Based in Barcelona. Open to AI engineering roles.",
       url: localeUrl(locale, "/", SITE_URL),
       locale: OG_LOCALES[locale],
       alternateLocale: LOCALES.filter((item) => item !== locale).map((item) => OG_LOCALES[item]),
@@ -87,15 +87,16 @@ function jsonLd(locale: Locale) {
     name: SITE_NAME,
     url: localeUrl(locale, "/", SITE_URL),
     email: DEV_EMAIL,
-    jobTitle: "Frontend software engineer",
+    jobTitle: "AI software engineer",
+    worksFor: { "@type": "Organization", name: "Fors Corp", url: GITHUB_ORG_URL },
     address: {
       "@type": "PostalAddress",
       addressLocality: "Barcelona",
       addressCountry: "ES",
     },
     sameAs: [GITHUB_URL, LINKEDIN_URL],
-    knowsAbout: ["React", "TypeScript", "Angular", "Next.js", "observability", "Playwright"],
-    seeks: "Frontend software engineer roles in Barcelona or remote EU, open from December 2025",
+    knowsAbout: ["LLM agents", "Claude Code", "Model Context Protocol", "React", "TypeScript", "Go", "Next.js", "observability"],
+    seeks: "AI engineering and LLM-agent roles in Barcelona or remote EU",
   };
 }
 

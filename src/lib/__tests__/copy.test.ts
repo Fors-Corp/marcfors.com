@@ -38,6 +38,9 @@ describe("locale copy", () => {
   it("makes recruiter and custom-work paths obvious", () => {
     expect(copy.en.kicker).toMatch(/open to work/i);
     expect(copy.en.headline).toMatch(/AI software engineer/i);
+    expect(copy.en.breakTitle).toMatch(/Fors Corp/);
+    expect(copy.en.tagline).toMatch(/LLM agents/);
+    expect(Object.values(copy).map((t) => t.proofLine).join("\n")).not.toMatch(/mlaas/);
     expect(copy.en.hirePath).toMatch(/recruiter/i);
     expect(copy.en.buildPath).toMatch(/custom/i);
     expect(copy.en.seeking).toMatch(/AI engineering|LLM agents/i);

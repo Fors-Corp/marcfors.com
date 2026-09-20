@@ -2,6 +2,29 @@
 
 All notable changes to this project are versioned with [SemVer](https://semver.org/).
 
+## 0.15.0 — 2026-09-20
+
+### Fors Corp alignment
+
+Brings the site in line with the AI CV (`Marc_Fors_CV_AI_v2.pdf`), LinkedIn
+and GitHub after the product repos moved to the `Fors-Corp` org.
+
+- **Title and metadata say "AI software engineer"**: page title, description,
+  OpenGraph/Twitter alt text, manifest and JSON-LD (`jobTitle`, `worksFor`
+  Fors Corp, `knowsAbout`, `seeks`). Link previews on LinkedIn no longer read
+  "Frontend software engineer".
+- **New tagline** in all six locales: "I ship complete products with LLM
+  agents — and gate every line they write."
+- **Current role reads "Fors Corp · independent practice"** in every locale.
+- **mlaas is now LMaaS**, one entry covering local LLM serving over an
+  OpenAI-compatible API plus ML training and retraining; proof line updated.
+- **forsight is described as the observability platform** it now is (Go agent,
+  ML anomaly scoring, React library) and **Fors Design System gets its own
+  card**. Both link to `github.com/Fors-Corp/…` and to their org Pages sites —
+  the old `marcfs31.github.io/forsight/` link had started returning 404.
+- `SITE_REPO` points at `Fors-Corp/marcfors.com`; tests cover the org links,
+  the LMaaS rename and the new copy.
+
 ## 0.14.0 — 2026-09-14
 
 ### AI positioning and automatic project discovery

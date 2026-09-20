@@ -16,8 +16,8 @@ Public personal portfolio for Marc Fors, hosted at **https://marcfors.com**. Obs
 
 ## Facts
 
-- CV is the source of truth (`Marc_Fors_CV_Modern_v3_German.pdf` — English content despite the filename).
-- Career break Dec 2025–present. Dynatrace ended Nov 2025. Do not write “currently at Dynatrace”.
+- CV is the source of truth (`Marc_Fors_CV_AI_v2.pdf`).
+- Dec 2025–present: AI Software Engineer at Fors Corp (independent practice; product repos live in the `Fors-Corp` GitHub org). Dynatrace ended Nov 2025. Do not write “currently at Dynatrace”.
 - LinkedIn vanity is `linkedin.com/in/marc-fors` (hyphen).
 
 ## Stack & UI
