@@ -12,7 +12,7 @@ import { mailTo } from "@/lib/mail";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { linkLabel } from "@/lib/labels";
-import { SITE_HOST, SITE_NAME, SITE_REPO } from "@/lib/site";
+import { CV_FILENAME, CV_PATH, SITE_HOST, SITE_NAME, SITE_REPO } from "@/lib/site";
 import { SpotlightLayer } from "@/components/SpotlightLayer";
 import { SignalBoard, type SignalStrings } from "@/components/SignalBoard";
 
@@ -169,12 +169,10 @@ export function Desk({
               <a className="cta ghost" href={mailTo(t.buildSubject)}>
                 {t.buildCta}
               </a>
-              <Link className="cta ghost" href={withLocale(locale, "/print")}>
-                {t.printCta}
-              </Link>
-              <Link className="cta ghost" href={withLocale(locale, "/cv")}>
+              {/* The real CV file, straight to disk. Not the /print route, which builds a PDF from page markup. */}
+              <a className="cta ghost" href={CV_PATH} download={CV_FILENAME}>
                 {t.cvCta}
-              </Link>
+              </a>
             </div>
             <a className="hero-email" href={`mailto:${contact.email}`}>
               {contact.email}
@@ -370,9 +368,7 @@ export function Desk({
         <footer>
           <span>{t.footer}</span>
           {" · "}
-          <Link href={withLocale(locale, "/cv")}>{t.cvCta}</Link>
-          {" · "}
-          <Link href={withLocale(locale, "/print")}>{t.printCta}</Link>
+          <Link href={withLocale(locale, "/cv")}>{t.cvTitle}</Link>
           {" · "}
           <a
             href={SITE_REPO}

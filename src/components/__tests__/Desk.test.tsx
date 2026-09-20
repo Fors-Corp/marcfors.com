@@ -6,6 +6,7 @@ import { Desk } from "@/components/Desk";
 import { copy } from "@/data/copy";
 import { featured } from "@/data/projects";
 import { getAuditSnapshot } from "@/lib/audit";
+import { CV_FILENAME, CV_PATH } from "@/lib/site";
 
 vi.mock("next/navigation", () => ({ usePathname: () => "/", useRouter: () => ({ push: vi.fn() }) }));
 vi.mock("web-vitals", () => ({
@@ -57,6 +58,28 @@ describe("Desk", () => {
     expect(archive.open).toBe(false);
     await userEvent.click(within(archive).getByText(copy.en.atticTitle));
     expect(archive.open).toBe(true);
+  });
+
+  it("downloads the real CV file from the home page and offers no generated PDF", () => {
+    renderDesk();
+    const download = screen.getByRole("link", { name: copy.en.cvCta });
+    // A direct file download, not a link to a page that builds one.
+    expect(download).toHaveAttribute("href", CV_PATH);
+    expect(download).toHaveAttribute("download", CV_FILENAME);
+
+    // /print produces a PDF from page markup via window.print(); it must not be
+    // reachable from the home page, hero or footer.
+    const hrefs = screen.getAllByRole("link").map((a) => a.getAttribute("href") ?? "");
+    expect(hrefs.filter((href) => href.endsWith("/print"))).toEqual([]);
+  });
+
+  it("links the footer to the CV viewer page", () => {
+    renderDesk("it");
+    const footer = screen.getByRole("contentinfo");
+    expect(within(footer).getByRole("link", { name: copy.it.cvTitle })).toHaveAttribute(
+      "href",
+      "/it/cv",
+    );
   });
 
   it("never shows a source link for a private project", () => {

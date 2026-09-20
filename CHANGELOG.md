@@ -2,6 +2,20 @@
 
 All notable changes to this project are versioned with [SemVer](https://semver.org/).
 
+## 0.16.1 — 2026-09-20
+
+### The CV button downloads your CV, not a generated one
+
+- **"Download CV" on the home page now saves `marc-fors-cv.pdf` directly.** It
+  used to link to the `/cv` page, and the only PDF the home page could produce
+  otherwise was "Print CV" — `/print` builds a PDF from page markup through
+  `window.print()`, so what came out was a re-typeset copy, not the designed CV.
+- **"Print CV" is gone from the hero and the footer.** The `/print` route still
+  exists (noindex, unlinked) but nothing on the site sends visitors to it.
+- **The footer links to the `/cv` viewer page** by name instead.
+- Tests pin both: the hero link is a `download` of the real file, and no link on
+  the home page ends in `/print`.
+
 ## 0.16.0 — 2026-09-20
 
 ### The CV, on the site
