@@ -18,9 +18,18 @@ describe("sitemap", () => {
     );
   });
 
+  it("lists the CV page in every locale", () => {
+    const entries = sitemap();
+    for (const locale of LOCALES) {
+      const url = locale === "en" ? `${SITE_URL}/cv` : `${SITE_URL}/${locale}/cv`;
+      expect(entries.some((entry) => entry.url === url), `cv for ${locale}`).toBe(true);
+    }
+  });
+
   it("covers the home page and every case study in every locale", () => {
     const entries = sitemap();
-    const pages = 1 + slugs.length;
+    // home + /cv + one per case study
+    const pages = 2 + slugs.length;
     expect(entries).toHaveLength(LOCALES.length * pages);
 
     for (const locale of LOCALES) {

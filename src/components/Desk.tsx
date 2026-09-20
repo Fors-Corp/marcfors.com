@@ -172,6 +172,9 @@ export function Desk({
               <Link className="cta ghost" href={withLocale(locale, "/print")}>
                 {t.printCta}
               </Link>
+              <Link className="cta ghost" href={withLocale(locale, "/cv")}>
+                {t.cvCta}
+              </Link>
             </div>
             <a className="hero-email" href={`mailto:${contact.email}`}>
               {contact.email}
@@ -366,6 +369,8 @@ export function Desk({
 
         <footer>
           <span>{t.footer}</span>
+          {" · "}
+          <Link href={withLocale(locale, "/cv")}>{t.cvCta}</Link>
           {" · "}
           <Link href={withLocale(locale, "/print")}>{t.printCta}</Link>
           {" · "}

@@ -14,6 +14,24 @@ const CSP_DIRECTIVES = [
 
 export const CONTENT_SECURITY_POLICY = CSP_DIRECTIVES.join("; ");
 
+// The CV viewer on /cv renders public/marc-fors-cv.pdf in a same-origin
+// <iframe>. `frame-ancestors` and `X-Frame-Options` govern who may frame a
+// *response*, so the site-wide `'none'` / `DENY` would block that PDF from
+// loading even inside our own page — the embed fails silently, as a blank
+// frame. These override the pair for that one asset: `'self'` still refuses
+// every cross-origin framer, so clickjacking cover is unchanged site-wide and
+// on the PDF itself. `object-src 'none'` is deliberately left intact, which is
+// why the viewer uses <iframe> and not <object>/<embed>.
+export const EMBEDDABLE_ASSET_HEADERS: { key: string; value: string }[] = [
+  {
+    key: "Content-Security-Policy",
+    value: CSP_DIRECTIVES.map((directive) =>
+      directive === "frame-ancestors 'none'" ? "frame-ancestors 'self'" : directive,
+    ).join("; "),
+  },
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
+];
+
 // `next dev` only: React 19 / Next 16 in development call eval() for debugging
 // features (reconstructing call stacks across environments), and @vercel/analytics
 // loads its debug build from va.vercel-scripts.com instead of the same-origin

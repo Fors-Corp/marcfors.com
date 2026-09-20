@@ -50,6 +50,13 @@ export type UiCopy = {
   printCta: string;
   printTitle: string;
   printHint: string;
+  cvCta: string;
+  cvTitle: string;
+  cvLede: string;
+  cvDownload: string;
+  cvOpen: string;
+  cvUnsupported: string;
+  cvViewerLabel: string;
   caseStudy: string;
   atticTitle: string;
   hits: readonly string[];

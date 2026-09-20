@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import nextConfig from "../../../next.config";
 import { CONTENT_SECURITY_POLICY } from "@/lib/securityHeaders";
+import { CV_PATH } from "@/lib/site";
 
 async function headerRules() {
   const rules = await nextConfig.headers!();
@@ -37,5 +38,38 @@ describe("next.config headers()", () => {
     );
     // the site root is never tagged noindex
     expect(sources).not.toContain("/:path*");
+  });
+  it("lets the CV PDF be framed same-origin, and only same-origin", async () => {
+    const rules = await headerRules();
+    const cv = rules.filter((r) => r.source === CV_PATH);
+    expect(cv, `no header rule for ${CV_PATH}`).not.toHaveLength(0);
+
+    const header = (key: string) =>
+      cv.flatMap((r) => r.headers).filter((h) => h.key === key).at(-1)?.value;
+
+    // Site-wide these are `frame-ancestors 'none'` / DENY, which would block the
+    // PDF from loading in our own /cv iframe. `'self'` still refuses everyone else.
+    expect(header("Content-Security-Policy")).toContain("frame-ancestors 'self'");
+    expect(header("Content-Security-Policy")).not.toContain("frame-ancestors 'none'");
+    expect(header("X-Frame-Options")).toBe("SAMEORIGIN");
+    // The viewer relies on <iframe> precisely because this stays shut.
+    expect(header("Content-Security-Policy")).toContain("object-src 'none'");
+  });
+
+  it("overrides the CV headers after the site-wide rule, so the relaxation wins", async () => {
+    const rules = await headerRules();
+    const globalAt = rules.findIndex((r) => r.source === "/:path*");
+    const cvAt = rules.findIndex((r) => r.source === CV_PATH);
+    // Next applies matching rules in order; the last value for a key wins.
+    expect(cvAt).toBeGreaterThan(globalAt);
+  });
+
+  it("leaves the site-wide frame policy locked down", async () => {
+    const rules = await headerRules();
+    const csp = rules
+      .find((r) => r.source === "/:path*")
+      ?.headers.find((h) => h.key === "Content-Security-Policy")?.value;
+    expect(csp).toContain("frame-ancestors 'none'");
+    expect(CONTENT_SECURITY_POLICY).toContain("frame-ancestors 'none'");
   });
 });

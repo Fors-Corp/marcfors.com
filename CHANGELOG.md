@@ -2,6 +2,32 @@
 
 All notable changes to this project are versioned with [SemVer](https://semver.org/).
 
+## 0.16.0 — 2026-09-20
+
+### The CV, on the site
+
+- **New `/cv` page in all six locales**: the designed CV PDF rendered inline,
+  with a download button and an open-in-new-tab link. Reachable from the hero
+  CTA row and the footer, listed in the sitemap with the full hreflang set, and
+  indexable — unlike `/print`, which stays out of the index because it only
+  restates the home page.
+- **The published PDF is redacted.** The private original carries a phone
+  number and a personal Gmail address; AGENTS.md keeps both off the site and out
+  of git. `public/marc-fors-cv.pdf` has the contact line rewritten to
+  `developer@marcfors.com`, right-aligned to the original margin, and the phone
+  removed. The original is untouched on disk and stays out of the repo.
+- **`frame-ancestors` relaxed for that one asset.** The site-wide
+  `frame-ancestors 'none'` / `X-Frame-Options: DENY` would have blocked the PDF
+  from loading in its own same-origin viewer. `EMBEDDABLE_ASSET_HEADERS` sends
+  `'self'` / `SAMEORIGIN` for `/marc-fors-cv.pdf` only; every other header, and
+  every other path, is unchanged. `object-src 'none'` stays shut, which is why
+  the viewer is an `<iframe>` and not an `<object>`.
+- **The privacy gate now reads published assets.** `npm run privacy` only
+  grepped source, with `-I` skipping binaries — a PDF in `public/` holding a
+  phone number passed clean. It now decodes PDF streams (Flate *and* ASCII85,
+  the filter stack that hid the leak in the first place) and scans the text.
+  Extracted into `scripts/lib/`, so the unit tests exercise the same code CI runs.
+
 ## 0.15.0 — 2026-09-20
 
 ### Fors Corp alignment

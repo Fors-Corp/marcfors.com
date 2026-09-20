@@ -52,6 +52,13 @@ export const ui: UiCopy = {
   printCta: "Lebenslauf drucken",
   printTitle: "Lebenslauf",
   printHint: "Im Druckdialog als PDF speichern.",
+  cvCta: "Lebenslauf laden",
+  cvTitle: "Lebenslauf",
+  cvLede: "Der einseitige Lebenslauf als PDF. Hier lesen oder mitnehmen.",
+  cvDownload: "PDF herunterladen",
+  cvOpen: "In neuem Tab öffnen",
+  cvUnsupported: "Wird nichts angezeigt? In neuem Tab öffnen oder das PDF herunterladen.",
+  cvViewerLabel: "Marc Fors — Lebenslauf (PDF)",
   caseStudy: "Fallstudie",
   atticTitle: "Mehr",
   hits: [

@@ -1,6 +1,11 @@
 import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
-import { CONTENT_SECURITY_POLICY_DEV, SECURITY_HEADERS } from "./src/lib/securityHeaders";
+import {
+  CONTENT_SECURITY_POLICY_DEV,
+  EMBEDDABLE_ASSET_HEADERS,
+  SECURITY_HEADERS,
+} from "./src/lib/securityHeaders";
+import { CV_PATH } from "./src/lib/site";
 
 // In development, swap the CSP for the eval-tolerant variant so React's dev-only
 // stack reconstruction stops tripping the policy. Every other header, and the
@@ -30,6 +35,11 @@ const nextConfig: NextConfig = {
         headers: securityHeaders,
       },
       ...noindexSources.map((source) => ({ source, headers: NOINDEX })),
+      // Last rule wins per header key, so this re-sends Content-Security-Policy
+      // and X-Frame-Options for the CV alone, letting /cv frame it same-origin.
+      // Anything not listed here (HSTS, nosniff, Referrer-Policy, COOP/CORP…)
+      // still comes from the site-wide rule above.
+      { source: CV_PATH, headers: EMBEDDABLE_ASSET_HEADERS },
     ];
   },
 };

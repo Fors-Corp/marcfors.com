@@ -52,6 +52,13 @@ export const ui: UiCopy = {
   printCta: "Imprimir CV",
   printTitle: "Currículo",
   printHint: "Usa o diálogo de impressão para guardar um PDF.",
+  cvCta: "Descarregar CV",
+  cvTitle: "Currículo",
+  cvLede: "O CV de uma página, em PDF. Lê aqui ou leva uma cópia.",
+  cvDownload: "Descarregar PDF",
+  cvOpen: "Abrir num separador novo",
+  cvUnsupported: "Não aparece? Abre-o num separador novo ou descarrega o PDF.",
+  cvViewerLabel: "Marc Fors — CV (PDF)",
   caseStudy: "Estudo de caso",
   atticTitle: "Mais",
   hits: [
