@@ -2,6 +2,164 @@
 
 All notable changes to this project are versioned with [SemVer](https://semver.org/).
 
+## 0.16.1 — 2026-09-20
+
+### The CV button downloads your CV, not a generated one
+
+- **"Download CV" on the home page now saves `marc-fors-cv.pdf` directly.** It
+  used to link to the `/cv` page, and the only PDF the home page could produce
+  otherwise was "Print CV" — `/print` builds a PDF from page markup through
+  `window.print()`, so what came out was a re-typeset copy, not the designed CV.
+- **"Print CV" is gone from the hero and the footer.** The `/print` route still
+  exists (noindex, unlinked) but nothing on the site sends visitors to it.
+- **The footer links to the `/cv` viewer page** by name instead.
+- Tests pin both: the hero link is a `download` of the real file, and no link on
+  the home page ends in `/print`.
+
+## 0.16.0 — 2026-09-20
+
+### The CV, on the site
+
+- **New `/cv` page in all six locales**: the designed CV PDF rendered inline,
+  with a download button and an open-in-new-tab link. Reachable from the hero
+  CTA row and the footer, listed in the sitemap with the full hreflang set, and
+  indexable — unlike `/print`, which stays out of the index because it only
+  restates the home page.
+- **The published PDF is redacted.** The private original carries a phone
+  number and a personal Gmail address; AGENTS.md keeps both off the site and out
+  of git. `public/marc-fors-cv.pdf` has the contact line rewritten to
+  `developer@marcfors.com`, right-aligned to the original margin, and the phone
+  removed. The original is untouched on disk and stays out of the repo.
+- **`frame-ancestors` relaxed for that one asset.** The site-wide
+  `frame-ancestors 'none'` / `X-Frame-Options: DENY` would have blocked the PDF
+  from loading in its own same-origin viewer. `EMBEDDABLE_ASSET_HEADERS` sends
+  `'self'` / `SAMEORIGIN` for `/marc-fors-cv.pdf` only; every other header, and
+  every other path, is unchanged. `object-src 'none'` stays shut, which is why
+  the viewer is an `<iframe>` and not an `<object>`.
+- **The privacy gate now reads published assets.** `npm run privacy` only
+  grepped source, with `-I` skipping binaries — a PDF in `public/` holding a
+  phone number passed clean. It now decodes PDF streams (Flate *and* ASCII85,
+  the filter stack that hid the leak in the first place) and scans the text.
+  Extracted into `scripts/lib/`, so the unit tests exercise the same code CI runs.
+
+## 0.15.0 — 2026-09-20
+
+### Fors Corp alignment
+
+Brings the site in line with the AI CV (`Marc_Fors_CV_AI_v2.pdf`), LinkedIn
+and GitHub after the product repos moved to the `Fors-Corp` org.
+
+- **Title and metadata say "AI software engineer"**: page title, description,
+  OpenGraph/Twitter alt text, manifest and JSON-LD (`jobTitle`, `worksFor`
+  Fors Corp, `knowsAbout`, `seeks`). Link previews on LinkedIn no longer read
+  "Frontend software engineer".
+- **New tagline** in all six locales: "I ship complete products with LLM
+  agents — and gate every line they write."
+- **Current role reads "Fors Corp · independent practice"** in every locale.
+- **mlaas is now LMaaS**, one entry covering local LLM serving over an
+  OpenAI-compatible API plus ML training and retraining; proof line updated.
+- **forsight is described as the observability platform** it now is (Go agent,
+  ML anomaly scoring, React library) and **Fors Design System gets its own
+  card**. Both link to `github.com/Fors-Corp/…` and to their org Pages sites —
+  the old `marcfs31.github.io/forsight/` link had started returning 404.
+- `SITE_REPO` points at `Fors-Corp/marcfors.com`; tests cover the org links,
+  the LMaaS rename and the new copy.
+
+## 0.14.0 — 2026-09-14
+
+### AI positioning and automatic project discovery
+
+Repositioned the site from "frontend software engineer" to "AI software
+engineer" across all six locales (`src/data/copy/*.ts`) — the pitch is now
+running an LLM-agent delivery team (Claude Code, Codex, Cursor, Grok) against
+versioned rules and MCP servers, not just shipping React. `now`, `headline`,
+`lede`, `hits`, `hirePathLede` and `careerBreak.body` all updated in parallel
+across locales; unchanged by `copyUsage.test.ts` and `clientBundle.test.ts`.
+
+- **Four new featured projects** (`src/data/projects.ts`), backing the new
+  pitch with evidence instead of just claiming it: `mlaas` (a self-retraining
+  ML-as-a-Service behind a Go API, private, spotlight), `forsight` (the
+  observability design system these products share, public, spotlight),
+  `GH Dashboard` and `Business Manager` (private, supporting tier). Private
+  entries get `live` + `private: true` with no `repo`, matching the existing
+  rule that private repos are never linked.
+- **The public-repo feed now requires a live homepage.** `isListedRepo`
+  (`src/lib/github.ts`) previously auto-listed any non-fork, non-skipped
+  repo with a description or language — including one-off CLI experiments
+  and coursework with nothing running anywhere. It now also requires
+  `repo.homepage`, so the auto-discovered "Attic" feed only ever surfaces
+  repos that actually serve something live, the same bar the hand-curated
+  `featured` list already held itself to.
+
+## 0.13.1 — 2026-09-10
+
+### Lighthouse pass: font preload weight and repeated link names
+
+Triaged the full mobile Lighthouse report (13.4.1) against the live site.
+Seven flagged dimensions, five of which are deliberately left alone — the
+reasoning is recorded here so they don't get "fixed" again later:
+
+- **Font preload trimmed to the `latin` subset.** `app/[locale]/layout.tsx`
+  asked `next/font` for `["latin", "latin-ext"]` on both Fraunces and IBM
+  Plex Mono, which preloaded six woff2 files (108,020 B) at High priority
+  ahead of the JS chunks. Every glyph the six shipped locales actually render
+  — es/ca/it/pt/de accents, Catalan's U+00B7 middot — lives in `latin`;
+  `latin-ext` is Central/Eastern European. Verified by scanning every string
+  in `src/data/copy/**`, `src/data/projects.ts` and `content/work/**/*.mdx`
+  for codepoints in `latin-ext` but not `latin`: zero hits across 129 files.
+  Now 3 preloads / 56,672 B, a 51,348 B cut to the critical path, which is
+  where the LCP score loss lives (LCP 2029 ms was 466 ms element render
+  delay). Fail-safe rather than a gamble: `next/font` still emits the
+  `latin-ext` `@font-face` rules with their `unicode-range`, so a stray
+  character degrades to a lazy fetch instead of tofu. Guarded by
+  `src/lib/__tests__/fontSubset.test.ts`.
+- **Kept IBM Plex Mono weight 500.** Dropping it would have removed two more
+  files, but `globals.css` sets `body { font-family: var(--mono) }` with
+  `font-synthesis: none`, so a missing 500 renders as 400 with no faux-bold —
+  a silent visual regression, not an optimisation. The guard test pins this.
+- **Per-project accessible names on repeated links (WCAG 2.4.9).** `SOURCE`,
+  `LIVE` and `CASE STUDY` are re-rendered once per project, so seven "Source"
+  links pointed at four different repos under one accessible name (axe reports
+  this as `incomplete`, which is why the existing blanket axe scan never
+  caught it). Added `sourceFor`/`liveFor`/`caseStudyFor` aria-label templates
+  to all six locale files plus `linkLabel()` in `src/lib/labels.ts`. Visible
+  copy, DOM text and layout are untouched, and each template keeps the visible
+  word inside the accessible name so WCAG 2.5.3 (Label in Name) still holds —
+  pinned per locale by `src/lib/__tests__/labels.test.ts`. `Desk.test.tsx`
+  gains the real invariant (same accessible name implies same destination),
+  verified to fail without the labels.
+
+Deliberately not changed:
+
+- **`legacy-javascript` (est. 14,010 B).** The flagged polyfills are
+  `next/dist/build/polyfills/polyfill-module.js`, `require()`d unconditionally
+  by Next's own App Router client entry (`next/dist/client/app-globals.js`) —
+  not app code, and not the `nomodule` bundle (that is a separate chunk).
+  A `browserslist` key cannot remove it: with no config Next already uses
+  `MODERN_BROWSERSLIST_TARGET` (chrome 111 / edge 111 / firefox 111 /
+  safari 16.4, i.e. "baseline widely available"), so pinning it changes
+  nothing today and only stops future Next baseline advances reaching this
+  project. Two builds with different browserslist targets produced a
+  byte-identical JS chunk. The real block is 1,376 B raw / 440 B gzip, not
+  14,010 B — Lighthouse quotes a fixed per-signature core-js cost table. It
+  also defines `URL.canParse` (Chrome 120+/Safari 17+), so aliasing it away
+  would break Chrome 111–119 and Safari 16.4, inside Next's own support matrix.
+- **CSP `script-src 'unsafe-inline'`.** Removing it needs a per-request nonce,
+  which would convert all 58 prerendered pages to on-demand SSR. Hashes are
+  impractical because Next emits per-page `self.__next_f.push(...)` flight
+  payload scripts. `csp-xss` is zero-weighted and best-practices already
+  scores 1.0.
+- **Trusted Types.** Informative, weight 0, and the site injects the
+  anti-flash theme script and JSON-LD via `dangerouslySetInnerHTML`; the
+  directive risks breaking hydration in Chrome for no score movement.
+- **Render-blocking CSS / critical chain.** Both audits report zero FCP and
+  zero LCP savings. Inlining the two stylesheets measured *worse*
+  (+4,987 B brotli per document, ~+24 ms on Lighthouse's mobile throttle).
+- **Total Blocking Time 264 ms.** ~232 ms of it is a Bitwarden extension in
+  the auditing browser, not the site; the CI configuration measures 0 ms with
+  zero long tasks. The `unminified-javascript` and `unused-javascript` audits
+  are 100% that same extension.
+
 ## 0.13.0 — 2026-09-09
 
 ### Vercel Web Analytics

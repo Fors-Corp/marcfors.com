@@ -4,9 +4,9 @@ import { DEFAULT_LOCALE, OG_LOCALES } from "@/lib/locale";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-const title = `${SITE_NAME} — Frontend software engineer`;
+const title = `${SITE_NAME} — AI software engineer`;
 const description =
-  "Frontend software engineer in Barcelona. React, TypeScript, Angular. Previously Dynatrace Dashboards and Notebooks, CREALOGIX banking, T-Systems Justice.";
+  "AI software engineer in Barcelona, building complete products with LLM agents. React, TypeScript, Go. Previously Dynatrace Dashboards and Notebooks, CREALOGIX banking, T-Systems Justice.";
 
 // Static, request-independent defaults. Per-locale canonical/hreflang/OpenGraph
 // live in `app/[locale]/layout.tsx`. Nothing here reads a per-request value —
@@ -18,12 +18,12 @@ export const metadata: Metadata = {
   applicationName: SITE_NAME,
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
-  keywords: ["Marc Fors", "frontend software engineer", "React", "TypeScript", "Angular", "Barcelona"],
+  keywords: ["Marc Fors", "AI software engineer", "LLM agents", "Claude Code", "React", "TypeScript", "Go", "Barcelona"],
   robots: { index: true, follow: true },
   openGraph: {
     title,
     description:
-      "Seven-plus years in observability, fintech, banking and government. Based in Barcelona. Open to frontend software engineer roles.",
+      "Seven-plus years in observability, fintech, banking and government, now shipping products with LLM agents. Based in Barcelona. Open to AI engineering roles.",
     url: SITE_URL,
     siteName: SITE_NAME,
     locale: OG_LOCALES[DEFAULT_LOCALE],

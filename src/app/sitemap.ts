@@ -8,7 +8,7 @@ import { RELEASE_DATE, SITE_URL } from "@/lib/site";
 const lastModified = new Date(`${RELEASE_DATE}T00:00:00.000Z`);
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const pages = ["/", ...listCaseStudySlugs().map((slug) => `/work/${slug}`)];
+  const pages = ["/", "/cv", ...listCaseStudySlugs().map((slug) => `/work/${slug}`)];
   return LOCALES.flatMap((locale) =>
     pages.map((path) => ({
       url: localeUrl(locale, path, SITE_URL),

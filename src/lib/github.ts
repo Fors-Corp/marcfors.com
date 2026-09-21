@@ -13,7 +13,12 @@ export type GhRepo = {
 };
 
 export function isListedRepo(repo: GhRepo): boolean {
-  return !repo.fork && !skipRepos.has(repo.name) && Boolean(repo.description || repo.language);
+  return (
+    !repo.fork &&
+    !skipRepos.has(repo.name) &&
+    Boolean(repo.description || repo.language) &&
+    Boolean(repo.homepage)
+  );
 }
 
 export async function fetchPublicRepos(): Promise<GhRepo[]> {

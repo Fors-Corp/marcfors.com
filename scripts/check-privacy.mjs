@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync } from "node:child_process";
+import { scanPublicAssets } from "./lib/privacy.mjs";
 
 const patterns = ["@gmail.com", "marcfors.me"];
 const paths = [
@@ -32,8 +33,16 @@ for (const pattern of patterns) {
   }
 }
 
+// Published assets need their own pass: the grep above skips binaries (`-I`),
+// and a PDF keeps its text inside compressed streams, so a leak in `public/`
+// scans clean either way. See scripts/lib/privacy.mjs.
+for (const { file, label, match } of scanPublicAssets()) {
+  failed = true;
+  console.error(`Privacy leak: ${label} found in published asset ${file}: ${match}`);
+}
+
 if (failed) {
   process.exit(1);
 }
 
-console.log("Privacy scan clean.");
+console.log("Privacy scan clean (source + published assets).");

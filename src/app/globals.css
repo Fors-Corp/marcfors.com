@@ -1027,6 +1027,29 @@ footer {
   margin: 16px 0 6px;
 }
 
+.cv {
+  margin-top: 18px;
+}
+/* Tall enough to show a full A4 page without inner scrolling on a laptop,
+   capped so it never outgrows the viewport on short screens. */
+.cv-frame {
+  display: block;
+  width: 100%;
+  height: min(82vh, 1040px);
+  margin-top: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--paper);
+}
+.cv-hint {
+  margin-top: 10px;
+}
+@media (max-width: 640px) {
+  .cv-frame {
+    height: min(70vh, 720px);
+  }
+}
+
 } /* @layer components */
 
 @media print {

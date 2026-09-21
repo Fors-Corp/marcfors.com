@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: SITE_NAME,
     short_name: SITE_NAME,
-    description: "Frontend software engineer in Barcelona.",
+    description: "AI software engineer in Barcelona.",
     start_url: "/",
     display: "browser",
     background_color: "#10141c",

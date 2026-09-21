@@ -8,7 +8,7 @@ function repo(partial: Partial<GhRepo> & Pick<GhRepo, "name">): GhRepo {
     description: "ok",
     language: "TypeScript",
     stargazers_count: 0,
-    homepage: null,
+    homepage: "https://example.vercel.app",
     pushed_at: "2026-01-01",
     fork: false,
     ...partial,
@@ -21,7 +21,7 @@ describe("featured work", () => {
       if (project.private) {
         expect(project.repo, project.name).toBeUndefined();
       } else {
-        expect(project.repo, project.name).toMatch(/^https:\/\/github.com\/marcfs31\//);
+        expect(project.repo, project.name).toMatch(/^https:\/\/github.com\/(marcfs31|Fors-Corp)\//);
       }
     }
   });
@@ -50,10 +50,27 @@ describe("featured work", () => {
 
   it("lists this desk with public source and the live site", () => {
     const site = featured.find((item) => item.name === "marcfors.com");
-    expect(site?.repo).toBe("https://github.com/marcfs31/marcfors.com");
+    expect(site?.repo).toBe("https://github.com/Fors-Corp/marcfors.com");
     expect(site?.live).toBe("https://marcfors.com");
     expect(site?.private).toBeFalsy();
     expect(site?.spotlight).toBe(true);
+  });
+
+  it("lists LMaaS (not the old mlaas name) as a private spotlight with no repo", () => {
+    expect(featured.some((item) => item.name === "mlaas")).toBe(false);
+    const lmaas = featured.find((item) => item.name === "LMaaS");
+    expect(lmaas?.private).toBe(true);
+    expect(lmaas?.repo).toBeUndefined();
+    expect(lmaas?.blurb.en).toMatch(/OpenAI-compatible API/);
+  });
+
+  it("points the Fors-Corp products at the org repos and their org Pages sites", () => {
+    for (const name of ["forsight", "Fors Design System"]) {
+      const item = featured.find((project) => project.name === name);
+      expect(item?.repo, name).toMatch(/^https:\/\/github.com\/Fors-Corp\//);
+      expect(item?.live, name).toMatch(/^https:\/\/fors-corp.github.io\//);
+    }
+    expect(featured.find((item) => item.name === "forsight")?.blurb.en).toMatch(/observability platform/i);
   });
 
   it("covers every locale on every project blurb", () => {
@@ -75,6 +92,14 @@ describe("public repo listing", () => {
     expect(isListedRepo(repo({ name: "TicketApp" }))).toBe(false);
     expect(isListedRepo(repo({ name: "fileshelf", fork: true }))).toBe(false);
     expect(isListedRepo(repo({ name: "gifs-app", description: null, language: null }))).toBe(false);
+  });
+
+  it("only auto-lists repos that serve something live", () => {
+    expect(isListedRepo(repo({ name: "hyper-top", homepage: null }))).toBe(false);
+    expect(isListedRepo(repo({ name: "hyper-top", homepage: "" }))).toBe(false);
+    expect(isListedRepo(repo({ name: "forsight", homepage: "https://marcfs31.github.io/forsight/" }))).toBe(
+      true,
+    );
   });
 
   it("keeps the homework skip list populated", () => {

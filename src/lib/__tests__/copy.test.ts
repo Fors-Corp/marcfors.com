@@ -26,10 +26,10 @@ describe("locale copy", () => {
     }
   });
 
-  it("leads with the career break, not a current Dynatrace role", () => {
-    expect(copy.en.breakTitle).toMatch(/career break/i);
+  it("leads with independent practice, not a current Dynatrace role", () => {
+    expect(copy.en.breakTitle).toMatch(/independent practice/i);
     expect(careerBreak.en.when).toMatch(/Dec 2025/i);
-    expect(careerBreak.en.body).toMatch(/personal matters/i);
+    expect(careerBreak.en.body).toMatch(/LLM agents/i);
     expect(experience.en[0]?.org).toBe("Dynatrace");
     expect(experience.en[0]?.when).toMatch(/Nov 2025/);
     expect(`${careerBreak.en.body} ${experience.en[0]?.body}`).not.toMatch(/currently at Dynatrace/i);
@@ -37,13 +37,15 @@ describe("locale copy", () => {
 
   it("makes recruiter and custom-work paths obvious", () => {
     expect(copy.en.kicker).toMatch(/open to work/i);
-    expect(copy.en.headline).toMatch(/frontend software engineer/i);
+    expect(copy.en.headline).toMatch(/AI software engineer/i);
+    expect(copy.en.breakTitle).toMatch(/Fors Corp/);
+    expect(copy.en.tagline).toMatch(/LLM agents/);
+    expect(Object.values(copy).map((t) => t.proofLine).join("\n")).not.toMatch(/mlaas/);
     expect(copy.en.hirePath).toMatch(/recruiter/i);
     expect(copy.en.buildPath).toMatch(/custom/i);
-    expect(copy.en.seeking).toMatch(/react/i);
+    expect(copy.en.seeking).toMatch(/AI engineering|LLM agents/i);
     expect(copy.en.seeking).toMatch(/barcelona/i);
-    expect(copy.en.seeking).toMatch(/Dec 2025/);
-    expect(copy.en.seeking).not.toMatch(/\bnow\b/i);
+    expect(copy.en.seeking).toMatch(/available now/i);
     expect(copy.en.proofMetric).toMatch(/~20%/);
     expect(copy.en.hireCta).toMatch(/hire/i);
     expect(copy.en.buildCta).toMatch(/commission/i);

@@ -34,6 +34,10 @@ export type UiCopy = {
   hireSubject: string;
   buildSubject: string;
   source: string;
+  /** aria-label templates; `{project}` is filled by `linkLabel()` (WCAG 2.4.9). */
+  sourceFor: string;
+  liveFor: string;
+  caseStudyFor: string;
   live: string;
   private: string;
   public: string;
@@ -46,6 +50,13 @@ export type UiCopy = {
   printCta: string;
   printTitle: string;
   printHint: string;
+  cvCta: string;
+  cvTitle: string;
+  cvLede: string;
+  cvDownload: string;
+  cvOpen: string;
+  cvUnsupported: string;
+  cvViewerLabel: string;
   caseStudy: string;
   atticTitle: string;
   hits: readonly string[];
