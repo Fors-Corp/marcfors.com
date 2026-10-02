@@ -82,6 +82,15 @@ describe("Desk", () => {
     );
   });
 
+  it("links the footer to the support hub as a plain same-tab link", () => {
+    renderDesk("it");
+    const footer = screen.getByRole("contentinfo");
+    const support = within(footer).getByRole("link", { name: copy.it.supportLink });
+    expect(support).toHaveAttribute("href", "/donate");
+    // Same tab on purpose: Stripe's success redirect brings the visitor back to /donate/thanks.
+    expect(support).not.toHaveAttribute("target");
+  });
+
   it("never shows a source link for a private project", () => {
     renderDesk();
     const privateProject = featured.find((p) => p.private && !p.repo);

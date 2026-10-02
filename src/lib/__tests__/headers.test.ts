@@ -34,7 +34,14 @@ describe("next.config headers()", () => {
     );
     const sources = noindex.map((r) => r.source);
     expect(sources).toEqual(
-      expect.arrayContaining(["/print", "/:locale/print", "/lab/:path*", "/:locale/lab/:path*"]),
+      expect.arrayContaining([
+        "/print",
+        "/:locale/print",
+        "/lab/:path*",
+        "/:locale/lab/:path*",
+        "/donate/:path*",
+        "/:locale/donate/:path*",
+      ]),
     );
     // the site root is never tagged noindex
     expect(sources).not.toContain("/:path*");

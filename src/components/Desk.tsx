@@ -13,6 +13,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { linkLabel } from "@/lib/labels";
 import { CV_FILENAME, CV_PATH, SITE_HOST, SITE_NAME, SITE_REPO } from "@/lib/site";
+import { SUPPORT_PATH } from "@/lib/support";
 import { SpotlightLayer } from "@/components/SpotlightLayer";
 import { SignalBoard, type SignalStrings } from "@/components/SignalBoard";
 
@@ -369,6 +370,9 @@ export function Desk({
           <span>{t.footer}</span>
           {" · "}
           <Link href={withLocale(locale, "/cv")}>{t.cvTitle}</Link>
+          {" · "}
+          {/* A plain <a>: <Link> would prefetch /donate, i.e. fire the redirect on every view. */}
+          <a href={SUPPORT_PATH}>{t.supportLink}</a>
           {" · "}
           <a
             href={SITE_REPO}

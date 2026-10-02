@@ -45,7 +45,23 @@ You still have to do the parts that sit on your accounts:
    - `A` `@` → `76.76.21.21`
    - `CNAME` `www` → `cname.vercel-dns.com`
 
-TLS certificates are issued by Vercel after DNS answers correctly. No extra env vars are required for the site itself.
+TLS certificates are issued by Vercel after DNS answers correctly.
+
+## Support link (`/donate`)
+
+Every Fors-Corp project links to `https://marcfors.com/donate?from=<repo-slug>`. [`src/app/donate/route.ts`](src/app/donate/route.ts) answers with a `302` to the Stripe Payment Link, adding `client_reference_id=<slug>` when the slug is on the allowlist in [`src/lib/support.ts`](src/lib/support.ts) (unknown or missing → untagged). Stripe's after-payment redirect lands on `/donate/thanks`, localized and `noindex`. Visible copy says **Support · 1,99 €**, never "donate": these are tips to an individual, not charitable donations.
+
+The Payment Link URL lives only in one env var — never in git:
+
+| Var | Preview / Development | Production |
+| --- | --- | --- |
+| `STRIPE_SUPPORT_LINK_URL` | test-mode link (`https://buy.stripe.com/test_…`) | live-mode link |
+
+```bash
+vercel env add STRIPE_SUPPORT_LINK_URL production
+```
+
+If it is unset or not `https`, `/donate` returns `500` and logs `[donate] STRIPE_SUPPORT_LINK_URL is unset…` instead of redirecting anywhere else.
 
 ## Agents
 

@@ -2,6 +2,30 @@
 
 All notable changes to this project are versioned with [SemVer](https://semver.org/).
 
+## 0.17.0 — 2026-10-02
+
+### Support · 1,99 €
+
+- **New `/donate` hub route.** Every Fors-Corp project links to
+  `https://marcfors.com/donate?from=<repo-slug>`; the route `302`s to the Stripe
+  Payment Link and tags the tip with `client_reference_id=<slug>` when the slug
+  is one of the 13 allowlisted projects (Stripe allows only `[A-Za-z0-9_-]`,
+  ≤200 chars). Unknown or missing sources still reach checkout, untagged.
+- **The Payment Link lives only in `STRIPE_SUPPORT_LINK_URL`** (test link in
+  Preview/Development, live link in Production). Unset or non-`https` → `500`
+  plus a log line; it never redirects to a placeholder.
+- **`/donate/thanks` in all six locales**, where Stripe sends the visitor after
+  paying. `noindex` by metadata and `X-Robots-Tag`, not in the sitemap.
+- **"Support · 1,99 €" in the footer** (translated per locale). A plain
+  same-tab link, so Stripe's success redirect returns to the same tab. Copy
+  says "Support", never "donate": these are tips to an individual, not
+  charitable donations.
+- `proxy.ts` passes exactly `/donate` through without a locale hop; the thanks
+  page localizes like every other route. Tests cover the allowlist, the
+  redirect, the 500 path, the proxy split, the footer link and the noindex rule.
+- Ships on **`next` 16.3.8** (already on `main`), which fixes GHSA-vcvr-r3jv-pc5j
+  (RCE in `next/og` `ImageResponse`, used by the OG images).
+
 ## 0.16.1 — 2026-09-20
 
 ### The CV button downloads your CV, not a generated one

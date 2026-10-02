@@ -23,7 +23,14 @@ const securityHeaders =
 // their metadata: an HTTP header is honoured even when the HTML is never parsed
 // (a linked print view, a PDF proxy, a fetch by a naive crawler).
 const NOINDEX = [{ key: "X-Robots-Tag", value: "noindex, nofollow" }];
-const noindexSources = ["/print", "/:locale/print", "/lab/:path*", "/:locale/lab/:path*"];
+const noindexSources = [
+  "/print",
+  "/:locale/print",
+  "/lab/:path*",
+  "/:locale/lab/:path*",
+  "/donate/:path*",
+  "/:locale/donate/:path*",
+];
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
