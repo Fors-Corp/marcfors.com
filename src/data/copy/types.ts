@@ -73,6 +73,9 @@ export type UiCopy = {
   langsTitle: string;
   footer: string;
   homeCta: string;
+  supportLink: string;
+  supportThanksTitle: string;
+  supportThanksBody: string;
   traceTitle: string;
   traceLede: string;
   tracePaste: string;

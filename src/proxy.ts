@@ -1,12 +1,15 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { DEFAULT_LOCALE, isCrawler, isLocale, LOCALE_KEY, preferredLocale, withLocale } from "@/lib/locale";
+import { SUPPORT_PATH } from "@/lib/support";
 
 const SKIP =
   /^\/(?:api|_next|icon|apple-icon|opengraph-image|twitter-image|robots\.txt|sitemap\.xml|manifest\.webmanifest|\.well-known)(?:\/|$|\.)/;
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  if (SKIP.test(pathname) || pathname.includes(".")) {
+  // `/donate` (exactly) is the tip redirect, the same in every locale; its
+  // `/donate/thanks` page is localized like any other.
+  if (SKIP.test(pathname) || pathname.includes(".") || pathname === SUPPORT_PATH) {
     return NextResponse.next();
   }
 

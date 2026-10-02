@@ -44,6 +44,20 @@ describe("locale proxy", () => {
     expect(res.headers.get("location")).toBeNull();
   });
 
+  it("passes /donate through untouched, whatever the remembered locale", () => {
+    const res = proxy(request("/donate?from=fors", { cookie: `${LOCALE_KEY}=es` }));
+    expect(isPassThrough(res)).toBe(true);
+    expect(rewrite(res)).toBeNull();
+    expect(res.headers.get("location")).toBeNull();
+  });
+
+  it("still localizes the /donate/thanks page", () => {
+    const res = proxy(request("/donate/thanks"));
+    expect(rewrite(res)).toBe("http://localhost/en/donate/thanks");
+    const es = proxy(request("/donate/thanks", { cookie: `${LOCALE_KEY}=es` }));
+    expect(new URL(es.headers.get("location")!).pathname).toBe("/es/donate/thanks");
+  });
+
   it("redirects /en/* back to the clean root path", () => {
     const res = proxy(request("/en/print"));
     expect(res.status).toBe(307);
