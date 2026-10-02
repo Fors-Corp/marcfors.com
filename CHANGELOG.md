@@ -23,9 +23,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 - `proxy.ts` passes exactly `/donate` through without a locale hop; the thanks
   page localizes like every other route. Tests cover the allowlist, the
   redirect, the 500 path, the proxy split, the footer link and the noindex rule.
-- **`next` 16.3.5 → 16.3.6** for GHSA-vcvr-r3jv-pc5j (RCE in `next/og`
-  `ImageResponse`, which the OG images use); `npm audit` is clean again. Same
-  bump as Dependabot #39, so the two merge cleanly.
+- Ships on **`next` 16.3.8** (already on `main`), which fixes GHSA-vcvr-r3jv-pc5j
+  (RCE in `next/og` `ImageResponse`, used by the OG images).
 
 ## 0.16.1 — 2026-09-20
 
