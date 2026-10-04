@@ -6,7 +6,7 @@ import { Desk } from "@/components/Desk";
 import { copy } from "@/data/copy";
 import { featured } from "@/data/projects";
 import { getAuditSnapshot } from "@/lib/audit";
-import type { Locale } from "@/lib/locale";
+import { LOCALES, type Locale } from "@/lib/locale";
 import { CV_FILENAME, CV_PATH } from "@/lib/site";
 
 vi.mock("next/navigation", () => ({ usePathname: () => "/", useRouter: () => ({ push: vi.fn() }) }));
@@ -92,7 +92,7 @@ describe("Desk", () => {
     expect(support).not.toHaveAttribute("target");
   });
 
-  it.each(["en", "es", "de"] as const)("surfaces Support in the header nav and the contact section (%s)", (locale) => {
+  it.each(LOCALES)("surfaces Support in the header nav and the contact section (%s)", (locale) => {
     renderDesk(locale);
     const t = copy[locale];
     const nav = screen.getByRole("navigation", { name: t.navLabel });

@@ -13,7 +13,7 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 - All three are plain same-tab `<a href="/donate">`, never `<Link>`, so a view
   never prefetches (and fires) the redirect.
 - The Stripe price is now tax-inclusive: the payer is charged exactly 1,99 €.
-- Tests cover the nav link and the card in en, es and de, and the copy-key
+- Tests cover the nav link and the card in every locale, and the copy-key
   lockstep and dead-key checks cover all six locales.
 
 ## 0.18.0 — 2026-10-04
