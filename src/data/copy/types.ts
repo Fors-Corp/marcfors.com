@@ -3,6 +3,10 @@ export type UiCopy = {
   now: string;
   kicker: string;
   headline: string;
+  /** <title> of the home page: name first, then the role phrasings recruiters search for. */
+  metaTitle: string;
+  /** <meta name="description"> of the home page, ≤160 characters. */
+  metaDescription: string;
   tagline: string;
   lede: string;
   proofLine: string;

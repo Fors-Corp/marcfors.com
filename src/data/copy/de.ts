@@ -6,6 +6,8 @@ export const ui: UiCopy = {
   now: "LLM-Agenten · React · TypeScript · Go",
   kicker: "Offen für Arbeit",
   headline: "KI-Softwareingenieur",
+  metaTitle: "Marc Fors — KI-Softwareingenieur, LLM-Agenten · Barcelona",
+  metaDescription: "Marc Fors, KI-Softwareingenieur in Barcelona. Komplette Produkte mit LLM-Agenten, Claude Code und MCP in React, TypeScript und Go. Offen für Rollen im KI- und LLM-Engineering.",
   tagline: "Ich baue vollständige Produkte mit LLM-Agenten und prüfe jede Zeile, die sie schreiben.",
   lede: "Mehr als sieben Jahre in Observability, Fintech, Banking und Verwaltung, heute baue ich vollständige Produkte mit LLM-Agenten als Lieferteam. Ich führe Claude Code, Codex, Cursor und Grok gegen versionierte Regeln, binde MCP-Server in jedes Repository ein, weise jede Aufgabe dem passenden Modell zu, und alles, was sie produzieren, muss vor dem Merge durch die CI.",
   proofLine: "LMaaS · Claude Code · Go · React · TypeScript · Barcelona",

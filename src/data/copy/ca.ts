@@ -6,6 +6,8 @@ export const ui: UiCopy = {
   now: "Agents LLM · React · TypeScript · Go",
   kicker: "Disponible",
   headline: "Enginyer de programari IA",
+  metaTitle: "Marc Fors — Enginyer de programari IA, agents LLM · Barcelona",
+  metaDescription: "Marc Fors, enginyer de programari IA a Barcelona. Productes complets amb agents LLM, Claude Code i MCP en React, TypeScript i Go. Obert a rols d'enginyeria d'IA i LLM.",
   tagline: "Construeixo productes complets amb agents LLM i controlo cada línia que escriuen.",
   lede: "Més de set anys en observabilitat, fintech, banca i administració, ara construint productes complets amb agents LLM com a equip d'entrega. Executo Claude Code, Codex, Cursor i Grok contra regles versionades, connecto servidors MCP a cada repositori, assigno cada tasca al model adequat, i tot el que produeixen passa per CI abans d'integrar-se.",
   proofLine: "LMaaS · Claude Code · Go · React · TypeScript · Barcelona",

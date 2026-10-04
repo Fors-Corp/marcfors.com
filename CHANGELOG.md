@@ -2,6 +2,31 @@
 
 All notable changes to this project are versioned with [SemVer](https://semver.org/).
 
+## 0.18.0 — 2026-10-04
+
+### Search presence
+
+- **One `Person` entity, not one per page.** `src/lib/seo.ts` builds a
+  schema.org `@graph` of `WebSite` + `Person` (stable `@id`s, `givenName` /
+  `familyName`, `hasOccupation` for "AI Software Engineer", "LLM Engineer" and
+  "AI Agent Engineer", `knowsAbout` incl. Claude Code, Claude Agent SDK and
+  MCP, `alumniOf`, `knowsLanguage`, `sameAs` to GitHub, Fors-Corp and
+  LinkedIn). The `[locale]` layout emits it on every page through the new
+  `JsonLd` component.
+- **`ProfilePage` on the home page** (Google's profile markup) and
+  **`BreadcrumbList` + `SoftwareSourceCode`/`CreativeWork` on each case study**,
+  all pointing at the shared Person id.
+- **Localized `<title>` and `<meta description>`.** New `metaTitle` /
+  `metaDescription` copy keys in all six locales replace the hardcoded English
+  strings; the title leads with the name, then the role phrasings and
+  "Barcelona". OpenGraph is now `type: profile` with first/last name; Twitter
+  card follows the locale.
+- **Search Console hook.** `GOOGLE_SITE_VERIFICATION` (Vercel env) renders the
+  verification meta tag; `max-image-preview: large` added to the robots meta.
+- Tests cover title/description length and keywords per locale, the id links
+  between graph nodes, the profile page, the breadcrumbs per case study, and
+  that the Person node never carries a phone or Gmail address.
+
 ## 0.17.0 — 2026-10-02
 
 ### Support · 1,99 €
