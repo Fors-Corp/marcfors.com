@@ -139,6 +139,8 @@ export function Desk({
             >
               {t.source}
             </a>
+            {/* Plain <a>, like the footer link: <Link> would prefetch /donate and fire the redirect on every view. */}
+            <a href={SUPPORT_PATH}>{t.supportNav}</a>
             <a className="nav-hire" href={mailTo(t.hireSubject)}>
               {t.hireCta}
             </a>
@@ -292,6 +294,14 @@ export function Desk({
                 <p>{t.buildPathLede}</p>
                 <a className="cta ghost" href={mailTo(t.buildSubject)}>
                   {t.buildCta}
+                </a>
+              </article>
+              <article className="card path-card">
+                <div className="kicker">{t.supportPath}</div>
+                <h3>{t.supportNav}</h3>
+                <p>{t.supportPathLede}</p>
+                <a className="cta ghost" href={SUPPORT_PATH}>
+                  {t.supportLink}
                 </a>
               </article>
             </div>

@@ -6,6 +6,7 @@ import { Desk } from "@/components/Desk";
 import { copy } from "@/data/copy";
 import { featured } from "@/data/projects";
 import { getAuditSnapshot } from "@/lib/audit";
+import type { Locale } from "@/lib/locale";
 import { CV_FILENAME, CV_PATH } from "@/lib/site";
 
 vi.mock("next/navigation", () => ({ usePathname: () => "/", useRouter: () => ({ push: vi.fn() }) }));
@@ -18,7 +19,7 @@ vi.mock("web-vitals", () => ({
 }));
 
 const audit = getAuditSnapshot();
-const renderDesk = (locale: "en" | "it" = "en") =>
+const renderDesk = (locale: Locale = "en") =>
   render(<Desk repos={[]} audit={audit} initialLocale={locale} />);
 
 beforeEach(() => {
@@ -89,6 +90,22 @@ describe("Desk", () => {
     expect(support).toHaveAttribute("href", "/donate");
     // Same tab on purpose: Stripe's success redirect brings the visitor back to /donate/thanks.
     expect(support).not.toHaveAttribute("target");
+  });
+
+  it.each(["en", "es", "de"] as const)("surfaces Support in the header nav and the contact section (%s)", (locale) => {
+    renderDesk(locale);
+    const t = copy[locale];
+    const nav = screen.getByRole("navigation", { name: t.navLabel });
+    const navLink = within(nav).getByRole("link", { name: t.supportNav });
+    expect(navLink).toHaveAttribute("href", "/donate");
+    expect(navLink).not.toHaveAttribute("target");
+
+    const contact = document.getElementById("contact") as HTMLElement;
+    const card = within(contact).getByRole("heading", { name: t.supportNav }).closest(".card") as HTMLElement;
+    expect(within(card).getByText(t.supportPathLede)).toBeInTheDocument();
+    const cta = within(card).getByRole("link", { name: t.supportLink });
+    expect(cta).toHaveAttribute("href", "/donate");
+    expect(cta).not.toHaveAttribute("target");
   });
 
   it("never shows a source link for a private project", () => {

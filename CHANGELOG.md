@@ -2,6 +2,20 @@
 
 All notable changes to this project are versioned with [SemVer](https://semver.org/).
 
+## 0.19.0 — 2026-10-04
+
+### Support, easier to find
+
+- **"Support" in the header nav** (translated per locale), visible on every
+  scroll position, and **a third card in the Contact section** next to
+  Recruiters and Custom work, with one sentence on what a tip funds and the
+  "Support · 1,99 €" button. The footer link stays.
+- All three are plain same-tab `<a href="/donate">`, never `<Link>`, so a view
+  never prefetches (and fires) the redirect.
+- The Stripe price is now tax-inclusive: the payer is charged exactly 1,99 €.
+- Tests cover the nav link and the card in en, es and de, and the copy-key
+  lockstep and dead-key checks cover all six locales.
+
 ## 0.18.0 — 2026-10-04
 
 ### Search presence

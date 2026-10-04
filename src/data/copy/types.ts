@@ -78,6 +78,10 @@ export type UiCopy = {
   footer: string;
   homeCta: string;
   supportLink: string;
+  /** Short header-nav label; the full "· 1,99 €" label stays on the buttons. */
+  supportNav: string;
+  supportPath: string;
+  supportPathLede: string;
   supportThanksTitle: string;
   supportThanksBody: string;
   traceTitle: string;
