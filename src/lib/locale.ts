@@ -1,4 +1,4 @@
-export const LOCALES = ["en", "es", "ca", "it", "pt", "de"] as const;
+export const LOCALES = ["en", "es", "ca", "it", "pt", "de", "fr"] as const;
 export type Locale = (typeof LOCALES)[number];
 
 export const LOCALE_CODES: Record<Locale, string> = {
@@ -8,6 +8,7 @@ export const LOCALE_CODES: Record<Locale, string> = {
   it: "IT",
   pt: "PT",
   de: "DE",
+  fr: "FR",
 };
 
 export const LOCALE_LABELS: Record<Locale, string> = {
@@ -17,6 +18,7 @@ export const LOCALE_LABELS: Record<Locale, string> = {
   it: "Italiano",
   pt: "Português",
   de: "Deutsch",
+  fr: "Français",
 };
 
 export const OG_LOCALES: Record<Locale, string> = {
@@ -26,6 +28,7 @@ export const OG_LOCALES: Record<Locale, string> = {
   it: "it_IT",
   pt: "pt_PT",
   de: "de_DE",
+  fr: "fr_FR",
 };
 
 export const DEFAULT_LOCALE: Locale = "en";

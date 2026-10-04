@@ -75,7 +75,7 @@ describe("featured work", () => {
 
   it("covers every locale on every project blurb", () => {
     for (const project of [...featured, ...lab]) {
-      expect(Object.keys(project.blurb).sort(), project.name).toEqual(["ca", "de", "en", "es", "it", "pt"]);
+      expect(Object.keys(project.blurb).sort(), project.name).toEqual(["ca", "de", "en", "es", "fr", "it", "pt"]);
     }
   });
 
