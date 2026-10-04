@@ -162,4 +162,12 @@ export const ATLAS_COPY: Record<Locale, AtlasCopy> = {
     hint: "56 Wörter · 90 Kanten · 4 Sprachen",
     rel: { syn: "Synonym", ant: "Gegenteil", tr: "Übersetzung", rel: "verwandt" },
   },
+  fr: {
+    heading: "L’Atlas",
+    lede: "Une tranche en direct de mon autre projet, Wordkeep : du vocabulaire enregistré, relié par le sens. Faites glisser un mot pour le déplacer, touchez-le ou cliquez dessus pour lire ses liens ; ouvrez la carte 3D complète sur Wordkeep.",
+    open: "Ouvrir l’atlas 3D",
+    visit: "Voir Wordkeep",
+    hint: "56 mots · 90 liens · 4 langues",
+    rel: { syn: "synonyme", ant: "antonyme", tr: "traduction", rel: "apparenté" },
+  },
 };

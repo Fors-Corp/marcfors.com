@@ -4,6 +4,19 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## 0.19.0 — 2026-10-04
 
+### French
+
+- **`/fr` is the seventh locale.** `src/data/copy/fr.ts` carries the full UI,
+  experience, education and language copy; the three case studies exist as
+  `content/work/<slug>/fr.mdx`; every project blurb and the Word Atlas copy have
+  a French line; the language switcher gets a French flag. `hreflang`, the
+  sitemap, `og:locale` (`fr_FR`), JSON-LD and the Accept-Language redirect pick
+  it up from the single `LOCALES` list.
+- The site now claims seven languages in the marcfors.com project blurb.
+- Tests: locale list, French labels and routing, `fr-FR` Accept-Language, the
+  per-project blurb keys, and every existing per-locale loop (copy lockstep,
+  Desk, sitemap, SEO) now includes `fr`.
+
 ### Support, easier to find
 
 - **"Support" in the header nav** (translated per locale), visible on every

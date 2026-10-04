@@ -66,4 +66,11 @@ const FLAGS: Record<Locale, React.ReactNode> = {
       <rect y="10.667" width="24" height="5.333" fill="#FFCE00" />
     </>
   ),
+  fr: (
+    <>
+      <rect width="24" height="16" fill="#fff" />
+      <rect width="8" height="16" fill="#0055A4" />
+      <rect x="16" width="8" height="16" fill="#EF4135" />
+    </>
+  ),
 };

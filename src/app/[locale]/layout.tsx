@@ -18,7 +18,7 @@ export function generateStaticParams() {
 // renders (e.g. `/de/work/<unknown-slug>`) can still reach `app/[locale]/not-found.tsx`.
 // Unknown locales are rejected explicitly by the `isLocale` guards below.
 
-// Only the `latin` subset is preloaded. Every glyph the six locales actually
+// Only the `latin` subset is preloaded. Every glyph the seven locales actually
 // render (es/ca/it/pt/de accents, Catalan's U+00B7 middot) lives in `latin` —
 // `latin-ext` is Central/Eastern European and was costing 52,124 B of
 // High-priority preload nobody needed. This is fail-safe, not a gamble: next/font

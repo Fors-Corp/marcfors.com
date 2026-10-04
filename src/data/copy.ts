@@ -6,6 +6,7 @@ import * as ca from "@/data/copy/ca";
 import * as it from "@/data/copy/it";
 import * as pt from "@/data/copy/pt";
 import * as de from "@/data/copy/de";
+import * as fr from "@/data/copy/fr";
 
 export type { Locale };
 export type { Job, UiCopy };
@@ -18,6 +19,7 @@ export const copy: Record<Locale, UiCopy> = {
   it: it.ui,
   pt: pt.ui,
   de: de.ui,
+  fr: fr.ui,
 };
 
 export const experience: Record<Locale, readonly Job[]> = {
@@ -27,6 +29,7 @@ export const experience: Record<Locale, readonly Job[]> = {
   it: it.experience,
   pt: pt.experience,
   de: de.experience,
+  fr: fr.experience,
 };
 
 export const careerBreak: Record<Locale, { when: string; body: string }> = {
@@ -36,6 +39,7 @@ export const careerBreak: Record<Locale, { when: string; body: string }> = {
   it: it.careerBreak,
   pt: pt.careerBreak,
   de: de.careerBreak,
+  fr: fr.careerBreak,
 };
 
 export const education: Record<Locale, readonly string[]> = {
@@ -45,6 +49,7 @@ export const education: Record<Locale, readonly string[]> = {
   it: it.education,
   pt: pt.education,
   de: de.education,
+  fr: fr.education,
 };
 
 export const languages: Record<Locale, string> = {
@@ -54,4 +59,5 @@ export const languages: Record<Locale, string> = {
   it: it.languages,
   pt: pt.languages,
   de: de.languages,
+  fr: fr.languages,
 };
