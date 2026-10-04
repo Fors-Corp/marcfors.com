@@ -4,7 +4,10 @@ import { notFound } from "next/navigation";
 import { Fraunces, IBM_Plex_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { isLocale, languageAlternates, LOCALES, localeUrl, OG_LOCALES, type Locale } from "@/lib/locale";
-import { DEV_EMAIL, GITHUB_ORG_URL, GITHUB_URL, LINKEDIN_URL, SITE_NAME, SITE_URL } from "@/lib/site";
+import { JsonLd } from "@/components/JsonLd";
+import { copy } from "@/data/copy";
+import { FAMILY_NAME, GIVEN_NAME, siteJsonLd } from "@/lib/seo";
+import { SITE_URL } from "@/lib/site";
 import { ANTI_FLASH_SCRIPT } from "@/lib/theme";
 
 export function generateStaticParams() {
@@ -39,10 +42,6 @@ const mono = IBM_Plex_Mono({
   adjustFontFallback: true,
 });
 
-const title = `${SITE_NAME} — AI software engineer`;
-const description =
-  "AI software engineer in Barcelona, building complete products with LLM agents. React, TypeScript, Go. Previously Dynatrace Dashboards and Notebooks, CREALOGIX banking, T-Systems Justice.";
-
 // Match the paper/ink palette backgrounds (src/lib/themePalettes.ts) so the mobile
 // browser chrome tracks the active theme instead of a single hard-coded colour.
 export const viewport: Viewport = {
@@ -62,41 +61,27 @@ export async function generateMetadata({
   if (!isLocale(raw)) notFound();
   const locale: Locale = raw;
 
+  const t = copy[locale];
+  // Localized <title>/<description>: a search in Spanish or German should see a
+  // snippet in that language, not the English default from the root layout.
   return {
-    title,
-    description,
+    title: t.metaTitle,
+    description: t.metaDescription,
     alternates: {
       canonical: localeUrl(locale, "/", SITE_URL),
       languages: languageAlternates("/", SITE_URL),
     },
     openGraph: {
-      title,
-      description:
-        "Seven-plus years in observability, fintech, banking and government, now shipping products with LLM agents. Based in Barcelona. Open to AI engineering roles.",
+      type: "profile",
+      firstName: GIVEN_NAME,
+      lastName: FAMILY_NAME,
+      title: t.metaTitle,
+      description: t.metaDescription,
       url: localeUrl(locale, "/", SITE_URL),
       locale: OG_LOCALES[locale],
       alternateLocale: LOCALES.filter((item) => item !== locale).map((item) => OG_LOCALES[item]),
     },
-  };
-}
-
-function jsonLd(locale: Locale) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: SITE_NAME,
-    url: localeUrl(locale, "/", SITE_URL),
-    email: DEV_EMAIL,
-    jobTitle: "AI software engineer",
-    worksFor: { "@type": "Organization", name: "Fors Corp", url: GITHUB_ORG_URL },
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Barcelona",
-      addressCountry: "ES",
-    },
-    sameAs: [GITHUB_URL, LINKEDIN_URL],
-    knowsAbout: ["LLM agents", "Claude Code", "Model Context Protocol", "React", "TypeScript", "Go", "Next.js", "observability"],
-    seeks: "AI engineering and LLM-agent roles in Barcelona or remote EU",
+    twitter: { card: "summary_large_image", title: t.metaTitle, description: t.metaDescription },
   };
 }
 
@@ -121,10 +106,8 @@ export default async function LocaleLayout({
         }
       >
         <script dangerouslySetInnerHTML={{ __html: ANTI_FLASH_SCRIPT }} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd(locale)) }}
-        />
+        {/* application/ld+json: WebSite + Person graph, shared by every page. */}
+        <JsonLd data={siteJsonLd(locale)} />
         {children}
         <Analytics />
       </body>

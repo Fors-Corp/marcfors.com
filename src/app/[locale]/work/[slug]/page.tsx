@@ -3,11 +3,13 @@ import { linkLabel } from "@/lib/labels";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BrandMark } from "@/components/BrandMark";
+import { JsonLd } from "@/components/JsonLd";
 import { WordAtlas } from "@/components/WordAtlas";
 import { caseStudyBySlug, listCaseStudySlugs } from "@/data/caseStudies";
 import { copy } from "@/data/copy";
 import { ATLAS_COPY } from "@/data/wordAtlas";
 import { isLocale, languageAlternates, LOCALES, localeUrl, withLocale } from "@/lib/locale";
+import { caseStudyJsonLd } from "@/lib/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -34,6 +36,15 @@ export async function generateMetadata({
       canonical: localeUrl(locale, `/work/${slug}`, SITE_URL),
       languages: languageAlternates(`/work/${slug}`, SITE_URL),
     },
+    // The [locale] layout declares `og:type profile` for the person; a case
+    // study is an article about one piece of work, so override it here.
+    openGraph: {
+      type: "article",
+      title: `${study.project} — ${copy[locale].caseStudy}`,
+      description: study.description,
+      url: localeUrl(locale, `/work/${slug}`, SITE_URL),
+      authors: [SITE_NAME],
+    },
   };
 }
 
@@ -54,6 +65,7 @@ export default async function CaseStudyPage({
 
   return (
     <div className="wrap">
+      <JsonLd data={caseStudyJsonLd(locale, study)} />
       <header className="top">
         <Link className="brand" href={withLocale(locale, "/")}>
           <BrandMark />
