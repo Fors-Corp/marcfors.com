@@ -26,10 +26,18 @@ describe("sitemap", () => {
     }
   });
 
+  it("lists the privacy page in every locale", () => {
+    const entries = sitemap();
+    for (const locale of LOCALES) {
+      const url = locale === "en" ? `${SITE_URL}/privacy` : `${SITE_URL}/${locale}/privacy`;
+      expect(entries.some((entry) => entry.url === url), `privacy for ${locale}`).toBe(true);
+    }
+  });
+
   it("covers the home page and every case study in every locale", () => {
     const entries = sitemap();
-    // home + /cv + one per case study
-    const pages = 2 + slugs.length;
+    // home + /cv + /privacy + one per case study
+    const pages = 3 + slugs.length;
     expect(entries).toHaveLength(LOCALES.length * pages);
 
     for (const locale of LOCALES) {

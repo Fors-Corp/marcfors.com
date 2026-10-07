@@ -381,6 +381,8 @@ export function Desk({
           {" · "}
           <Link href={withLocale(locale, "/cv")}>{t.cvTitle}</Link>
           {" · "}
+          <Link href={withLocale(locale, "/privacy")}>{t.privacyLink}</Link>
+          {" · "}
           {/* A plain <a>: <Link> would prefetch /donate, i.e. fire the redirect on every view. */}
           <a href={SUPPORT_PATH}>{t.supportLink}</a>
           {" · "}

@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { copy } from "../src/data/copy";
 import { findAtlasNodePoint } from "./atlasHit";
 
 test("home renders the desk in English", async ({ page }) => {
@@ -104,4 +105,12 @@ test("unknown path returns a styled 404", async ({ page }) => {
   const res = await page.goto("/nonsense-path");
   expect(res?.status()).toBe(404);
   await expect(page.getByText(/page not found/i)).toBeVisible();
+});
+
+test("privacy notice renders and localizes", async ({ page }) => {
+  await page.goto("/privacy");
+  await expect(page.getByRole("heading", { level: 1, name: copy.en.privacyTitle })).toBeVisible();
+  await expect(page.locator("main")).toContainText("marcfors-locale");
+  await page.goto("/de/privacy");
+  await expect(page.locator("html")).toHaveAttribute("lang", "de");
 });
