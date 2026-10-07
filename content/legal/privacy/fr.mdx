@@ -1,0 +1,52 @@
+## Qui exploite ce site
+
+marcfors.com est édité par Marc Fors, ingénieur logiciel indépendant basé à Barcelone, en Espagne, qui exerce sous le nom de Fors Corp. Vous pouvez me joindre à developer@marcfors.com. Cette section constitue les mentions légales exigées par la loi espagnole 34/2002 sur les services de la société de l’information (LSSI). Le reste de cette page est la politique de confidentialité exigée par le Règlement général sur la protection des données (RGPD) de l’UE et par le California Online Privacy Protection Act (CalOPPA).
+
+## En bref
+
+- Aucune publicité et aucun suivi inter-sites. Pas de Google Analytics, pas de pixels de réseaux sociaux, pas de scripts tiers.
+- Un seul cookie, `marcfors-locale`, écrit uniquement lorsque vous choisissez une langue. Vos choix de langue et de thème sont aussi conservés dans le localStorage de votre navigateur. Aucun d’eux ne vous identifie.
+- C’est pourquoi il n’y a pas de bandeau de cookies : la loi ne demande le consentement que pour les cookies qui ne sont pas strictement nécessaires ou qui vous suivent à la trace.
+- Le site traite très peu de données personnelles : les journaux du serveur nécessaires à son fonctionnement, des mesures de performance sans identifiants, et ce que vous m’envoyez par e-mail ou par un pourboire via Stripe.
+
+## Ce qui est traité, et pourquoi
+
+**Diffusion des pages.** Lorsque vous chargez une page, l’hébergeur, Vercel Inc. (États-Unis), reçoit votre adresse IP, votre user agent et l’URL demandée, comme tout serveur web. Ces journaux de requêtes existent pour diffuser le site, le protéger contre les abus et diagnostiquer les pannes. Vercel les conserve brièvement ; le site lui-même n’en stocke aucun. Base juridique : intérêt légitime (RGPD, art. 6(1)(f)).
+
+**Limitation du débit.** Les deux points de terminaison de mesure ci-dessous comptent les requêtes par adresse IP en mémoire pendant une minute, puis les oublient. Rien n’est écrit sur disque.
+
+**Mesures de performance (web vitals).** Votre navigateur envoie cinq indicateurs de temps (LCP, INP, CLS, FCP, TTFB) à `/api/vitals`. Chaque rapport contient le nom de l’indicateur, sa valeur et un identifiant aléatoire propre à ce chargement de page, et rien d’autre : pas d’adresse IP, pas de cookie, pas de compte. Ils sont journalisés pour que je puisse garder le site rapide. Base juridique : intérêt légitime.
+
+**Mesure d’audience.** Vercel Web Analytics compte les pages vues sans cookies ni identifiants persistants. Il calcule à partir de la requête une empreinte (hash) qui est supprimée sous 24 heures, de sorte que les visites ne peuvent pas être rattachées à vous d’un jour à l’autre, et je ne vois jamais que des totaux agrégés. Base juridique : intérêt légitime. Voir la [politique de confidentialité de Vercel](https://vercel.com/legal/privacy-policy).
+
+**Rapports d’erreurs.** Si une page plante, le navigateur envoie le message d’erreur et un condensé (digest) à `/api/errors` afin que je puisse la corriger. Aucune donnée personnelle n’y est incluse, volontairement. Base juridique : intérêt légitime.
+
+**E-mail.** Si vous écrivez à developer@marcfors.com, je conserve votre message et votre adresse aussi longtemps que la conversation, et le travail qui peut en découler, en ont besoin. Base juridique : mesures précontractuelles prises à votre demande (art. 6(1)(b)) ou intérêt légitime.
+
+**Pourboires (Support · 1,99 €).** Le bouton de soutien vous renvoie vers une page de paiement exploitée par Stripe (Stripe Payments Europe Ltd., Irlande, et Stripe Inc., États-Unis). Stripe collecte les données de votre carte et votre adresse e-mail selon [sa propre politique de confidentialité](https://stripe.com/privacy) ; je ne vois jamais le numéro de carte. Stripe me communique le montant, la date, votre adresse e-mail et le projet depuis lequel vous avez laissé un pourboire. Je conserve cet enregistrement aussi longtemps que le droit fiscal et comptable espagnol l’exige, jusqu’à six ans. Base juridique : exécution de la transaction (art. 6(1)(b)) et obligation légale (art. 6(1)(c)).
+
+## Cookies et stockage du navigateur
+
+- **`marcfors-locale`** (cookie propriétaire, un an) : défini uniquement lorsque vous choisissez une langue dans le sélecteur, afin que le site se rouvre dans cette langue.
+- **`marcfors-locale`** (localStorage) : le même choix, conservé côté client jusqu’à ce que vous l’effaciez.
+- **`marcfors-theme`** (localStorage) : la palette de couleurs que vous avez choisie, conservée jusqu’à ce que vous l’effaciez.
+
+Ces éléments mémorisent un choix que vous avez fait vous-même, ce qui les exempte de consentement au titre de l’art. 5(3) de la directive ePrivacy et du guide sur les cookies de l’autorité espagnole de protection des données. Vous pouvez les supprimer à tout moment depuis les paramètres de votre navigateur ; le site suit alors simplement la langue de votre navigateur et le thème de votre système. La page de paiement Stripe dépose ses propres cookies selon la politique de Stripe.
+
+## Qui reçoit des données
+
+Vercel Inc. (hébergement, journaux de requêtes, mesure d’audience) et Stripe (paiements) traitent des données pour mon compte, et Stripe agit aussi en tant que responsable de traitement indépendant pour ses propres obligations légales. Les deux sont certifiés au titre du cadre de protection des données UE-États-Unis (EU-US Data Privacy Framework), et les transferts vers les États-Unis reposent en outre sur les clauses contractuelles types de la Commission européenne. Je ne vends pas de données personnelles et je ne les partage pas à des fins publicitaires.
+
+## Vos droits
+
+En vertu du RGPD, vous pouvez me demander d’accéder aux données que je détiens sur vous, de les rectifier, de les effacer ou de les exporter, d’en limiter le traitement ou de vous y opposer, et de retirer votre consentement lorsque celui-ci était la base juridique. Écrivez à developer@marcfors.com ; je réponds dans un délai d’un mois. Vous pouvez aussi introduire une réclamation auprès d’une autorité de contrôle : en Espagne, l’Agencia Española de Protección de Datos ([aepd.es](https://www.aepd.es)), ou l’autorité de votre propre pays de l’UE.
+
+## Visiteurs des États-Unis
+
+- Ce site ne vend ni ne partage d’informations personnelles et ne vous suit pas sur d’autres sites ; il n’y a donc rien à refuser. Il respecte par défaut les signaux Global Privacy Control et Do Not Track, car aucun suivi n’a lieu, avec ou sans eux.
+- Les seuils du California Consumer Privacy Act (CCPA/CPRA) ne s’appliquent pas à ce site. Les informations ci-dessus sont fournies volontairement et pour satisfaire au CalOPPA.
+- Le site ne s’adresse pas aux enfants de moins de 16 ans et ne collecte sciemment aucune donnée les concernant.
+
+## Modifications
+
+Les modifications importantes sont annoncées sur cette page, avec la date affichée en haut, et dans le journal des modifications public du site. La version actuelle a pris effet à cette date.

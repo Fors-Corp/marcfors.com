@@ -1,0 +1,52 @@
+## Wer diese Website betreibt
+
+marcfors.com wird von Marc Fors veröffentlicht, einem selbstständigen Softwareentwickler mit Sitz in Barcelona, Spanien, der unter dem Namen Fors Corp arbeitet. Du erreichst mich unter developer@marcfors.com. Dieser Abschnitt ist die rechtliche Anbieterkennzeichnung (Impressum), die das spanische Gesetz 34/2002 über Dienste der Informationsgesellschaft (LSSI) verlangt. Der Rest dieser Seite ist die Datenschutzerklärung, die die Datenschutz-Grundverordnung der EU (DSGVO) und der California Online Privacy Protection Act (CalOPPA) verlangen.
+
+## Kurz gesagt
+
+- Keine Werbung und kein websiteübergreifendes Tracking. Kein Google Analytics, keine Social-Media-Pixel, keine Skripte von Drittanbietern.
+- Ein Cookie, `marcfors-locale`, das nur geschrieben wird, wenn du eine Sprache auswählst. Deine Sprach- und Theme-Auswahl bleibt außerdem im localStorage deines Browsers. Nichts davon identifiziert dich.
+- Deshalb gibt es kein Cookie-Banner: Das Gesetz verlangt eine Einwilligung nur für Cookies, die nicht unbedingt erforderlich sind oder die dich tracken.
+- Die Website verarbeitet sehr wenige personenbezogene Daten: die Server-Logs, die für ihren Betrieb nötig sind, Leistungsmessungen ohne Kennungen und alles, was du mir per E-Mail oder über ein Trinkgeld bei Stripe schickst.
+
+## Was verarbeitet wird und warum
+
+**Auslieferung der Seiten.** Wenn du eine Seite lädst, erhält der Hosting-Anbieter Vercel Inc. (USA) deine IP-Adresse, deinen User-Agent und die angeforderte URL, wie jeder Webserver. Diese Anfrage-Logs dienen dazu, die Website auszuliefern, sie vor Missbrauch zu schützen und Fehler zu beheben. Vercel speichert sie nur kurz; die Website selbst speichert keine. Rechtsgrundlage: berechtigtes Interesse (DSGVO Art. 6(1)(f)).
+
+**Ratenbegrenzung.** Die beiden unten genannten Beacon-Endpunkte zählen Anfragen pro IP-Adresse eine Minute lang im Arbeitsspeicher und vergessen sie dann. Es wird nichts auf die Festplatte geschrieben.
+
+**Leistungsmessungen (Web Vitals).** Dein Browser sendet fünf Zeitmetriken (LCP, INP, CLS, FCP, TTFB) an `/api/vitals`. Jeder Bericht enthält den Namen der Metrik, ihren Wert und eine zufällige ID für diesen Seitenaufruf, und sonst nichts: keine IP-Adresse, kein Cookie, kein Konto. Sie werden protokolliert, damit ich die Website schnell halten kann. Rechtsgrundlage: berechtigtes Interesse.
+
+**Reichweitenmessung.** Vercel Web Analytics zählt Seitenaufrufe ohne Cookies oder dauerhafte Kennungen. Es leitet aus der Anfrage einen Hash ab, der innerhalb von 24 Stunden verworfen wird, sodass Besuche nicht über mehrere Tage hinweg mit dir verknüpft werden können, und ich sehe immer nur aggregierte Zahlen. Rechtsgrundlage: berechtigtes Interesse. Siehe [die Datenschutzerklärung von Vercel](https://vercel.com/legal/privacy-policy).
+
+**Fehlerberichte.** Wenn eine Seite abstürzt, sendet der Browser die Fehlermeldung und einen Digest an `/api/errors`, damit ich den Fehler beheben kann. Absichtlich werden keine personenbezogenen Daten übermittelt. Rechtsgrundlage: berechtigtes Interesse.
+
+**E-Mail.** Wenn du an developer@marcfors.com schreibst, bewahre ich deine Nachricht und deine Adresse so lange auf, wie die Unterhaltung und etwaige daraus folgende Arbeit sie benötigen. Rechtsgrundlage: vorvertragliche Maßnahmen auf deine Anfrage hin (Art. 6(1)(b)) oder berechtigtes Interesse.
+
+**Trinkgelder (Support · 1,99 €).** Der Support-Button führt dich zu einer Zahlungsseite, die von Stripe betrieben wird (Stripe Payments Europe Ltd., Irland, und Stripe Inc., USA). Stripe erhebt deine Kartendaten und deine E-Mail-Adresse nach [seiner eigenen Datenschutzerklärung](https://stripe.com/privacy); die Kartennummer sehe ich nie. Stripe zeigt mir den Betrag, das Datum, deine E-Mail-Adresse und das Projekt, von dem aus du das Trinkgeld gegeben hast. Diesen Datensatz bewahre ich so lange auf, wie das spanische Steuer- und Buchführungsrecht es verlangt, bis zu sechs Jahre. Rechtsgrundlage: Durchführung der Transaktion (Art. 6(1)(b)) und rechtliche Verpflichtung (Art. 6(1)(c)).
+
+## Cookies und Browser-Speicher
+
+- **`marcfors-locale`** (First-Party-Cookie, ein Jahr): wird nur gesetzt, wenn du im Sprachumschalter eine Sprache auswählst, damit sich die Website wieder in dieser Sprache öffnet.
+- **`marcfors-locale`** (localStorage): dieselbe Auswahl, auf dem Client gespeichert, bis du sie löschst.
+- **`marcfors-theme`** (localStorage): die von dir gewählte Farbpalette, gespeichert, bis du sie löschst.
+
+Diese Einträge merken sich eine Auswahl, die du selbst getroffen hast, und sind deshalb nach Art. 5(3) der ePrivacy-Richtlinie und dem Cookie-Leitfaden der spanischen Datenschutzbehörde von der Einwilligungspflicht ausgenommen. Du kannst sie jederzeit in den Einstellungen deines Browsers löschen; die Website folgt dann einfach der Sprache deines Browsers und deinem System-Theme. Die Zahlungsseite von Stripe setzt eigene Cookies nach den Richtlinien von Stripe.
+
+## Wer Daten erhält
+
+Vercel Inc. (Hosting, Anfrage-Logs, Reichweitenmessung) und Stripe (Zahlungen) verarbeiten Daten in meinem Auftrag, und Stripe handelt für seine eigenen rechtlichen Verpflichtungen außerdem als eigenständiger Verantwortlicher. Beide sind nach dem EU-US Data Privacy Framework zertifiziert, und Übermittlungen in die Vereinigten Staaten stützen sich zusätzlich auf die Standardvertragsklauseln der Europäischen Kommission. Ich verkaufe keine personenbezogenen Daten und gebe sie nicht zu Werbezwecken weiter.
+
+## Deine Rechte
+
+Nach der DSGVO kannst du von mir Auskunft über die über dich gespeicherten Daten, ihre Berichtigung, Löschung oder Herausgabe oder die Einschränkung ihrer Verarbeitung verlangen, der Verarbeitung widersprechen und eine Einwilligung widerrufen, wo sie die Grundlage war. Schreib an developer@marcfors.com; ich antworte innerhalb eines Monats. Du kannst dich außerdem bei einer Aufsichtsbehörde beschweren: in Spanien bei der Agencia Española de Protección de Datos ([aepd.es](https://www.aepd.es)) oder bei der Behörde deines eigenen EU-Landes.
+
+## Besucher aus den Vereinigten Staaten
+
+- Diese Website verkauft oder teilt keine personenbezogenen Informationen und trackt dich nicht über andere Websites hinweg, es gibt also nichts, wovon du dich abmelden müsstest. Sie respektiert standardmäßig Global-Privacy-Control- und Do-Not-Track-Signale, weil mit oder ohne sie kein Tracking stattfindet.
+- Die Schwellenwerte des California Consumer Privacy Act (CCPA/CPRA) gelten für diese Website nicht. Die obigen Angaben werden freiwillig und zur Erfüllung des CalOPPA gemacht.
+- Die Website richtet sich nicht an Kinder unter 16 Jahren und erhebt wissentlich keine Daten von ihnen.
+
+## Änderungen
+
+Wesentliche Änderungen werden auf dieser Seite angekündigt, mit dem Datum oben, und im öffentlichen Changelog der Website. Die aktuelle Version ist an diesem Datum in Kraft getreten.
