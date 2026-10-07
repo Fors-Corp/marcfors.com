@@ -78,11 +78,14 @@ describe("locale proxy", () => {
     expect(res.headers.get("set-cookie")).toBeNull();
   });
 
-  it("redirects a first visit by Accept-Language and remembers the pick", () => {
+  it("redirects a first visit by Accept-Language without setting a cookie", () => {
     const res = proxy(request("/", { headers: { "accept-language": "es-ES,es;q=0.9,en;q=0.8" } }));
     expect(res.status).toBe(307);
     expect(new URL(res.headers.get("location")!).pathname).toBe("/es");
-    expect(res.headers.get("set-cookie") ?? "").toContain(`${LOCALE_KEY}=es`);
+    // Only an explicit pick in the switcher persists a locale (prefs.writeLocale);
+    // an automatic redirect must not store anything, or the cookie stops being
+    // the consent-exempt "user-chosen preference" the privacy notice describes.
+    expect(res.headers.get("set-cookie")).toBeNull();
   });
 
   it("keeps crawlers on English regardless of Accept-Language", () => {
@@ -99,8 +102,10 @@ describe("locale proxy", () => {
     expect(localeHeader(res)).toBe("en");
   });
 
-  it("does not set a Secure cookie on plain http", () => {
-    const res = proxy(request("http://localhost/", { headers: { "accept-language": "pt-PT" } }));
-    expect(res.headers.get("set-cookie") ?? "").not.toMatch(/Secure/i);
+  it("never sets a cookie on any automatic routing path", () => {
+    for (const path of ["/", "/cv", "/work/wordkeep", "/en/cv"]) {
+      const res = proxy(request(path, { headers: { "accept-language": "pt-PT" } }));
+      expect(res.headers.get("set-cookie"), path).toBeNull();
+    }
   });
 });

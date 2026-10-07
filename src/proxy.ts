@@ -35,19 +35,15 @@ export function proxy(request: NextRequest) {
     : preferredLocale(request.headers.get("accept-language"));
   const pick = remembered ?? fromBrowser;
 
+  // The cookie is never written here. A first visit is routed by
+  // Accept-Language on every request (deterministic, nothing stored); only an
+  // explicit pick in the language switcher persists a locale (`writeLocale`).
+  // That keeps `marcfors-locale` a user-chosen preference, which is what exempts
+  // it from cookie consent under ePrivacy art. 5(3) — see /privacy.
   if (pick !== DEFAULT_LOCALE) {
     const url = request.nextUrl.clone();
     url.pathname = withLocale(pick, pathname);
-    const response = NextResponse.redirect(url);
-    if (!remembered) {
-      response.cookies.set(LOCALE_KEY, pick, {
-        path: "/",
-        maxAge: 31536000,
-        sameSite: "lax",
-        secure: request.nextUrl.protocol === "https:",
-      });
-    }
-    return response;
+    return NextResponse.redirect(url);
   }
 
   const headers = new Headers(request.headers);
