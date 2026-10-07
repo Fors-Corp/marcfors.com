@@ -1,0 +1,52 @@
+## Quem gere este site
+
+marcfors.com é publicado por Marc Fors, engenheiro de software por conta própria sediado em Barcelona, Espanha, que trabalha sob o nome Fors Corp. Podes contactar-me em developer@marcfors.com. Esta secção é o aviso legal exigido pela Lei espanhola 34/2002 dos serviços da sociedade da informação (LSSI). O resto desta página é o aviso de privacidade exigido pelo Regulamento Geral sobre a Proteção de Dados (RGPD) da UE e pela California Online Privacy Protection Act (CalOPPA).
+
+## Em resumo
+
+- Sem publicidade e sem rastreamento entre sites. Sem Google Analytics, sem pixels de redes sociais, sem scripts de terceiros.
+- Um cookie, `marcfors-locale`, escrito apenas quando escolhes um idioma. As tuas escolhas de idioma e de tema também ficam no localStorage do teu navegador. Nenhuma delas te identifica.
+- É por isso que não há banner de cookies: a lei só exige consentimento para cookies que não sejam estritamente necessários ou que te rastreiem.
+- O site trata muito poucos dados pessoais: os registos do servidor necessários para o fazer funcionar, medições de desempenho sem identificadores e o que me enviares por e-mail ou através de uma gorjeta no Stripe.
+
+## O que é tratado, e porquê
+
+**Servir as páginas.** Quando carregas uma página, o fornecedor de alojamento, a Vercel Inc. (EUA), recebe o teu endereço IP, o user agent e o URL pedido, como qualquer servidor web. Estes registos de pedidos existem para entregar o site, defendê-lo contra abusos e depurar falhas. A Vercel guarda-os por pouco tempo; o próprio site não guarda nenhum. Base jurídica: interesse legítimo (RGPD art. 6(1)(f)).
+
+**Limitação de pedidos.** Os dois endpoints de beacon abaixo contam os pedidos por endereço IP em memória durante um minuto e depois esquecem-nos. Nada é escrito em disco.
+
+**Medições de desempenho (web vitals).** O teu navegador envia cinco métricas de tempo (LCP, INP, CLS, FCP, TTFB) para `/api/vitals`. Cada relatório contém o nome da métrica, o seu valor e um id aleatório desse carregamento de página, e nada mais: nenhum endereço IP, nenhum cookie, nenhuma conta. São registadas para que eu possa manter o site rápido. Base jurídica: interesse legítimo.
+
+**Medição de audiência.** O Vercel Web Analytics conta visualizações de página sem cookies nem identificadores persistentes. Deriva um hash a partir do pedido que é descartado em 24 horas, pelo que as visitas não podem ser associadas a ti ao longo de vários dias, e eu só vejo contagens agregadas. Base jurídica: interesse legítimo. Consulta [a política de privacidade da Vercel](https://vercel.com/legal/privacy-policy).
+
+**Relatórios de erros.** Se uma página falhar, o navegador envia a mensagem de erro e um digest para `/api/errors` para que eu a possa corrigir. Propositadamente, não é incluído nenhum dado pessoal. Base jurídica: interesse legítimo.
+
+**E-mail.** Se escreveres para developer@marcfors.com, guardo a tua mensagem e o teu endereço durante o tempo que a conversa, e qualquer trabalho que dela resulte, precisar deles. Base jurídica: diligências prévias à celebração de um contrato a teu pedido (art. 6(1)(b)) ou interesse legítimo.
+
+**Gorjetas (Support · 1,99 €).** O botão de apoio leva-te para uma página de pagamento operada pelo Stripe (Stripe Payments Europe Ltd., Irlanda, e Stripe Inc., EUA). O Stripe recolhe os dados do teu cartão e o teu endereço de e-mail ao abrigo da [sua própria política de privacidade](https://stripe.com/privacy); nunca vejo o número do cartão. O Stripe mostra-me o montante, a data, o teu endereço de e-mail e o projeto a partir do qual deste a gorjeta. Guardo esse registo durante o tempo que a legislação fiscal e contabilística espanhola exigir, até seis anos. Base jurídica: execução da transação (art. 6(1)(b)) e obrigação legal (art. 6(1)(c)).
+
+## Cookies e armazenamento do navegador
+
+- **`marcfors-locale`** (cookie próprio, um ano): definido apenas quando escolhes um idioma no seletor, para que o site volte a abrir nesse idioma.
+- **`marcfors-locale`** (localStorage): a mesma escolha, mantida no cliente até a apagares.
+- **`marcfors-theme`** (localStorage): a paleta de cores que escolheste, mantida até a apagares.
+
+Estes itens lembram uma escolha que fizeste tu próprio, o que os isenta de consentimento ao abrigo do art. 5(3) da Diretiva ePrivacy e do guia de cookies da autoridade espanhola de proteção de dados. Podes apagá-los a qualquer momento nas definições do teu navegador; o site passa então simplesmente a seguir o idioma do teu navegador e o tema do teu sistema. A página de pagamento do Stripe define os seus próprios cookies ao abrigo da política do Stripe.
+
+## Quem recebe dados
+
+A Vercel Inc. (alojamento, registos de pedidos, medição de audiência) e o Stripe (pagamentos) tratam dados em meu nome, e o Stripe também atua como responsável pelo tratamento independente para as suas próprias obrigações legais. Ambos estão certificados ao abrigo do Quadro de Privacidade de Dados UE-EUA, e as transferências para os Estados Unidos assentam adicionalmente nas Cláusulas Contratuais-Tipo da Comissão Europeia. Não vendo dados pessoais e não os partilho para fins publicitários.
+
+## Os teus direitos
+
+Ao abrigo do RGPD, podes pedir-me o acesso aos dados que tenho sobre ti, a sua retificação, apagamento ou exportação, ou a limitação do seu tratamento, bem como opor-te a esse tratamento e retirar o teu consentimento quando este tenha sido a base. Escreve para developer@marcfors.com; respondo no prazo de um mês. Também podes apresentar uma reclamação a uma autoridade de controlo: em Espanha, a Agencia Española de Protección de Datos ([aepd.es](https://www.aepd.es)), ou a autoridade do teu próprio país da UE.
+
+## Visitantes dos Estados Unidos
+
+- Este site não vende nem partilha informações pessoais e não te rastreia noutros sites, pelo que não há nada a que tenhas de te opor. Respeita por defeito os sinais Global Privacy Control e Do Not Track, porque não ocorre qualquer rastreamento, com ou sem eles.
+- Os limiares da California Consumer Privacy Act (CCPA/CPRA) não se aplicam a este site. As divulgações acima são feitas voluntariamente e para cumprir a CalOPPA.
+- O site não se destina a crianças com menos de 16 anos e não recolhe conscientemente dados delas.
+
+## Alterações
+
+As alterações significativas são anunciadas nesta página, com a data indicada no topo, e no registo de alterações público do site. A versão atual entrou em vigor nessa data.
