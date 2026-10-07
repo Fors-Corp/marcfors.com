@@ -2,6 +2,37 @@
 
 All notable changes to this project are versioned with [SemVer](https://semver.org/).
 
+## 0.20.0 — 2026-10-08
+
+### Privacy & legal notice
+
+- **`/privacy` in every locale.** One page with the legal notice Spain's LSSI
+  (art. 10) requires, the GDPR art. 13 privacy notice (purposes, legal bases,
+  the processors Vercel and Stripe, US transfers, retention, rights, the AEPD)
+  and the CalOPPA items for US visitors (effective date, Do Not Track / Global
+  Privacy Control, children). Prose is MDX in `content/legal/privacy/<locale>.mdx`;
+  `PRIVACY_UPDATED` in `src/lib/site.ts` is the effective date shown on the
+  page. Linked from the desk footer, listed in the sitemap with `hreflang`.
+- **No cookie banner, on purpose.** The site stores only user-chosen
+  preferences (the `marcfors-locale` cookie, locale and theme in localStorage),
+  which are consent-exempt under ePrivacy art. 5(3). The notice explains that;
+  AGENTS.md now records that adding any tracker means adding consent first.
+- **The proxy no longer sets the locale cookie.** A first visit is routed by
+  `Accept-Language` on every request; only the language switcher persists a
+  pick, so the cookie stays a choice the visitor made.
+- The security "controls" line about cookies now says what is true: one
+  preference cookie, set only when you pick a language.
+- Tests: `legal.test.ts` pins what every locale's notice must state (cookie
+  and storage keys, processors, supervisory authority) and that it leaks no
+  address or phone; sitemap, footer, copy-lockstep and proxy tests updated; a
+  Playwright smoke test opens `/privacy` and `/de/privacy`.
+
+### Dependencies
+
+- `npm audit fix` for the `sharp` (GHSA-wq5f-xc86-pv6w) and `source-map-js`
+  (GHSA-68fv-2mgg-jv7q) advisories, both transitive deps of `next`, which had
+  started failing the `--audit-level=high` gate.
+
 ## 0.19.0 — 2026-10-04
 
 ### French
