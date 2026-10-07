@@ -1,0 +1,52 @@
+## Who runs this site
+
+marcfors.com is published by Marc Fors, a self-employed software engineer based in Barcelona, Spain, working under the name Fors Corp. You can reach me at developer@marcfors.com. This section is the legal notice required by Spain's Law 34/2002 on Information Society Services (LSSI). The rest of this page is the privacy notice required by the EU General Data Protection Regulation (GDPR) and by the California Online Privacy Protection Act (CalOPPA).
+
+## In short
+
+- No advertising and no cross-site tracking. No Google Analytics, no social-media pixels, no third-party scripts.
+- One cookie, `marcfors-locale`, written only when you pick a language. Your language and theme choices also stay in your browser's localStorage. None of these identifies you.
+- That is why there is no cookie banner: the law asks for consent only for cookies that are not strictly necessary or that track you.
+- The site processes very little personal data: the server logs needed to run it, performance measurements without identifiers, and whatever you send me by e-mail or through a tip on Stripe.
+
+## What is processed, and why
+
+**Serving the pages.** When you load a page, the hosting provider, Vercel Inc. (USA), receives your IP address, user agent and the URL requested, as any web server does. These request logs exist to deliver the site, defend it against abuse and debug failures. Vercel keeps them briefly; the site itself stores none. Legal basis: legitimate interest (GDPR art. 6(1)(f)).
+
+**Rate limiting.** The two beacon endpoints below count requests per IP address in memory for one minute, then forget them. Nothing is written to disk.
+
+**Performance measurements (web vitals).** Your browser sends five timing metrics (LCP, INP, CLS, FCP, TTFB) to `/api/vitals`. Each report carries the metric name, its value and a random id for that page load, and nothing else: no IP address, no cookie, no account. They are logged so I can keep the site fast. Legal basis: legitimate interest.
+
+**Audience measurement.** Vercel Web Analytics counts page views without cookies or persistent identifiers. It derives a hash from the request that is discarded within 24 hours, so visits cannot be linked to you across days, and I only ever see aggregate counts. Legal basis: legitimate interest. See [Vercel's privacy policy](https://vercel.com/legal/privacy-policy).
+
+**Error reports.** If a page crashes, the browser sends the error message and a digest to `/api/errors` so I can fix it. No personal data is included on purpose. Legal basis: legitimate interest.
+
+**E-mail.** If you write to developer@marcfors.com, I keep your message and address for as long as the conversation, and any work that follows from it, needs them. Legal basis: steps prior to a contract at your request (art. 6(1)(b)) or legitimate interest.
+
+**Tips (Support · 1,99 €).** The support button sends you to a payment page operated by Stripe (Stripe Payments Europe Ltd., Ireland, and Stripe Inc., USA). Stripe collects your card details and e-mail address under [its own privacy policy](https://stripe.com/privacy); I never see the card number. Stripe shows me the amount, the date, your e-mail address and the project you were tipping from. I keep that record for as long as Spanish tax and accounting law requires, up to six years. Legal basis: performance of the transaction (art. 6(1)(b)) and legal obligation (art. 6(1)(c)).
+
+## Cookies and browser storage
+
+- **`marcfors-locale`** (first-party cookie, one year): set only when you pick a language in the switcher, so the site reopens in that language.
+- **`marcfors-locale`** (localStorage): the same choice, kept on the client until you clear it.
+- **`marcfors-theme`** (localStorage): the colour palette you picked, kept until you clear it.
+
+These remember a choice you made yourself, which exempts them from consent under art. 5(3) of the ePrivacy Directive and the cookie guide of the Spanish data protection authority. You can delete them at any time from your browser's settings; the site then simply follows your browser's language and your system theme. The Stripe payment page sets its own cookies under Stripe's policy.
+
+## Who receives data
+
+Vercel Inc. (hosting, request logs, audience measurement) and Stripe (payments) process data on my behalf, and Stripe also acts as an independent controller for its own legal obligations. Both are certified under the EU-US Data Privacy Framework, and transfers to the United States additionally rely on the European Commission's Standard Contractual Clauses. I do not sell personal data and I do not share it for advertising.
+
+## Your rights
+
+Under the GDPR you can ask me to access, correct, erase or export the data I hold about you, to restrict or object to its processing, and to withdraw consent where consent was the basis. Write to developer@marcfors.com; I answer within one month. You can also lodge a complaint with a supervisory authority: in Spain the Agencia Española de Protección de Datos ([aepd.es](https://www.aepd.es)), or the authority of your own EU country.
+
+## Visitors from the United States
+
+- This site does not sell or share personal information and does not track you across other sites, so there is nothing to opt out of. It honours Global Privacy Control and Do Not Track signals by default, because no tracking happens with or without them.
+- The thresholds of the California Consumer Privacy Act (CCPA/CPRA) do not apply to this site. The disclosures above are made voluntarily and to meet CalOPPA.
+- The site is not directed at children under 16 and knowingly collects no data from them.
+
+## Changes
+
+Material changes are announced on this page, with the date shown at the top, and in the site's public changelog. The current version took effect on that date.
