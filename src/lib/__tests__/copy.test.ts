@@ -17,7 +17,7 @@ describe("locale copy", () => {
   });
 
   it("actually translates the prose fields (no English left in place)", () => {
-    const prose = ["lede", "contactLede", "hirePathLede", "buildPathLede"] as const;
+    const prose = ["lede", "contactLede", "hirePathLede", "buildPathLede", "privacyLede"] as const;
     for (const locale of LOCALES.filter((l) => l !== "en")) {
       for (const key of prose) {
         expect(copy[locale][key], `${locale}.${key}`).not.toBe(copy.en[key]);

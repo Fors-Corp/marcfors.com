@@ -84,6 +84,10 @@ export type UiCopy = {
   supportPathLede: string;
   supportThanksTitle: string;
   supportThanksBody: string;
+  privacyLink: string; // footer label
+  privacyTitle: string; // page <h1> and <title>
+  privacyLede: string; // <meta description> and lede paragraph
+  privacyUpdated: string; // "Last updated" label shown before the date
   traceTitle: string;
   traceLede: string;
   tracePaste: string;
