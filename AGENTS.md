@@ -13,6 +13,9 @@ Public personal portfolio for Marc Fors, hosted at **https://marcfors.com**. Obs
 - Git author for this repo: `Marc Fors <developer@marcfors.com>`.
 - GitHub user `marcfs31` is public and fine to mention. Private GitHub repos must not be linked.
 - Phone stays off the site and out of git. It lives on the CV, nowhere in this tree.
+- /privacy is the legal + privacy notice (LSSI, GDPR, CalOPPA). Prose lives in content/legal/privacy/<locale>.mdx; any change to what the site stores, sends or embeds must update it in the same PR and bump PRIVACY_UPDATED in src/lib/site.ts.
+- No cookie banner by design: the site only stores user-chosen preferences (locale cookie + localStorage), which are consent-exempt. Adding any tracker or third-party script means adding a consent flow first.
+- The locale cookie is written only by the language switcher (prefs.writeLocale), never by the proxy.
 
 ## Facts
 

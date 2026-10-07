@@ -83,6 +83,15 @@ describe("Desk", () => {
     );
   });
 
+  it("links the footer to the privacy notice", () => {
+    renderDesk("it");
+    const footer = screen.getByRole("contentinfo");
+    expect(within(footer).getByRole("link", { name: copy.it.privacyLink })).toHaveAttribute(
+      "href",
+      "/it/privacy",
+    );
+  });
+
   it("links the footer to the support hub as a plain same-tab link", () => {
     renderDesk("it");
     const footer = screen.getByRole("contentinfo");
