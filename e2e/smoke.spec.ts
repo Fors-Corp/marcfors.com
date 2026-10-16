@@ -9,10 +9,23 @@ test("home renders the desk in English", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
 });
 
+test("Gatto links from featured work to a localized success story and the live storefront", async ({ page }) => {
+  await page.goto("/ca");
+  const card = page.locator(".project-card").filter({ has: page.getByRole("heading", { name: "Gatto", exact: true }) });
+  await expect(card.locator(".technology-icon")).toHaveCount(3);
+  await expect(card.locator('a[href="https://gatto-psi.vercel.app"]')).toBeVisible();
+  await expect(card.locator('a[href*="github.com"]')).toHaveCount(0);
+  await card.locator('a[href="/ca/work/gatto"]').click();
+  await expect(page.getByRole("heading", { name: "Gatto", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Resultat" })).toBeVisible();
+  await expect(page.locator("main")).toContainText("Silvia Galiano");
+  await expect(page.locator("main .technology-icon")).toHaveCount(3);
+});
+
 test("language switch changes the URL and the lang attribute", async ({ page }) => {
   await page.goto("/");
   // Desktop header shows the locale links; the <select> is a mobile-only fallback.
-  await page.getByRole("link", { name: "Español" }).click();
+  await page.getByRole("link", { name: "ES · Español" }).click();
   await expect(page).toHaveURL(/\/es$/);
   expect(await page.locator("html").getAttribute("lang")).toBe("es");
 });

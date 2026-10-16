@@ -43,8 +43,10 @@ jobs:
       - run: npm run lint
       - run: npm audit --omit=dev --audit-level=high
       - run: npm run build
-      - name: Lighthouse budgets (local build)
-        run: npx --yes @lhci/cli@0.14.0 autorun
+      - name: Lighthouse desktop budgets (local build)
+        run: npx --yes @lhci/cli@0.15.1 autorun
+      - name: Lighthouse mobile budgets (local build)
+        run: npx --yes @lhci/cli@0.15.1 autorun --config=lighthouserc.mobile.cjs
       - name: Upload Lighthouse report
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7

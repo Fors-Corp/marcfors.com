@@ -3,7 +3,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { Desk } from "@/components/Desk";
-import { copy } from "@/data/copy";
+import { copy, skills } from "@/data/copy";
 import { featured } from "@/data/projects";
 import { getAuditSnapshot } from "@/lib/audit";
 import { LOCALES, type Locale } from "@/lib/locale";
@@ -23,6 +23,10 @@ const renderDesk = (locale: Locale = "en") =>
   render(<Desk repos={[]} audit={audit} initialLocale={locale} />);
 
 beforeEach(() => {
+  vi.stubGlobal("IntersectionObserver", class {
+    observe() {}
+    disconnect() {}
+  });
   vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ json: async () => ({ ok: true, audit }) }));
 });
 afterEach(() => {
@@ -31,6 +35,18 @@ afterEach(() => {
 });
 
 describe("Desk", () => {
+  it.each(LOCALES)("pairs every project and skill label with a decorative icon (%s)", (locale) => {
+    const { container } = renderDesk(locale);
+    for (const card of container.querySelectorAll(".project-card")) {
+      const chips = card.querySelectorAll(".chips li");
+      expect(chips.length).toBeGreaterThan(0);
+      for (const chip of chips) expect(chip.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
+    }
+    const stack = container.querySelector("#skills") as HTMLElement;
+    expect(within(stack).getAllByRole("heading", { level: 3 })).toHaveLength(Object.keys(skills).length);
+    expect(stack.querySelectorAll(".technology-icon")).toHaveLength(Object.values(skills).flat().length);
+  });
+
   it("leads with the name and role", () => {
     renderDesk();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Marc Fors");
@@ -125,6 +141,13 @@ describe("Desk", () => {
     const card = heading.closest(".card") as HTMLElement;
     expect(within(card).getByText(copy.en.private)).toBeInTheDocument();
     expect(within(card).queryByRole("link", { name: copy.en.source })).toBeNull();
+  });
+
+  it("distinguishes a live product's status from the privacy of its source", () => {
+    renderDesk();
+    const card = screen.getByRole("heading", { name: "Gatto" }).closest(".card") as HTMLElement;
+    expect(within(card).getByText(copy.en.live, { selector: ".badge" })).not.toHaveClass("private");
+    expect(within(card).getByText(copy.en.private)).toHaveClass("private");
   });
 
   it("emphasises every proof-line token, including the Italian 'Barcellona'", () => {

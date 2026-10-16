@@ -2,6 +2,15 @@ import { SITE_HOST } from "@/lib/site";
 import type { Job, UiCopy } from "./types";
 
 export const ui: UiCopy = {
+  activity: {
+    title: "Activitat a GitHub",
+    lede: "Un any de contribucions i feina pública recent. S’actualitza cada cinc minuts mentre és visible; GitHub pot trigar a publicar canvis. El calendari segueix el perfil públic i pot incloure contribucions privades anònimes.",
+    calendar: "Calendari de contribucions", recent: "Activitat pública recent", profile: "Veure el perfil de GitHub",
+    loading: "Carregant l’activitat de GitHub…", unavailable: "L’activitat de GitHub no està disponible temporalment. Consulta el perfil o torna més tard.",
+    empty: "GitHub no ha retornat activitat pública recent.", checked: "Última consulta",
+    daily: "Contribucions per dia", contributions: "contribucions", less: "Menys", more: "Més",
+    kinds: { push: "Codi enviat", pullRequest: "Sol·licitud de canvis", issue: "Incidència", release: "Versió publicada" },
+  },
   place: "Barcelona · ciutadà UE",
   now: "Agents LLM · React · TypeScript · Go",
   kicker: "Disponible",

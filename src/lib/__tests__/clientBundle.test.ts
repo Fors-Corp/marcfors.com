@@ -20,6 +20,15 @@ function walk(dir: string): string[] {
 }
 
 describe("client/server boundary", () => {
+  it("keeps the technology icon catalog out of Client Components", () => {
+    const offenders = walk(SRC).filter((file) => {
+      const text = readFileSync(file, "utf8");
+      return /^["']use client["'];/m.test(text) &&
+        /from ["'](?:simple-icons|@\/components\/TechnologyChips|@\/lib\/technologyIcons)["']/.test(text);
+    });
+    expect(offenders.map((file) => path.relative(SRC, file))).toEqual([]);
+  });
+
   it("no Client Component imports the full copy map", () => {
     const offenders = walk(SRC).filter((file) => {
       const text = readFileSync(file, "utf8");

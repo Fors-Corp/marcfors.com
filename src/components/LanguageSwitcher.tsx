@@ -21,7 +21,7 @@ export function LanguageSwitcher({ locale, langLabel }: { locale: Locale; langLa
             href={withLocale(code, rest)}
             lang={code}
             hrefLang={code}
-            aria-label={LOCALE_LABELS[code]}
+            aria-label={`${LOCALE_CODES[code]} · ${LOCALE_LABELS[code]}`}
             aria-current={locale === code ? "page" : undefined}
             onClick={() => writeLocale(code)}
           >

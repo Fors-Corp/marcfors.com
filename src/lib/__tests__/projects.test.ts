@@ -16,6 +16,20 @@ function repo(partial: Partial<GhRepo> & Pick<GhRepo, "name">): GhRepo {
 }
 
 describe("featured work", () => {
+  it("features Gatto as a delivered storefront with a case study, without exposing source", () => {
+    const gatto = featured.find((item) => item.name === "Gatto");
+    expect(gatto).toMatchObject({
+      stack: ["HTML5", "CSS3", "JavaScript"],
+      live: "https://gatto-psi.vercel.app",
+      caseStudy: "gatto",
+      private: true,
+      spotlight: true,
+    });
+    expect(gatto?.repo).toBeUndefined();
+    expect(gatto?.blurb.en).toMatch(/Silvia Galiano/);
+    expect(gatto?.blurb.en).toMatch(/Spanish, Catalan and English/);
+  });
+
   it("never links source for private projects", () => {
     for (const project of featured) {
       if (project.private) {

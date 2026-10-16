@@ -10,6 +10,11 @@ describe("locale copy", () => {
       expect(Object.keys(copy[locale])).toEqual(keys);
       expect(Object.keys(copy[locale].skillGroups)).toEqual(Object.keys(copy.en.skillGroups));
       expect(Object.keys(copy[locale].vitalDefs)).toEqual([...VITAL_NAMES]);
+      expect(Object.keys(copy[locale].activity)).toEqual(Object.keys(copy.en.activity));
+      expect(Object.values(copy[locale].activity.kinds)).toHaveLength(4);
+      for (const value of Object.values(copy[locale].activity)) {
+        if (typeof value === "string") expect(value.trim()).not.toBe("");
+      }
       expect(experience[locale]).toHaveLength(experience.en.length);
       expect(education[locale]).toHaveLength(education.en.length);
       expect(experience[locale][0]?.points.length).toBe(experience.en[0]?.points.length);
@@ -23,6 +28,7 @@ describe("locale copy", () => {
         expect(copy[locale][key], `${locale}.${key}`).not.toBe(copy.en[key]);
       }
       expect(careerBreak[locale].body, `${locale} career break`).not.toBe(careerBreak.en.body);
+      expect(copy[locale].activity.lede).not.toBe(copy.en.activity.lede);
     }
   });
 

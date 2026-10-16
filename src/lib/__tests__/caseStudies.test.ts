@@ -5,7 +5,7 @@ import { LOCALES } from "@/lib/locale";
 describe("case studies", () => {
   it("lists every case study, sorted by order", () => {
     const slugs = listCaseStudySlugs();
-    expect(slugs).toEqual(["wordkeep", "habit-breaker", "iterm-studio"]);
+    expect(slugs).toEqual(["wordkeep", "habit-breaker", "iterm-studio", "gatto"]);
   });
 
   it("has matching frontmatter across every locale, differing only in description", () => {
@@ -42,6 +42,19 @@ describe("case studies", () => {
     const habit = caseStudyBySlug("habit-breaker", "en");
     expect(habit?.live).toMatch(/^https:\/\//);
     expect(habit?.repo).toBeUndefined();
+  });
+
+  it("describes Gatto's delivered outcome without exposing private contact details or source", () => {
+    for (const locale of LOCALES) {
+      const study = caseStudyBySlug("gatto", locale);
+      expect(study?.live).toBe("https://gatto-psi.vercel.app");
+      expect(study?.repo).toBeUndefined();
+      const body = caseStudyBody("gatto", locale)!;
+      expect(body).toContain("Silvia Galiano");
+      expect(body).toContain("Vercel");
+      expect(body).not.toMatch(/mailto:|tel:|wa\.me|github\.com|@/);
+    }
+    expect(caseStudyBody("gatto", "en")).toContain("no build step, runtime dependencies or trackers");
   });
 
   it("returns undefined for an unknown slug or a locale with no file", () => {

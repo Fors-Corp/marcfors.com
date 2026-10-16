@@ -30,6 +30,23 @@ export const featured: Project[] = [
     spotlight: true,
   },
   {
+    name: "Gatto",
+    blurb: {
+      en: "A live, trilingual storefront for Silvia Galiano's handicraft shop in Gràcia, Barcelona. Spanish, Catalan and English; directions, opening hours and direct contact, without dependencies or trackers.",
+      es: "Una web trilingüe en producción para la tienda de artesanía de Silvia Galiano en Gràcia, Barcelona. Castellano, catalán e inglés; cómo llegar, horarios y contacto directo, sin dependencias ni rastreadores.",
+      ca: "Un aparador web trilingüe en producció per a la botiga d'artesania de Silvia Galiano a Gràcia, Barcelona. Castellà, català i anglès; com arribar-hi, horaris i contacte directe, sense dependències ni rastrejadors.",
+      it: "Un sito vetrina trilingue online per il negozio di artigianato di Silvia Galiano a Gràcia, Barcellona. Spagnolo, catalano e inglese; indicazioni, orari e contatto diretto, senza dipendenze né tracciamento.",
+      pt: "Um site de apresentação trilingue em produção para a loja de artesanato de Silvia Galiano em Gràcia, Barcelona. Castelhano, catalão e inglês; direções, horários e contacto direto, sem dependências nem rastreadores.",
+      de: "Eine veröffentlichte dreisprachige Website für Silvia Galianos Kunsthandwerksladen in Gràcia, Barcelona. Spanisch, Katalanisch und Englisch; Anfahrt, Öffnungszeiten und direkter Kontakt, ohne Abhängigkeiten oder Tracking.",
+      fr: "Un site vitrine trilingue en ligne pour la boutique d'artisanat de Silvia Galiano à Gràcia, Barcelone. Espagnol, catalan et anglais ; itinéraire, horaires et contact direct, sans dépendances ni traceurs.",
+    },
+    stack: ["HTML5", "CSS3", "JavaScript"],
+    live: "https://gatto-psi.vercel.app",
+    caseStudy: "gatto",
+    private: true,
+    spotlight: true,
+  },
+  {
     name: "Wordkeep",
     blurb: {
       en: "Vocabulary keeper with a spaced review queue and a 3D atlas that wires saved words together by synonym, antonym, translation and sense across four languages.",
