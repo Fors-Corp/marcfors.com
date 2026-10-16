@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { LOCALE_KEY, LOCALES } from "@/lib/locale";
-import { BANNED_PHONE_PATTERNS, BANNED_PUBLIC_PATTERNS, DEV_EMAIL } from "@/lib/site";
+import { BANNED_PHONE_PATTERNS, BANNED_PUBLIC_PATTERNS, DEV_EMAIL, PRIVACY_UPDATED } from "@/lib/site";
 import { THEME_KEY } from "@/lib/theme";
 
 const ROOT = path.join(process.cwd(), "content", "legal", "privacy");
@@ -10,6 +10,15 @@ const read = (locale: string) => fs.readFileSync(path.join(ROOT, `${locale}.mdx`
 const headings = (body: string) => body.split("\n").filter((line) => line.startsWith("## ")).length;
 
 describe("privacy and legal notice", () => {
+  it("dates the GitHub activity disclosure", () => {
+    expect(PRIVACY_UPDATED).toBe("2026-10-16");
+  });
+
+  it.each(LOCALES)("%s discloses the first-party GitHub activity endpoint", (locale) => {
+    expect(read(locale)).toContain("/api/github-activity");
+    expect(read(locale)).toContain("GitHub");
+  });
+
   it.each(LOCALES)("has a non-empty %s file", (locale) => {
     const file = path.join(ROOT, `${locale}.mdx`);
     expect(fs.existsSync(file), `${locale}.mdx exists`).toBe(true);

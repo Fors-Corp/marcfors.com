@@ -1,4 +1,22 @@
+export type ActivityStrings = {
+  title: string;
+  lede: string;
+  calendar: string;
+  recent: string;
+  profile: string;
+  loading: string;
+  unavailable: string;
+  empty: string;
+  checked: string;
+  daily: string;
+  contributions: string;
+  less: string;
+  more: string;
+  kinds: Record<"push" | "pullRequest" | "issue" | "release", string>;
+};
+
 export type UiCopy = {
+  activity: ActivityStrings;
   place: string;
   now: string;
   kicker: string;

@@ -11,11 +11,13 @@ import type { GhRepo } from "@/lib/github";
 import { mailTo } from "@/lib/mail";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import { TechnologyChips } from "@/components/TechnologyChips";
 import { linkLabel } from "@/lib/labels";
 import { CV_FILENAME, CV_PATH, SITE_HOST, SITE_NAME, SITE_REPO } from "@/lib/site";
 import { SUPPORT_PATH } from "@/lib/support";
 import { SpotlightLayer } from "@/components/SpotlightLayer";
 import { SignalBoard, type SignalStrings } from "@/components/SignalBoard";
+import { GitHubActivity } from "@/components/GitHubActivity";
 
 function projectLinks(project: Project, locale: Locale) {
   const t = copy[locale];
@@ -123,10 +125,10 @@ export function Desk({
       </a>
       <div className="wrap">
         <header className="top">
-          <Link className="brand" href={`${withLocale(locale, "/")}#intro`}>
+          <a className="brand" href="#intro">
             <BrandMark />
             {SITE_NAME}
-          </Link>
+          </a>
           <nav className="nav" aria-label={t.navLabel}>
             <a href="#projects">{t.projectsTitle}</a>
             <a href="#work">{t.workTitle}</a>
@@ -149,7 +151,7 @@ export function Desk({
           </nav>
         </header>
 
-        <main id="main" className="sheet">
+        <main id="main" className="sheet" tabIndex={-1}>
           <section id="intro" className="hero">
             <p className="kicker">{t.kicker}</p>
             <h1>{SITE_NAME}</h1>
@@ -186,19 +188,13 @@ export function Desk({
             <h2>{t.projectsTitle}</h2>
             <div className="grid-cards">
               {spotlight.map((project) => (
-                <article className="card" key={project.name}>
-                  <div className={project.private ? "badge private" : "badge"}>
+                <article className="card project-card" key={project.name}>
+                  <div className={project.private && !project.live ? "badge private" : "badge"}>
                     {project.live ? t.live : project.private ? t.private : t.public}
                   </div>
                   <h3>{project.name}</h3>
                   <p>{project.blurb[locale]}</p>
-                  <div className="chips">
-                    {project.stack.map((item) => (
-                      <span className="chip" key={item}>
-                        {item}
-                      </span>
-                    ))}
-                  </div>
+                  <TechnologyChips items={project.stack} />
                   {projectLinks(project, locale)}
                 </article>
               ))}
@@ -259,14 +255,8 @@ export function Desk({
             <div className="skill-groups">
               {(Object.keys(skills) as Array<keyof typeof skills>).map((group) => (
                 <div key={group}>
-                  <div className="skill-label">{t.skillGroups[group]}</div>
-                  <div className="chips">
-                    {skills[group].map((item) => (
-                      <span className={RECRUITER_SKILLS.has(item) ? "chip hit" : "chip"} key={item}>
-                        {item}
-                      </span>
-                    ))}
-                  </div>
+                  <h3 className="skill-label">{t.skillGroups[group]}</h3>
+                  <TechnologyChips items={skills[group]} highlighted={RECRUITER_SKILLS} />
                 </div>
               ))}
             </div>
@@ -320,6 +310,8 @@ export function Desk({
               </div>
             </div>
           </section>
+
+          <GitHubActivity locale={locale} strings={t.activity} />
 
           <section id="signal" className="section">
             <h2>{t.signalTitle}</h2>

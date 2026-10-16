@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { BrandMark } from "@/components/BrandMark";
 import { JsonLd } from "@/components/JsonLd";
 import { WordAtlas } from "@/components/WordAtlas";
+import { TechnologyChips } from "@/components/TechnologyChips";
 import { caseStudyBySlug, listCaseStudySlugs } from "@/data/caseStudies";
 import { copy } from "@/data/copy";
 import { ATLAS_COPY } from "@/data/wordAtlas";
@@ -65,24 +66,19 @@ export default async function CaseStudyPage({
 
   return (
     <div className="wrap">
+      <a className="skip" href="#main">{t.skipToContent}</a>
       <JsonLd data={caseStudyJsonLd(locale, study)} />
       <header className="top">
-        <Link className="brand" href={withLocale(locale, "/")}>
+        <Link className="brand" href={withLocale(locale, "/")} prefetch={false}>
           <BrandMark />
           {SITE_NAME}
         </Link>
-        <Link href={withLocale(locale, "/")}>{t.homeCta}</Link>
+        <Link href={withLocale(locale, "/")} prefetch={false}>{t.homeCta}</Link>
       </header>
-      <main id="main" className="case">
+      <main id="main" className="case" tabIndex={-1}>
         <p className="kicker">{t.caseStudy}</p>
         <h1>{study.project}</h1>
-        <div className="chips">
-          {study.stack.map((item) => (
-            <span className="chip" key={item}>
-              {item}
-            </span>
-          ))}
-        </div>
+        <TechnologyChips items={study.stack} />
         <div className="case-body">
           <Content />
         </div>
