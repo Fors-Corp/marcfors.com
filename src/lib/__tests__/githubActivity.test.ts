@@ -93,7 +93,7 @@ describe("public contribution calendar", () => {
 describe("server-side GitHub retrieval", () => {
   it("caches both sources, forwards no visitor data and never sends credentials to the calendar", async () => {
     vi.stubEnv("GITHUB_TOKEN", "test-only-token");
-    const fetchMock = vi.fn(async (url: string) => url.includes("api.github.com")
+    const fetchMock = vi.fn(async (url: string) => new URL(url).hostname === "api.github.com"
       ? Response.json([event()]) : new Response(calendar()));
     vi.stubGlobal("fetch", fetchMock);
     const result = await fetchGitHubActivity();
@@ -112,7 +112,7 @@ describe("server-side GitHub retrieval", () => {
   it("works without a token and keeps a healthy calendar when the API is rate-limited", async () => {
     vi.stubEnv("GITHUB_TOKEN", "");
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    vi.stubGlobal("fetch", vi.fn(async (url: string) => url.includes("api.github.com")
+    vi.stubGlobal("fetch", vi.fn(async (url: string) => new URL(url).hostname === "api.github.com"
       ? new Response("", { status: 403 }) : new Response(calendar())));
     const result = await fetchGitHubActivity();
     expect(result.events).toBeNull();
@@ -125,7 +125,7 @@ describe("server-side GitHub retrieval", () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("timeout")));
     expect(await fetchGitHubActivity()).toMatchObject({ events: null, calendar: null });
     expect(warn).toHaveBeenCalledTimes(2);
-    vi.stubGlobal("fetch", vi.fn(async (url: string) => url.includes("api.github.com")
+    vi.stubGlobal("fetch", vi.fn(async (url: string) => new URL(url).hostname === "api.github.com"
       ? Response.json({ error: true }) : new Response("<html>markup changed</html>")));
     expect(await fetchGitHubActivity()).toMatchObject({ events: null, calendar: null });
   });
