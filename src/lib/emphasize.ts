@@ -1,7 +1,21 @@
 export type Piece = { text: string; hit: boolean };
 
-export const RECRUITER_SKILLS = new Set(["React", "TypeScript", "Angular", "JavaScript", "Accessibility"]);
+export const RECRUITER_SKILLS = new Set([
+  "React",
+  "TypeScript",
+  "Angular",
+  "JavaScript",
+  "Accessibility",
+  "React Testing Library",
+  "Jest",
+  "Playwright",
+  "Integration testing",
+  "Git",
+  "CI/CD",
+  "REST APIs",
+]);
 
+// No bare "Git" here: splitEmphasis matches substrings, so it would light up "GitHub".
 export const RECRUITER_TOKENS = [
   "React",
   "TypeScript",
@@ -10,6 +24,9 @@ export const RECRUITER_TOKENS = [
   "Jenkins",
   "Spring",
   "Java",
+  "REST APIs",
+  "CI/CD",
+  "Playwright",
   "~20%",
   "~20 %",
 ] as const;
