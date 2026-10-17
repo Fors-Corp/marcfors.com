@@ -1,0 +1,26 @@
+---
+project: "WME Trading Corp"
+stack:
+  - "Next.js 16"
+  - "React 19"
+  - "TypeScript"
+live: "https://wmetradingcorp.com"
+order: 5
+description: "A trading-education brand goes live in nine languages on its own domain, with copy that teaches a process instead of promising returns."
+---
+
+## Problem
+
+WME Trading Corp is an education-first brand for developing traders. It needed a public home on wmetradingcorp.com that explained its mentorship approach to a multilingual audience, in a market where careless copy reads as a promise of profit. A course platform for clients is planned, so the first release also had to leave room for it.
+
+## Approach
+
+I built the landing page in Next.js 16, React 19 and strict TypeScript. Every language has complete copy in CA, EN, ES, DE, NL, FR, IT, PT and RO, including disclosures, metadata and accessibility text, on its own shareable path with matching canonicals, `hreflang` alternates and sitemap entries. A typed dictionary contract fails the tests if any language is missing a key, and only the selected language is loaded.
+
+The copy frames trading as a learning loop of prepare, practice, review and refine. Its chart is a labelled, fictional learning diagram, never a forecast, and the page states plainly that it offers paid education with no promised returns. Enquiries open an email instead of a form, so the site collects nothing. It ships no remote fonts, trackers or database, defaults to a dark theme that is restored before first paint, and turns off nonessential motion under `prefers-reduced-motion`.
+
+Public routes live in their own route group, so a future authenticated course area can get its own layout and server-side access checks without reshaping the marketing site.
+
+## Result
+
+The page is live on the client's domain through Vercel, with `www` redirecting to the apex over HTTPS and all nine localized routes verified there. The client has a credible public presence today and a codebase ready for the course platform when its requirements are settled.

@@ -1,0 +1,26 @@
+---
+project: "WME Trading Corp"
+stack:
+  - "Next.js 16"
+  - "React 19"
+  - "TypeScript"
+live: "https://wmetradingcorp.com"
+order: 5
+description: "Un brand di formazione sul trading va online in nove lingue sul proprio dominio, con testi che insegnano un processo invece di promettere rendimenti."
+---
+
+## Problema
+
+WME Trading Corp è un brand di formazione per trader in crescita. Serviva una casa pubblica su wmetradingcorp.com che spiegasse il suo mentoring a un pubblico multilingue, in un mercato dove un testo poco attento suona come una promessa di profitto. È prevista una piattaforma di corsi per i clienti, quindi la prima versione doveva anche lasciarle spazio.
+
+## Approccio
+
+Ho costruito la landing con Next.js 16, React 19 e TypeScript strict. Ogni lingua ha testi completi in CA, EN, ES, DE, NL, FR, IT, PT e RO, compresi avvertenze, metadati e testi di accessibilità, su un proprio percorso condivisibile con canonical, alternative `hreflang` e voci di sitemap coerenti. Un contratto tipizzato dei dizionari fa fallire i test se a una lingua manca una chiave, e viene caricata solo la lingua scelta.
+
+I testi presentano il trading come un ciclo di apprendimento: preparare, praticare, rivedere e perfezionare. Il grafico è un diagramma didattico fittizio ed etichettato, mai una previsione, e la pagina dichiara chiaramente che offre formazione a pagamento senza rendimenti promessi. Le richieste aprono un'email invece di un modulo, quindi il sito non raccoglie nulla. Non carica font remoti, tracciamento né database, parte con il tema scuro ripristinato prima del primo rendering e disattiva il movimento non essenziale con `prefers-reduced-motion`.
+
+Le route pubbliche vivono in un proprio route group, così una futura area corsi autenticata potrà avere il suo layout e controlli di accesso lato server senza rifare il sito commerciale.
+
+## Risultato
+
+La pagina è online sul dominio del cliente tramite Vercel, con `www` che reindirizza al dominio principale in HTTPS e tutte e nove le route localizzate verificate lì. Il cliente ha oggi una presenza pubblica credibile e un codice pronto per la piattaforma di corsi quando i requisiti saranno definiti.

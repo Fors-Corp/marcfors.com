@@ -47,6 +47,23 @@ export const featured: Project[] = [
     spotlight: true,
   },
   {
+    name: "WME Trading Corp",
+    blurb: {
+      en: "A live landing page for a trading-education brand, in nine languages with a shareable route each. Compliance-minded copy, no promised returns, no trackers, and a structure ready for a private course platform.",
+      es: "Una landing en producción para una marca de formación en trading, en nueve idiomas con una ruta compartible cada uno. Textos cuidadosos con el cumplimiento, sin rentabilidades prometidas ni rastreadores, y una estructura lista para una plataforma privada de cursos.",
+      ca: "Una landing en producció per a una marca de formació en trading, en nou llengües amb una ruta compartible cadascuna. Textos curosos amb el compliment normatiu, sense rendibilitats promeses ni rastrejadors, i una estructura preparada per a una plataforma privada de cursos.",
+      it: "Una landing online per un brand di formazione sul trading, in nove lingue con un percorso condivisibile ciascuna. Testi attenti alla conformità, nessun rendimento promesso né tracciamento, e una struttura pronta per una piattaforma privata di corsi.",
+      pt: "Uma landing em produção para uma marca de formação em trading, em nove línguas com uma rota partilhável cada. Textos atentos à conformidade, sem retornos prometidos nem rastreadores, e uma estrutura pronta para uma plataforma privada de cursos.",
+      de: "Eine veröffentlichte Landingpage für eine Trading-Bildungsmarke, in neun Sprachen mit je einer teilbaren Route. Regelkonforme Texte, keine versprochenen Renditen, kein Tracking und eine Struktur, die für eine private Kursplattform bereit ist.",
+      fr: "Une landing page en ligne pour une marque de formation au trading, en neuf langues avec une route partageable chacune. Des textes attentifs à la conformité, aucun rendement promis ni traceur, et une structure prête pour une plateforme de cours privée.",
+    },
+    stack: ["Next.js 16", "React 19", "TypeScript"],
+    live: "https://wmetradingcorp.com",
+    caseStudy: "wme-trading-corp",
+    private: true,
+    spotlight: true,
+  },
+  {
     name: "Wordkeep",
     blurb: {
       en: "Vocabulary keeper with a spaced review queue and a 3D atlas that wires saved words together by synonym, antonym, translation and sense across four languages.",
