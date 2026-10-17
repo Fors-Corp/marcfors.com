@@ -25,6 +25,16 @@ describe("motion", () => {
     expect(outside).not.toMatch(/(^|[\s;{])animation:\s*[a-z]/m);
   });
 
+  it("keeps the orbiting border off the plain-text nav hire link", () => {
+    const optIn = blockAfter(css, css.indexOf(OPT_IN));
+    expect(optIn).not.toMatch(/\.nav-hire/);
+  });
+
+  it("gives tooltips an opaque underlay so the card behind never shows through", () => {
+    const tip = blockAfter(css, css.search(/^\.tip \{/m));
+    expect(tip).toMatch(/background:[^;]*var\(--ink\)\s*;/);
+  });
+
   it("never fades content through opacity, so contrast checks see the final colours", () => {
     const keyframes = [...css.matchAll(/@keyframes\s+[\w-]+/g)].map((m) => blockAfter(css, m.index));
     expect(keyframes.length).toBeGreaterThanOrEqual(5);

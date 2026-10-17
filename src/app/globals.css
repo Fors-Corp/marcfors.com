@@ -880,7 +880,8 @@ h2, h3 {
   padding: 12px 14px;
   border: 1px solid var(--line);
   border-radius: var(--r-sm);
-  background: var(--panel);
+  /* --panel is translucent; the ink underlay keeps the card text from showing through. */
+  background: linear-gradient(var(--panel), var(--panel)), var(--ink);
   color: var(--paper);
   font-size: 13px;
   letter-spacing: 0;
@@ -1328,9 +1329,9 @@ footer {
     translate: 0 -3px;
   }
 
-  /* Star Border: a light orbits the primary call-to-action's edge. */
-  .cta:not(.ghost),
-  .nav-hire {
+  /* Star Border: a light orbits the primary call-to-action's edge. Filled CTAs
+     only: on the plain-text nav hire link a brass fill swallowed the brass label. */
+  .cta:not(.ghost) {
     border-color: transparent;
     background:
       linear-gradient(var(--brass), var(--brass)) padding-box,
