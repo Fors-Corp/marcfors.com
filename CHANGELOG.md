@@ -19,6 +19,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   blur-in, shiny role line, light sweeps on highlighted chips, pointer spotlight
   on cards, an orbiting border on the primary call to action and scroll-driven
   reveals. All of it is off under `prefers-reduced-motion`.
+- Fix the nav hire link turning into a solid brass box and the web-vitals
+  tooltip letting the card text show through.
 
 ## 0.20.0 — 2026-10-08
 
