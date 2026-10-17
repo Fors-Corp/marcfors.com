@@ -14,6 +14,11 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   visitor data forwarding; update every privacy notice effective 2026-10-16.
 - Gate desktop and applied-throttling mobile Lighthouse runs in CI, including
   accessibility, LCP, CLS and TBT budgets.
+- Highlight every testing technology plus Git, CI/CD and REST APIs in the stack.
+- Add React Bits–inspired motion in plain CSS (no animation library): hero
+  blur-in, shiny role line, light sweeps on highlighted chips, pointer spotlight
+  on cards, an orbiting border on the primary call to action and scroll-driven
+  reveals. All of it is off under `prefers-reduced-motion`.
 
 ## 0.20.0 — 2026-10-08
 

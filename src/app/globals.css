@@ -1246,6 +1246,130 @@ footer {
   @page { margin: 16mm; }
 }
 
+/* Motion and surface polish, after React Bits (reactbits.dev, MIT + Commons Clause):
+   Blur Text, Shiny Text, Spotlight Card, Star Border and Animated Content, rebuilt
+   in CSS so the page ships no animation library and no extra client JS. Every
+   animation is opt-in behind no-preference; under reduced motion only the static
+   styling below remains. */
+
+@property --orbit {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* Spotlight Card: reuses the desk's pointer coordinates (--spot-x/--spot-y, set by
+   SpotlightLayer). A fixed attachment puts the glow under the pointer on every
+   card without per-card listeners. Unset coordinates park it off-screen. */
+.card {
+  background:
+    radial-gradient(
+        360px circle at var(--spot-x, -999px) var(--spot-y, -999px),
+        color-mix(in srgb, var(--brass) 12%, transparent),
+        transparent 70%
+      )
+      fixed,
+    var(--panel);
+  transition: border-color 0.25s ease, translate 0.25s ease;
+}
+.card:hover {
+  border-color: color-mix(in srgb, var(--brass) 45%, var(--line));
+}
+
+.chip.hit {
+  background: color-mix(in srgb, var(--signal) 8%, transparent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--signal) 18%, transparent);
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  /* Blur Text: hero lines come into focus in sequence. No opacity change, so the
+     LCP element is painted on the first frame. */
+  .hero > * {
+    animation: focus-in 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .hero > :nth-child(2) { animation-delay: 60ms; }
+  .hero > :nth-child(3) { animation-delay: 120ms; }
+  .hero > :nth-child(4) { animation-delay: 180ms; }
+  .hero > :nth-child(5) { animation-delay: 240ms; }
+  .hero > :nth-child(6) { animation-delay: 300ms; }
+  .hero > :nth-child(n + 7) { animation-delay: 360ms; }
+
+  /* Shiny Text */
+  .role {
+    background: linear-gradient(110deg, var(--brass) 42%, var(--paper) 50%, var(--brass) 58%) 0 0 / 250% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 7s linear infinite;
+  }
+
+  /* Highlighted chips catch the light one after another, then rest. */
+  .chip.hit {
+    background:
+      linear-gradient(110deg, transparent 35%, color-mix(in srgb, var(--signal) 22%, transparent) 50%, transparent 65%)
+        -150% 0 / 250% 100% no-repeat,
+      color-mix(in srgb, var(--signal) 8%, transparent);
+    animation: sweep 6s ease-in-out infinite;
+  }
+  .chips > li:nth-child(3n + 2) .chip.hit { animation-delay: 0.4s; }
+  .chips > li:nth-child(3n + 3) .chip.hit { animation-delay: 0.8s; }
+
+  .chip {
+    transition: translate 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .chip:hover {
+    translate: 0 -2px;
+    border-color: var(--brass);
+    color: var(--paper);
+  }
+
+  /* translate, not transform: the scroll reveal below owns transform. */
+  .card:hover {
+    translate: 0 -3px;
+  }
+
+  /* Star Border: a light orbits the primary call-to-action's edge. */
+  .cta:not(.ghost),
+  .nav-hire {
+    border-color: transparent;
+    background:
+      linear-gradient(var(--brass), var(--brass)) padding-box,
+      conic-gradient(from var(--orbit), var(--brass) 0 65%, var(--paper) 80%, var(--brass) 95%) border-box;
+    animation: orbit 4s linear infinite;
+  }
+
+  /* Animated Content: blocks rise into focus as they scroll in. Transform and
+     blur only — never opacity — so contrast checks see the final colours. */
+  @supports (animation-timeline: view()) {
+    .section > h2,
+    .card,
+    .job,
+    .repo-row,
+    .skill-groups > div {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 45%;
+    }
+  }
+}
+
+@keyframes focus-in {
+  from { filter: blur(10px); transform: translateY(14px); }
+}
+@keyframes shine {
+  to { background-position: -250% 0; }
+}
+@keyframes sweep {
+  0% { background-position: -150% 0, 0 0; }
+  25%, 100% { background-position: 250% 0, 0 0; }
+}
+@keyframes orbit {
+  to { --orbit: 360deg; }
+}
+@keyframes rise {
+  from { filter: blur(6px); transform: translateY(28px) scale(0.98); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .spot { display: none; }
   .tip { transform: none; }
