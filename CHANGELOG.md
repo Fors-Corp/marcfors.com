@@ -7,6 +7,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 - Add technology icons alongside visible names, improve keyboard navigation,
   theme contrast, touch targets and mobile layouts.
 - Feature Gatto with a seven-language case study and its Vercel-hosted live URL.
+- Feature WME Trading Corp (wmetradingcorp.com) as client work with a
+  seven-language case study; the private source is not linked.
 - Add a first-party GitHub activity feed and contribution calendar, refreshed
   while visible. Fetch public data server-side without third-party widgets or
   visitor data forwarding; update every privacy notice effective 2026-10-16.

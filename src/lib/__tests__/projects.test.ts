@@ -30,6 +30,19 @@ describe("featured work", () => {
     expect(gatto?.blurb.en).toMatch(/Spanish, Catalan and English/);
   });
 
+  it("features WME Trading Corp as a live client site with a case study, without exposing source", () => {
+    const wme = featured.find((item) => item.name === "WME Trading Corp");
+    expect(wme).toMatchObject({
+      live: "https://wmetradingcorp.com",
+      caseStudy: "wme-trading-corp",
+      private: true,
+      spotlight: true,
+    });
+    expect(wme?.repo).toBeUndefined();
+    expect(wme?.blurb.en).toMatch(/nine languages/);
+    expect(wme?.blurb.en).toMatch(/no promised returns/);
+  });
+
   it("never links source for private projects", () => {
     for (const project of featured) {
       if (project.private) {

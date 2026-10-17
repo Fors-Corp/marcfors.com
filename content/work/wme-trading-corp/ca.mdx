@@ -1,0 +1,26 @@
+---
+project: "WME Trading Corp"
+stack:
+  - "Next.js 16"
+  - "React 19"
+  - "TypeScript"
+live: "https://wmetradingcorp.com"
+order: 5
+description: "Una marca de formació en trading surt a producció en nou llengües i amb domini propi, amb textos que ensenyen un procés en lloc de prometre rendibilitat."
+---
+
+## Problema
+
+WME Trading Corp és una marca de formació per a traders en desenvolupament. Necessitava una casa pública a wmetradingcorp.com que expliqués la seva mentoria a un públic multilingüe, en un mercat on un text descurat es llegeix com una promesa de beneficis. Hi ha prevista una plataforma de cursos per a clients, així que la primera versió també li havia de deixar lloc.
+
+## Enfocament
+
+Vaig construir la landing amb Next.js 16, React 19 i TypeScript estricte. Cada llengua té els textos complets en CA, EN, ES, DE, NL, FR, IT, PT i RO, inclosos avisos, metadades i textos d'accessibilitat, a la seva pròpia ruta compartible amb canonicals, alternatives `hreflang` i entrades de sitemap coherents. Un contracte tipat de diccionaris fa fallar els tests si a una llengua li falta una clau, i només es carrega la llengua escollida.
+
+Els textos plantegen el trading com un cicle d'aprenentatge: preparar, practicar, revisar i afinar. El seu gràfic és un diagrama didàctic fictici i etiquetat, mai una previsió, i la pàgina diu clarament que ofereix formació de pagament sense rendibilitats promeses. Les consultes obren un correu en lloc d'un formulari, així que el web no recull res. No carrega fonts remotes, rastrejadors ni base de dades, arrenca en tema fosc restaurat abans del primer pintat i desactiva el moviment no essencial amb `prefers-reduced-motion`.
+
+Les rutes públiques viuen en el seu propi grup de rutes, de manera que una futura zona de cursos autenticada podrà tenir el seu propi layout i controls d'accés al servidor sense refer el web comercial.
+
+## Resultat
+
+La pàgina és en producció al domini del client a través de Vercel, amb `www` redirigint al domini arrel per HTTPS i les nou rutes localitzades verificades allà. El client té avui una presència pública creïble i un codi preparat per a la plataforma de cursos quan se'n tanquin els requisits.
