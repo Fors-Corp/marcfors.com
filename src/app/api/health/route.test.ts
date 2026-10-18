@@ -11,7 +11,8 @@ describe("GET /api/health", () => {
     expect(body.version).toBe(SITE_VERSION);
     expect(body.releasedAt).toBe(RELEASE_DATE);
     expect(body.encryption.hsts).toBe(true);
-    expect(body.encryption.cookies).toBe("none");
+    // The locale cookie exists (prefs.writeLocale), so "none" would be untrue.
+    expect(body.encryption.cookies).toBe("preference-only");
     expect(body.headers).toContain("Content-Security-Policy");
     expect(JSON.stringify(body)).not.toMatch(/@gmail\.com/i);
   });
