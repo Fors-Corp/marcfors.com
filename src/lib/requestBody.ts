@@ -1,4 +1,10 @@
-export type JsonBody = { ok: true; value: unknown } | { ok: false; status: 400 | 413 };
+export type JsonBody =
+  | { ok: true; value: unknown }
+  | { ok: false; status: 400; error: "invalid json" }
+  | { ok: false; status: 413; error: "payload too large" };
+
+const INVALID = { ok: false, status: 400, error: "invalid json" } as const;
+const TOO_LARGE = { ok: false, status: 413, error: "payload too large" } as const;
 
 /**
  * Reads a JSON request body, refusing anything over `maxBytes`. Content-Length
@@ -6,28 +12,28 @@ export type JsonBody = { ok: true; value: unknown } | { ok: false; status: 400 |
  * the bytes actually streamed, before anything is buffered past the limit.
  */
 export async function readJsonBody(request: Request, maxBytes: number): Promise<JsonBody> {
-  if (Number(request.headers.get("content-length") ?? 0) > maxBytes) return { ok: false, status: 413 };
-  if (!request.body) return { ok: false, status: 400 };
+  if (Number(request.headers.get("content-length") ?? 0) > maxBytes) return TOO_LARGE;
+  if (!request.body) return INVALID;
 
   const reader = request.body.getReader();
   const decoder = new TextDecoder();
   let text = "";
   let total = 0;
-  for (;;) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    total += value.byteLength;
-    if (total > maxBytes) {
-      await reader.cancel();
-      return { ok: false, status: 413 };
-    }
-    text += decoder.decode(value, { stream: true });
-  }
-  text += decoder.decode();
-
   try {
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel();
+        return TOO_LARGE;
+      }
+      text += decoder.decode(value, { stream: true });
+    }
+    text += decoder.decode();
     return { ok: true, value: JSON.parse(text) };
   } catch {
-    return { ok: false, status: 400 };
+    // A body that aborts mid-stream is as unusable as malformed JSON.
+    return INVALID;
   }
 }

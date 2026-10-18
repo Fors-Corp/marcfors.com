@@ -23,7 +23,7 @@ describe("readJsonBody", () => {
   it("refuses a chunked body over the cap even with no Content-Length", async () => {
     const request = chunked(["[", "1,".repeat(600), "1]"]);
     expect(request.headers.get("content-length")).toBeNull();
-    expect(await readJsonBody(request, 512)).toEqual({ ok: false, status: 413 });
+    expect(await readJsonBody(request, 512)).toEqual({ ok: false, status: 413, error: "payload too large" });
   });
 
   it("refuses early on an oversized Content-Length", async () => {
@@ -32,15 +32,27 @@ describe("readJsonBody", () => {
       headers: { "Content-Length": "9999" },
       body: "{}",
     });
-    expect(await readJsonBody(request, 512)).toEqual({ ok: false, status: 413 });
+    expect(await readJsonBody(request, 512)).toEqual({ ok: false, status: 413, error: "payload too large" });
   });
 
   it("reports malformed or missing bodies as 400", async () => {
-    expect(await readJsonBody(chunked(["{nope"]), 64)).toEqual({ ok: false, status: 400 });
+    expect(await readJsonBody(chunked(["{nope"]), 64)).toEqual({ ok: false, status: 400, error: "invalid json" });
     expect(await readJsonBody(new Request("http://localhost/api", { method: "POST" }), 64)).toEqual({
       ok: false,
       status: 400,
+      error: "invalid json",
     });
+  });
+
+  it("reports a body that errors mid-stream as 400, not a thrown 500", async () => {
+    const body = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(new TextEncoder().encode('{"a":'));
+        controller.error(new Error("connection reset"));
+      },
+    });
+    const request = new Request("http://localhost/api", { method: "POST", body, duplex: "half" } as RequestInit);
+    expect(await readJsonBody(request, 64)).toEqual({ ok: false, status: 400, error: "invalid json" });
   });
 
   it("decodes a multi-byte character split across chunks", async () => {
