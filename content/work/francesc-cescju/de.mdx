@@ -1,0 +1,24 @@
+---
+project: "FranCesc & Cescju"
+stack:
+  - "HTML5"
+  - "CSS3"
+  - "JavaScript"
+live: "https://cescju-prototype.vercel.app"
+order: 5
+description: "Aus einem WordPress-Blog wird eine fünfseitige katalanische Website mit Buchungsweg für Klangbäder und einem Fotoportfolio. Ein Prototyp, gebaut und verifiziert mit einem Multi-Agenten-Workflow."
+---
+
+## Problem
+
+francesc-cescju.eu ist die Website von FranCesc & Cescju: Klangbäder mit tibetischen Klangschalen und Naturfotografie in Sant Hilari Sacalm (Girona). Termine waren schon ausgebucht, oft gemeinsam mit der Gemeinde und dem örtlichen Gesundheitszentrum veranstaltet, doch die Website sagte das nicht. Die Startseite war ein chronologischer WordPress-Feed mit allen Fotos direkt im Text, die Seite für kommende Termine war leer, und es gab keine Möglichkeit, einen Platz zu reservieren. Fotografie und Klangbäder konkurrierten im selben Strom.
+
+## Ansatz
+
+Ich habe das Redesign als Multi-Agenten-Workflow in Claude Code umgesetzt. Vier Auditoren lasen die Website aus unterschiedlichen Blickwinkeln (Informationsarchitektur, visuelles Design, katalanische Texte, technisches SEO und Barrierefreiheit) und lieferten 45 Befunde. Ein Design-Agent machte daraus eine schriftliche Spezifikation mit Design-Tokens und finalen Texten; fünf Builder-Agenten setzten sie in HTML, CSS und rund 3 KB JavaScript um; ein unabhängiger Prüfer führte deterministische Checks für Links, gemeinsames Markup, Überschriftenreihenfolge und WCAG-Kontrast aus, und ein letzter Agent behob, was er fand.
+
+Die Website beginnt jetzt mit dem Angebot und dem Ort, gibt den Klangbädern eine eigene Seite mit Reservierung per E-Mail und Telefon und zeigt die Fotos in Serien mit einer per Tastatur bedienbaren Lightbox. Jedes Textfarbpaar erfüllt WCAG AA im hellen und im dunklen Farbschema. Angaben, die die aktuelle Website nicht veröffentlicht, etwa künftige Termine und Preise, sind auf der Seite als vorläufig markiert und bleiben aus den strukturierten Daten heraus.
+
+## Ergebnis
+
+Ein fünfseitiger Prototyp auf Vercel mit strenger Content Security Policy, ohne Build-Schritt und ohne Tracking. Er ist nicht indexiert, weil er noch nicht übernommen wurde: Er ist ein Vorschlag, wie die Website aussehen könnte.

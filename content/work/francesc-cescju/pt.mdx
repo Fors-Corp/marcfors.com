@@ -1,0 +1,24 @@
+---
+project: "FranCesc & Cescju"
+stack:
+  - "HTML5"
+  - "CSS3"
+  - "JavaScript"
+live: "https://cescju-prototype.vercel.app"
+order: 5
+description: "Um blogue WordPress transforma-se num site em catalão de cinco páginas com reserva para banhos de som e um portefólio fotográfico. Um protótipo construído e verificado com um fluxo multiagente."
+---
+
+## Problema
+
+francesc-cescju.eu é o site de FranCesc & Cescju: banhos de som com taças tibetanas e fotografia de natureza em Sant Hilari Sacalm (Girona). As sessões já esgotaram, muitas vezes organizadas com a câmara municipal e o centro de saúde da vila, mas o site não o dizia. A página inicial era uma lista cronológica do WordPress com todas as fotos carregadas em linha, a página das próximas sessões estava vazia e não havia forma de reservar lugar. A fotografia e os banhos de som disputavam o mesmo fluxo.
+
+## Abordagem
+
+Fiz o redesenho com um fluxo multiagente do Claude Code. Quatro auditores leram o site a partir de perspetivas diferentes (arquitetura da informação, design visual, textos em catalão, SEO técnico e acessibilidade) e devolveram 45 constatações. Um agente de design transformou-as numa especificação escrita com tokens de design e textos finais; cinco agentes construtores implementaram-na em HTML, CSS e cerca de 3 KB de JavaScript; um verificador independente executou verificações determinísticas de ligações, marcação partilhada, ordem dos títulos e contraste WCAG, e um último agente aplicou o que encontrou.
+
+Agora o site abre com o que oferece e onde, dá aos banhos de som uma página própria com reserva por e-mail e telefone e apresenta as fotografias por séries com um visualizador utilizável por teclado. Todos os pares de cores de texto cumprem WCAG AA nos temas claro e escuro. Os dados que o site atual não publica, como datas futuras e preços, são marcados como provisórios na página e ficam fora dos dados estruturados.
+
+## Resultado
+
+Um protótipo de cinco páginas na Vercel com uma política de segurança de conteúdo rigorosa, sem passo de compilação nem rastreadores. Não está indexado porque ainda não foi adotado: é uma proposta do que o site poderia ser.

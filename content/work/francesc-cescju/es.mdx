@@ -1,0 +1,24 @@
+---
+project: "FranCesc & Cescju"
+stack:
+  - "HTML5"
+  - "CSS3"
+  - "JavaScript"
+live: "https://cescju-prototype.vercel.app"
+order: 5
+description: "Un blog de WordPress se convierte en una web en catalán de cinco páginas con reserva para baños de sonido y un portfolio fotográfico. Un prototipo construido y verificado con un flujo multiagente."
+---
+
+## Problema
+
+francesc-cescju.eu es la web de FranCesc & Cescju: baños de sonido con cuencos tibetanos y fotografía de naturaleza en Sant Hilari Sacalm (Girona). Las sesiones han llegado a llenarse, a menudo organizadas con el ayuntamiento y el centro de atención primaria del pueblo, pero la web no lo contaba. La portada era un listado cronológico de WordPress con todas las fotos cargadas en línea, la página de próximas sesiones estaba vacía y no había forma de reservar plaza. La fotografía y los baños de sonido competían en el mismo flujo.
+
+## Enfoque
+
+Hice el rediseño con un flujo multiagente de Claude Code. Cuatro auditores leyeron la web desde ángulos distintos (arquitectura de la información, diseño visual, textos en catalán, SEO técnico y accesibilidad) y devolvieron 45 hallazgos. Un agente de diseño los convirtió en una especificación escrita con tokens de diseño y textos definitivos; cinco agentes constructores la implementaron en HTML, CSS y unos 3 KB de JavaScript; un verificador independiente ejecutó comprobaciones deterministas de enlaces, marcado compartido, orden de encabezados y contraste WCAG, y un último agente aplicó lo que encontró.
+
+La web abre ahora con qué ofrece y dónde, da a los baños de sonido su propia página con reserva por correo y teléfono, y presenta las fotografías por series con un visor accesible por teclado. Todos los pares de color de texto cumplen WCAG AA en los temas claro y oscuro. Los datos que la web actual no publica, como fechas futuras y precios, se marcan como provisionales en la página y quedan fuera de los datos estructurados.
+
+## Resultado
+
+Un prototipo de cinco páginas en Vercel con una política de seguridad de contenido estricta, sin paso de compilación ni rastreadores. No está indexado porque todavía no se ha adoptado: es una propuesta de lo que podría ser la web.

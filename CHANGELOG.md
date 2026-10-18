@@ -9,6 +9,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 - Feature Gatto with a seven-language case study and its Vercel-hosted live URL.
 - Feature forscorp.es (Fors Corp's own site) as selected work; the private
   source is not linked.
+- Feature the FranCesc & Cescju redesign prototype with a seven-language case
+  study and its Vercel-hosted live URL; the private source is not linked.
 - Add a first-party GitHub activity feed and contribution calendar, refreshed
   while visible. Fetch public data server-side without third-party widgets or
   visitor data forwarding; update every privacy notice effective 2026-10-16.

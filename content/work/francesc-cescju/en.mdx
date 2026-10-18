@@ -1,0 +1,24 @@
+---
+project: "FranCesc & Cescju"
+stack:
+  - "HTML5"
+  - "CSS3"
+  - "JavaScript"
+live: "https://cescju-prototype.vercel.app"
+order: 5
+description: "A WordPress blog feed becomes a five-page Catalan site with a booking path for sound baths and a photography portfolio. A prototype, built and verified by a multi-agent workflow."
+---
+
+## Problem
+
+francesc-cescju.eu is the site of FranCesc & Cescju: sound baths with Tibetan singing bowls and nature photography in Sant Hilari Sacalm (Girona). Sessions have sold out, often run with the town council and the local primary-care centre, but the site did not say so. The home page was a chronological WordPress feed with every photo loaded inline, the page for upcoming sessions was empty, and there was no way to book a place. Photography and sound baths competed in the same stream.
+
+## Approach
+
+I ran the redesign as a multi-agent Claude Code workflow. Four auditors read the site through different lenses (information architecture, visual design, Catalan copy, technical SEO and accessibility) and returned 45 findings. A design agent turned them into a written specification with design tokens and final copy; five builder agents implemented it in HTML, CSS and about 3 KB of JavaScript; an independent verifier ran deterministic checks for links, shared markup, heading order and WCAG contrast, and a last agent applied what it found.
+
+The site now opens with what it offers and where, gives sound baths their own page with booking by email and phone, and presents the photographs as series with a keyboard-friendly lightbox. Every text colour pair meets WCAG AA in light and dark schemes. Facts the current site does not publish, such as future dates and prices, are marked provisional on the page and kept out of the structured data.
+
+## Result
+
+A five-page prototype on Vercel with a strict Content Security Policy, no build step and no trackers. It is not indexed because it has not been adopted yet: it is a proposal for what the site could be.

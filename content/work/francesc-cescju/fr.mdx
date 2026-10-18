@@ -1,0 +1,24 @@
+---
+project: "FranCesc & Cescju"
+stack:
+  - "HTML5"
+  - "CSS3"
+  - "JavaScript"
+live: "https://cescju-prototype.vercel.app"
+order: 5
+description: "Un blog WordPress devient un site en catalan de cinq pages avec réservation pour les bains sonores et un portfolio photo. Un prototype construit et vérifié par un workflow multi-agents."
+---
+
+## Problème
+
+francesc-cescju.eu est le site de FranCesc & Cescju : bains sonores aux bols tibétains et photographie de nature à Sant Hilari Sacalm (Gérone). Les séances ont déjà affiché complet, souvent organisées avec la mairie et le centre de soins primaires du village, mais le site ne le disait pas. La page d’accueil était un fil WordPress chronologique avec toutes les photos chargées dans le texte, la page des prochaines séances était vide et il n’y avait aucun moyen de réserver une place. La photographie et les bains sonores se disputaient le même flux.
+
+## Approche
+
+J’ai mené la refonte avec un workflow multi-agents de Claude Code. Quatre auditeurs ont lu le site sous des angles différents (architecture de l’information, design visuel, textes en catalan, SEO technique et accessibilité) et ont remonté 45 constats. Un agent de design en a fait une spécification écrite avec des design tokens et les textes définitifs ; cinq agents bâtisseurs l’ont implémentée en HTML, CSS et environ 3 Ko de JavaScript ; un vérificateur indépendant a lancé des contrôles déterministes sur les liens, le balisage partagé, l’ordre des titres et le contraste WCAG, puis un dernier agent a appliqué ce qu’il a trouvé.
+
+Le site s’ouvre désormais sur ce qu’il propose et où, donne aux bains sonores leur propre page avec réservation par e-mail et par téléphone, et présente les photographies par séries avec une visionneuse utilisable au clavier. Chaque paire de couleurs de texte respecte WCAG AA en thème clair comme en thème sombre. Les informations que le site actuel ne publie pas, comme les dates à venir et les tarifs, sont signalées comme provisoires sur la page et restent hors des données structurées.
+
+## Résultat
+
+Un prototype de cinq pages sur Vercel avec une Content Security Policy stricte, sans étape de build ni traceurs. Il n’est pas indexé parce qu’il n’a pas encore été adopté : c’est une proposition de ce que le site pourrait être.
