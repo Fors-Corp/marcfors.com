@@ -17,7 +17,7 @@ export function GET() {
       encryption: {
         transport: "TLS 1.3 at the edge",
         hsts: true,
-        cookies: "none",
+        cookies: "preference-only",
       },
       audit,
       headers: SECURITY_HEADERS.map((item) => item.key),
