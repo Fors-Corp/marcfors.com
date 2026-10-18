@@ -36,6 +36,8 @@ beforeEach(() => {
   vi.stubGlobal(
     "fetch",
     vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
       json: async () => ({
         ok: true,
         version: "9.9.9",
@@ -73,6 +75,15 @@ describe("SignalBoard", () => {
     await waitFor(() => {
       expect(screen.getByText(/9\.9\.9 · abcdef1 · fra1/)).toBeInTheDocument();
     });
+  });
+
+  it("ignores an HTTP error from /api/health instead of rendering its body", async () => {
+    const failing = vi.fn().mockResolvedValue({ ok: false, status: 503, json: async () => ({ error: "down" }) });
+    vi.stubGlobal("fetch", failing);
+    render(<SignalBoard audit={audit} strings={strings} />);
+    await waitFor(() => expect(failing).toHaveBeenCalled());
+    expect(screen.getByText(copy.en.healthWaiting)).toBeInTheDocument();
+    expect(document.body.textContent).not.toContain("undefined");
   });
 
   it("keeps the build snapshot when /api/health fails", async () => {
