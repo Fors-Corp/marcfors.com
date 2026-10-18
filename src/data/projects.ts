@@ -108,6 +108,7 @@ export const featured: Project[] = [
     },
     stack: ["Next.js 16", "Tailwind CSS", "TypeScript"],
     live: "https://ferretodo-lepant.vercel.app",
+    repo: "https://github.com/marcfs31/ferretodo-lepant",
     private: true,
     spotlight: true,
   },

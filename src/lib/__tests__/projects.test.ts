@@ -76,15 +76,15 @@ describe("featured work", () => {
     expect(photo?.blurb.en).toMatch(/no database, accounts or analytics/);
   });
 
-  it("features FerreTodo Lepant by its live site, never its private repository", () => {
+  it("features FerreTodo Lepant by its live site and its private repository", () => {
     const shop = featured.find((item) => item.name === "FerreTodo Lepant");
     expect(shop).toMatchObject({
       stack: ["Next.js 16", "Tailwind CSS", "TypeScript"],
       live: "https://ferretodo-lepant.vercel.app",
+      repo: "https://github.com/marcfs31/ferretodo-lepant",
       private: true,
       spotlight: true,
     });
-    expect(shop?.repo).toBeUndefined();
     for (const blurb of Object.values(shop!.blurb)) {
       expect(blurb).toMatch(/Lepant/);
       expect(blurb).toMatch(/WhatsApp/);
@@ -92,11 +92,11 @@ describe("featured work", () => {
     }
   });
 
-  it("never links source for private projects", () => {
+  it("links source for private projects only where Marc opted in", () => {
+    const privateWithSource = featured.filter((p) => p.private && p.repo).map((p) => p.name);
+    expect(privateWithSource).toEqual(["FerreTodo Lepant"]);
     for (const project of featured) {
-      if (project.private) {
-        expect(project.repo, project.name).toBeUndefined();
-      } else {
+      if (!project.private) {
         expect(project.repo, project.name).toMatch(/^https:\/\/github.com\/(marcfs31|Fors-Corp)\//);
       }
     }

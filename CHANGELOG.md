@@ -14,7 +14,7 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 - Feature Fors Photography, the fine-art print shop, with its Vercel-hosted
   live URL; the private source is not linked.
 - Feature the FerreTodo Lepant hardware-store site with its Vercel-hosted live
-  URL; the private source is not linked.
+  URL and a link to its repository, which stays private.
 - Add a first-party GitHub activity feed and contribution calendar, refreshed
   while visible. Fetch public data server-side without third-party widgets or
   visitor data forwarding; update every privacy notice effective 2026-10-16.
