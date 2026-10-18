@@ -30,6 +30,19 @@ describe("featured work", () => {
     expect(gatto?.blurb.en).toMatch(/Spanish, Catalan and English/);
   });
 
+  it("features forscorp.es as live work, linking the site but never its private source", () => {
+    const fors = featured.find((item) => item.name === "Fors Corp");
+    expect(fors).toMatchObject({
+      stack: ["Next.js 16", "React 19", "TypeScript"],
+      live: "https://forscorp.es",
+      private: true,
+      spotlight: true,
+    });
+    expect(fors?.repo).toBeUndefined();
+    expect(fors?.blurb.en).toMatch(/Spanish, Catalan and English/);
+    expect(fors?.blurb.en).toMatch(/no cookies or analytics/);
+  });
+
   it("never links source for private projects", () => {
     for (const project of featured) {
       if (project.private) {

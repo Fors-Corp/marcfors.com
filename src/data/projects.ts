@@ -47,6 +47,22 @@ export const featured: Project[] = [
     spotlight: true,
   },
   {
+    name: "Fors Corp",
+    blurb: {
+      en: "Fors Corp's own storefront: websites and AI assistants for Barcelona clinics and advisory firms. Spanish, Catalan and English, statically prerendered, built on the Fors design system, with no cookies or analytics.",
+      es: "El escaparate de Fors Corp: webs y asistentes de IA para clínicas y gestorías de Barcelona. Castellano, catalán e inglés, prerenderizado estático, sobre el sistema de diseño Fors, sin cookies ni analítica.",
+      ca: "L'aparador de Fors Corp: webs i assistents d'IA per a clíniques i gestories de Barcelona. Castellà, català i anglès, prerenderitzat estàtic, sobre el sistema de disseny Fors, sense galetes ni analítica.",
+      it: "La vetrina di Fors Corp: siti web e assistenti IA per cliniche e studi di consulenza di Barcellona. Spagnolo, catalano e inglese, prerenderizzato staticamente, basato sul design system Fors, senza cookie né analytics.",
+      pt: "A montra da Fors Corp: sites e assistentes de IA para clínicas e gestorias de Barcelona. Espanhol, catalão e inglês, pré-renderizado de forma estática, sobre o design system Fors, sem cookies nem analítica.",
+      de: "Das Schaufenster von Fors Corp: Websites und KI-Assistenten für Kliniken und Steuerkanzleien in Barcelona. Spanisch, Katalanisch und Englisch, statisch vorgerendert, auf dem Fors-Designsystem aufgebaut, ohne Cookies und ohne Analytics.",
+      fr: "La vitrine de Fors Corp : sites web et assistants IA pour les cliniques et cabinets de conseil de Barcelone. Espagnol, catalan et anglais, prérendu statique, bâti sur le design system Fors, sans cookies ni analytics.",
+    },
+    stack: ["Next.js 16", "React 19", "TypeScript"],
+    live: "https://forscorp.es",
+    private: true,
+    spotlight: true,
+  },
+  {
     name: "Wordkeep",
     blurb: {
       en: "Vocabulary keeper with a spaced review queue and a 3D atlas that wires saved words together by synonym, antonym, translation and sense across four languages.",
