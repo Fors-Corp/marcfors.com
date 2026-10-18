@@ -60,7 +60,10 @@ export function SignalBoard({
         return res.json() as Promise<Health>;
       })
       .then((body) => {
-        if (typeof body.region !== "string" || !body.audit) throw new Error("/api/health: unexpected shape");
+        const counts = [body.audit?.critical, body.audit?.high, body.audit?.moderate, body.audit?.low];
+        if (typeof body.region !== "string" || !counts.every((n) => typeof n === "number")) {
+          throw new Error("/api/health: unexpected shape");
+        }
         setHealth({ ...body, region: `${body.region} · ${Math.round(performance.now() - started)}ms` });
       })
       .catch(() => {

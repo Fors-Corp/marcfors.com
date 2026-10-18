@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
+import { onLCP } from "web-vitals";
 import { SignalBoard, type SignalStrings } from "@/components/SignalBoard";
 import { copy } from "@/data/copy";
 import { getAuditSnapshot } from "@/lib/audit";
@@ -84,6 +85,41 @@ describe("SignalBoard", () => {
     await waitFor(() => expect(failing).toHaveBeenCalled());
     expect(screen.getByText(copy.en.healthWaiting)).toBeInTheDocument();
     expect(document.body.textContent).not.toContain("undefined");
+  });
+
+  it("ignores a health body whose audit lacks the rendered counts", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({ ok: true, status: 200, json: async () => ({ region: "fra1", audit: {} }) }),
+    );
+    render(<SignalBoard audit={audit} strings={strings} />);
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
+    expect(screen.getByText(`critical ${audit.critical}`)).toBeInTheDocument();
+    expect(document.body.textContent).not.toContain("undefined");
+  });
+
+  it("swallows a failed vitals beacon instead of leaving an unhandled rejection", async () => {
+    // A plain function, not vi.fn: a spy attaches handlers to returned promises
+    // to record settled results, which would mark this rejection as handled.
+    const urls: string[] = [];
+    vi.stubGlobal("fetch", (url: string) => {
+      urls.push(url);
+      return url === "/api/vitals"
+        ? Promise.reject(new TypeError("offline"))
+        : Promise.resolve({ ok: false, status: 503, json: async () => ({}) });
+    });
+    vi.mocked(onLCP).mockImplementationOnce((report) => report({ name: "LCP", value: 900, id: "v1" } as never));
+    const unhandled: unknown[] = [];
+    const record = (reason: unknown) => unhandled.push(reason);
+    process.on("unhandledRejection", record);
+    try {
+      render(<SignalBoard audit={audit} strings={strings} />);
+      await waitFor(() => expect(urls).toContain("/api/vitals"));
+      await new Promise((resolve) => setTimeout(resolve, 20));
+      expect(unhandled).toEqual([]);
+    } finally {
+      process.off("unhandledRejection", record);
+    }
   });
 
   it("keeps the build snapshot when /api/health fails", async () => {
