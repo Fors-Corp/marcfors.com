@@ -1,8 +1,6 @@
-/**
- * Emits one `application/ld+json` block. Server-only: the payload is built
- * from constants and copy, never from request data, so `JSON.stringify` is
- * safe here. `</script>` cannot appear because no value is user-controlled.
- */
+import { serializeJsonLd } from "@/lib/seo";
+
+/** Emits one `application/ld+json` block; escaping lives in `serializeJsonLd`. */
 export function JsonLd({ data }: { data: object }) {
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(data) }} />;
 }
