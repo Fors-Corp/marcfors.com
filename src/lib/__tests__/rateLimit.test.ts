@@ -30,9 +30,26 @@ describe("createRateLimiter", () => {
     limited("old-2");
     vi.advanceTimersByTime(1_100);
     limited("active");
-    // At the cap: the sweep must forget the idle keys but still block "active".
+    expect(limited.trackedKeys()).toBe(3);
+    // At the cap: the sweep forgets the two idle keys but still blocks "active".
     limited("new");
+    expect(limited.trackedKeys()).toBe(2);
     expect(limited("active")).toBe(true);
+  });
+
+  it("sweeps at most once per window instead of on every request", () => {
+    vi.useFakeTimers();
+    const limited = createRateLimiter({ max: 5, windowMs: 1_000, maxKeys: 2 });
+    limited("a");
+    limited("b");
+    vi.advanceTimersByTime(600);
+    limited("c"); // at the cap: sweeps, nothing idle yet
+    vi.advanceTimersByTime(500);
+    limited("d"); // a and b are idle now, but the last sweep was 500ms ago
+    expect(limited.trackedKeys()).toBe(4);
+    vi.advanceTimersByTime(600);
+    limited("e"); // a window after the last sweep: a, b and c are collected
+    expect(limited.trackedKeys()).toBe(2);
   });
 });
 
