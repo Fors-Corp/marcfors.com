@@ -21,6 +21,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
+          fetch-depth: 2
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: "22"
@@ -30,10 +31,17 @@ jobs:
         # Skipped for Dependabot (its commits are authored by dependabot[bot],
         # and their contents are still gated by `npm run privacy`) and on push
         # to main, where HEAD is a merge commit authored by whoever merged.
-        if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
+        if: github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]'
+        env:
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          author=$(git log -1 --format='%ae')
-          echo "HEAD author: $author"
+          # Inspect the PR head, not GitHub's synthetic merge commit.
+          author=$(git log -1 --format='%ae' "$PR_HEAD_SHA" --)
+          echo "PR head author: $author"
+          # Copilot uses a fixed bot identity, not a personal mailbox.
+          if [ "$author" = "198982749+Copilot@users.noreply.github.com" ]; then
+            exit 0
+          fi
           echo "$author" | grep -q '@marcfors.com'
           echo "$author" | grep -vi gmail
       - run: npm ci
