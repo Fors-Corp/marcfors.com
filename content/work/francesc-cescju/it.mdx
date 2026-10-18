@@ -1,0 +1,24 @@
+---
+project: "FranCesc & Cescju"
+stack:
+  - "HTML5"
+  - "CSS3"
+  - "JavaScript"
+live: "https://cescju-prototype.vercel.app"
+order: 5
+description: "Un blog WordPress diventa un sito in catalano di cinque pagine con prenotazione per i bagni sonori e un portfolio fotografico. Un prototipo costruito e verificato con un workflow multi-agente."
+---
+
+## Problema
+
+francesc-cescju.eu è il sito di FranCesc & Cescju: bagni sonori con campane tibetane e fotografia naturalistica a Sant Hilari Sacalm (Girona). Le sessioni hanno fatto il tutto esaurito, spesso organizzate con il comune e il centro di assistenza primaria del paese, ma il sito non lo diceva. La home era un elenco cronologico di WordPress con tutte le foto caricate in linea, la pagina delle prossime sessioni era vuota e non c'era modo di prenotare un posto. Fotografia e bagni sonori si contendevano lo stesso flusso.
+
+## Approccio
+
+Ho condotto il redesign con un workflow multi-agente di Claude Code. Quattro auditor hanno letto il sito da prospettive diverse (architettura dell'informazione, design visivo, testi in catalano, SEO tecnico e accessibilità) e hanno restituito 45 rilievi. Un agente di design li ha trasformati in una specifica scritta con design token e testi definitivi; cinque agenti costruttori l'hanno implementata in HTML, CSS e circa 3 KB di JavaScript; un verificatore indipendente ha eseguito controlli deterministici su link, markup condiviso, ordine dei titoli e contrasto WCAG, e un ultimo agente ha applicato ciò che ha trovato.
+
+Ora il sito si apre con cosa offre e dove, dedica ai bagni sonori una pagina propria con prenotazione via email e telefono e presenta le fotografie per serie con un visualizzatore utilizzabile da tastiera. Tutte le coppie di colori del testo rispettano WCAG AA nei temi chiaro e scuro. I dati che il sito attuale non pubblica, come date future e prezzi, sono segnati come provvisori nella pagina e restano fuori dai dati strutturati.
+
+## Risultato
+
+Un prototipo di cinque pagine su Vercel con una Content Security Policy rigorosa, senza build né tracciamento. Non è indicizzato perché non è ancora stato adottato: è una proposta di ciò che il sito potrebbe essere.

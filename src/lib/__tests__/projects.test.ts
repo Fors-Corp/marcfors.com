@@ -43,6 +43,22 @@ describe("featured work", () => {
     expect(fors?.blurb.en).toMatch(/no cookies or analytics/);
   });
 
+  it("features the FranCesc & Cescju redesign as a prototype with a case study, never its private source", () => {
+    const cescju = featured.find((item) => item.name === "FranCesc & Cescju");
+    expect(cescju).toMatchObject({
+      stack: ["HTML5", "CSS3", "JavaScript"],
+      live: "https://cescju-prototype.vercel.app",
+      caseStudy: "francesc-cescju",
+      private: true,
+      spotlight: true,
+    });
+    expect(cescju?.repo).toBeUndefined();
+    for (const blurb of Object.values(cescju!.blurb)) {
+      expect(blurb).toMatch(/Sant Hilari Sacalm/);
+    }
+    expect(cescju?.blurb.en).toMatch(/redesign prototype/);
+  });
+
   it("never links source for private projects", () => {
     for (const project of featured) {
       if (project.private) {

@@ -47,6 +47,23 @@ export const featured: Project[] = [
     spotlight: true,
   },
   {
+    name: "FranCesc & Cescju",
+    blurb: {
+      en: "A redesign prototype for a sound-bath and nature-photography practice in Sant Hilari Sacalm: a WordPress blog feed rebuilt as five Catalan pages with a booking path and a photo portfolio. Audited, specified, built and verified by a multi-agent workflow.",
+      es: "Prototipo de rediseño para un proyecto de baños de sonido y fotografía de naturaleza en Sant Hilari Sacalm: un blog de WordPress convertido en cinco páginas en catalán con reserva de plazas y portfolio fotográfico. Auditado, especificado, construido y verificado con un flujo multiagente.",
+      ca: "Prototip de redisseny per a un projecte de banys de so i fotografia de natura a Sant Hilari Sacalm: un blog de WordPress convertit en cinc pàgines en català amb reserva de places i portfoli fotogràfic. Auditat, especificat, construït i verificat amb un flux multiagent.",
+      it: "Prototipo di redesign per un progetto di bagni sonori e fotografia naturalistica a Sant Hilari Sacalm: un blog WordPress trasformato in cinque pagine in catalano con prenotazione dei posti e portfolio fotografico. Analizzato, specificato, costruito e verificato con un workflow multi-agente.",
+      pt: "Protótipo de redesenho para um projeto de banhos de som e fotografia de natureza em Sant Hilari Sacalm: um blogue WordPress transformado em cinco páginas em catalão com reserva de lugares e portefólio fotográfico. Auditado, especificado, construído e verificado com um fluxo multiagente.",
+      de: "Redesign-Prototyp für ein Projekt mit Klangbädern und Naturfotografie in Sant Hilari Sacalm: ein WordPress-Blog, neu gebaut als fünf katalanische Seiten mit Platzreservierung und Fotoportfolio. Geprüft, spezifiziert, gebaut und verifiziert mit einem Multi-Agenten-Workflow.",
+      fr: "Prototype de refonte pour un projet de bains sonores et de photographie de nature à Sant Hilari Sacalm : un blog WordPress reconstruit en cinq pages en catalan avec réservation de places et portfolio photo. Audité, spécifié, construit et vérifié par un workflow multi-agents.",
+    },
+    stack: ["HTML5", "CSS3", "JavaScript"],
+    live: "https://cescju-prototype.vercel.app",
+    caseStudy: "francesc-cescju",
+    private: true,
+    spotlight: true,
+  },
+  {
     name: "Fors Corp",
     blurb: {
       en: "Fors Corp's own storefront: websites and AI assistants for Barcelona clinics and advisory firms. Spanish, Catalan and English, statically prerendered, built on the Fors design system, with no cookies or analytics.",

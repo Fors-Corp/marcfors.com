@@ -1,0 +1,24 @@
+---
+project: "FranCesc & Cescju"
+stack:
+  - "HTML5"
+  - "CSS3"
+  - "JavaScript"
+live: "https://cescju-prototype.vercel.app"
+order: 5
+description: "Un blog de WordPress es converteix en un web en català de cinc pàgines amb reserva per als banys de so i un portfoli fotogràfic. Un prototip construït i verificat amb un flux multiagent."
+---
+
+## Problema
+
+francesc-cescju.eu és el web de FranCesc & Cescju: banys de so amb bols tibetans i fotografia de natura a Sant Hilari Sacalm (Girona). Les sessions han arribat a exhaurir places, sovint organitzades amb l'Ajuntament i el CAP del poble, però el web no ho explicava. La portada era un llistat cronològic de WordPress amb totes les fotos carregades en línia, la pàgina de properes sessions era buida i no hi havia manera de reservar plaça. La fotografia i els banys de so competien en el mateix flux.
+
+## Enfocament
+
+Vaig fer el redisseny amb un flux multiagent de Claude Code. Quatre auditors van llegir el web des de mirades diferents (arquitectura de la informació, disseny visual, textos en català, SEO tècnic i accessibilitat) i en van treure 45 troballes. Un agent de disseny les va convertir en una especificació escrita amb tokens de disseny i textos definitius; cinc agents constructors la van implementar amb HTML, CSS i uns 3 KB de JavaScript; un verificador independent va executar comprovacions deterministes d'enllaços, marcatge compartit, ordre d'encapçalaments i contrast WCAG, i un darrer agent va aplicar el que va trobar.
+
+Ara el web obre amb què ofereix i on, dona als banys de so una pàgina pròpia amb reserva per correu i telèfon, i presenta les fotografies per sèries amb un visor accessible amb teclat. Tots els parells de colors de text compleixen WCAG AA en els temes clar i fosc. Les dades que el web actual no publica, com ara dates futures i preus, es marquen com a provisionals a la pàgina i queden fora de les dades estructurades.
+
+## Resultat
+
+Un prototip de cinc pàgines a Vercel amb una política de seguretat de contingut estricta, sense pas de compilació ni rastrejadors. No està indexat perquè encara no s'ha adoptat: és una proposta del que podria ser el web.
