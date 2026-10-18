@@ -5,7 +5,7 @@ import { LOCALES } from "@/lib/locale";
 describe("case studies", () => {
   it("lists every case study, sorted by order", () => {
     const slugs = listCaseStudySlugs();
-    expect(slugs).toEqual(["wordkeep", "habit-breaker", "iterm-studio", "gatto", "wme-trading-corp"]);
+    expect(slugs).toEqual(["wordkeep", "habit-breaker", "iterm-studio", "gatto"]);
   });
 
   it("has matching frontmatter across every locale, differing only in description", () => {
@@ -55,19 +55,6 @@ describe("case studies", () => {
       expect(body).not.toMatch(/mailto:|tel:|wa\.me|github\.com|@/);
     }
     expect(caseStudyBody("gatto", "en")).toContain("no build step, runtime dependencies or trackers");
-  });
-
-  it("describes WME Trading Corp's live client site without source, contact details or return promises", () => {
-    for (const locale of LOCALES) {
-      const study = caseStudyBySlug("wme-trading-corp", locale);
-      expect(study?.live).toBe("https://wmetradingcorp.com");
-      expect(study?.repo).toBeUndefined();
-      const body = caseStudyBody("wme-trading-corp", locale)!;
-      expect(body).toContain("CA, EN, ES, DE, NL, FR, IT, PT");
-      expect(body).toContain("Vercel");
-      expect(body).not.toMatch(/mailto:|tel:|wa\.me|github\.com|@/);
-    }
-    expect(caseStudyBody("wme-trading-corp", "en")).toContain("no promised returns");
   });
 
   it("returns undefined for an unknown slug or a locale with no file", () => {
