@@ -1,5 +1,6 @@
 import { isErrorReport } from "@/lib/errors";
 import { clientIp, createRateLimiter } from "@/lib/rateLimit";
+import { readJsonBody } from "@/lib/requestBody";
 
 export const dynamic = "force-dynamic";
 
@@ -10,16 +11,12 @@ export async function POST(request: Request) {
     return Response.json({ error: "rate limited" }, { status: 429 });
   }
 
-  if (Number(request.headers.get("content-length") ?? 0) > 4096) {
-    return Response.json({ error: "payload too large" }, { status: 413 });
+  const read = await readJsonBody(request, 4096);
+  if (!read.ok) {
+    const error = read.status === 413 ? "payload too large" : "invalid json";
+    return Response.json({ error }, { status: read.status });
   }
-
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return Response.json({ error: "invalid json" }, { status: 400 });
-  }
+  const body = read.value;
 
   if (!isErrorReport(body)) {
     return Response.json({ error: "invalid report" }, { status: 400 });
