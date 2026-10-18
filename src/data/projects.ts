@@ -96,6 +96,22 @@ export const featured: Project[] = [
     spotlight: true,
   },
   {
+    name: "FerreTodo Lepant",
+    blurb: {
+      en: "A one-page site for a neighbourhood hardware store on Carrer de Lepant in the Eixample, Barcelona. Spanish, Catalan, English and French; a live open-now status, WhatsApp contact, a light and dark theme drawn from the shop sign, and a map that loads only on request.",
+      es: "Una web de una página para una ferretería de barrio en la calle Lepant, en el Eixample de Barcelona. Castellano, catalán, inglés y francés; estado de abierto en directo, contacto por WhatsApp, tema claro y oscuro inspirado en el rótulo de la tienda y un mapa que solo se carga si se pide.",
+      ca: "Un web d'una pàgina per a una ferreteria de barri al carrer de Lepant, a l'Eixample de Barcelona. Castellà, català, anglès i francès; estat d'obert en directe, contacte per WhatsApp, tema clar i fosc inspirat en el rètol de la botiga i un mapa que només es carrega si es demana.",
+      it: "Un sito di una pagina per una ferramenta di quartiere in Carrer de Lepant, nell'Eixample di Barcellona. Spagnolo, catalano, inglese e francese; stato di apertura in tempo reale, contatto via WhatsApp, tema chiaro e scuro ispirato all'insegna del negozio e una mappa che si carica solo su richiesta.",
+      pt: "Um site de uma página para uma loja de ferragens de bairro na Carrer de Lepant, no Eixample de Barcelona. Castelhano, catalão, inglês e francês; estado de aberto em tempo real, contacto por WhatsApp, tema claro e escuro inspirado no letreiro da loja e um mapa que só carrega a pedido.",
+      de: "Eine einseitige Website für einen Eisenwarenladen im Viertel, in der Carrer de Lepant im Eixample, Barcelona. Spanisch, Katalanisch, Englisch und Französisch; Live-Status „jetzt geöffnet“, Kontakt per WhatsApp, helles und dunkles Farbschema nach dem Ladenschild und eine Karte, die erst auf Wunsch lädt.",
+      fr: "Un site d’une page pour une quincaillerie de quartier sur la Carrer de Lepant, dans l’Eixample à Barcelone. Espagnol, catalan, anglais et français ; statut d’ouverture en direct, contact par WhatsApp, thème clair et sombre tiré de l’enseigne de la boutique et une carte qui ne se charge qu’à la demande.",
+    },
+    stack: ["Next.js 16", "Tailwind CSS", "TypeScript"],
+    live: "https://ferretodo-lepant.vercel.app",
+    private: true,
+    spotlight: true,
+  },
+  {
     name: "Wordkeep",
     blurb: {
       en: "Vocabulary keeper with a spaced review queue and a 3D atlas that wires saved words together by synonym, antonym, translation and sense across four languages.",
