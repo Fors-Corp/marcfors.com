@@ -55,8 +55,12 @@ export function SignalBoard({
   useEffect(() => {
     const started = performance.now();
     fetch("/api/health")
-      .then((res) => res.json())
-      .then((body: Health) => {
+      .then((res) => {
+        if (!res.ok) throw new Error(`/api/health ${res.status}`);
+        return res.json() as Promise<Health>;
+      })
+      .then((body) => {
+        if (typeof body.region !== "string" || !body.audit) throw new Error("/api/health: unexpected shape");
         setHealth({ ...body, region: `${body.region} · ${Math.round(performance.now() - started)}ms` });
       })
       .catch(() => {
@@ -77,18 +81,21 @@ export function SignalBoard({
           rating: ratingFor(name, metric.value),
         };
         setVitals((current) => ({ ...current, [name]: payload }));
-        void fetch("/api/vitals", {
+        // A lost beacon is acceptable: the reading is already shown locally.
+        fetch("/api/vitals", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
           keepalive: true,
-        });
+        }).catch(() => {});
       };
       onLCP(report);
       onINP(report);
       onCLS(report);
       onFCP(report);
       onTTFB(report);
+    }).catch(() => {
+      /* web-vitals chunk failed to load: the panel keeps its waiting state */
     });
     return () => {
       cancelled = true;
