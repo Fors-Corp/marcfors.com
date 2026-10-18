@@ -3,10 +3,25 @@
  * instance, so it resets on a cold start and is not shared across regions — fine
  * for the low-stakes beacon endpoints it guards, not a security control.
  */
-export function createRateLimiter({ windowMs = 60_000, max }: { windowMs?: number; max: number }) {
+export function createRateLimiter({
+  windowMs = 60_000,
+  max,
+  maxKeys = 10_000,
+}: {
+  windowMs?: number;
+  max: number;
+  maxKeys?: number;
+}) {
   const hits = new Map<string, number[]>();
   return function limited(key: string): boolean {
     const now = Date.now();
+    // A key is otherwise only pruned when it comes back, so one-shot clients
+    // (e.g. rotating IPv6 addresses) would grow the map without bound.
+    if (hits.size >= maxKeys) {
+      for (const [stale, rows] of hits) {
+        if (now - (rows.at(-1) ?? 0) >= windowMs) hits.delete(stale);
+      }
+    }
     const rows = (hits.get(key) ?? []).filter((stamp) => now - stamp < windowMs);
     if (rows.length >= max) {
       hits.set(key, rows);
