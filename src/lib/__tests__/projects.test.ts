@@ -59,6 +59,23 @@ describe("featured work", () => {
     expect(cescju?.blurb.en).toMatch(/redesign prototype/);
   });
 
+  it("features Fors Photography as a live print shop, linking the store but never its private source", () => {
+    const photo = featured.find((item) => item.name === "Fors Photography");
+    expect(photo).toMatchObject({
+      stack: ["Next.js 16", "React 19", "Stripe"],
+      live: "https://fors-photography.vercel.app",
+      private: true,
+      spotlight: true,
+    });
+    expect(photo?.repo).toBeUndefined();
+    expect(photo?.caseStudy).toBeUndefined();
+    for (const blurb of Object.values(photo!.blurb)) {
+      expect(blurb).toMatch(/18/);
+      expect(blurb).toMatch(/Stripe/);
+    }
+    expect(photo?.blurb.en).toMatch(/no database, accounts or analytics/);
+  });
+
   it("never links source for private projects", () => {
     for (const project of featured) {
       if (project.private) {
