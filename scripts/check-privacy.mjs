@@ -6,7 +6,10 @@ const patterns = ["@gmail.com", "marcfors.me"];
 const paths = [
   "src",
   "content",
+  "docs",
   "README.md",
+  "SECURITY.md",
+  ".env.example",
   "CHANGELOG.md",
   "package.json",
   "AGENTS.md",
