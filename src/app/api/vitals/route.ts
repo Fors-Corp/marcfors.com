@@ -12,10 +12,7 @@ export async function POST(request: Request) {
   }
 
   const read = await readJsonBody(request, 2048);
-  if (!read.ok) {
-    const error = read.status === 413 ? "payload too large" : "invalid json";
-    return Response.json({ error }, { status: read.status });
-  }
+  if (!read.ok) return Response.json({ error: read.error }, { status: read.status });
   const body = read.value;
 
   if (!isVitalPayload(body)) {
