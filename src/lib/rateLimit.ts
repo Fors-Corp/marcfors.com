@@ -13,11 +13,15 @@ export function createRateLimiter({
   maxKeys?: number;
 }) {
   const hits = new Map<string, number[]>();
-  return function limited(key: string): boolean {
+  let lastSweep = 0;
+  function limited(key: string): boolean {
     const now = Date.now();
     // A key is otherwise only pruned when it comes back, so one-shot clients
-    // (e.g. rotating IPv6 addresses) would grow the map without bound.
-    if (hits.size >= maxKeys) {
+    // (e.g. rotating IPv6 addresses) would grow the map without bound. Sweep at
+    // most once per window so a full map of active keys is not rescanned on
+    // every request.
+    if (hits.size >= maxKeys && now - lastSweep >= windowMs) {
+      lastSweep = now;
       for (const [stale, rows] of hits) {
         if (now - (rows.at(-1) ?? 0) >= windowMs) hits.delete(stale);
       }
@@ -30,7 +34,8 @@ export function createRateLimiter({
     rows.push(now);
     hits.set(key, rows);
     return false;
-  };
+  }
+  return Object.assign(limited, { trackedKeys: () => hits.size });
 }
 
 export function clientIp(request: Request): string {
