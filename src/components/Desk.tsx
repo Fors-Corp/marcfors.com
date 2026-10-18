@@ -46,7 +46,7 @@ function projectLinks(project: Project, locale: Locale) {
           {t.caseStudy}
         </Link>
       ) : null}
-      {project.repo && !project.private ? (
+      {project.repo ? (
         <a
           href={project.repo}
           target="_blank"
@@ -55,9 +55,8 @@ function projectLinks(project: Project, locale: Locale) {
         >
           {t.source}
         </a>
-      ) : project.private ? (
-        <span className="badge private">{t.private}</span>
       ) : null}
+      {project.private ? <span className="badge private">{t.private}</span> : null}
     </div>
   );
 }

@@ -143,6 +143,13 @@ describe("Desk", () => {
     expect(within(card).queryByRole("link", { name: copy.en.source })).toBeNull();
   });
 
+  it("shows both the source link and the private badge when a private project opts into linking its repo", () => {
+    renderDesk();
+    const card = screen.getByRole("heading", { name: "FerreTodo Lepant" }).closest(".card") as HTMLElement;
+    expect(card.querySelector('a[href="https://github.com/marcfs31/ferretodo-lepant"]')).toHaveTextContent(copy.en.source);
+    expect(within(card).getByText(copy.en.private)).toHaveClass("private");
+  });
+
   it("distinguishes a live product's status from the privacy of its source", () => {
     renderDesk();
     const card = screen.getByRole("heading", { name: "Gatto" }).closest(".card") as HTMLElement;
