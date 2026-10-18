@@ -21,6 +21,16 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   reveals. All of it is off under `prefers-reduced-motion`.
 - Fix the nav hire link turning into a solid brass box and the web-vitals
   tooltip letting the card text show through.
+- Security: cap `/api/vitals` and `/api/errors` bodies on the streamed bytes,
+  so a chunked request without `Content-Length` can no longer bypass the limit;
+  escape `<` and U+2028/U+2029 in JSON-LD; bound the rate limiter's key map.
+- Fix the signal board rendering a failed `/api/health` response as live data,
+  and unhandled rejections from the vitals beacon and the `web-vitals` import.
+- `/api/health` reports `cookies: "preference-only"` (the locale cookie) instead
+  of `"none"`; `security.txt` lists every locale, derived from `LOCALES`.
+- Docs: add `docs/architecture.md`, `docs/security.md`, `docs/contributing.md`
+  and `.env.example`; the privacy scan now covers `docs/`, `SECURITY.md` and
+  `.env.example`.
 
 ## 0.20.0 — 2026-10-08
 

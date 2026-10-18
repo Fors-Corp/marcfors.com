@@ -1,5 +1,5 @@
 import path from "node:path";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { careerBreak, contact, copy, education, experience, languages } from "@/data/copy";
 import { caseStudyBySlug, listCaseStudySlugs } from "@/data/caseStudies";
@@ -76,6 +76,17 @@ describe("public surface privacy", () => {
     const text = corpus();
     for (const pattern of BANNED_PUBLIC_PATTERNS) {
       expect(text).not.toMatch(pattern);
+    }
+  });
+});
+
+describe("source scan coverage", () => {
+  // A doc the scan skips is a doc a personal address can ship in unnoticed.
+  it("greps docs/ and every root-level Markdown file", () => {
+    const script = readFileSync(path.join(repoRoot, "scripts", "check-privacy.mjs"), "utf8");
+    const rootDocs = readdirSync(repoRoot).filter((name) => name.endsWith(".md"));
+    for (const target of ["docs", ...rootDocs]) {
+      expect(script, `scripts/check-privacy.mjs must scan ${target}`).toContain(`"${target}"`);
     }
   });
 });
