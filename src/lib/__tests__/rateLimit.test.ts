@@ -22,6 +22,18 @@ describe("createRateLimiter", () => {
     vi.advanceTimersByTime(1_100);
     expect(limited("k")).toBe(false);
   });
+
+  it("sweeps at the key cap without forgetting a still-active key", () => {
+    vi.useFakeTimers();
+    const limited = createRateLimiter({ max: 1, windowMs: 1_000, maxKeys: 3 });
+    limited("old-1");
+    limited("old-2");
+    vi.advanceTimersByTime(1_100);
+    limited("active");
+    // At the cap: the sweep must forget the idle keys but still block "active".
+    limited("new");
+    expect(limited("active")).toBe(true);
+  });
 });
 
 describe("clientIp", () => {
