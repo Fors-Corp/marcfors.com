@@ -24,7 +24,11 @@ describe("TechnologyChips", () => {
       expect(icon?.getAttribute("href") ?? icon?.getAttribute("d")).toBeTruthy();
       expect(item.querySelector(".chip")).toHaveAttribute("translate", "no");
     }
-    for (const name of items) expect(screen.getByText(name)).toBeVisible();
+    // Assert on the chips already in hand: a getByText scan per name over this
+    // SVG-heavy tree cost ~4s under coverage and put the test at its timeout.
+    const chips = screen.getAllByRole("listitem").map((item) => item.querySelector(".chip"));
+    expect(chips.map((chip) => chip?.textContent)).toEqual(items);
+    for (const chip of chips) expect(chip).toBeVisible();
     expect(screen.queryByRole("img")).toBeNull();
     expect(await axe(container)).toHaveNoViolations();
   });
