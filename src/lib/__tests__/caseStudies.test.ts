@@ -5,7 +5,7 @@ import { LOCALES } from "@/lib/locale";
 describe("case studies", () => {
   it("lists every case study, sorted by order", () => {
     const slugs = listCaseStudySlugs();
-    expect(slugs).toEqual(["wordkeep", "habit-breaker", "iterm-studio", "gatto", "francesc-cescju"]);
+    expect(slugs).toEqual(["mensura", "wordkeep", "habit-breaker", "iterm-studio", "gatto", "francesc-cescju"]);
   });
 
   it("has matching frontmatter across every locale, differing only in description", () => {
@@ -42,6 +42,22 @@ describe("case studies", () => {
     const habit = caseStudyBySlug("habit-breaker", "en");
     expect(habit?.live).toMatch(/^https:\/\//);
     expect(habit?.repo).toBeUndefined();
+  });
+
+  it("documents Mensura's locally learned, history-validated forecast without linking its private source", () => {
+    for (const locale of LOCALES) {
+      const study = caseStudyBySlug("mensura", locale);
+      expect(study?.live).toBe("https://tracking-consumos-vite.vercel.app");
+      expect(study?.repo).toBeUndefined();
+      const body = caseStudyBody("mensura", locale)!;
+      expect(body).toContain("180");
+      expect(body).toContain("localStorage");
+      expect(body).not.toMatch(/github\.com|@gmail\.com|mailto:|tel:/i);
+    }
+    const english = caseStudyBody("mensura", "en")!;
+    expect(english).toContain("gradient-boosted trees");
+    expect(english).toContain("Monte Carlo");
+    expect(english).toContain("clinical predictor");
   });
 
   it("describes Gatto's delivered outcome without exposing private contact details or source", () => {

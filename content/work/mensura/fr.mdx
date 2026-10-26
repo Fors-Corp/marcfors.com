@@ -1,0 +1,30 @@
+---
+project: "Mensura"
+stack:
+  - "Vite"
+  - "React"
+  - "TypeScript"
+live: "https://tracking-consumos-vite.vercel.app"
+order: 0
+description: "Un suivi privé des consommations par heure qui apprend sur l’appareil à partir de données personnelles. Prévision, validation et confidentialité."
+---
+
+## L’instrument
+
+Mensura est un outil privé destiné à une seule personne, pour noter les consommations de substances heure par heure et examiner les tendances, une carte thermique et des prévisions. Chaque ligne correspond à une substance ; chaque cellule enregistre une heure et une quantité. Un zéro saisi explicitement peut marquer l’arrêt de la consommation. Les jours sans information ne sont pas automatiquement considérés comme des jours confirmés sans consommation.
+
+## Comment la prévision apprend
+
+Il n’y a ni modèle de population ni entraînement dans le cloud. Mensura ajuste un modèle distinct pour chaque substance à partir de l’historique récent de la personne, jusqu’à 180 jours calendaires de relevés horaires. L’activité des autres substances suivies est également prise en compte : elle peut révéler qu’une substance tend à en suivre une autre. Les périodes sans relevés préservent la chronologie, mais ne prouvent pas l’absence de consommation.
+
+La prévision comporte deux volets. D’abord, un modèle logistique régularisé estime la probabilité de consommation à chaque heure. En parallèle, un modèle concurrent d’arbres à gradient boosting est entraîné pour capter des interactions, par exemple un horaire qui varie le week-end. Les deux sont comparés sur des blocs temporels successifs laissés de côté pour la validation ; le modèle le plus complexe ne remplace le modèle simple que si les résultats le justifient. Les probabilités sont calibrées hors échantillon. Ensuite, une régression ridge estime la quantité lorsqu’une consommation a lieu, en modélisant `log(1 + quantité)`.
+
+Les variables n’utilisent que les informations disponibles avant l’heure à prévoir : l’heure et le jour de la semaine ; plusieurs échelles de temps depuis les relevés précédents de la personne ; la présence d’une consommation plus tôt dans la journée ; la quantité cumulée ; le rythme récent ; la durée de l’épisode ; et l’activité des autres substances suivies. Les jours récents pèsent davantage. La demi-vie de cette pondération est choisie parmi plusieurs possibilités par validation historique. Un changement de tendance détecté peut raccourcir cette mémoire afin que les anciens comportements n’écrasent pas les nouveaux.
+
+## Du modèle à la prévision
+
+Mensura simule 400 fois les heures restantes de la journée. Une consommation simulée modifie les heures suivantes de cette même simulation : les épisodes restent ainsi visibles au lieu d’être lissés par une moyenne. Les simulations donnent un total journalier attendu, la probabilité de consommation à l’heure suivante et un profil de risque horaire. Si l’historique est trop limité, l’application revient à un profil par heure de la journée plutôt que d’afficher une précision injustifiée.
+
+## Limites et confidentialité
+
+Les relevés et les modèles restent dans le `localStorage` du navigateur ; l’application n’envoie pas les journaux de consommation à un serveur. Une clé d’accès facultative chiffre les données locales et les sauvegardes automatiques dans le navigateur. Les statistiques de visites sont séparées et ne reçoivent pas le contenu des relevés. La prévision est une heuristique personnelle pour réfléchir à ses données, pas un diagnostic, une recommandation de traitement ni un prédicteur clinique.

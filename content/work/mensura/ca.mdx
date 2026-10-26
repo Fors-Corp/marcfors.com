@@ -1,0 +1,30 @@
+---
+project: "Mensura"
+stack:
+  - "Vite"
+  - "React"
+  - "TypeScript"
+live: "https://tracking-consumos-vite.vercel.app"
+order: 0
+description: "Un registre privat de consum per hores que aprèn al dispositiu a partir de dades personals. La previsió, la validació i el model de privacitat."
+---
+
+## L’instrument
+
+Mensura és un registre privat i personal per anotar el consum de substàncies hora a hora i revisar-ne els patrons com a tendències, un mapa de calor i una previsió. Cada fila representa una substància i cada cel·la, una hora i una quantitat. Els zeros explícits poden indicar que el consum s’ha aturat; els dies sense informació no s’interpreten automàticament com a dies confirmats sense consum.
+
+## Com aprèn la previsió
+
+No hi ha cap model poblacional ni entrenament al núvol. Mensura ajusta un model independent per a cada substància amb l’historial recent de la persona, fins a 180 dies naturals de registres horaris. També té en compte l’activitat d’altres substàncies: pot ajudar a detectar que una sol precedir-ne una altra. Els intervals sense registres mantenen la continuïtat temporal, però no compten com a prova que no hi hagués consum.
+
+La previsió té dues parts. Primer, un model logístic regularitzat estima la probabilitat de consum a cada hora. Alhora, s’entrena un model rival d’arbres potenciats per gradient, que pot captar interaccions com ara un horari que canvia els caps de setmana. Tots dos es comparen en blocs temporals reservats i cada vegada més amplis; el model més complex només substitueix el senzill si la validació ho avala. Les probabilitats es calibren amb dades fora de l’entrenament. Després, una regressió ridge estima la quantitat condicionada al fet que hi hagi consum, modelant `log(1 + quantitat)`.
+
+Les variables només fan servir informació anterior a l’hora prevista: patrons de rellotge i dia de la setmana; diversos intervals des dels registres anteriors de la mateixa persona; si ja hi ha hagut consum aquell dia; la quantitat acumulada; la taxa recent; la durada de l’episodi; i l’activitat d’altres substàncies registrades. Els dies recents pesen més. La semivida d’aquest pes s’escull entre diverses opcions mitjançant validació històrica; si es detecta un canvi de patró, la memòria es pot escurçar perquè el comportament antic no domini la tendència nova.
+
+## De l’ajust a la previsió
+
+Mensura simula les hores que queden del dia 400 vegades. Cada consum simulat influeix en les hores posteriors d’aquella mateixa simulació, per conservar els episodis en lloc d’allisar-los. A partir de les simulacions, calcula un total diari esperat, la probabilitat de consum durant l’hora següent i un perfil de risc horari. Si l’historial és massa escàs, recorre a un perfil per hora del dia en lloc de mostrar una precisió que les dades no permeten.
+
+## Límits i privacitat
+
+Els registres i els models es desen a `localStorage` del navegador; l’aplicació no envia els registres de consum a cap servidor. Una clau d’accés opcional xifra les dades locals i les còpies de seguretat automàtiques al mateix navegador. Les analítiques de visites són independents i no reben el contingut dels registres. La previsió és una heurística personal per reflexionar-hi, no un diagnòstic, una recomanació de tractament ni un predictor clínic.
