@@ -4,6 +4,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+- Refresh the dev-only transitive `zod` (via `eslint-plugin-react-hooks`) from
+  4.5.4 to 4.6.7 to fix GHSA-mrhx-c7xc-m3w5 (high, memory exhaustion).
 - Add technology icons alongside visible names, improve keyboard navigation,
   theme contrast, touch targets and mobile layouts.
 - Feature Gatto with a seven-language case study and its Vercel-hosted live URL.
