@@ -4,6 +4,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+## 0.21.0 — 2026-10-26
+
+- Bump `react` and `react-dom` to 19.3.1, `yaml` to 2.9.1, and the CodeQL
+  action to 4.39.0.
 - Refresh the dev-only transitive `zod` (via `eslint-plugin-react-hooks`) from
   4.5.4 to 4.6.7 to fix GHSA-mrhx-c7xc-m3w5 (high, memory exhaustion).
 - Add technology icons alongside visible names, improve keyboard navigation,
