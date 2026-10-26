@@ -5,6 +5,7 @@ import { PrintButton } from "@/components/PrintButton";
 import { PrintDesk } from "@/components/PrintDesk";
 import { copy } from "@/data/copy";
 import { isLocale, languageAlternates, localeUrl, withLocale } from "@/lib/locale";
+import { pageSocialMetadata } from "@/lib/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export async function generateMetadata({
@@ -14,11 +15,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
+  const title = `${copy[locale].printTitle} — ${SITE_NAME}`;
+  const url = localeUrl(locale, "/print", SITE_URL);
   return {
-    title: `${copy[locale].printTitle} — ${SITE_NAME}`,
+    title,
+    description: copy[locale].cvLede,
     robots: { index: false, follow: true },
+    ...pageSocialMetadata({ locale, title, description: copy[locale].cvLede, url }),
     alternates: {
-      canonical: localeUrl(locale, "/print", SITE_URL),
+      canonical: url,
       languages: languageAlternates("/print", SITE_URL),
     },
   };

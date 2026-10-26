@@ -1,6 +1,7 @@
+import type { Metadata } from "next";
 import type { CaseStudy } from "@/data/caseStudies";
 import { copy } from "@/data/copy";
-import { localeUrl, type Locale } from "@/lib/locale";
+import { LOCALES, localeUrl, OG_LOCALES, type Locale } from "@/lib/locale";
 import { DEV_EMAIL, GITHUB_ORG_URL, GITHUB_URL, LINKEDIN_URL, RELEASE_DATE, SITE_NAME, SITE_URL } from "@/lib/site";
 
 /**
@@ -18,6 +19,49 @@ export const PORTRAIT_URL = `${SITE_URL}/opengraph-image`;
 
 /** The role phrasings recruiters and search engines use for the same job. */
 export const OCCUPATIONS = ["AI Software Engineer", "LLM Engineer", "AI Agent Engineer"] as const;
+
+type PageSocialMetadataOptions = {
+  locale: Locale;
+  title: string;
+  description: string;
+  url: string;
+  type?: "article" | "profile" | "website";
+  authors?: string[];
+};
+
+/** Re-declare complete social cards on leaf pages because Next merges metadata shallowly. */
+export function pageSocialMetadata({
+  locale,
+  title,
+  description,
+  url,
+  type = "website",
+  authors,
+}: PageSocialMetadataOptions): Pick<Metadata, "openGraph" | "twitter"> {
+  const imageAlt = `${SITE_NAME} — ${OCCUPATIONS[0]}`;
+  const imageUrl = localeUrl(locale, "/opengraph-image", SITE_URL);
+  const twitterImageUrl = localeUrl(locale, "/twitter-image", SITE_URL);
+
+  return {
+    openGraph: {
+      type,
+      title,
+      description,
+      url,
+      siteName: SITE_NAME,
+      locale: OG_LOCALES[locale],
+      alternateLocale: LOCALES.filter((item) => item !== locale).map((item) => OG_LOCALES[item]),
+      images: [{ url: imageUrl, alt: imageAlt }],
+      ...(type === "article" && authors ? { authors } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [twitterImageUrl],
+    },
+  };
+}
 
 /** Topics the site should rank for; mirrored in visible copy, never only here. */
 export const KNOWS_ABOUT = [

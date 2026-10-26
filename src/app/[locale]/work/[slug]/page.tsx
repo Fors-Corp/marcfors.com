@@ -10,7 +10,7 @@ import { caseStudyBySlug, listCaseStudySlugs } from "@/data/caseStudies";
 import { copy } from "@/data/copy";
 import { ATLAS_COPY } from "@/data/wordAtlas";
 import { isLocale, languageAlternates, LOCALES, localeUrl, withLocale } from "@/lib/locale";
-import { caseStudyJsonLd } from "@/lib/seo";
+import { caseStudyJsonLd, pageSocialMetadata } from "@/lib/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -30,21 +30,22 @@ export async function generateMetadata({
   if (!isLocale(locale)) notFound();
   const study = caseStudyBySlug(slug, locale);
   if (!study) notFound();
+  const socialTitle = `${study.project} — ${copy[locale].caseStudy}`;
+  const url = localeUrl(locale, `/work/${slug}`, SITE_URL);
   return {
-    title: `${study.project} — ${copy[locale].caseStudy} — ${SITE_NAME}`,
+    title: `${socialTitle} — ${SITE_NAME}`,
     description: study.description,
-    alternates: {
-      canonical: localeUrl(locale, `/work/${slug}`, SITE_URL),
-      languages: languageAlternates(`/work/${slug}`, SITE_URL),
-    },
-    // The [locale] layout declares `og:type profile` for the person; a case
-    // study is an article about one piece of work, so override it here.
-    openGraph: {
-      type: "article",
-      title: `${study.project} — ${copy[locale].caseStudy}`,
+    ...pageSocialMetadata({
+      locale,
+      title: socialTitle,
       description: study.description,
-      url: localeUrl(locale, `/work/${slug}`, SITE_URL),
+      url,
+      type: "article",
       authors: [SITE_NAME],
+    }),
+    alternates: {
+      canonical: url,
+      languages: languageAlternates(`/work/${slug}`, SITE_URL),
     },
   };
 }

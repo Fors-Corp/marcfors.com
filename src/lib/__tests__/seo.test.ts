@@ -2,7 +2,16 @@ import { describe, expect, it } from "vitest";
 import { caseStudyBySlug, listCaseStudySlugs } from "@/data/caseStudies";
 import { copy } from "@/data/copy";
 import { LOCALES, localeUrl } from "@/lib/locale";
-import { caseStudyJsonLd, KNOWS_ABOUT, OCCUPATIONS, PERSON_ID, profilePageJsonLd, siteJsonLd, WEBSITE_ID } from "@/lib/seo";
+import {
+  caseStudyJsonLd,
+  KNOWS_ABOUT,
+  OCCUPATIONS,
+  pageSocialMetadata,
+  PERSON_ID,
+  profilePageJsonLd,
+  siteJsonLd,
+  WEBSITE_ID,
+} from "@/lib/seo";
 import { GITHUB_URL, LINKEDIN_URL, RELEASE_DATE, SITE_NAME, SITE_URL } from "@/lib/site";
 
 type Node = Record<string, unknown>;
@@ -57,6 +66,45 @@ describe("profile page JSON-LD", () => {
     expect(page.url).toBe(localeUrl(locale, "/", SITE_URL));
     expect(page.name).toBe(copy[locale].metaTitle);
     expect(page.dateModified).toBe(RELEASE_DATE);
+  });
+});
+
+describe("leaf page social metadata", () => {
+  it.each(LOCALES)("%s uses page-specific titles, descriptions, and images", (locale) => {
+    const title = "Curriculum vitae — Marc Fors";
+    const description = "A page-specific CV description.";
+    const url = localeUrl(locale, "/cv", SITE_URL);
+    const metadata = pageSocialMetadata({ locale, title, description, url });
+
+    expect(metadata.openGraph).toMatchObject({
+      type: "website",
+      title,
+      description,
+      url,
+      siteName: SITE_NAME,
+      locale: expect.any(String),
+    });
+    expect(metadata.openGraph?.images).toEqual([
+      expect.objectContaining({ url: localeUrl(locale, "/opengraph-image", SITE_URL) }),
+    ]);
+    expect(metadata.twitter).toMatchObject({
+      card: "summary_large_image",
+      title,
+      description,
+      images: [localeUrl(locale, "/twitter-image", SITE_URL)],
+    });
+  });
+
+  it("preserves article authors for case studies", () => {
+    const metadata = pageSocialMetadata({
+      locale: "en",
+      title: "Study — Case study",
+      description: "Study summary",
+      url: `${SITE_URL}/work/study`,
+      type: "article",
+      authors: [SITE_NAME],
+    });
+    expect(metadata.openGraph).toMatchObject({ type: "article", authors: [SITE_NAME] });
   });
 });
 
