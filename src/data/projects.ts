@@ -25,7 +25,7 @@ export const featured: Project[] = [
       fr: "Un suivi privé et personnel des consommations qui apprend une prévision horaire à partir de vos propres données, sur l’appareil. Il modélise les horaires, la récence, les quantités et les liens entre substances, puis vérifie ses prévisions sur un historique mis de côté. Les données restent dans le navigateur.",
     },
     stack: ["Vite", "React", "TypeScript"],
-    live: "https://tracking-consumos-vite.vercel.app",
+    live: "https://mensura.cc",
     caseStudy: "mensura",
     private: true,
     spotlight: true,

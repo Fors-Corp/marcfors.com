@@ -47,7 +47,7 @@ describe("case studies", () => {
   it("documents Mensura's locally learned, history-validated forecast without linking its private source", () => {
     for (const locale of LOCALES) {
       const study = caseStudyBySlug("mensura", locale);
-      expect(study?.live).toBe("https://tracking-consumos-vite.vercel.app");
+      expect(study?.live).toBe("https://mensura.cc");
       expect(study?.repo).toBeUndefined();
       const body = caseStudyBody("mensura", locale)!;
       expect(body).toContain("180");
