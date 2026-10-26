@@ -1,0 +1,30 @@
+---
+project: "Mensura"
+stack:
+  - "Vite"
+  - "React"
+  - "TypeScript"
+live: "https://tracking-consumos-vite.vercel.app"
+order: 0
+description: "A private hourly substance tracker that learns on-device from personal logs. Explore its two-part forecast, validation strategy and privacy model."
+---
+
+## The instrument
+
+Mensura is a private, single-user tracker for recording substance consumption hour by hour and reviewing patterns as trends, a heatmap and a forecast. Each row represents a substance; each cell records an hour and amount. Explicitly logged zeroes can mark that use stopped, while days with no information are not silently treated as confirmed abstinence.
+
+## How the forecast learns
+
+There is no population model or cloud training job. Mensura builds a separate fit for each substance from the user’s own recent history, using up to 180 calendar days of hourly records. The training window includes other tracked substances too: their activity can help reveal that one substance tends to follow another. Unlogged gaps carry the timeline forward but are not counted as evidence of no use.
+
+The forecast has two parts. First, a regularised logistic model estimates the probability of use in each hour. A challenger based on gradient-boosted trees is trained alongside it so the model can capture interactions, such as a time-of-day pattern that changes on weekends. Both compete on expanding, held-out time blocks; the challenger replaces the simpler model only when validation supports the change. Probabilities are calibrated out of sample. Second, ridge regression estimates the amount, conditional on use, by modelling `log(1 + amount)`.
+
+Features are built only from information available before the hour being predicted: clock and weekday patterns; several time scales of recency after the person’s own previous logs; whether use has already happened that day; amount accumulated so far; recent overall rate; active-use duration; and activity in other tracked substances. Recent days carry more weight, with the recency half-life selected from candidates using out-of-sample validation. A detected change in the pattern can shorten that memory so older behaviour does not overwhelm a new trend.
+
+## From a fit to an outlook
+
+Mensura uses Monte Carlo simulation to project the remaining hours of a day 400 times. A simulated use feeds back into later hours in that same simulated day, preserving bursts instead of averaging them away. The paths produce an expected daily total, a next-hour probability and an hourly risk profile. If the log is too sparse to support the fitted model, the app falls back to an hour-of-day profile rather than presenting an unsupported level of precision.
+
+## Boundaries and privacy
+
+Entries and model fits stay in the browser’s `localStorage`; the app does not send consumption logs to a server. An optional access key encrypts local data and automatic backups in the browser. Page-view analytics are separate and do not receive log contents. The forecast is a personal heuristic for reflection, not a diagnosis, treatment recommendation or clinical predictor.

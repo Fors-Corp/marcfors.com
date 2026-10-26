@@ -53,6 +53,17 @@ describe("Desk", () => {
     expect(screen.getByText(copy.en.headline)).toBeInTheDocument();
   });
 
+  it("puts Mensura first in featured work and links its detailed case study", () => {
+    renderDesk();
+    const firstCard = document.querySelector("#projects .project-card");
+    expect(firstCard).toBeTruthy();
+    expect(within(firstCard as HTMLElement).getByRole("heading", { name: "Mensura" })).toBeInTheDocument();
+    expect(within(firstCard as HTMLElement).getByRole("link", { name: /case study for mensura/i })).toHaveAttribute(
+      "href",
+      "/work/mensura",
+    );
+  });
+
   it("renders every section, all visible on load — no accordion", () => {
     const { container } = renderDesk();
     for (const id of ["intro", "projects", "work", "skills", "contact", "signal", "edu"]) {

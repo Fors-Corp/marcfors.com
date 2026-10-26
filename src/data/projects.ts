@@ -14,6 +14,23 @@ export type Project = {
 
 export const featured: Project[] = [
   {
+    name: "Mensura",
+    blurb: {
+      en: "A private, single-user substance tracker that learns an hourly forecast from your own logs on-device. It models timing, recency, amount and cross-substance patterns, then tests forecasts against held-out history. Your logs stay in the browser.",
+      es: "Un registro privado y personal de consumo que aprende una previsión por hora a partir de tus propios datos, en el dispositivo. Modela horarios, recencia, cantidades y patrones entre sustancias, y contrasta sus previsiones con datos históricos reservados. Tus registros permanecen en el navegador.",
+      ca: "Un registre privat i personal de consum que aprèn una previsió per hora a partir de les teves pròpies dades, al dispositiu. Modela horaris, recència, quantitats i patrons entre substàncies, i contrasta les previsions amb dades històriques reservades. Els registres es queden al navegador.",
+      it: "Un registro privato e personale dei consumi che apprende una previsione oraria dai tuoi dati, direttamente sul dispositivo. Modella orari, recenza, quantità e pattern tra sostanze, poi verifica le previsioni su dati storici esclusi dall’addestramento. I registri restano nel browser.",
+      pt: "Um registo privado e pessoal de consumos que aprende uma previsão horária a partir dos teus próprios dados, no dispositivo. Modela horários, recência, quantidades e padrões entre substâncias, e testa as previsões com histórico reservado. Os registos ficam no navegador.",
+      de: "Ein privater, persönlicher Konsum-Tracker, der direkt auf dem Gerät aus den eigenen Einträgen eine stündliche Prognose lernt. Er modelliert Uhrzeit, zeitlichen Abstand, Mengen und Zusammenhänge zwischen Substanzen und prüft Prognosen anhand zurückgehaltener Verlaufsdaten. Die Einträge bleiben im Browser.",
+      fr: "Un suivi privé et personnel des consommations qui apprend une prévision horaire à partir de vos propres données, sur l’appareil. Il modélise les horaires, la récence, les quantités et les liens entre substances, puis vérifie ses prévisions sur un historique mis de côté. Les données restent dans le navigateur.",
+    },
+    stack: ["Vite", "React", "TypeScript"],
+    live: "https://tracking-consumos-vite.vercel.app",
+    caseStudy: "mensura",
+    private: true,
+    spotlight: true,
+  },
+  {
     name: "marcfors.com",
     blurb: {
       en: "This desk. Observatory portfolio with first-party vitals, a supply-chain audit on every build, and seven locales. Public source.",

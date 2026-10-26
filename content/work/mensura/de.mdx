@@ -1,0 +1,30 @@
+---
+project: "Mensura"
+stack:
+  - "Vite"
+  - "React"
+  - "TypeScript"
+live: "https://tracking-consumos-vite.vercel.app"
+order: 0
+description: "Ein privater stündlicher Konsum-Tracker, der direkt auf dem Gerät aus persönlichen Einträgen lernt. Prognose, Validierung und Datenschutz."
+---
+
+## Das Instrument
+
+Mensura ist ein privater Tracker für eine einzelne Person, um Substanzkonsum stündlich zu protokollieren und Muster als Trends, Heatmap und Prognose zu betrachten. Jede Zeile steht für eine Substanz; jede Zelle erfasst eine Stunde und eine Menge. Explizit eingetragene Nullen können das Ende eines Konsums markieren. Tage ohne Informationen gelten nicht automatisch als bestätigte Tage ohne Konsum.
+
+## Wie die Prognose lernt
+
+Es gibt weder ein Bevölkerungsmodell noch ein Cloud-Training. Mensura passt für jede Substanz ein eigenes Modell an die jüngsten Aufzeichnungen der Person an – bis zu 180 Kalendertage stündlicher Einträge. Auch die Aktivität anderer erfasster Substanzen fließt ein: So lässt sich erkennen, ob eine Substanz häufig auf eine andere folgt. Nicht protokollierte Lücken halten den zeitlichen Verlauf zusammen, gelten aber nicht als Beleg für ausbleibenden Konsum.
+
+Die Prognose besteht aus zwei Teilen. Zuerst schätzt ein regularisiertes logistisches Modell die Konsumwahrscheinlichkeit für jede Stunde. Parallel wird ein Gradient-Boosting-Baum-Modell als Herausforderer trainiert. Es kann Wechselwirkungen erkennen, etwa wenn ein Tageszeitmuster am Wochenende anders ausfällt. Beide Modelle werden anhand fortschreitender, für die Validierung zurückgehaltener Zeitblöcke verglichen; das komplexere ersetzt das einfachere nur, wenn die Ergebnisse dafür sprechen. Die Wahrscheinlichkeiten werden außerhalb der Trainingsdaten kalibriert. Eine Ridge-Regression schätzt anschließend die Menge unter der Bedingung, dass Konsum stattfindet, und modelliert dazu `log(1 + Menge)`.
+
+Die Merkmale verwenden ausschließlich Informationen, die vor der prognostizierten Stunde bekannt sind: Uhrzeit und Wochentag; mehrere Zeitabstände seit den eigenen vorherigen Einträgen; ob an diesem Tag bereits Konsum erfasst wurde; die bisherige Tagesmenge; die jüngste Rate; die Dauer einer Konsumphase; sowie die Aktivität anderer erfasster Substanzen. Neuere Tage werden stärker gewichtet. Die Halbwertszeit dieser Gewichtung wird anhand historischer Validierung aus mehreren Kandidaten gewählt. Erkennt das Modell einen Musterwechsel, kann es sein Gedächtnis verkürzen, damit älteres Verhalten den neuen Verlauf nicht überlagert.
+
+## Vom Modell zur Prognose
+
+Mensura simuliert die verbleibenden Stunden des Tages 400-mal. Ein simulierter Konsum beeinflusst die späteren Stunden desselben Durchlaufs; so bleiben Konsumphasen erhalten, statt in einem Durchschnitt zu verschwinden. Daraus entstehen eine erwartete Tagessumme, die Wahrscheinlichkeit für Konsum in der nächsten Stunde und ein stündliches Risikoprofil. Bei zu wenigen Daten wechselt die App zu einem Profil nach Tageszeit, statt eine nicht belegte Genauigkeit vorzutäuschen.
+
+## Grenzen und Datenschutz
+
+Einträge und Modelle bleiben im `localStorage` des Browsers; die App sendet keine Konsumprotokolle an einen Server. Ein optionaler Zugriffsschlüssel verschlüsselt lokale Daten und automatische Backups im Browser. Die Seitenaufruf-Analytics sind davon getrennt und erhalten keine Protokollinhalte. Die Prognose ist eine persönliche Heuristik zur Reflexion, keine Diagnose, Behandlungsempfehlung oder klinische Vorhersage.

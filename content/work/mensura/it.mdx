@@ -1,0 +1,30 @@
+---
+project: "Mensura"
+stack:
+  - "Vite"
+  - "React"
+  - "TypeScript"
+live: "https://tracking-consumos-vite.vercel.app"
+order: 0
+description: "Un registro privato dei consumi orari che apprende sul dispositivo dai dati personali. La previsione, la validazione e il modello di privacy."
+---
+
+## Lo strumento
+
+Mensura è un registro privato per una sola persona, pensato per annotare i consumi di sostanze ora per ora e rivederli come tendenze, mappa di calore e previsione. Ogni riga rappresenta una sostanza; ogni cella registra un’ora e una quantità. Gli zeri inseriti esplicitamente possono segnare l’interruzione del consumo, mentre i giorni senza informazioni non vengono considerati automaticamente giorni di astinenza confermata.
+
+## Come apprende la previsione
+
+Non usa un modello di popolazione né un addestramento nel cloud. Mensura stima un modello separato per ogni sostanza a partire dalla cronologia recente della persona, fino a 180 giorni di registrazioni orarie. Considera anche l’attività delle altre sostanze tracciate: può aiutare a riconoscere quando una tende a precederne un’altra. I giorni senza registrazioni mantengono la continuità temporale, ma non sono prove di mancato consumo.
+
+La previsione ha due componenti. Per prima cosa, una regressione logistica regolarizzata stima la probabilità di consumo in ogni ora. In parallelo si allena un modello concorrente di alberi con boosting del gradiente, in grado di cogliere interazioni come un orario che cambia nel fine settimana. I due modelli vengono confrontati su blocchi temporali di validazione progressivi e tenuti fuori dall’addestramento; il più complesso sostituisce quello semplice solo se i risultati lo giustificano. Le probabilità vengono calibrate fuori campione. Una regressione ridge stima poi la quantità, condizionata al consumo, usando `log(1 + quantità)`.
+
+Le variabili si basano solo su ciò che è noto prima dell’ora prevista: orario e giorno della settimana; più scale temporali dalla registrazione precedente della persona; se il consumo è già avvenuto quel giorno; la quantità cumulata; la frequenza recente; la durata dell’episodio; e l’attività delle altre sostanze registrate. I giorni più recenti pesano maggiormente. La semivita del peso viene scelta tra più alternative tramite validazione storica; un cambiamento rilevato nei dati può accorciare la memoria, così il comportamento passato non sovrasta quello nuovo.
+
+## Dal modello alla previsione
+
+Mensura simula 400 volte le ore rimanenti della giornata. Ogni consumo simulato influenza le ore successive della stessa simulazione, preservando i raggruppamenti invece di appiattirli in una media. Dai percorsi ottiene un totale giornaliero atteso, la probabilità di consumo nell’ora successiva e un profilo di rischio orario. Se la cronologia è troppo scarsa, usa un profilo per ora del giorno anziché mostrare una precisione non supportata dai dati.
+
+## Limiti e privacy
+
+Le registrazioni e i modelli restano nel `localStorage` del browser; l’app non invia i registri dei consumi a un server. Una chiave di accesso facoltativa cifra i dati locali e i backup automatici nel browser. Le analisi delle visualizzazioni sono separate e non ricevono il contenuto dei registri. La previsione è un’euristica personale per riflettere sui propri dati, non una diagnosi, un consiglio terapeutico o un predittore clinico.
