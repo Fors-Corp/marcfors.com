@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { copy } from "@/data/copy";
 import { isLocale, languageAlternates, LOCALES, localeUrl, withLocale } from "@/lib/locale";
+import { pageSocialMetadata } from "@/lib/seo";
 import { PRIVACY_UPDATED, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -17,13 +18,16 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const t = copy[locale];
+  const title = `${t.privacyTitle} — ${SITE_NAME}`;
+  const url = localeUrl(locale, "/privacy", SITE_URL);
   return {
-    title: `${t.privacyTitle} — ${SITE_NAME}`,
+    title,
     description: t.privacyLede,
+    ...pageSocialMetadata({ locale, title, description: t.privacyLede, url }),
     // Indexable on purpose: a legal notice should be findable, and it is listed
     // in the sitemap.
     alternates: {
-      canonical: localeUrl(locale, "/privacy", SITE_URL),
+      canonical: url,
       languages: languageAlternates("/privacy", SITE_URL),
     },
   };

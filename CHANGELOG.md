@@ -4,6 +4,11 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+- Correct localized page-level Open Graph and Twitter cards, and let crawlers
+  read `noindex` directives instead of blocking those routes in `robots.txt`.
+- Refresh the sitemap and profile structured-data modification date to match
+  the 0.21.0 release date.
+
 ## 0.21.0 — 2026-10-26
 
 - Bump `react` and `react-dom` to 19.3.1, `yaml` to 2.9.1, and the CodeQL

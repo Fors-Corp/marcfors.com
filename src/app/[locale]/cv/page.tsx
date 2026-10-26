@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { CvViewer } from "@/components/CvViewer";
 import { copy } from "@/data/copy";
 import { isLocale, languageAlternates, localeUrl, withLocale } from "@/lib/locale";
+import { pageSocialMetadata } from "@/lib/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export async function generateMetadata({
@@ -14,14 +15,17 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const t = copy[locale];
+  const title = `${t.cvTitle} — ${SITE_NAME}`;
+  const url = localeUrl(locale, "/cv", SITE_URL);
   return {
-    title: `${t.cvTitle} — ${SITE_NAME}`,
+    title,
     description: t.cvLede,
+    ...pageSocialMetadata({ locale, title, description: t.cvLede, url }),
     // Unlike /print — a duplicate of the home page copy, kept out of the index —
     // this page hosts the CV itself, which is exactly what a recruiter searches
     // for. It stays indexable and is listed in the sitemap.
     alternates: {
-      canonical: localeUrl(locale, "/cv", SITE_URL),
+      canonical: url,
       languages: languageAlternates("/cv", SITE_URL),
     },
   };

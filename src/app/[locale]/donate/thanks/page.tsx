@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { copy } from "@/data/copy";
 import { isLocale, languageAlternates, localeUrl, withLocale } from "@/lib/locale";
+import { pageSocialMetadata } from "@/lib/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { SUPPORT_THANKS_PATH } from "@/lib/support";
 
@@ -14,14 +15,17 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const t = copy[locale];
+  const title = `${t.supportThanksTitle} — ${SITE_NAME}`;
+  const url = localeUrl(locale, SUPPORT_THANKS_PATH, SITE_URL);
   return {
-    title: `${t.supportThanksTitle} — ${SITE_NAME}`,
+    title,
     description: t.supportThanksBody,
+    ...pageSocialMetadata({ locale, title, description: t.supportThanksBody, url }),
     // Where Stripe sends a visitor after a tip. Nothing to rank for, so it stays
     // out of the index and the sitemap (next.config.ts adds the header too).
     robots: { index: false, follow: false },
     alternates: {
-      canonical: localeUrl(locale, SUPPORT_THANKS_PATH, SITE_URL),
+      canonical: url,
       languages: languageAlternates(SUPPORT_THANKS_PATH, SITE_URL),
     },
   };
