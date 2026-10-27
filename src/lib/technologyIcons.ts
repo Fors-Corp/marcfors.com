@@ -1,19 +1,21 @@
 import {
-  siAngular, siClerk, siCss, siDrizzle, siExpress, siGit, siGo, siHtml5,
+  siAngular, siClaude, siClerk, siCss, siDrizzle, siExpress, siGit, siGo, siHono, siHtml5,
   siIterm2, siJavascript, siJenkins, siJest, siNeon, siNextdotjs,
   siOpenjdk, siOpentelemetry, siPrisma, siPython, siRadixui, siReact,
-  siReactivex, siSpring, siSqlite, siSwift, siTestinglibrary, siTypescript, siVite,
+  siReactivex, siSpring, siSqlite, siSwift, siTestinglibrary, siThreedotjs, siTypescript, siVite,
   type SimpleIcon,
 } from "simple-icons";
 
 export const TECHNOLOGY_BRANDS: Record<string, SimpleIcon> = {
   Angular: siAngular,
+  "Claude API": siClaude,
   Clerk: siClerk,
   CSS3: siCss,
   Drizzle: siDrizzle,
   Express: siExpress,
   Git: siGit,
   Go: siGo,
+  Hono: siHono,
   HTML5: siHtml5,
   iTerm2: siIterm2,
   Java: siOpenjdk,
@@ -32,6 +34,7 @@ export const TECHNOLOGY_BRANDS: Record<string, SimpleIcon> = {
   Spring: siSpring,
   SQLite: siSqlite,
   Swift: siSwift,
+  "Three.js": siThreedotjs,
   TypeScript: siTypescript,
   Vite: siVite,
 };

@@ -73,8 +73,8 @@ test("Wordkeep case study embeds the atlas and links out to the live project", a
   await expect(page.getByText("56 words · 90 links · 4 languages")).toBeVisible();
   const openAtlas = page.getByRole("link", { name: "Open the 3D atlas" });
   const visit = page.getByRole("link", { name: "Visit Wordkeep" });
-  await expect(openAtlas).toHaveAttribute("href", "https://wordkeep-zeta.vercel.app/graph");
-  await expect(visit).toHaveAttribute("href", "https://wordkeep-zeta.vercel.app");
+  await expect(openAtlas).toHaveAttribute("href", "https://wordkeep.me/graph");
+  await expect(visit).toHaveAttribute("href", "https://wordkeep.me");
 });
 
 test("Wordkeep atlas: a click selects a word and shows its links, and the canvas claims touch gestures", async ({

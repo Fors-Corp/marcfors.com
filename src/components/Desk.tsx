@@ -9,6 +9,7 @@ import type { AuditSnapshot } from "@/lib/audit";
 import { RECRUITER_SKILLS, RECRUITER_TOKENS } from "@/lib/emphasize";
 import type { GhRepo } from "@/lib/github";
 import { mailTo } from "@/lib/mail";
+import { ButtonArrow } from "@/components/ButtonArrow";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { TechnologyChips } from "@/components/TechnologyChips";
@@ -25,17 +26,24 @@ function projectLinks(project: Project, locale: Locale) {
     <div className="links">
       {project.live ? (
         <a
+          className="primary"
           href={project.live}
           target="_blank"
           rel="noopener noreferrer"
           aria-label={linkLabel(t.liveFor, project.name)}
         >
-          {t.live}
+          {t.viewLive}
+          <ButtonArrow out />
         </a>
       ) : null}
       {project.href ? (
-        <Link href={withLocale(locale, project.href)} aria-label={linkLabel(t.liveFor, project.name)}>
-          {t.live}
+        <Link
+          className="primary"
+          href={withLocale(locale, project.href)}
+          aria-label={linkLabel(t.liveFor, project.name)}
+        >
+          {t.viewLive}
+          <ButtonArrow />
         </Link>
       ) : null}
       {project.caseStudy ? (
@@ -44,6 +52,7 @@ function projectLinks(project: Project, locale: Locale) {
           aria-label={linkLabel(t.caseStudyFor, project.name)}
         >
           {t.caseStudy}
+          <ButtonArrow />
         </Link>
       ) : null}
       {project.repo ? (
@@ -54,9 +63,9 @@ function projectLinks(project: Project, locale: Locale) {
           aria-label={linkLabel(t.sourceFor, project.name)}
         >
           {t.source}
+          <ButtonArrow out />
         </a>
       ) : null}
-      {project.private ? <span className="badge private">{t.private}</span> : null}
     </div>
   );
 }
@@ -188,8 +197,11 @@ export function Desk({
             <div className="grid-cards">
               {spotlight.map((project) => (
                 <article className="card project-card" key={project.name}>
-                  <div className={project.private && !project.live ? "badge private" : "badge"}>
-                    {project.live ? t.live : project.private ? t.private : t.public}
+                  <div className="card-status">
+                    <span className={project.live ? "badge live" : project.private ? "badge private" : "badge"}>
+                      {project.live ? t.live : project.private ? t.private : t.public}
+                    </span>
+                    {project.live && project.private ? <span className="badge private">{t.private}</span> : null}
                   </div>
                   <h3>{project.name}</h3>
                   <p>{project.blurb[locale]}</p>
@@ -204,6 +216,7 @@ export function Desk({
                   <div className="repo-row" key={project.name}>
                     <div>
                       <strong>{project.name}</strong>
+                      {project.private ? <span className="badge private repo-badge">{t.private}</span> : null}
                       <div className="muted">{project.blurb[locale]}</div>
                     </div>
                     {projectLinks(project, locale)}
@@ -302,9 +315,11 @@ export function Desk({
               <div className="contact">
                 <a href={contact.linkedin} target="_blank" rel="noopener noreferrer">
                   LinkedIn
+                  <ButtonArrow out />
                 </a>
                 <a href={contact.github} target="_blank" rel="noopener noreferrer">
                   GitHub
+                  <ButtonArrow out />
                 </a>
               </div>
             </div>

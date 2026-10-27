@@ -2,21 +2,40 @@
 project: "Wordkeep"
 stack:
   - "React"
-  - "Vite"
   - "TypeScript"
-live: "https://wordkeep-zeta.vercel.app"
+  - "Vite"
+  - "Three.js"
+  - "Hono"
+  - "SQLite"
+  - "Claude API"
+live: "https://wordkeep.me"
 order: 1
-description: "Um vocabulário pelo qual podes caminhar, não só fazer scroll. O Atlas desta página é uma fatia congelada do grafo ao vivo; a versão 3D completa está a um clique."
+description: "Uma app que ensina sete línguas a jogar, guarda um léxico pessoal, explica frases com o Claude e desenha o teu vocabulário como um atlas 3D."
 ---
 
-## Problema
+## O problema
 
-Uma lista de cartões diz-te que palavras guardaste, não como se relacionam. Aprendes 'hot' e 'cold' como duas entradas soltas em vez de um eixo que já intuis em quatro línguas.
+As apps de cursos ensinam-te as palavras delas; os dicionários esquecem que procuraste uma. Um baralho de cartões diz-te que palavras guardaste, não como se relacionam: aprendes «quente» e «frio» como dois cartões soltos em vez de um mesmo eixo que já conheces a meio em quatro línguas. E assim que uma app precisa de uma conta e de um servidor para guardar o teu vocabulário, as tuas notas deixam de ser tuas.
 
-## Abordagem
+## O que faz
 
-Cada palavra guardada leva ligações tipadas — sinónimo, antónimo, tradução, relacionada. Uma fila espaçada agenda a revisão; um grafo de forças 3D, o Atlas, dispõe todo o léxico para que essas ligações ganhem forma. React, Vite e uma pequena API serverless.
+O Wordkeep tem quatro partes que se alimentam umas às outras.
 
-## Resultado
+- **Aprender.** Um percurso de unidades para alemão, italiano, português europeu, francês, espanhol, catalão e inglês, agrupadas por nível QECR. Alemão, italiano, português e inglês vão de A1 a C1. Cada unidade tem uma lição de palavras, uma de gramática e uma de frases, explicadas em inglês, espanhol, catalão ou francês, nunca na língua que se aprende. Os exercícios incluem escolha múltipla, escrita (acentos e artigos perdoados, mas assinalados), construção de frases, pares e escolha do artigo; os falhados voltam no fim. XP, um objetivo diário, sequências, medalhas e uma liga semanal com amigos fazem disto um jogo.
+- **Léxico.** Procura uma palavra em mais de 200 línguas. Definições e etimologia vêm do Wiktionary, preferindo a edição de cada língua. Guardas os sentidos e exemplos que te interessam e acrescentas uma mnemónica; a definição nunca é escrita por ti. A revisão usa SM-2 com De novo, Difícil, Bem e Fácil.
+- **Frases.** Escreve uma frase inteira e o Wordkeep decompõe-na: classe gramatical, forma de dicionário e flexão de cada palavra. Com o Claude, acrescenta a função de cada palavra, o tempo, o modo e a voz, as orações, as expressões idiomáticas, uma tradução para a tua língua e perguntas de revisão. As frases guardadas entram no léxico e na fila de revisão como as palavras.
+- **Atlas.** Cada entrada tem ligações tipificadas (sinónimo, antónimo, tradução, relacionada) e um grafo de forças em Three.js dispõe todo o léxico para que essas ligações ganhem forma. O atlas abaixo é um corte congelado dele.
 
-Um vocabulário pelo qual podes caminhar, não só fazer scroll. O Atlas desta página é uma fatia congelada do grafo ao vivo; a versão 3D completa está a um clique.
+## Claude, com orçamento
+
+Cada análise de frase é uma chamada paga à API, por isso o servidor limita-a em vez de confiar no cliente. Cada visitante (um IP com hash) tem uma quota diária e a app inteira tem um teto diário. Passado qualquer um deles, o visitante continua a receber a decomposição gratuita do dicionário com uma nota breve, nunca um erro. Os resultados ficam em cache durante 30 dias, por isso uma frase repetida ou um segundo visitante que pergunta o mesmo não custam nada. Num só servidor, contadores e cache vivem em SQLite; na Vercel, onde as instâncias não partilham nada, o Claude fica desligado até se ligar um Redis partilhado.
+
+## Teu, no teu dispositivo
+
+O léxico vive no IndexedDB do navegador. Não há registo e a app instala-se como PWA que funciona offline. Para o partilhar entre dispositivos, um código de sincronização de 26 caracteres liga-os; o servidor guarda apenas um hash dele e junta as alterações entrada a entrada, ganha a edição mais recente.
+
+As contas são opcionais e cifradas de ponta a ponta. A palavra-passe nunca sai do dispositivo: o PBKDF2 transforma-a numa chave de acesso, que o servidor guarda apenas como hash scrypt, e numa chave que desembrulha uma chave de dados aleatória. Os registos são selados com AES-GCM antes de serem enviados e os seus ids são HMAC, por isso o servidor não consegue ler as palavras nem associá-las a entradas. Um código de recuperação mostrado uma única vez substitui uma palavra-passe esquecida; não há reposição por email, de propósito.
+
+## Como chega à produção
+
+Um cliente React e Vite fala com uma pequena API em Hono que corre o mesmo código na Vercel, no Fly.io ou num contentor Docker, com SQLite ou Turso por trás. Cada pull request passa lint, typecheck, testes unitários dos dois lados, o build e Playwright de ponta a ponta. Depois de cada push para main, e a cada 30 minutos, uma verificação de produção confirma que o site publicado serve a versão do repositório e volta a publicar quando um evento de push se perde.

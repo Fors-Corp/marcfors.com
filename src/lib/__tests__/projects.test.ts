@@ -30,6 +30,23 @@ describe("featured work", () => {
     expect(gatto?.blurb.en).toMatch(/Spanish, Catalan and English/);
   });
 
+  it("features Wordkeep right after Mensura, on its own domain, without exposing source", () => {
+    expect(featured.findIndex((item) => item.name === "Wordkeep")).toBe(1);
+    const wordkeep = featured.find((item) => item.name === "Wordkeep");
+    expect(wordkeep).toMatchObject({
+      stack: ["React", "TypeScript", "Three.js", "Hono", "Claude API"],
+      live: "https://wordkeep.me",
+      caseStudy: "wordkeep",
+      private: true,
+      spotlight: true,
+    });
+    expect(wordkeep?.repo).toBeUndefined();
+    for (const blurb of Object.values(wordkeep!.blurb)) {
+      expect(blurb).toMatch(/Claude/);
+      expect(blurb).toMatch(/3D/);
+    }
+  });
+
   it("features forscorp.es as live work, linking the site but never its private source", () => {
     const fors = featured.find((item) => item.name === "Fors Corp");
     expect(fors).toMatchObject({
