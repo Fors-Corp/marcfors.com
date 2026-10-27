@@ -70,6 +70,17 @@ function projectLinks(project: Project, locale: Locale) {
   );
 }
 
+function HeartIcon() {
+  return (
+    <svg className="heart" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path
+        fill="currentColor"
+        d="M12 21s-7.5-4.6-10-9.3C.4 8.4 2.2 4.5 6 4.5c2.2 0 3.6 1.2 4.5 2.6.3.5.7.5 1 0 .9-1.4 2.3-2.6 4.5-2.6 3.8 0 5.6 3.9 4 7.2C19.5 16.4 12 21 12 21Z"
+      />
+    </svg>
+  );
+}
+
 function ProofLine({ text }: { text: string }) {
   // Every token in the proof line is a curated recruiter keyword, so all of them
   // are emphasised. (The old English-only `token === "Barcelona"` check left the
@@ -150,7 +161,10 @@ export function Desk({
               {t.source}
             </a>
             {/* Plain <a>, like the footer link: <Link> would prefetch /donate and fire the redirect on every view. */}
-            <a href={SUPPORT_PATH}>{t.supportNav}</a>
+            <a className="nav-support" href={SUPPORT_PATH}>
+              <HeartIcon />
+              {t.supportLink}
+            </a>
             <a className="nav-hire" href={mailTo(t.hireSubject)}>
               {t.hireCta}
             </a>

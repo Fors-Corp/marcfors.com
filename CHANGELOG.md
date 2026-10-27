@@ -4,6 +4,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+- Put a filled “♥ Support · 1,99 €” button in the top nav beside “Hire me”,
+  coloured from each theme's warm accent.
+- Restyle the language picker as one segmented pill with round flags and
+  codes, the current language lit in brass.
 - Make project actions real buttons: a filled “View live ↗” beside outlined
   “Case study →” and “Source ↗”, with arrows that say whether a link leaves
   the site. Card actions sit on the card's bottom edge so a row lines up, and

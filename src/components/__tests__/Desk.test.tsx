@@ -141,6 +141,18 @@ describe("Desk", () => {
     expect(hrefs.filter((href) => href.endsWith("/print"))).toEqual([]);
   });
 
+  it.each(LOCALES)("puts the priced support button in the top nav, beside Hire me (%s)", (locale) => {
+    renderDesk(locale);
+    const nav = screen.getByRole("navigation", { name: copy[locale].navLabel });
+    const support = within(nav).getByRole("link", { name: copy[locale].supportLink });
+    expect(support).toHaveClass("nav-support");
+    expect(support).toHaveAttribute("href", "/donate");
+    // Same tab, and a plain <a>: <Link> would prefetch /donate and fire its redirect.
+    expect(support).not.toHaveAttribute("target");
+    expect(support.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
+    expect(support.nextElementSibling).toHaveClass("nav-hire");
+  });
+
   it("links the footer to the CV viewer page", () => {
     renderDesk("it");
     const footer = screen.getByRole("contentinfo");
@@ -172,7 +184,7 @@ describe("Desk", () => {
     renderDesk(locale);
     const t = copy[locale];
     const nav = screen.getByRole("navigation", { name: t.navLabel });
-    const navLink = within(nav).getByRole("link", { name: t.supportNav });
+    const navLink = within(nav).getByRole("link", { name: t.supportLink });
     expect(navLink).toHaveAttribute("href", "/donate");
     expect(navLink).not.toHaveAttribute("target");
 

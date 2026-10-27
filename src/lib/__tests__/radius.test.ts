@@ -28,9 +28,9 @@ describe("radius scale", () => {
     }
   });
 
-  it("rounds the language select, cards and the switcher badge through tokens", () => {
+  it("rounds the language select, cards and the language pill through tokens", () => {
     expect(css).toMatch(/\.lang-select\s*\{[^}]*border-radius:\s*var\(--r-xs\)/);
     expect(css).toMatch(/\.card\s*\{[^}]*border-radius:\s*var\(--r-md\)/);
-    expect(css).toMatch(/\.langs \.lang-code\s*\{[^}]*border-radius:\s*var\(--r-2xs\)/);
+    expect(css).toMatch(/\.langs \{[^}]*border-radius:\s*var\(--r-pill\)/);
   });
 });
