@@ -68,7 +68,7 @@ describe("Desk", () => {
     renderDesk();
     const secondCard = document.querySelectorAll("#projects .project-card")[1] as HTMLElement;
     expect(within(secondCard).getByRole("heading", { name: "Wordkeep" })).toBeInTheDocument();
-    expect(within(secondCard).getByRole("link", { name: /live site for wordkeep/i })).toHaveAttribute(
+    expect(within(secondCard).getByRole("link", { name: /view live: wordkeep/i })).toHaveAttribute(
       "href",
       "https://wordkeep.me",
     );

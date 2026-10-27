@@ -49,7 +49,7 @@ export const ui: UiCopy = {
   buildSubject: `App su misura — ${SITE_HOST}`,
   source: "Codice",
   sourceFor: "Codice sorgente di {project}",
-  liveFor: "Sito live di {project}",
+  liveFor: "Vedi online: {project}",
   caseStudyFor: "Caso di studio di {project}",
   live: "Live",
   viewLive: "Vedi online",
