@@ -61,6 +61,8 @@ export type UiCopy = {
   liveFor: string;
   caseStudyFor: string;
   live: string;
+  /** Label on the button that opens a live product; `live` stays the status badge. */
+  viewLive: string;
   private: string;
   public: string;
   lang: string;

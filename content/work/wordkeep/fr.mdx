@@ -2,21 +2,40 @@
 project: "Wordkeep"
 stack:
   - "React"
-  - "Vite"
   - "TypeScript"
+  - "Vite"
+  - "Three.js"
+  - "Hono"
+  - "SQLite"
+  - "Claude API"
 live: "https://wordkeep.me"
 order: 1
-description: "Un vocabulaire que l’on parcourt à pied, pas seulement que l’on fait défiler. L’Atlas de cette page est une tranche figée du graphe en direct ; la version 3D complète est à un clic."
+description: "Une app qui enseigne sept langues en jouant, tient un lexique personnel, explique les phrases avec Claude et dessine ton vocabulaire en atlas 3D."
 ---
 
-## Problème
+## Le problème
 
-Une liste de fiches vous dit quels mots vous avez enregistrés, pas comment ils sont reliés. Vous apprenez « chaud » et « froid » comme deux entrées sans lien, au lieu d’un seul axe que vous connaissez déjà à moitié dans quatre langues.
+Les applis de cours t’apprennent leurs mots ; les dictionnaires oublient que tu en as cherché un. Un paquet de fiches te dit quels mots tu as gardés, pas comment ils se relient : tu apprends « chaud » et « froid » comme deux fiches isolées au lieu d’un même axe que tu connais déjà à moitié dans quatre langues. Et dès qu’une appli exige un compte et un serveur pour garder ton vocabulaire, tes notes ne t’appartiennent plus.
 
-## Approche
+## Ce qu’il fait
 
-Chaque mot enregistré porte des liens typés — synonyme, antonyme, traduction, apparenté. Une file espacée planifie la révision ; un graphe de forces 3D, l’Atlas, déploie tout le lexique pour que ces liens deviennent une forme. Construit avec React, Vite et une petite API serverless.
+Wordkeep a quatre parties qui se nourrissent l’une l’autre.
 
-## Résultat
+- **Apprendre.** Un parcours d’unités pour l’allemand, l’italien, le portugais européen, le français, l’espagnol, le catalan et l’anglais, regroupées par niveau CECRL. L’allemand, l’italien, le portugais et l’anglais vont de A1 à C1. Chaque unité a une leçon de mots, une de grammaire et une de phrases, expliquées en anglais, espagnol, catalan ou français, jamais dans la langue apprise. Les exercices vont du QCM à la saisie (accents et articles pardonnés mais signalés), à la construction de phrases, aux paires et au choix de l’article ; les ratés reviennent à la fin. XP, objectif quotidien, séries, badges et une ligue hebdomadaire entre amis en font un jeu.
+- **Lexique.** Cherche un mot dans plus de 200 langues. Définitions et étymologie viennent du Wiktionnaire, de préférence de l’édition de chaque langue. Tu gardes les sens et les exemples qui t’intéressent et ajoutes un moyen mnémotechnique ; la définition, tu ne la tapes jamais. La révision suit SM-2 avec À revoir, Difficile, Bien et Facile.
+- **Phrases.** Tape une phrase entière et Wordkeep la décompose : nature, forme de dictionnaire et flexion de chaque mot. Avec Claude, il ajoute la fonction de chaque mot, le temps, le mode et la voix, les propositions, les expressions, une traduction dans ta langue et des questions de quiz. Les phrases gardées rejoignent le lexique et la file de révision comme les mots.
+- **Atlas.** Chaque entrée porte des liens typés (synonyme, antonyme, traduction, apparenté) et un graphe de forces en Three.js déploie tout le lexique pour que ces liens prennent forme. L’atlas ci-dessous en est une tranche figée.
 
-Un vocabulaire que l’on parcourt à pied, pas seulement que l’on fait défiler. L’Atlas de cette page est une tranche figée du graphe en direct ; la version 3D complète est à un clic.
+## Claude, avec un budget
+
+Chaque analyse de phrase est un appel d’API payant, donc le serveur la limite au lieu de faire confiance au client. Chaque visiteur (une IP hachée) dispose d’un quota quotidien et l’appli entière d’un plafond quotidien. Au-delà de l’un ou l’autre, le visiteur reçoit toujours la décomposition gratuite du dictionnaire avec une courte note, jamais une erreur. Les résultats restent en cache 30 jours : une phrase répétée ou un second visiteur posant la même question ne coûte rien. Sur un seul serveur, compteurs et cache vivent dans SQLite ; sur Vercel, où les instances ne partagent rien, Claude reste éteint tant qu’un Redis partagé n’est pas branché.
+
+## À toi, sur ton appareil
+
+Le lexique vit dans l’IndexedDB du navigateur. Pas d’inscription, et l’appli s’installe comme PWA hors ligne. Pour le partager entre appareils, un code de synchronisation de 26 caractères les relie ; le serveur n’en garde qu’un hachage et fusionne les changements entrée par entrée, la modification la plus récente l’emporte.
+
+Les comptes sont facultatifs et chiffrés de bout en bout. Le mot de passe ne quitte jamais l’appareil : PBKDF2 en tire une clé de connexion, que le serveur ne garde que sous forme de hachage scrypt, et une clé qui déverrouille une clé de données aléatoire. Les enregistrements sont scellés avec AES-GCM avant l’envoi et leurs identifiants sont des HMAC, si bien que le serveur ne peut ni lire les mots ni les relier aux entrées. Un code de récupération affiché une seule fois remplace un mot de passe oublié ; pas de réinitialisation par e-mail, par choix.
+
+## Comment il est livré
+
+Un client React et Vite parle à une petite API Hono qui exécute le même code sur Vercel, Fly.io ou un conteneur Docker, avec SQLite ou Turso derrière. Chaque pull request passe le lint, le typecheck, les tests unitaires des deux côtés, le build et Playwright de bout en bout. Après chaque push sur main, et toutes les 30 minutes, une vérification de production confirme que le site en ligne sert la version du dépôt et relance un déploiement quand un événement de push s’est perdu.

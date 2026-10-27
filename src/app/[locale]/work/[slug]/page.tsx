@@ -3,6 +3,7 @@ import { linkLabel } from "@/lib/labels";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BrandMark } from "@/components/BrandMark";
+import { ButtonArrow } from "@/components/ButtonArrow";
 import { JsonLd } from "@/components/JsonLd";
 import { WordAtlas } from "@/components/WordAtlas";
 import { TechnologyChips } from "@/components/TechnologyChips";
@@ -74,37 +75,46 @@ export default async function CaseStudyPage({
           <BrandMark />
           {SITE_NAME}
         </Link>
-        <Link href={withLocale(locale, "/")} prefetch={false}>{t.homeCta}</Link>
+        <Link className="back-link" href={withLocale(locale, "/")} prefetch={false}>
+          <ButtonArrow />
+          {t.homeCta}
+        </Link>
       </header>
       <main id="main" className="case" tabIndex={-1}>
         <p className="kicker">{t.caseStudy}</p>
         <h1>{study.project}</h1>
+        <p className="case-lede">{study.description}</p>
         <TechnologyChips items={study.stack} />
+        {/* Up front, so a visitor can open the product without reading to the end. */}
+        {study.live || study.repo ? (
+          <div className="links case-actions">
+            {study.live ? (
+              <a
+                className="primary"
+                href={study.live}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={linkLabel(t.liveFor, study.project)}
+              >
+                {t.viewLive}
+                <ButtonArrow out />
+              </a>
+            ) : null}
+            {study.repo ? (
+              <a
+                href={study.repo}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={linkLabel(t.sourceFor, study.project)}
+              >
+                {t.source}
+                <ButtonArrow out />
+              </a>
+            ) : null}
+          </div>
+        ) : null}
         <div className="case-body">
           <Content />
-        </div>
-        <div className="links">
-          {study.live ? (
-            <a
-              className="cta"
-              href={study.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={linkLabel(t.liveFor, study.project)}
-            >
-              {t.live}
-            </a>
-          ) : null}
-          {study.repo ? (
-            <a
-              href={study.repo}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={linkLabel(t.sourceFor, study.project)}
-            >
-              {t.source}
-            </a>
-          ) : null}
         </div>
       </main>
       {slug === "wordkeep" ? (
@@ -114,6 +124,12 @@ export default async function CaseStudyPage({
           <WordAtlas locale={locale} />
         </section>
       ) : null}
+      <footer className="case-footer">
+        <Link className="back-link" href={withLocale(locale, "/")} prefetch={false}>
+          <ButtonArrow />
+          {t.homeCta}
+        </Link>
+      </footer>
     </div>
   );
 }

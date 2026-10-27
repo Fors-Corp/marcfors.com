@@ -38,6 +38,20 @@ describe("case studies", () => {
     }
   });
 
+  it("documents Wordkeep's current product on its own domain, without linking its private source", () => {
+    for (const locale of LOCALES) {
+      const study = caseStudyBySlug("wordkeep", locale);
+      expect(study?.live).toBe("https://wordkeep.me");
+      expect(study?.repo).toBeUndefined();
+      expect(study?.stack).toEqual(expect.arrayContaining(["Three.js", "Hono", "Claude API"]));
+      const body = caseStudyBody("wordkeep", locale)!;
+      for (const fact of ["Claude", "SM-2", "IndexedDB", "AES-GCM", "PBKDF2", "Three.js", "200", "30"]) {
+        expect(body, `${locale}: ${fact}`).toContain(fact);
+      }
+      expect(body).not.toMatch(/github\.com|vercel\.app|@gmail\.com|mailto:|tel:/i);
+    }
+  });
+
   it("ships Habit Breaker as a live product without a private repo URL", () => {
     const habit = caseStudyBySlug("habit-breaker", "en");
     expect(habit?.live).toMatch(/^https:\/\//);

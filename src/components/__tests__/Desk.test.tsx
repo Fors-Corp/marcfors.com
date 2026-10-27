@@ -64,6 +64,46 @@ describe("Desk", () => {
     );
   });
 
+  it("features Wordkeep second, opening the live app and its case study", () => {
+    renderDesk();
+    const secondCard = document.querySelectorAll("#projects .project-card")[1] as HTMLElement;
+    expect(within(secondCard).getByRole("heading", { name: "Wordkeep" })).toBeInTheDocument();
+    expect(within(secondCard).getByRole("link", { name: /view live: wordkeep/i })).toHaveAttribute(
+      "href",
+      "https://wordkeep.me",
+    );
+    expect(within(secondCard).getByRole("link", { name: /case study for wordkeep/i })).toHaveAttribute(
+      "href",
+      "/work/wordkeep",
+    );
+  });
+
+  it.each(LOCALES)("renders project actions as buttons, the live product filled and labelled as an action (%s)", (locale) => {
+    const { container } = renderDesk(locale);
+    const t = copy[locale];
+    for (const card of container.querySelectorAll<HTMLElement>(".project-card")) {
+      const actions = card.querySelector(".links") as HTMLElement;
+      const live = actions.querySelector<HTMLAnchorElement>("a.primary");
+      if (live) {
+        expect(live).toHaveTextContent(t.viewLive);
+        expect(actions.firstElementChild).toBe(live);
+      }
+      for (const link of actions.querySelectorAll("a")) {
+        expect(link.querySelector(".btn-arrow")).toHaveAttribute("aria-hidden", "true");
+      }
+      // The privacy of the source is status, shown beside "Live", never mixed into the actions.
+      expect(actions.querySelector(".badge")).toBeNull();
+    }
+  });
+
+  it("keeps the private tag on archived rest-of-work rows", () => {
+    const { container } = renderDesk();
+    const row = [...container.querySelectorAll<HTMLElement>(".rest-work .repo-row")].find((el) =>
+      el.textContent?.includes("GH Dashboard"),
+    );
+    expect(row?.querySelector(".badge.private")).toHaveTextContent(copy.en.private);
+  });
+
   it("renders every section, all visible on load — no accordion", () => {
     const { container } = renderDesk();
     for (const id of ["intro", "projects", "work", "skills", "contact", "signal", "edu"]) {
@@ -166,18 +206,6 @@ describe("Desk", () => {
     const card = screen.getByRole("heading", { name: "Gatto" }).closest(".card") as HTMLElement;
     expect(within(card).getByText(copy.en.live, { selector: ".badge" })).not.toHaveClass("private");
     expect(within(card).getByText(copy.en.private)).toHaveClass("private");
-  });
-
-  it("renders each live link as a button-styled link", () => {
-    const { container } = renderDesk();
-    const live = container.querySelectorAll(`.project-card .links a[href^="https://"][aria-label*="${copy.en.liveFor.split("{")[0].trim()}"]`);
-    expect(live.length).toBeGreaterThan(0);
-    for (const link of live) expect(link).toHaveClass("cta");
-  });
-
-  it("lists Wordkeep right after Mensura at its own domain", () => {
-    expect(featured.slice(0, 2).map((p) => p.name)).toEqual(["Mensura", "Wordkeep"]);
-    expect(featured[1].live).toBe("https://wordkeep.me");
   });
 
   it("emphasises every proof-line token, including the Italian 'Barcellona'", () => {
