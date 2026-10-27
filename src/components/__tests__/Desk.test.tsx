@@ -168,6 +168,18 @@ describe("Desk", () => {
     expect(within(card).getByText(copy.en.private)).toHaveClass("private");
   });
 
+  it("renders each live link as a button-styled link", () => {
+    const { container } = renderDesk();
+    const live = container.querySelectorAll(`.project-card .links a[href^="https://"][aria-label*="${copy.en.liveFor.split("{")[0].trim()}"]`);
+    expect(live.length).toBeGreaterThan(0);
+    for (const link of live) expect(link).toHaveClass("cta");
+  });
+
+  it("lists Wordkeep right after Mensura at its own domain", () => {
+    expect(featured.slice(0, 2).map((p) => p.name)).toEqual(["Mensura", "Wordkeep"]);
+    expect(featured[1].live).toBe("https://wordkeep.me");
+  });
+
   it("emphasises every proof-line token, including the Italian 'Barcellona'", () => {
     const { container } = renderDesk("it");
     const proof = container.querySelector(".proof-line") as HTMLElement;

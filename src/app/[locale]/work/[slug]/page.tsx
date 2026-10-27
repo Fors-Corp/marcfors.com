@@ -86,6 +86,7 @@ export default async function CaseStudyPage({
         <div className="links">
           {study.live ? (
             <a
+              className="cta"
               href={study.live}
               target="_blank"
               rel="noopener noreferrer"

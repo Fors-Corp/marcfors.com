@@ -4,6 +4,9 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+- Style the "Live site" links on project cards and case studies as buttons.
+- List Wordkeep right after Mensura at the top of the portfolio, linking to
+  its own domain, wordkeep.me.
 - Correct localized page-level Open Graph and Twitter cards, and let crawlers
   read `noindex` directives instead of blocking those routes in `robots.txt`.
 - Refresh the sitemap and profile structured-data modification date to match

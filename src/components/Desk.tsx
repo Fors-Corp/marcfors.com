@@ -25,6 +25,7 @@ function projectLinks(project: Project, locale: Locale) {
     <div className="links">
       {project.live ? (
         <a
+          className="cta"
           href={project.live}
           target="_blank"
           rel="noopener noreferrer"
@@ -34,7 +35,7 @@ function projectLinks(project: Project, locale: Locale) {
         </a>
       ) : null}
       {project.href ? (
-        <Link href={withLocale(locale, project.href)} aria-label={linkLabel(t.liveFor, project.name)}>
+        <Link className="cta" href={withLocale(locale, project.href)} aria-label={linkLabel(t.liveFor, project.name)}>
           {t.live}
         </Link>
       ) : null}

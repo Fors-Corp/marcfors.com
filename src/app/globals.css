@@ -716,6 +716,10 @@ h2, h3 {
   align-items: center;
   min-height: 44px;
 }
+.links a.cta {
+  justify-content: center;
+  padding: 8px 18px;
+}
 
 .activity-heading {
   display: flex;
@@ -1005,6 +1009,7 @@ footer {
   .wrap { padding: 22px max(16px, env(safe-area-inset-right)) 72px max(16px, env(safe-area-inset-left)); }
   h1 { font-size: 40px; }
   .cta { width: 100%; }
+  .links a.cta { width: auto; }
   .repo-row { grid-template-columns: minmax(0, 1fr); }
   .tip { width: min(240px, 86vw); }
 }
