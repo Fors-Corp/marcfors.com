@@ -9,7 +9,7 @@ import { LOCALES } from "@/lib/locale";
 // over, so both failure modes are pinned here.
 const PAIRS = [
   ["sourceFor", "source"],
-  ["liveFor", "live"],
+  ["liveFor", "viewLive"],
   ["caseStudyFor", "caseStudy"],
 ] as const;
 
