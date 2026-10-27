@@ -52,6 +52,7 @@ export const ui: UiCopy = {
   liveFor: "Site ao vivo de {project}",
   caseStudyFor: "Estudo de caso de {project}",
   live: "Ao vivo",
+  viewLive: "Ver ao vivo",
   private: "Privado",
   public: "Público",
   lang: "Língua",

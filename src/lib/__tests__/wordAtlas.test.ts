@@ -35,8 +35,8 @@ describe("word atlas snapshot", () => {
   });
 
   it("points at the live Wordkeep project", () => {
-    expect(WORDKEEP_URL).toBe("https://wordkeep-zeta.vercel.app");
-    expect(WORDKEEP_GRAPH_URL).toBe("https://wordkeep-zeta.vercel.app/graph");
+    expect(WORDKEEP_URL).toBe("https://wordkeep.me");
+    expect(WORDKEEP_GRAPH_URL).toBe("https://wordkeep.me/graph");
   });
 
   it("localizes the atlas micro-copy for every shipped locale", () => {

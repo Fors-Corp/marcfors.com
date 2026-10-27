@@ -2,21 +2,40 @@
 project: "Wordkeep"
 stack:
   - "React"
-  - "Vite"
   - "TypeScript"
-live: "https://wordkeep-zeta.vercel.app"
+  - "Vite"
+  - "Three.js"
+  - "Hono"
+  - "SQLite"
+  - "Claude API"
+live: "https://wordkeep.me"
 order: 1
-description: "Un vocabulari pel qual pots passejar, no només fer scroll. L'Atles d'aquesta pàgina és un tall congelat del graf en viu; la versió 3D completa és a un clic."
+description: "Una app d’idiomes que ensenya set llengües jugant, guarda un lèxic personal, explica frases amb Claude i dibuixa el teu vocabulari com un atles 3D."
 ---
 
-## Problema
+## El problema
 
-Una llista de targetes et diu quines paraules has desat, no com es relacionen. Aprens 'hot' i 'cold' com dues entrades soltes en lloc d'un eix que ja intueixes en quatre llengües.
+Les apps de cursos t’ensenyen les seves paraules; els diccionaris obliden que n’has buscat una. Un feix de targetes et diu quines paraules has desat, no com es relacionen: aprens «calent» i «fred» com dues targetes soltes en lloc d’un mateix eix que ja coneixes a mitges en quatre idiomes. I tan bon punt una app necessita un compte i un servidor per guardar el teu vocabulari, les teves notes deixen de ser teves.
 
-## Enfocament
+## Què fa
 
-Cada paraula desada porta enllaços tipats — sinònim, antònim, traducció, relacionada. Una cua espaiada programa el repàs; un graf de forces 3D, l'Atles, desplega tot el lèxic perquè aquests enllaços prenguin forma. React, Vite i una petita API serverless.
+Wordkeep té quatre parts que s’alimenten entre elles.
 
-## Resultat
+- **Aprendre.** Un camí d’unitats per a alemany, italià, portuguès europeu, francès, castellà, català i anglès, agrupades per nivell MECR. Alemany, italià, portuguès i anglès van d’A1 a C1. Cada unitat té una lliçó de paraules, una de gramàtica i una de frases, explicades en anglès, castellà, català o francès, mai en la llengua que s’aprèn. Els exercicis inclouen opció múltiple, escriptura (accents i articles es perdonen, però s’assenyalen), construir frases, aparellar i triar l’article; els fallats tornen al final. XP, un objectiu diari, ratxes, insígnies i una lliga setmanal amb amics el converteixen en un joc.
+- **Lèxic.** Busca una paraula en més de 200 idiomes. Definicions i etimologia vénen del Wiktionary, preferint l’edició de cada llengua. Deses les accepcions i els exemples que t’interessen i hi afegeixes una mnemotècnia; la definició no l’escrius mai tu. El repàs fa servir SM-2 amb Una altra vegada, Difícil, Bé i Fàcil.
+- **Frases.** Escriu una oració sencera i Wordkeep la desglossa: categoria gramatical, forma de diccionari i flexió de cada paraula. Amb Claude hi afegeix la funció de cada paraula, el temps, el mode i la veu, les oracions, les expressions, una traducció a la teva llengua i preguntes de repàs. Les frases desades entren al lèxic i a la cua de repàs com les paraules.
+- **Atles.** Cada entrada porta enllaços tipats (sinònim, antònim, traducció, relacionada) i un graf de forces en Three.js desplega tot el lèxic perquè aquests enllaços prenguin forma. L’atles de sota n’és un tall congelat.
 
-Un vocabulari pel qual pots passejar, no només fer scroll. L'Atles d'aquesta pàgina és un tall congelat del graf en viu; la versió 3D completa és a un clic.
+## Claude, amb pressupost
+
+Cada anàlisi de frase és una crida de pagament a l’API, així que el servidor la limita en comptes de fiar-se del client. Cada visitant (una IP amb hash) té una quota diària i tota l’app té un sostre diari. Superat qualsevol dels dos, el visitant continua rebent el desglossament gratuït del diccionari amb una nota breu, mai un error. Els resultats es guarden en memòria cau 30 dies, així que una frase repetida o un segon visitant que pregunta el mateix no costa res. En un sol servidor, comptadors i memòria cau viuen a SQLite; a Vercel, on les instàncies no comparteixen res, Claude queda apagat fins que s’hi connecta un Redis compartit.
+
+## Teu, al teu dispositiu
+
+El lèxic viu a l’IndexedDB del navegador. No hi ha registre i l’app s’instal·la com a PWA sense connexió. Per compartir-lo entre dispositius, un codi de sincronització de 26 caràcters els enllaça; el servidor només en guarda un hash i fusiona els canvis per entrada, guanya l’edició més recent.
+
+Els comptes són opcionals i xifrats d’extrem a extrem. La contrasenya no surt mai del dispositiu: PBKDF2 la converteix en una clau d’accés, que el servidor només guarda com a hash scrypt, i en una clau que desembolica una clau de dades aleatòria. Els registres se segellen amb AES-GCM abans d’enviar-se i els seus ids són HMAC, així que el servidor no pot llegir les paraules ni vincular-les a entrades. Un codi de recuperació d’un sol ús substitueix una contrasenya oblidada; no hi ha restabliment per correu, expressament.
+
+## Com s’entrega
+
+Un client React i Vite parla amb una petita API en Hono que executa el mateix codi a Vercel, Fly.io o un contenidor Docker, amb SQLite o Turso al darrere. Cada pull request passa lint, typecheck, tests unitaris a banda i banda, el build i Playwright de punta a punta. Després de cada push a main, i cada 30 minuts, una comprovació de producció confirma que la web en directe serveix la versió del repositori i torna a desplegar si s’ha perdut un esdeveniment de push.

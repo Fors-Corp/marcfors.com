@@ -6,8 +6,8 @@ import type { Locale } from "@/lib/locale";
  * stays dependency- and request-free. The live 3D version is linked from the
  * component.
  */
-export const WORDKEEP_URL = "https://wordkeep-zeta.vercel.app";
-export const WORDKEEP_GRAPH_URL = "https://wordkeep-zeta.vercel.app/graph";
+export const WORDKEEP_URL = "https://wordkeep.me";
+export const WORDKEEP_GRAPH_URL = "https://wordkeep.me/graph";
 
 export type AtlasRelation = "syn" | "ant" | "tr" | "rel";
 export type AtlasLang = "en" | "es" | "fr" | "de";

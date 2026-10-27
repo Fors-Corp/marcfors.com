@@ -4,6 +4,19 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+- Make project actions real buttons: a filled “View live ↗” beside outlined
+  “Case study →” and “Source ↗”, with arrows that say whether a link leaves
+  the site. Card actions sit on the card's bottom edge so a row lines up, and
+  the private-source tag moves up beside the live status dot.
+- Give every call to action hover, press and focus feedback; turn the header
+  “Hire me”, the LinkedIn/GitHub links and the case-study way back to the desk
+  into outlined pill buttons.
+- Case studies open with their summary as a lede and put “View live” above
+  the prose instead of at the end, with a way back to the desk in the footer.
+- Rewrite the Wordkeep card and seven-language case study for the current app
+  (Learn courses, Wiktionary lexicon, Claude phrase analysis on a budget,
+  end-to-end encrypted accounts), move it right after Mensura and link its
+  production domain, wordkeep.me. Add Three.js, Hono and Claude API icons.
 - Correct localized page-level Open Graph and Twitter cards, and let crawlers
   read `noindex` directives instead of blocking those routes in `robots.txt`.
 - Refresh the sitemap and profile structured-data modification date to match

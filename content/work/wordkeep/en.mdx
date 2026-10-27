@@ -2,21 +2,40 @@
 project: "Wordkeep"
 stack:
   - "React"
-  - "Vite"
   - "TypeScript"
-live: "https://wordkeep-zeta.vercel.app"
+  - "Vite"
+  - "Three.js"
+  - "Hono"
+  - "SQLite"
+  - "Claude API"
+live: "https://wordkeep.me"
 order: 1
-description: "A vocabulary you can walk through, not just scroll. The Atlas on this page is a frozen slice of the live graph; the full 3D version is one click away."
+description: "A language app that teaches seven languages by playing, keeps a personal lexicon, explains phrases with Claude and maps your vocabulary as a 3D atlas."
 ---
 
-## Problem
+## The problem
 
-A flashcard list tells you which words you saved, not how they relate. You learn 'hot' and 'cold' as two unconnected entries instead of one axis you already half-know in four languages.
+Course apps teach you their words; dictionaries forget you looked one up. A flashcard deck tells you which words you saved, not how they relate: you learn “hot” and “cold” as two unconnected cards instead of one axis you already half-know in four languages. And the moment an app needs an account and a server to hold your vocabulary, your notes are no longer yours.
 
-## Approach
+## What it does
 
-Every saved word carries typed links — synonym, antonym, translation, related. A spaced queue schedules review; a 3D force graph, the Atlas, lays the whole lexicon out so those links become shape. Built with React, Vite and a small serverless API.
+Wordkeep has four parts that feed each other.
 
-## Result
+- **Learn.** A path of units for German, Italian, European Portuguese, French, Spanish, Catalan and English, grouped by CEFR level. German, Italian, Portuguese and English run from A1 to C1. Every unit has a words, a grammar and a phrases lesson, explained in English, Spanish, Catalan or French, never in the language being learned. Exercises cover multiple choice, typing (accents and articles forgiven but pointed out), sentence building, matching pairs and articles; missed ones come back at the end. XP, a daily goal, streaks, badges and a weekly league with friends keep it a game.
+- **Lexicon.** Look up a word in more than 200 languages. Definitions and etymology come from Wiktionary, preferring each language’s own edition. You keep the senses and examples you care about and add a mnemonic; the definition itself is never something you type. Review runs on SM-2 with Again, Hard, Good and Easy.
+- **Phrases.** Type a whole sentence and Wordkeep breaks it down: part of speech, dictionary form and inflection for every word. With Claude, it adds each word’s role, the tense, mood and voice, the clauses, any idioms, a translation into your language and quiz questions. Kept phrases join the lexicon and the review queue like words.
+- **Atlas.** Every entry carries typed links (synonym, antonym, translation, related) and a Three.js force graph lays the whole lexicon out so those links become shape. The atlas below is a frozen slice of it.
 
-A vocabulary you can walk through, not just scroll. The Atlas on this page is a frozen slice of the live graph; the full 3D version is one click away.
+## Claude, on a budget
+
+Every phrase analysis is a paid API call, so the server bounds it rather than trusting the client. Each visitor (a hashed IP) gets a daily allowance and the whole app has a daily ceiling. Past either one, the visitor still gets the free dictionary breakdown with a short note, never an error. Results are cached for 30 days, so a repeated phrase or a second visitor asking the same thing costs nothing. On a single server, counters and cache live in SQLite; on Vercel, where instances share nothing, Claude stays off until a shared Redis store is connected.
+
+## Yours, on your device
+
+The lexicon lives in the browser’s IndexedDB. There is no sign-up, and the app installs as an offline PWA. To share it across devices, a 26-character sync code links them; the server keeps only a hash of it and merges changes per entry, newest edit wins.
+
+Accounts are optional and end-to-end encrypted. The password never leaves the device: PBKDF2 turns it into a login key, which the server stores only as an scrypt hash, and a key that unwraps a random data key. Records are sealed with AES-GCM before they are sent and their ids are HMACs, so the server cannot read the words or tie them to entries. A one-time recovery code replaces a forgotten password; there is no email reset, by design.
+
+## How it ships
+
+A React and Vite client talks to a small Hono API that runs the same code on Vercel, Fly.io or a Docker box, with SQLite or Turso behind it. Every pull request runs lint, typecheck, unit tests on both sides, the build and Playwright end to end. After each push to main, and every 30 minutes, a production check confirms the live site serves the version in the repository and redeploys when a push event was lost.
