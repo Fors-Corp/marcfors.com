@@ -3,12 +3,24 @@
  * `https://marcfors.com/donate?from=<repo-slug>`; `src/app/donate/route.ts`
  * redirects that to the Stripe Payment Link held in `STRIPE_SUPPORT_LINK_URL`
  * (test link in Preview/Development, live link in Production — never in git).
+ * The site's own Support buttons link to `/donate` with no `from`, so they use
+ * `STRIPE_SITE_SUPPORT_LINK_URL` instead and leave the project tips untouched.
  * The `/donate` path is kept for the hub URL, but visible copy says "Support":
  * these are voluntary tips to an individual, not charitable donations.
  */
 export const SUPPORT_PATH = "/donate";
 export const SUPPORT_THANKS_PATH = "/donate/thanks";
 export const SUPPORT_LINK_ENV = "STRIPE_SUPPORT_LINK_URL";
+export const SITE_SUPPORT_LINK_ENV = "STRIPE_SITE_SUPPORT_LINK_URL";
+
+/**
+ * Which env var holds the Payment Link for a hub request. Only a request with
+ * no `from` at all is the site's own button; any `from`, even an unknown one,
+ * is a project tip and keeps the project link.
+ */
+export function supportLinkEnv(from: string | null): string {
+  return from === null ? SITE_SUPPORT_LINK_ENV : SUPPORT_LINK_ENV;
+}
 
 /**
  * Projects allowed to tag a tip with `client_reference_id`. Anything else —
