@@ -1,7 +1,28 @@
 import { describe, expect, it } from "vitest";
-import { CLIENT_REFERENCE_ID, SUPPORT_SOURCES, supportRedirectUrl, supportSource } from "@/lib/support";
+import {
+  CLIENT_REFERENCE_ID,
+  SITE_SUPPORT_LINK_ENV,
+  SUPPORT_LINK_ENV,
+  SUPPORT_SOURCES,
+  supportLinkEnv,
+  supportRedirectUrl,
+  supportSource,
+} from "@/lib/support";
 
 const LINK = "https://buy.stripe.com/test_abc123";
+
+describe("supportLinkEnv", () => {
+  it("reads the site link only when there is no from at all", () => {
+    expect(supportLinkEnv(null)).toBe(SITE_SUPPORT_LINK_ENV);
+    expect(supportLinkEnv(null)).toBe("STRIPE_SITE_SUPPORT_LINK_URL");
+  });
+
+  it("reads the project link for any from, known or not", () => {
+    expect(supportLinkEnv("wordkeep")).toBe(SUPPORT_LINK_ENV);
+    expect(supportLinkEnv("")).toBe(SUPPORT_LINK_ENV);
+    expect(supportLinkEnv("not-a-project")).toBe(SUPPORT_LINK_ENV);
+  });
+});
 
 describe("support source allowlist", () => {
   it("holds exactly the 13 in-scope projects, each a valid Stripe client_reference_id", () => {

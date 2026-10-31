@@ -78,17 +78,18 @@ TLS certificates are issued by Vercel after DNS answers correctly.
 
 Every Fors-Corp project links to `https://marcfors.com/donate?from=<repo-slug>`. [`src/app/donate/route.ts`](src/app/donate/route.ts) answers with a `302` to the Stripe Payment Link, adding `client_reference_id=<slug>` when the slug is on the allowlist in [`src/lib/support.ts`](src/lib/support.ts) (unknown or missing → untagged). Stripe's after-payment redirect lands on `/donate/thanks`, localized and `noindex`. Visible copy says **Support · 1,99 €**, never "donate": these are tips to an individual, not charitable donations.
 
-The Payment Link URL lives only in one env var — never in git:
+The Payment Link URLs live only in env vars — never in git. The site's own Support buttons (`/donate`, no `from`) and the project tips (`/donate?from=<slug>`) use separate links, so changing one never moves the other:
 
-| Var | Preview / Development | Production |
-| --- | --- | --- |
-| `STRIPE_SUPPORT_LINK_URL` | test-mode link (`https://buy.stripe.com/test_…`) | live-mode link |
+| Var | Used by | Preview / Development | Production |
+| --- | --- | --- | --- |
+| `STRIPE_SITE_SUPPORT_LINK_URL` | marcfors.com's own Support buttons | test-mode link (`https://buy.stripe.com/test_…`) | live-mode link |
+| `STRIPE_SUPPORT_LINK_URL` | project tips (`?from=<slug>`) | test-mode link (`https://buy.stripe.com/test_…`) | live-mode link |
 
 ```bash
-vercel env add STRIPE_SUPPORT_LINK_URL production
+vercel env add STRIPE_SITE_SUPPORT_LINK_URL production
 ```
 
-If it is unset or not `https`, `/donate` returns `500` and logs `[donate] STRIPE_SUPPORT_LINK_URL is unset…` instead of redirecting anywhere else.
+If the var for a request is unset or not `https`, `/donate` returns `500` and logs `[donate] <VAR> is unset…` instead of redirecting anywhere else. Unknown `from` values still go to the project link, untagged.
 
 ## Agents
 
