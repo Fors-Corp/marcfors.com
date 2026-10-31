@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import sitemap from "@/app/sitemap";
 import { listCaseStudySlugs } from "@/data/caseStudies";
-import { LOCALES } from "@/lib/locale";
+import { LOCALES, localeUrl } from "@/lib/locale";
 import { RELEASE_DATE, SITE_URL } from "@/lib/site";
 
 const slugs = listCaseStudySlugs();
@@ -45,6 +45,19 @@ describe("sitemap", () => {
       const homeEntry = entries.find((entry) => entry.url === home);
       expect(homeEntry, `home for ${locale}`).toBeDefined();
       expect(homeEntry?.priority).toBe(1);
+      expect(homeEntry?.images).toEqual([localeUrl(locale, "/opengraph-image", SITE_URL)]);
+      const cv = entries.find((entry) => entry.url === (locale === "en" ? `${SITE_URL}/cv` : `${SITE_URL}/${locale}/cv`));
+      const privacy = entries.find(
+        (entry) => entry.url === (locale === "en" ? `${SITE_URL}/privacy` : `${SITE_URL}/${locale}/privacy`),
+      );
+      const studyEntry = entries.find(
+        (entry) =>
+          entry.url === (locale === "en" ? `${SITE_URL}/work/${slugs[0]}` : `${SITE_URL}/${locale}/work/${slugs[0]}`),
+      );
+      expect(cv?.priority).toBe(0.6);
+      expect(privacy?.priority).toBe(0.3);
+      expect(privacy?.changeFrequency).toBe("yearly");
+      expect(studyEntry?.priority).toBe(0.8);
       for (const slug of slugs) {
         const path = locale === "en" ? `/work/${slug}` : `/${locale}/work/${slug}`;
         expect(entries.some((entry) => entry.url === `${SITE_URL}${path}`)).toBe(true);

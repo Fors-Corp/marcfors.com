@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { copy } from "@/data/copy";
 import { DEFAULT_LOCALE, OG_LOCALES } from "@/lib/locale";
+import { CRAWL_ROBOTS } from "@/lib/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -18,10 +19,16 @@ export const metadata: Metadata = {
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
   keywords: ["Marc Fors", "AI software engineer", "LLM engineer", "LLM agents", "Claude Code", "MCP", "React", "TypeScript", "Go", "Barcelona"],
-  robots: { index: true, follow: true, "max-image-preview": "large" },
-  // Search Console ownership token; set `GOOGLE_SITE_VERIFICATION` in Vercel,
-  // no code change needed. Undefined simply omits the tag.
-  verification: { google: process.env.GOOGLE_SITE_VERIFICATION },
+  robots: CRAWL_ROBOTS,
+  // Webmaster ownership tokens. Set in Vercel; undefined simply omits the tag.
+  // Bing's token is the `msvalidate.01` meta name.
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+    yandex: process.env.YANDEX_VERIFICATION,
+    ...(process.env.BING_SITE_VERIFICATION
+      ? { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } }
+      : {}),
+  },
   openGraph: {
     title,
     description,

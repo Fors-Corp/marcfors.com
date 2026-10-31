@@ -76,20 +76,22 @@ describe("featured work", () => {
     expect(cescju?.blurb.en).toMatch(/redesign prototype/);
   });
 
-  it("features Fors Photography as a live print shop, linking the store but never its private source", () => {
+  it("features Fors Photography on forsphoto.com and links the repository Marc opted in", () => {
     const photo = featured.find((item) => item.name === "Fors Photography");
     expect(photo).toMatchObject({
-      stack: ["Next.js 16", "React 19", "Stripe"],
-      live: "https://fors-photography.vercel.app",
+      stack: ["Next.js 16", "React 19", "Tailwind CSS", "Stripe"],
+      live: "https://www.forsphoto.com",
+      repo: "https://github.com/Fors-Corp/fors-photography",
       private: true,
       spotlight: true,
     });
-    expect(photo?.repo).toBeUndefined();
     expect(photo?.caseStudy).toBeUndefined();
     for (const blurb of Object.values(photo!.blurb)) {
       expect(blurb).toMatch(/18/);
       expect(blurb).toMatch(/Stripe/);
+      expect(blurb).toMatch(/forsphoto\.com/);
     }
+    expect(photo?.blurb.en).toMatch(/four sizes/);
     expect(photo?.blurb.en).toMatch(/no database, accounts or analytics/);
   });
 
@@ -111,7 +113,7 @@ describe("featured work", () => {
 
   it("links source for private projects only where Marc opted in", () => {
     const privateWithSource = featured.filter((p) => p.private && p.repo).map((p) => p.name);
-    expect(privateWithSource).toEqual(["FerreTodo Lepant"]);
+    expect(privateWithSource).toEqual(["Fors Photography", "FerreTodo Lepant"]);
     for (const project of featured) {
       if (!project.private) {
         expect(project.repo, project.name).toMatch(/^https:\/\/github.com\/(marcfs31|Fors-Corp)\//);

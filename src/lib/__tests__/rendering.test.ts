@@ -34,7 +34,7 @@ describe("static rendering invariants", () => {
     expect(localeLayout).toMatch(/<html lang=\{locale\}/);
     expect(localeLayout).toMatch(/<body/);
     expect(localeLayout).toContain("ANTI_FLASH_SCRIPT");
-    expect(localeLayout).toContain("<JsonLd data={siteJsonLd(locale)} />");
+    expect(localeLayout).toContain("<JsonLd data={siteJsonLd()} />");
     expect(localeLayout).toContain("generateStaticParams");
   });
 

@@ -9,5 +9,6 @@ describe("robots", () => {
     expect(rule.allow).toBe("/");
     expect(rule.disallow).toBeUndefined();
     expect(sitemap).toBe(`${SITE_URL}/sitemap.xml`);
+    expect(robots().host).toBe(SITE_URL);
   });
 });

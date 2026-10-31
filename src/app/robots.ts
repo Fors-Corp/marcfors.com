@@ -6,5 +6,7 @@ export default function robots(): MetadataRoute.Robots {
     // Noindex pages must remain crawlable so bots can see their robots metadata.
     rules: { userAgent: "*", allow: "/" },
     sitemap: `${SITE_URL}/sitemap.xml`,
+    // Yandex preferred-mirror directive. Google ignores `Host`.
+    host: SITE_URL,
   };
 }

@@ -6,8 +6,9 @@ import { Analytics } from "@vercel/analytics/next";
 import { isLocale, languageAlternates, LOCALES, localeUrl, OG_LOCALES, type Locale } from "@/lib/locale";
 import { JsonLd } from "@/components/JsonLd";
 import { copy } from "@/data/copy";
-import { FAMILY_NAME, GIVEN_NAME, siteJsonLd } from "@/lib/seo";
-import { SITE_URL } from "@/lib/site";
+import { OG_SIZE, OG_TYPE } from "@/lib/og";
+import { FAMILY_NAME, GIVEN_NAME, OCCUPATIONS, siteJsonLd } from "@/lib/seo";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { ANTI_FLASH_SCRIPT } from "@/lib/theme";
 
 export function generateStaticParams() {
@@ -62,6 +63,14 @@ export async function generateMetadata({
   const locale: Locale = raw;
 
   const t = copy[locale];
+  const imageAlt = `${SITE_NAME} — ${OCCUPATIONS[0]}`;
+  const image = {
+    url: localeUrl(locale, "/opengraph-image", SITE_URL),
+    alt: imageAlt,
+    width: OG_SIZE.width,
+    height: OG_SIZE.height,
+    type: OG_TYPE,
+  };
   // Localized <title>/<description>: a search in Spanish or German should see a
   // snippet in that language, not the English default from the root layout.
   return {
@@ -80,8 +89,14 @@ export async function generateMetadata({
       url: localeUrl(locale, "/", SITE_URL),
       locale: OG_LOCALES[locale],
       alternateLocale: LOCALES.filter((item) => item !== locale).map((item) => OG_LOCALES[item]),
+      images: [image],
     },
-    twitter: { card: "summary_large_image", title: t.metaTitle, description: t.metaDescription },
+    twitter: {
+      card: "summary_large_image",
+      title: t.metaTitle,
+      description: t.metaDescription,
+      images: [{ url: localeUrl(locale, "/twitter-image", SITE_URL), alt: imageAlt }],
+    },
   };
 }
 
@@ -107,7 +122,7 @@ export default async function LocaleLayout({
       >
         <script dangerouslySetInnerHTML={{ __html: ANTI_FLASH_SCRIPT }} />
         {/* application/ld+json: WebSite + Person graph, shared by every page. */}
-        <JsonLd data={siteJsonLd(locale)} />
+        <JsonLd data={siteJsonLd()} />
         {children}
         <Analytics />
       </body>

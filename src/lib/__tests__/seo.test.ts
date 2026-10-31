@@ -4,15 +4,19 @@ import { copy } from "@/data/copy";
 import { LOCALES, localeUrl } from "@/lib/locale";
 import {
   caseStudyJsonLd,
+  CRAWL_ROBOTS,
+  cvPageJsonLd,
   KNOWS_ABOUT,
   OCCUPATIONS,
   pageSocialMetadata,
   PERSON_ID,
+  portfolioJsonLd,
+  privacyPageJsonLd,
   profilePageJsonLd,
   siteJsonLd,
   WEBSITE_ID,
 } from "@/lib/seo";
-import { GITHUB_URL, LINKEDIN_URL, RELEASE_DATE, SITE_NAME, SITE_URL } from "@/lib/site";
+import { CV_PATH, GITHUB_URL, LINKEDIN_URL, PRIVACY_UPDATED, RELEASE_DATE, SITE_NAME, SITE_URL } from "@/lib/site";
 
 type Node = Record<string, unknown>;
 const nodeOf = (graph: { "@graph": Node[] }, type: string) => graph["@graph"].find((n) => n["@type"] === type);
@@ -30,18 +34,19 @@ describe("home metadata copy", () => {
 
 describe("site JSON-LD graph", () => {
   it.each(LOCALES)("%s links WebSite and Person through stable ids", (locale) => {
-    const graph = siteJsonLd(locale);
+    const graph = siteJsonLd();
     const site = nodeOf(graph, "WebSite")!;
     const person = nodeOf(graph, "Person")!;
     expect(site["@id"]).toBe(WEBSITE_ID);
     expect(site.publisher).toEqual({ "@id": PERSON_ID });
     expect(person["@id"]).toBe(PERSON_ID);
-    expect(person.url).toBe(localeUrl(locale, "/", SITE_URL));
-    expect(site.inLanguage).toBe(locale);
+    expect(person.url).toBe(SITE_URL);
+    expect(site.inLanguage).toEqual([...LOCALES]);
+    expect(profilePageJsonLd(locale).url).toBe(localeUrl(locale, "/", SITE_URL));
   });
 
   it("describes the person with the role phrasings and topics to rank for", () => {
-    const person = nodeOf(siteJsonLd("en"), "Person")!;
+    const person = nodeOf(siteJsonLd(), "Person")!;
     expect(person.name).toBe(SITE_NAME);
     expect(person.givenName).toBe("Marc");
     expect(person.familyName).toBe("Fors");
@@ -85,13 +90,17 @@ describe("leaf page social metadata", () => {
       locale: expect.any(String),
     });
     expect(metadata.openGraph?.images).toEqual([
-      expect.objectContaining({ url: localeUrl(locale, "/opengraph-image", SITE_URL) }),
+      expect.objectContaining({
+        url: localeUrl(locale, "/opengraph-image", SITE_URL),
+        width: 1200,
+        height: 630,
+      }),
     ]);
     expect(metadata.twitter).toMatchObject({
       card: "summary_large_image",
       title,
       description,
-      images: [localeUrl(locale, "/twitter-image", SITE_URL)],
+      images: [expect.objectContaining({ url: localeUrl(locale, "/twitter-image", SITE_URL), width: 1200, height: 630 })],
     });
   });
 
@@ -130,5 +139,61 @@ describe("case study JSON-LD", () => {
     const study = caseStudyBySlug(slugs[0], "de")!;
     const crumbs = nodeOf(caseStudyJsonLd("de", study), "BreadcrumbList")!.itemListElement as Node[];
     expect(crumbs[1].item).toBe(`${SITE_URL}/de/work/${slugs[0]}`);
+  });
+});
+
+describe("crawl robots", () => {
+  it("lets every crawler use a large image preview and an uncapped snippet", () => {
+    expect(CRAWL_ROBOTS).toMatchObject({
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    });
+  });
+});
+
+describe("portfolio JSON-LD", () => {
+  it("points Fors Photography at the canonical shop and the opted-in repository", () => {
+    const list = portfolioJsonLd("en") as Node;
+    const items = list.itemListElement as Node[];
+    const photo = items.map((entry) => entry.item as Node).find((item) => item.name === "Fors Photography");
+    expect(photo).toMatchObject({
+      url: "https://www.forsphoto.com",
+      codeRepository: "https://github.com/Fors-Corp/fors-photography",
+    });
+    expect(String(photo?.description)).toContain("forsphoto.com");
+    expect(list.numberOfItems).toBe(items.length);
+    expect(items.map((entry) => entry.position)).toEqual(items.map((_, index) => index + 1));
+    expect(JSON.stringify(list)).not.toMatch(/gmail|\+34/i);
+  });
+});
+
+describe("cv and privacy JSON-LD", () => {
+  it("describes the CV as a PDF authored by the person", () => {
+    const graph = cvPageJsonLd("es");
+    const doc = nodeOf(graph, "DigitalDocument")!;
+    expect(doc.url).toBe(`${SITE_URL}/es/cv`);
+    expect(doc.author).toEqual({ "@id": PERSON_ID });
+    expect(doc.associatedMedia).toMatchObject({ contentUrl: `${SITE_URL}${CV_PATH}`, encodingFormat: "application/pdf" });
+    const crumbs = nodeOf(graph, "BreadcrumbList")!.itemListElement as Node[];
+    expect(crumbs[1].item).toBe(`${SITE_URL}/es/cv`);
+  });
+
+  it("dates the privacy page from the legal prose, not the release", () => {
+    const graph = privacyPageJsonLd("de");
+    const page = nodeOf(graph, "WebPage")!;
+    expect(page.url).toBe(`${SITE_URL}/de/privacy`);
+    expect(page.inLanguage).toBe("de");
+    expect(page.dateModified).toBe(PRIVACY_UPDATED);
+    expect(page.about).toEqual({ "@id": PERSON_ID });
   });
 });
