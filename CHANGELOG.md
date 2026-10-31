@@ -4,6 +4,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+## 0.22.0 — 2026-10-31
+
+- Bump `next` to 16.4.3 with `@next/mdx` and `eslint-config-next` to match,
+  and the CodeQL action within v4.
 - Put a filled “♥ Support · 1,99 €” button in the top nav beside “Hire me”,
   coloured from each theme's warm accent.
 - Restyle the language picker as one segmented pill with round flags and
