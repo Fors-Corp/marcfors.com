@@ -1,7 +1,7 @@
 export const SITE_HOST = "marcfors.com";
 export const SITE_URL = `https://${SITE_HOST}`;
 export const SITE_NAME = "Marc Fors";
-export const SITE_VERSION = "0.21.0";
+export const SITE_VERSION = "0.22.0";
 /** Release date of the current SITE_VERSION. Feeds sitemap `lastModified` so it stays stable between builds. */
 export const RELEASE_DATE = "2026-10-26";
 /** Effective date of content/legal/privacy/*.mdx; bump whenever that prose changes. */
