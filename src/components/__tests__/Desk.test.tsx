@@ -53,15 +53,21 @@ describe("Desk", () => {
     expect(screen.getByText(copy.en.headline)).toBeInTheDocument();
   });
 
-  it("puts Fors Photography first in featured work and links the live shop", () => {
+  it("puts Fors Photography first in featured work with live shop and case study, never Source", () => {
     renderDesk();
-    const firstCard = document.querySelector("#projects .project-card");
+    const firstCard = document.querySelector("#projects .project-card") as HTMLElement;
     expect(firstCard).toBeTruthy();
-    expect(within(firstCard as HTMLElement).getByRole("heading", { name: "Fors Photography" })).toBeInTheDocument();
-    expect(within(firstCard as HTMLElement).getByRole("link", { name: /view live: fors photography/i })).toHaveAttribute(
+    expect(within(firstCard).getByRole("heading", { name: "Fors Photography" })).toBeInTheDocument();
+    expect(within(firstCard).getByRole("link", { name: /view live: fors photography/i })).toHaveAttribute(
       "href",
       "https://www.forsphoto.com",
     );
+    expect(within(firstCard).getByRole("link", { name: /case study for fors photography/i })).toHaveAttribute(
+      "href",
+      "/work/fors-photography",
+    );
+    expect(within(firstCard).queryByRole("link", { name: copy.en.source })).toBeNull();
+    expect(within(firstCard).getByText(copy.en.private)).toHaveClass("private");
   });
 
   it("features Mensura second with its case study, and Wordkeep third with the live app", () => {
@@ -204,20 +210,16 @@ describe("Desk", () => {
   });
 
   it("never shows a source link for a private project", () => {
-    renderDesk();
-    const privateProject = featured.find((p) => p.private && !p.repo);
-    expect(privateProject).toBeTruthy();
-    const heading = screen.getByRole("heading", { name: privateProject!.name });
-    const card = heading.closest(".card") as HTMLElement;
-    expect(within(card).getByText(copy.en.private)).toBeInTheDocument();
-    expect(within(card).queryByRole("link", { name: copy.en.source })).toBeNull();
-  });
-
-  it("shows both the source link and the private badge when a private project opts into linking its repo", () => {
-    renderDesk();
-    const card = screen.getByRole("heading", { name: "FerreTodo Lepant" }).closest(".card") as HTMLElement;
-    expect(card.querySelector('a[href="https://github.com/marcfs31/ferretodo-lepant"]')).toHaveTextContent(copy.en.source);
-    expect(within(card).getByText(copy.en.private)).toHaveClass("private");
+    const { container } = renderDesk();
+    const privateProjects = featured.filter((p) => p.private && p.spotlight);
+    expect(privateProjects.length).toBeGreaterThan(0);
+    for (const project of privateProjects) {
+      const card = [...container.querySelectorAll<HTMLElement>(".project-card")].find((el) =>
+        el.querySelector("h3")?.textContent === project.name,
+      );
+      expect(card, project.name).toBeTruthy();
+      expect(within(card!).queryByRole("link", { name: copy.en.source })).toBeNull();
+    }
   });
 
   it("distinguishes a live product's status from the privacy of its source", () => {

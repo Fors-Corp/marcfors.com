@@ -56,6 +56,7 @@ describe("featured work", () => {
     expect(fors).toMatchObject({
       stack: ["Next.js 16", "React 19", "TypeScript"],
       live: "https://forscorp.es",
+      caseStudy: "fors-corp",
       private: true,
       spotlight: true,
     });
@@ -80,16 +81,16 @@ describe("featured work", () => {
     expect(cescju?.blurb.en).toMatch(/redesign prototype/);
   });
 
-  it("features Fors Photography on forsphoto.com and links the repository Marc opted in", () => {
+  it("features Fors Photography on forsphoto.com with a case study and no private source", () => {
     const photo = featured.find((item) => item.name === "Fors Photography");
     expect(photo).toMatchObject({
       stack: ["Next.js 16", "React 19", "Tailwind CSS", "Stripe"],
       live: "https://www.forsphoto.com",
-      repo: "https://github.com/Fors-Corp/fors-photography",
+      caseStudy: "fors-photography",
       private: true,
       spotlight: true,
     });
-    expect(photo?.caseStudy).toBeUndefined();
+    expect(photo?.repo).toBeUndefined();
     for (const blurb of Object.values(photo!.blurb)) {
       expect(blurb).toMatch(/18/);
       expect(blurb).toMatch(/Stripe/);
@@ -99,15 +100,16 @@ describe("featured work", () => {
     expect(photo?.blurb.en).toMatch(/no database, accounts or analytics/);
   });
 
-  it("features FerreTodo Lepant by its live site and its private repository", () => {
+  it("features FerreTodo Lepant by its live site and case study, never its private source", () => {
     const shop = featured.find((item) => item.name === "FerreTodo Lepant");
     expect(shop).toMatchObject({
       stack: ["Next.js 16", "Tailwind CSS", "TypeScript"],
       live: "https://ferretodo-lepant.vercel.app",
-      repo: "https://github.com/marcfs31/ferretodo-lepant",
+      caseStudy: "ferretodo-lepant",
       private: true,
       spotlight: true,
     });
+    expect(shop?.repo).toBeUndefined();
     for (const blurb of Object.values(shop!.blurb)) {
       expect(blurb).toMatch(/Lepant/);
       expect(blurb).toMatch(/WhatsApp/);
@@ -115,11 +117,11 @@ describe("featured work", () => {
     }
   });
 
-  it("links source for private projects only where Marc opted in", () => {
+  it("never links source for private projects", () => {
     const privateWithSource = featured.filter((p) => p.private && p.repo).map((p) => p.name);
-    expect(privateWithSource).toEqual(["Fors Photography", "FerreTodo Lepant"]);
+    expect(privateWithSource).toEqual([]);
     for (const project of featured) {
-      if (!project.private) {
+      if (!project.private && project.repo) {
         expect(project.repo, project.name).toMatch(/^https:\/\/github.com\/(marcfs31|Fors-Corp)\//);
       }
     }
@@ -135,8 +137,8 @@ describe("featured work", () => {
 
   it("lists iTerm Studio with public source, gallery, and a case study", () => {
     const studio = featured.find((item) => item.name === "iTerm Studio");
-    expect(studio?.repo).toBe("https://github.com/marcfs31/iterm-studio");
-    expect(studio?.live).toBe("https://marcfs31.github.io/iterm-studio/");
+    expect(studio?.repo).toBe("https://github.com/Fors-Corp/iterm-studio");
+    expect(studio?.live).toBe("https://fors-corp.github.io/iterm-studio/");
     expect(studio?.caseStudy).toBe("iterm-studio");
     expect(studio?.private).toBeFalsy();
     expect(studio?.spotlight).toBe(true);
@@ -147,29 +149,51 @@ describe("featured work", () => {
     expect(skipRepos.has("SmartGarden")).toBe(true);
   });
 
-  it("lists this desk with public source and the live site", () => {
+  it("lists this desk with public source, the live site, and a case study", () => {
     const site = featured.find((item) => item.name === "marcfors.com");
     expect(site?.repo).toBe("https://github.com/Fors-Corp/marcfors.com");
     expect(site?.live).toBe("https://marcfors.com");
+    expect(site?.caseStudy).toBe("marcfors-com");
     expect(site?.private).toBeFalsy();
     expect(site?.spotlight).toBe(true);
   });
 
-  it("lists LMaaS (not the old mlaas name) as a private spotlight with no repo", () => {
+  it("lists LMaaS (not the old mlaas name) as a private spotlight with a case study and no repo", () => {
     expect(featured.some((item) => item.name === "mlaas")).toBe(false);
     const lmaas = featured.find((item) => item.name === "LMaaS");
     expect(lmaas?.private).toBe(true);
     expect(lmaas?.repo).toBeUndefined();
+    expect(lmaas?.caseStudy).toBe("lmaas");
     expect(lmaas?.blurb.en).toMatch(/OpenAI-compatible API/);
   });
 
-  it("points the Fors-Corp products at the org repos and their org Pages sites", () => {
-    for (const name of ["forsight", "Fors Design System"]) {
-      const item = featured.find((project) => project.name === name);
-      expect(item?.repo, name).toMatch(/^https:\/\/github.com\/Fors-Corp\//);
-      expect(item?.live, name).toMatch(/^https:\/\/fors-corp.github.io\//);
+  it("lists forsight as a private spotlight with a live Pages site and no source link", () => {
+    const forsight = featured.find((item) => item.name === "forsight");
+    expect(forsight).toMatchObject({
+      live: "https://fors-corp.github.io/forsight/",
+      caseStudy: "forsight",
+      private: true,
+      spotlight: true,
+    });
+    expect(forsight?.repo).toBeUndefined();
+    expect(forsight?.blurb.en).toMatch(/observability platform/i);
+  });
+
+  it("points Fors Design System at the org repo and Pages site", () => {
+    const item = featured.find((project) => project.name === "Fors Design System");
+    expect(item?.repo).toMatch(/^https:\/\/github.com\/Fors-Corp\//);
+    expect(item?.live).toMatch(/^https:\/\/fors-corp\.github\.io\//);
+    expect(item?.caseStudy).toBe("fors-design-system");
+  });
+
+  it("gives every spotlight product a case study except fileshelf", () => {
+    for (const project of featured.filter((item) => item.spotlight)) {
+      if (project.name === "fileshelf") {
+        expect(project.caseStudy).toBeUndefined();
+        continue;
+      }
+      expect(project.caseStudy, project.name).toBeTruthy();
     }
-    expect(featured.find((item) => item.name === "forsight")?.blurb.en).toMatch(/observability platform/i);
   });
 
   it("covers every locale on every project blurb", () => {
@@ -205,5 +229,8 @@ describe("public repo listing", () => {
     expect(skipRepos.has("TicketApp")).toBe(true);
     expect(skipRepos.has("my-portfolio")).toBe(true);
     expect(skipRepos.has("learning-spring")).toBe(true);
+    expect(skipRepos.has(".github")).toBe(true);
+    expect(skipRepos.has("demo-repository")).toBe(true);
+    expect(skipRepos.has("claude-code-guidelines")).toBe(true);
   });
 });

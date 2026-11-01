@@ -162,14 +162,15 @@ describe("crawl robots", () => {
 });
 
 describe("portfolio JSON-LD", () => {
-  it("points Fors Photography at the canonical shop and the opted-in repository", () => {
+  it("points Fors Photography at its case study without a private codeRepository", () => {
     const list = portfolioJsonLd("en") as Node;
     const items = list.itemListElement as Node[];
     const photo = items.map((entry) => entry.item as Node).find((item) => item.name === "Fors Photography");
     expect(photo).toMatchObject({
-      url: "https://www.forsphoto.com",
-      codeRepository: "https://github.com/Fors-Corp/fors-photography",
+      url: "https://marcfors.com/work/fors-photography",
+      sameAs: ["https://www.forsphoto.com"],
     });
+    expect(photo).not.toHaveProperty("codeRepository");
     expect(String(photo?.description)).toContain("forsphoto.com");
     expect(list.numberOfItems).toBe(items.length);
     expect(items.map((entry) => entry.position)).toEqual(items.map((_, index) => index + 1));

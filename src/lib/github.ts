@@ -1,5 +1,5 @@
 import { skipRepos } from "@/data/projects";
-import { GITHUB_USER } from "@/lib/site";
+import { GITHUB_ORG, GITHUB_USER } from "@/lib/site";
 
 export type GhRepo = {
   name: string;
@@ -21,24 +21,38 @@ export function isListedRepo(repo: GhRepo): boolean {
   );
 }
 
+async function fetchRepoPage(url: string, headers: Record<string, string>): Promise<GhRepo[]> {
+  const response = await fetch(url, { next: { revalidate: 3600 }, headers });
+  if (!response.ok) {
+    console.warn(
+      JSON.stringify({ type: "github-repos", ok: false, status: response.status, url }),
+    );
+    return [];
+  }
+  return (await response.json()) as GhRepo[];
+}
+
 export async function fetchPublicRepos(): Promise<GhRepo[]> {
   const headers: Record<string, string> = { Accept: "application/vnd.github+json" };
   // Optional: lifts the unauthenticated 60 req/hr shared-IP limit on serverless.
   if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
 
   try {
-    const response = await fetch(
-      `https://api.github.com/users/${GITHUB_USER}/repos?per_page=100&sort=updated`,
-      { next: { revalidate: 3600 }, headers },
-    );
-    if (!response.ok) {
-      console.warn(
-        JSON.stringify({ type: "github-repos", ok: false, status: response.status }),
-      );
-      return [];
+    const [userRepos, orgRepos] = await Promise.all([
+      fetchRepoPage(
+        `https://api.github.com/users/${GITHUB_USER}/repos?per_page=100&sort=updated`,
+        headers,
+      ),
+      fetchRepoPage(
+        `https://api.github.com/orgs/${GITHUB_ORG}/repos?per_page=100&sort=updated&type=public`,
+        headers,
+      ),
+    ]);
+    const byUrl = new Map<string, GhRepo>();
+    for (const repo of [...userRepos, ...orgRepos]) {
+      if (!byUrl.has(repo.html_url)) byUrl.set(repo.html_url, repo);
     }
-    const rows = (await response.json()) as GhRepo[];
-    return rows.filter(isListedRepo);
+    return [...byUrl.values()].filter(isListedRepo);
   } catch (error) {
     console.warn(
       JSON.stringify({ type: "github-repos", ok: false, error: (error as Error).message }),

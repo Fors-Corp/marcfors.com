@@ -5,7 +5,23 @@ import { LOCALES } from "@/lib/locale";
 describe("case studies", () => {
   it("lists every case study, sorted by order", () => {
     const slugs = listCaseStudySlugs();
-    expect(slugs).toEqual(["mensura", "wordkeep", "habit-breaker", "iterm-studio", "gatto", "francesc-cescju"]);
+    expect(slugs).toEqual([
+      "fors-photography",
+      "mensura",
+      "wordkeep",
+      "marcfors-com",
+      "gatto",
+      "francesc-cescju",
+      "fors-corp",
+      "ferretodo-lepant",
+      "habit-breaker",
+      "agent-switchboard",
+      "iterm-studio",
+      "finance-dashboard",
+      "lmaas",
+      "forsight",
+      "fors-design-system",
+    ]);
   });
 
   it("has matching frontmatter across every locale, differing only in description", () => {
@@ -98,6 +114,44 @@ describe("case studies", () => {
       expect(body).not.toMatch(/mailto:|tel:|wa\.me|github\.com|@|630/);
     }
     expect(caseStudyBody("francesc-cescju", "en")).toContain("not been adopted");
+  });
+
+
+  it("documents Fors Photography without linking private source", () => {
+    for (const locale of LOCALES) {
+      const study = caseStudyBySlug("fors-photography", locale);
+      expect(study?.live).toBe("https://www.forsphoto.com");
+      expect(study?.repo).toBeUndefined();
+      const body = caseStudyBody("fors-photography", locale)!;
+      expect(body).toContain("18");
+      expect(body).toContain("Stripe");
+      expect(body).not.toMatch(/github\.com|@gmail\.com|mailto:|tel:/i);
+    }
+  });
+
+  it("documents marcfors.com with public source", () => {
+    const study = caseStudyBySlug("marcfors-com", "en");
+    expect(study?.repo).toBe("https://github.com/Fors-Corp/marcfors.com");
+    expect(study?.live).toBe("https://marcfors.com");
+  });
+
+  it("keeps private product studies free of repo URLs", () => {
+    for (const slug of [
+      "fors-corp",
+      "ferretodo-lepant",
+      "agent-switchboard",
+      "finance-dashboard",
+      "lmaas",
+      "forsight",
+    ]) {
+      expect(caseStudyBySlug(slug, "en")?.repo, slug).toBeUndefined();
+    }
+  });
+
+  it("publishes Fors Design System with public source and Pages", () => {
+    const study = caseStudyBySlug("fors-design-system", "en");
+    expect(study?.repo).toBe("https://github.com/Fors-Corp/fors-design-system");
+    expect(study?.live).toBe("https://fors-corp.github.io/fors-design-system/");
   });
 
   it("returns undefined for an unknown slug or a locale with no file", () => {

@@ -5,10 +5,11 @@ import { LOCALES, localeUrl } from "@/lib/locale";
 import { SITE_URL } from "@/lib/site";
 
 describe("llms.txt", () => {
-  it("states the canonical shop, the repository, and every locale", () => {
+  it("states the photography case study, every locale, and never a private repo", () => {
     const text = llmsTxt();
-    expect(text).toContain("https://www.forsphoto.com");
-    expect(text).toContain("https://github.com/Fors-Corp/fors-photography");
+    expect(text).toContain("https://marcfors.com/work/fors-photography");
+    expect(text).toContain("forsphoto.com");
+    expect(text).not.toContain("https://github.com/Fors-Corp/fors-photography");
     expect(text).toContain("developer@marcfors.com");
     for (const locale of LOCALES) {
       expect(text).toContain(localeUrl(locale, "/", SITE_URL));

@@ -55,7 +55,7 @@ function projectLinks(project: Project, locale: Locale) {
           <ButtonArrow />
         </Link>
       ) : null}
-      {project.repo ? (
+      {project.repo && !project.private ? (
         <a
           href={project.repo}
           target="_blank"
