@@ -4,6 +4,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+## 0.22.0 — 2026-10-31
+
+- Bump `next` to 16.4.3 with `@next/mdx` and `eslint-config-next` to match,
+  and the CodeQL action within v4.
 - Point Fors Photography at https://www.forsphoto.com and link
   Fors-Corp/fors-photography. The shop is 18 signed prints in four sizes,
   six languages, Stripe checkout, and no database, accounts or analytics.
