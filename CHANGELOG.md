@@ -8,6 +8,14 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 - Bump `next` to 16.4.3 with `@next/mdx` and `eslint-config-next` to match,
   and the CodeQL action within v4.
+- Point Fors Photography at https://www.forsphoto.com and link
+  Fors-Corp/fors-photography. The shop is 18 signed prints in four sizes,
+  six languages, Stripe checkout, and no database, accounts or analytics.
+- Publish one robots policy for every crawler (large image previews, uncapped
+  snippets), name the preferred host for Yandex, serve `/llms.txt` for answer
+  engines, and describe the portfolio, CV and privacy pages in structured data.
+  Sitemap priorities follow the page: home, case studies, CV, then the legal notice.
+  Bing and Yandex verification tokens sit beside the Google one.
 - Put a filled “♥ Support · 1,99 €” button in the top nav beside “Hire me”,
   coloured from each theme's warm accent.
 - Restyle the language picker as one segmented pill with round flags and

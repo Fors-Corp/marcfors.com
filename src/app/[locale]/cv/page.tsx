@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CvViewer } from "@/components/CvViewer";
+import { JsonLd } from "@/components/JsonLd";
 import { copy } from "@/data/copy";
 import { isLocale, languageAlternates, localeUrl, withLocale } from "@/lib/locale";
-import { pageSocialMetadata } from "@/lib/seo";
+import { cvPageJsonLd, pageSocialMetadata } from "@/lib/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export async function generateMetadata({
@@ -38,6 +39,7 @@ export default async function CvPage({ params }: { params: Promise<{ locale: str
 
   return (
     <div className="wrap">
+      <JsonLd data={cvPageJsonLd(locale)} />
       <header className="top">
         <Link className="brand" href={withLocale(locale, "/")}>
           {SITE_NAME}

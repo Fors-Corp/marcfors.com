@@ -7,14 +7,23 @@ import { RELEASE_DATE, SITE_URL } from "@/lib/site";
 // told crawlers every URL changed on every fetch, which dilutes the crawl signal.
 const lastModified = new Date(`${RELEASE_DATE}T00:00:00.000Z`);
 
+function priorityFor(path: string): number {
+  if (path === "/") return 1;
+  if (path.startsWith("/work/")) return 0.8;
+  if (path === "/cv") return 0.6;
+  return 0.3;
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages = ["/", "/cv", "/privacy", ...listCaseStudySlugs().map((slug) => `/work/${slug}`)];
   return LOCALES.flatMap((locale) =>
     pages.map((path) => ({
       url: localeUrl(locale, path, SITE_URL),
       lastModified,
-      changeFrequency: "monthly" as const,
-      priority: path === "/" ? 1 : 0.7,
+      changeFrequency: path === "/privacy" ? ("yearly" as const) : ("monthly" as const),
+      priority: priorityFor(path),
+      // The home card is the image search engines should attach to the profile.
+      ...(path === "/" ? { images: [localeUrl(locale, "/opengraph-image", SITE_URL)] } : {}),
       // Every localized URL lists the full alternate set (incl. x-default) so
       // crawlers see the hreflang graph from the sitemap, not just the <head>.
       alternates: { languages: languageAlternates(path, SITE_URL) },
