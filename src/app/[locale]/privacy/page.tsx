@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/JsonLd";
 import { copy } from "@/data/copy";
 import { isLocale, languageAlternates, LOCALES, localeUrl, withLocale } from "@/lib/locale";
-import { pageSocialMetadata } from "@/lib/seo";
+import { pageSocialMetadata, privacyPageJsonLd } from "@/lib/seo";
 import { PRIVACY_UPDATED, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -47,6 +48,7 @@ export default async function PrivacyPage({ params }: { params: Promise<{ locale
 
   return (
     <div className="wrap">
+      <JsonLd data={privacyPageJsonLd(locale)} />
       <header className="top">
         <Link className="brand" href={withLocale(locale, "/")}>
           {SITE_NAME}

@@ -14,6 +14,10 @@ import { SITE_NAME } from "@/lib/site";
 export default function NotFound() {
   return (
     <html lang="en">
+      <head>
+        <meta name="robots" content="noindex" />
+        <title>{`Page not found — ${SITE_NAME}`}</title>
+      </head>
       <body
         style={{
           margin: 0,
