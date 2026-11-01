@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { BrandMark } from "@/components/BrandMark";
 import { Emphasize } from "@/components/Emphasize";
@@ -7,7 +8,6 @@ import { withLocale } from "@/lib/locale";
 import { featured, lab, type Project } from "@/data/projects";
 import type { AuditSnapshot } from "@/lib/audit";
 import { RECRUITER_SKILLS, RECRUITER_TOKENS } from "@/lib/emphasize";
-import type { GhRepo } from "@/lib/github";
 import { mailTo } from "@/lib/mail";
 import { ButtonArrow } from "@/components/ButtonArrow";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -18,7 +18,17 @@ import { CV_FILENAME, CV_PATH, SITE_HOST, SITE_NAME, SITE_REPO } from "@/lib/sit
 import { SUPPORT_PATH } from "@/lib/support";
 import { SpotlightLayer } from "@/components/SpotlightLayer";
 import { SignalBoard, type SignalStrings } from "@/components/SignalBoard";
-import { GitHubActivity } from "@/components/GitHubActivity";
+
+const GitHubActivity = dynamic(
+  () => import("@/components/GitHubActivity").then((mod) => mod.GitHubActivity),
+  {
+    loading: () => (
+      <section id="github" className="section activity-skeleton" aria-busy="true">
+        <div className="skeleton-block" />
+      </section>
+    ),
+  },
+);
 
 function projectLinks(project: Project, locale: Locale) {
   const t = copy[locale];
@@ -98,11 +108,9 @@ function ProofLine({ text }: { text: string }) {
 }
 
 export function Desk({
-  repos,
   audit,
   initialLocale,
 }: {
-  repos: GhRepo[];
   audit: AuditSnapshot;
   initialLocale: Locale;
 }) {
@@ -112,14 +120,6 @@ export function Desk({
   const tokens = [...hits, ...RECRUITER_TOKENS];
   const spotlight = featured.filter((item) => item.spotlight);
   const restWork = featured.filter((item) => !item.spotlight);
-
-  const featuredNames = new Set(featured.map((item) => item.name.toLowerCase().replace(/\s+/g, "-")));
-  const featuredUrls = new Set(featured.map((item) => item.repo).filter(Boolean));
-  const extraRepos = repos.filter((repo) => {
-    if (featuredNames.has(repo.name.toLowerCase())) return false;
-    if (featuredUrls.has(repo.html_url)) return false;
-    return true;
-  });
 
   const signalStrings: SignalStrings = {
     signalTitle: t.signalTitle,
@@ -151,6 +151,7 @@ export function Desk({
           <nav className="nav" aria-label={t.navLabel}>
             <a href="#projects">{t.projectsTitle}</a>
             <a href="#work">{t.workTitle}</a>
+            <a href="#lab">{t.labTitle}</a>
             <a href="#contact">{t.contactTitle}</a>
             <a
               href={SITE_REPO}
@@ -175,7 +176,10 @@ export function Desk({
 
         <main id="main" className="sheet" tabIndex={-1}>
           <section id="intro" className="hero">
-            <p className="kicker">{t.kicker}</p>
+            <p className="kicker">
+              <span className="signal-pip" aria-hidden="true" />
+              {t.kicker}
+            </p>
             <h1>{SITE_NAME}</h1>
             <p className="role">{t.headline}</p>
             <p className="seeking">{t.seeking}</p>
@@ -206,7 +210,7 @@ export function Desk({
             </a>
           </section>
 
-          <section id="projects" className="section">
+          <section id="projects" className="section reveal">
             <h2>{t.projectsTitle}</h2>
             <div className="grid-cards">
               {spotlight.map((project) => (
@@ -240,7 +244,7 @@ export function Desk({
             ) : null}
           </section>
 
-          <section id="work" className="section">
+          <section id="work" className="section reveal">
             <h2>{t.workTitle}</h2>
             <div className="trace">
               <article className="job job-now">
@@ -276,7 +280,7 @@ export function Desk({
             </div>
           </section>
 
-          <section id="skills" className="section">
+          <section id="skills" className="section reveal">
             <h2>{t.skillsTitle}</h2>
             <div className="skill-groups">
               {(Object.keys(skills) as Array<keyof typeof skills>).map((group) => (
@@ -288,7 +292,24 @@ export function Desk({
             </div>
           </section>
 
-          <section id="contact" className="section">
+          <section id="lab" className="section reveal">
+            <h2>{t.labTitle}</h2>
+            <p className="lede">{t.labLede}</p>
+            <ul className="lab-list">
+              {lab.map((idea) => (
+                <li key={idea.name}>
+                  {idea.href ? (
+                    <Link href={withLocale(locale, idea.href)}>{idea.name}</Link>
+                  ) : (
+                    <strong>{idea.name}</strong>
+                  )}
+                  <span className="muted"> — {idea.blurb[locale]}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section id="contact" className="section reveal">
             <h2>{t.contactTitle}</h2>
             <p className="lede">
               <Emphasize text={t.contactLede} phrases={hits} />
@@ -341,12 +362,12 @@ export function Desk({
 
           <GitHubActivity locale={locale} strings={t.activity} />
 
-          <section id="signal" className="section">
+          <section id="signal" className="section reveal">
             <h2>{t.signalTitle}</h2>
             <SignalBoard audit={audit} strings={signalStrings} showHeading={false} />
           </section>
 
-          <section id="edu" className="section">
+          <section id="edu" className="section reveal">
             <h2>{t.eduTitle}</h2>
             {education[locale].map((item) => (
               <p className="edu-line" key={item}>
@@ -356,44 +377,6 @@ export function Desk({
             <h3 className="subhead">{t.langsTitle}</h3>
             <p>{languages[locale]}</p>
           </section>
-
-          <details id="more" className="archive">
-            <summary>
-              <span className="fold-title">{t.atticTitle}</span>
-            </summary>
-            <div className="archive-body">
-              <h3 className="subhead">{t.labTitle}</h3>
-              <p className="lede">{t.labLede}</p>
-              <ul className="lab-list">
-                {lab.map((idea) => (
-                  <li key={idea.name}>
-                    {idea.href ? (
-                      <Link href={withLocale(locale, idea.href)}>{idea.name}</Link>
-                    ) : (
-                      <strong>{idea.name}</strong>
-                    )}
-                    <span className="muted"> — {idea.blurb[locale]}</span>
-                  </li>
-                ))}
-              </ul>
-              {extraRepos.length > 0 ? (
-                <>
-                  <h3 className="subhead">{t.moreTitle}</h3>
-                  {extraRepos.slice(0, 8).map((repo) => (
-                    <div className="repo-row" key={repo.html_url}>
-                      <div>
-                        <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
-                          {repo.name}
-                        </a>
-                        <div className="muted">{repo.description ?? repo.language}</div>
-                      </div>
-                      <span className="muted">{repo.language}</span>
-                    </div>
-                  ))}
-                </>
-              ) : null}
-            </div>
-          </details>
         </main>
 
         <footer>

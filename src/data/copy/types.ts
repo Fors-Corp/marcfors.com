@@ -33,7 +33,6 @@ export type UiCopy = {
   projectsTitle: string;
   labTitle: string;
   labLede: string;
-  moreTitle: string;
   signalTitle: string;
   signalLede: string;
   auditTitle: string;
@@ -82,7 +81,6 @@ export type UiCopy = {
   cvUnsupported: string;
   cvViewerLabel: string;
   caseStudy: string;
-  atticTitle: string;
   hits: readonly string[];
   vitalGood: string;
   vitalDefs: {

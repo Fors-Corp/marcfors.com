@@ -4,6 +4,16 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+## 0.25.0 — 2026-11-01
+
+- Redesign the signal desk: denser atmosphere, sticky brass header, live
+  open-to-work pip, and a scroll-driven signal rail.
+- Remove the More archive; promote Lab to an always-open section and stop
+  fetching the public-repo dump on the home page.
+- Lazy-load GitHub activity, use `content-visibility` on below-fold sections,
+  and deepen scroll/hover motion behind `prefers-reduced-motion`.
+- Rate-limit `GET /api/github-activity` (60/min per IP).
+
 ## 0.24.1 — 2026-11-01
 
 - Override transitive `minimatch` to `^11.0.1` (GHSA-g3hv-75wg-m249).

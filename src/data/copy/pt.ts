@@ -25,7 +25,6 @@ export const ui: UiCopy = {
   projectsTitle: "Trabalho selecionado",
   labTitle: "Laboratório",
   labLede: "Peças vistosas que caberiam ao lado das ferramentas que já publico. Cada uma usa um ofício que já pratico: observabilidade, mapas, música, hardware, software local-first.",
-  moreTitle: "Repositórios públicos",
   signalTitle: "Sinal",
   signalLede: "Esta secretária observa-se a si mesma. Cifragem em trânsito, auditoria de dependências em cada build, web vitals próprios. Sem tracker de terceiros.",
   auditTitle: "npm audit",
@@ -72,7 +71,6 @@ export const ui: UiCopy = {
   cvUnsupported: "Não aparece? Abre-o num separador novo ou descarrega o PDF.",
   cvViewerLabel: "Marc Fors — CV (PDF)",
   caseStudy: "Estudo de caso",
-  atticTitle: "Mais",
   hits: [
     "Mais de sete anos",
     "observabilidade, fintech, banca e administração",

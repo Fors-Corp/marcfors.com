@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { Desk } from "@/components/Desk";
 import { copy, skills } from "@/data/copy";
@@ -20,7 +19,7 @@ vi.mock("web-vitals", () => ({
 
 const audit = getAuditSnapshot();
 const renderDesk = (locale: Locale = "en") =>
-  render(<Desk repos={[]} audit={audit} initialLocale={locale} />);
+  render(<Desk audit={audit} initialLocale={locale} />);
 
 beforeEach(() => {
   vi.stubGlobal("IntersectionObserver", class {
@@ -119,7 +118,7 @@ describe("Desk", () => {
 
   it("renders every section, all visible on load — no accordion", () => {
     const { container } = renderDesk();
-    for (const id of ["intro", "projects", "work", "skills", "contact", "signal", "edu"]) {
+    for (const id of ["intro", "projects", "work", "skills", "lab", "contact", "signal", "edu"]) {
       const section = container.querySelector(`#${id}`);
       expect(section, id).toBeTruthy();
       expect(section, id).toBeVisible();
@@ -127,18 +126,10 @@ describe("Desk", () => {
     // The section headings are plain h2s, not expand/collapse buttons.
     expect(container.querySelector(".fold-head")).toBeNull();
     expect(container.querySelector("[aria-expanded]")).toBeNull();
-    for (const label of [copy.en.projectsTitle, copy.en.workTitle, copy.en.contactTitle]) {
+    expect(container.querySelector("details#more")).toBeNull();
+    for (const label of [copy.en.projectsTitle, copy.en.workTitle, copy.en.labTitle, copy.en.contactTitle]) {
       expect(screen.getByRole("heading", { level: 2, name: label })).toBeInTheDocument();
     }
-  });
-
-  it("keeps only the archive collapsed, and it opens on click", async () => {
-    const { container } = renderDesk();
-    const archive = container.querySelector("details#more") as HTMLDetailsElement;
-    expect(archive).toBeTruthy();
-    expect(archive.open).toBe(false);
-    await userEvent.click(within(archive).getByText(copy.en.atticTitle));
-    expect(archive.open).toBe(true);
   });
 
   it("downloads the real CV file from the home page and offers no generated PDF", () => {
