@@ -53,26 +53,33 @@ describe("Desk", () => {
     expect(screen.getByText(copy.en.headline)).toBeInTheDocument();
   });
 
-  it("puts Mensura first in featured work and links its detailed case study", () => {
+  it("puts Fors Photography first in featured work and links the live shop", () => {
     renderDesk();
     const firstCard = document.querySelector("#projects .project-card");
     expect(firstCard).toBeTruthy();
-    expect(within(firstCard as HTMLElement).getByRole("heading", { name: "Mensura" })).toBeInTheDocument();
-    expect(within(firstCard as HTMLElement).getByRole("link", { name: /case study for mensura/i })).toHaveAttribute(
+    expect(within(firstCard as HTMLElement).getByRole("heading", { name: "Fors Photography" })).toBeInTheDocument();
+    expect(within(firstCard as HTMLElement).getByRole("link", { name: /view live: fors photography/i })).toHaveAttribute(
       "href",
-      "/work/mensura",
+      "https://www.forsphoto.com",
     );
   });
 
-  it("features Wordkeep second, opening the live app and its case study", () => {
+  it("features Mensura second with its case study, and Wordkeep third with the live app", () => {
     renderDesk();
-    const secondCard = document.querySelectorAll("#projects .project-card")[1] as HTMLElement;
-    expect(within(secondCard).getByRole("heading", { name: "Wordkeep" })).toBeInTheDocument();
-    expect(within(secondCard).getByRole("link", { name: /view live: wordkeep/i })).toHaveAttribute(
+    const cards = document.querySelectorAll("#projects .project-card");
+    const mensura = cards[1] as HTMLElement;
+    const wordkeep = cards[2] as HTMLElement;
+    expect(within(mensura).getByRole("heading", { name: "Mensura" })).toBeInTheDocument();
+    expect(within(mensura).getByRole("link", { name: /case study for mensura/i })).toHaveAttribute(
+      "href",
+      "/work/mensura",
+    );
+    expect(within(wordkeep).getByRole("heading", { name: "Wordkeep" })).toBeInTheDocument();
+    expect(within(wordkeep).getByRole("link", { name: /view live: wordkeep/i })).toHaveAttribute(
       "href",
       "https://wordkeep.me",
     );
-    expect(within(secondCard).getByRole("link", { name: /case study for wordkeep/i })).toHaveAttribute(
+    expect(within(wordkeep).getByRole("link", { name: /case study for wordkeep/i })).toHaveAttribute(
       "href",
       "/work/wordkeep",
     );
