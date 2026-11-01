@@ -4,6 +4,14 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+## 0.24.1 — 2026-11-01
+
+- Override transitive `minimatch` to `^11.0.1` (GHSA-g3hv-75wg-m249).
+- Bump `simple-icons` to `^16.36.0`.
+- Rewrite the theme anti-flash boot script as a literal string so CodeQL
+  `js/bad-code-sanitization` no longer flags `JSON.stringify` as a code
+  sanitizer; keep a sync test against the theme constants.
+
 ## 0.24.0 — 2026-11-01
 
 - Add case studies for Fors Photography, marcfors.com, Fors Corp, FerreTodo Lepant,

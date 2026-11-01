@@ -2,7 +2,14 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { AA_NORMAL, contrastRatio } from "@/lib/contrast";
-import { PALETTE_THEMES, resolveTheme, THEME_CHOICES } from "@/lib/theme";
+import {
+  ANTI_FLASH_SCRIPT,
+  DEFAULT_THEME,
+  PALETTE_THEMES,
+  resolveTheme,
+  THEME_CHOICES,
+  THEME_KEY,
+} from "@/lib/theme";
 import { cssVars, THEME_PALETTES } from "@/lib/themePalettes";
 
 // Theme colour blocks live in the generated tokens.css; the system swatch and
@@ -30,6 +37,17 @@ describe("themes", () => {
     expect(resolveTheme("system", true)).toBe("light");
     expect(resolveTheme("system", false)).toBe("dark");
     expect(resolveTheme("green", true)).toBe("green");
+  });
+
+  it("keeps the anti-flash boot script in sync with theme constants", () => {
+    for (const choice of THEME_CHOICES) {
+      expect(ANTI_FLASH_SCRIPT).toContain(`"${choice}"`);
+    }
+    for (const palette of PALETTE_THEMES) {
+      expect(ANTI_FLASH_SCRIPT).toContain(`"${palette}"`);
+    }
+    expect(ANTI_FLASH_SCRIPT).toContain(`getItem("${THEME_KEY}")`);
+    expect(ANTI_FLASH_SCRIPT).toContain(`?stored:"${DEFAULT_THEME}"`);
   });
 
   it("keeps body copy and CTAs above AA in every theme", () => {
