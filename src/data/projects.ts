@@ -14,6 +14,23 @@ export type Project = {
 
 export const featured: Project[] = [
   {
+    name: "Fors Photography",
+    blurb: {
+      en: "My own print shop on forsphoto.com: 18 signed fine-art prints in four collections, from the Pacific coast, the desert Southwest and Europe, printed to order in four sizes. Six languages, Stripe-hosted checkout, no database, accounts or analytics.",
+      es: "Mi propia tienda de láminas en forsphoto.com: 18 copias fine art firmadas en cuatro colecciones, de la costa del Pacífico, el suroeste desértico y Europa, impresas por encargo en cuatro tamaños. Seis idiomas, pago alojado en Stripe, sin base de datos, cuentas ni analítica.",
+      ca: "La meva pròpia botiga de làmines a forsphoto.com: 18 còpies fine art signades en quatre col·leccions, de la costa del Pacífic, el sud-oest desèrtic i Europa, impreses per encàrrec en quatre mides. Sis llengües, pagament allotjat a Stripe, sense base de dades, comptes ni analítica.",
+      it: "Il mio negozio di stampe su forsphoto.com: 18 stampe fine art firmate in quattro collezioni, dalla costa del Pacifico, dal Sud-Ovest desertico e dall'Europa, stampate su ordinazione in quattro formati. Sei lingue, checkout ospitato da Stripe, senza database, account né analytics.",
+      pt: "A minha própria loja de impressões em forsphoto.com: 18 impressões fine art assinadas em quatro coleções, da costa do Pacífico, do sudoeste desértico e da Europa, impressas por encomenda em quatro tamanhos. Seis línguas, pagamento alojado na Stripe, sem base de dados, contas nem analítica.",
+      de: "Mein eigener Print-Shop auf forsphoto.com: 18 signierte Fine-Art-Drucke in vier Kollektionen, von der Pazifikküste, aus dem Wüsten-Südwesten und aus Europa, auf Bestellung in vier Größen gedruckt. Sechs Sprachen, Stripe-gehosteter Checkout, ohne Datenbank, Konten und Analytics.",
+      fr: "Ma propre boutique de tirages sur forsphoto.com : 18 tirages fine art signés en quatre collections, de la côte Pacifique, du Sud-Ouest désertique et d’Europe, imprimés à la commande en quatre formats. Six langues, paiement hébergé par Stripe, sans base de données, comptes ni analytics.",
+    },
+    stack: ["Next.js 16", "React 19", "Tailwind CSS", "Stripe"],
+    live: "https://www.forsphoto.com",
+    repo: "https://github.com/Fors-Corp/fors-photography",
+    private: true,
+    spotlight: true,
+  },
+  {
     name: "Mensura",
     blurb: {
       en: "A private, single-user substance tracker that learns an hourly forecast from your own logs on-device. It models timing, recency, amount and cross-substance patterns, then tests forecasts against held-out history. Your logs stay in the browser.",
@@ -110,23 +127,6 @@ export const featured: Project[] = [
     },
     stack: ["Next.js 16", "React 19", "TypeScript"],
     live: "https://forscorp.es",
-    private: true,
-    spotlight: true,
-  },
-  {
-    name: "Fors Photography",
-    blurb: {
-      en: "My own print shop on forsphoto.com: 18 signed fine-art prints in four collections, from the Pacific coast, the desert Southwest and Europe, printed to order in four sizes. Six languages, Stripe-hosted checkout, no database, accounts or analytics.",
-      es: "Mi propia tienda de láminas en forsphoto.com: 18 copias fine art firmadas en cuatro colecciones, de la costa del Pacífico, el suroeste desértico y Europa, impresas por encargo en cuatro tamaños. Seis idiomas, pago alojado en Stripe, sin base de datos, cuentas ni analítica.",
-      ca: "La meva pròpia botiga de làmines a forsphoto.com: 18 còpies fine art signades en quatre col·leccions, de la costa del Pacífic, el sud-oest desèrtic i Europa, impreses per encàrrec en quatre mides. Sis llengües, pagament allotjat a Stripe, sense base de dades, comptes ni analítica.",
-      it: "Il mio negozio di stampe su forsphoto.com: 18 stampe fine art firmate in quattro collezioni, dalla costa del Pacifico, dal Sud-Ovest desertico e dall'Europa, stampate su ordinazione in quattro formati. Sei lingue, checkout ospitato da Stripe, senza database, account né analytics.",
-      pt: "A minha própria loja de impressões em forsphoto.com: 18 impressões fine art assinadas em quatro coleções, da costa do Pacífico, do sudoeste desértico e da Europa, impressas por encomenda em quatro tamanhos. Seis línguas, pagamento alojado na Stripe, sem base de dados, contas nem analítica.",
-      de: "Mein eigener Print-Shop auf forsphoto.com: 18 signierte Fine-Art-Drucke in vier Kollektionen, von der Pazifikküste, aus dem Wüsten-Südwesten und aus Europa, auf Bestellung in vier Größen gedruckt. Sechs Sprachen, Stripe-gehosteter Checkout, ohne Datenbank, Konten und Analytics.",
-      fr: "Ma propre boutique de tirages sur forsphoto.com : 18 tirages fine art signés en quatre collections, de la côte Pacifique, du Sud-Ouest désertique et d’Europe, imprimés à la commande en quatre formats. Six langues, paiement hébergé par Stripe, sans base de données, comptes ni analytics.",
-    },
-    stack: ["Next.js 16", "React 19", "Tailwind CSS", "Stripe"],
-    live: "https://www.forsphoto.com",
-    repo: "https://github.com/Fors-Corp/fors-photography",
     private: true,
     spotlight: true,
   },
