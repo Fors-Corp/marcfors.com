@@ -4,6 +4,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+## 0.23.0 — 2026-11-01
+
+- Put Fors Photography first in selected work on the desk.
+
 ## 0.22.0 — 2026-10-31
 
 - Bump `next` to 16.4.3 with `@next/mdx` and `eslint-config-next` to match,
