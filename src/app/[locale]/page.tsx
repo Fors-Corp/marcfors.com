@@ -4,7 +4,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { getAuditSnapshot } from "@/lib/audit";
 import { fetchPublicRepos } from "@/lib/github";
 import { isLocale } from "@/lib/locale";
-import { profilePageJsonLd } from "@/lib/seo";
+import { portfolioJsonLd, profilePageJsonLd } from "@/lib/seo";
 
 export const revalidate = 3600;
 
@@ -15,6 +15,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   return (
     <>
       <JsonLd data={profilePageJsonLd(locale)} />
+      <JsonLd data={portfolioJsonLd(locale)} />
       <Desk repos={repos} audit={getAuditSnapshot()} initialLocale={locale} />
     </>
   );
