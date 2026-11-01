@@ -15,6 +15,7 @@ const paths = [
   "AGENTS.md",
   "GROK.md",
   "CLAUDE.md",
+  "PRODUCT.md",
   ".grok",
 ];
 

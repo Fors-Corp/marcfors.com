@@ -14,9 +14,26 @@ describe("GitHub activity endpoint", () => {
   ])("handles independent upstream availability (%#)", async ({ events, calendar, status, cache }) => {
     const snapshot = { events, calendar, checkedAt: "2026-10-16T12:00:00Z" };
     vi.mocked(fetchGitHubActivity).mockResolvedValue(snapshot);
-    const response = await GET();
+    const response = await GET(new Request("http://localhost/api/github-activity"));
     expect(response.status).toBe(status);
     expect(response.headers.get("Cache-Control")).toBe(cache);
     expect(await response.json()).toEqual(snapshot);
+  });
+
+  it("rate-limits abusive clients", async () => {
+    vi.mocked(fetchGitHubActivity).mockResolvedValue({
+      events: [],
+      calendar: [],
+      checkedAt: "2026-10-16T12:00:00Z",
+    });
+    const req = () =>
+      GET(
+        new Request("http://localhost/api/github-activity", {
+          headers: { "x-forwarded-for": "203.0.113.50" },
+        }),
+      );
+    let last = await req();
+    for (let i = 0; i < 60; i++) last = await req();
+    expect(last.status).toBe(429);
   });
 });

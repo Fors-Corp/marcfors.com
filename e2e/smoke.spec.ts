@@ -40,23 +40,16 @@ test("a theme pick sticks across a reload", async ({ page }) => {
 
 test("every section is on the page at once, and a nav link jumps to one", async ({ page }) => {
   await page.goto("/");
-  for (const id of ["intro", "projects", "work", "skills", "contact", "signal", "edu"]) {
+  for (const id of ["intro", "projects", "work", "skills", "lab", "contact", "signal", "edu"]) {
     await expect(page.locator(`#${id}`)).toBeVisible();
   }
   // No accordion: section headings are plain, not expand/collapse controls.
   await expect(page.locator(".fold-head")).toHaveCount(0);
   await expect(page.locator("[aria-expanded]")).toHaveCount(0);
+  await expect(page.locator("details#more")).toHaveCount(0);
 
   await page.getByRole("link", { name: "Selected work" }).first().click();
   await expect(page).toHaveURL(/#projects$/);
-});
-
-test("the archive is the only collapsed block and it opens on click", async ({ page }) => {
-  await page.goto("/");
-  const archive = page.locator("details#more");
-  await expect(archive).not.toHaveAttribute("open", /.*/);
-  await archive.locator("summary").click();
-  await expect(archive).toHaveAttribute("open", /.*/);
 });
 
 test("print route renders the CV", async ({ page }) => {

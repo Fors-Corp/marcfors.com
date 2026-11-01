@@ -25,7 +25,6 @@ export const ui: UiCopy = {
   projectsTitle: "Treball seleccionat",
   labTitle: "Laboratori",
   labLede: "Peces vistoses que encaixarien al costat de les eines que ja publico. Cadascuna usa un ofici que ja practico: observabilitat, mapes, música, hardware, programari local-first.",
-  moreTitle: "Repositoris públics",
   signalTitle: "Senyal",
   signalLede: "Aquest escriptori s'observa a si mateix. Xifratge en trànsit, auditoria de dependències a cada build, web vitals propis. Sense tracker de tercers.",
   auditTitle: "npm audit",
@@ -72,7 +71,6 @@ export const ui: UiCopy = {
   cvUnsupported: "No es veu? Obre’l en una pestanya nova o baixa el PDF.",
   cvViewerLabel: "Marc Fors — CV (PDF)",
   caseStudy: "Estudi de cas",
-  atticTitle: "Més",
   hits: [
     "Més de set anys",
     "observabilitat, fintech, banca i administració",

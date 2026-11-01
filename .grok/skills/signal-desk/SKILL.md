@@ -11,7 +11,7 @@ Palette tokens live in `src/lib/themePalettes.ts` and are applied as `[data-them
 
 Displayed Core Web Vitals must rate `good`. Ceilings are `VITAL_GOOD` in `src/lib/vitals.ts`. Do not fake a green rating.
 
-CLS especially: never insert unreserved height, never re-render the whole desk on pointer move (spotlight uses `--spot-x` / `--spot-y`), keep `h1` as the single-line name, keep vital tooltips `position: absolute`. The desk is one scannable column — every `<section>` open and stacked (`.sheet` / `.section`); only the `#more` archive folds, as a native `<details>`. Recruiter hits use `.hit` / `copy.hits`. `src/lib/__tests__/signalLayout.test.ts` guards the layout contract.
+CLS especially: never insert unreserved height, never re-render the whole desk on pointer move (spotlight uses `--spot-x` / `--spot-y`), keep `h1` as the single-line name, keep vital tooltips `position: absolute`. The desk is one scannable column — every `<section>` open and stacked (`.sheet` / `.section`); there is no More/archive fold. Scroll progress uses `--desk-progress` on the signal rail. Recruiter hits use `.hit` / `copy.hits`. `src/lib/__tests__/signalLayout.test.ts` guards the layout contract.
 
 ## Recruiter scan
 

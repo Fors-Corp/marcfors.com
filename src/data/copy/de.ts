@@ -25,7 +25,6 @@ export const ui: UiCopy = {
   projectsTitle: "Ausgewählte Arbeit",
   labTitle: "Labor",
   labLede: "Auffällige Stücke, die neben den Werkzeugen stehen könnten, die ich schon ausliefere. Jedes nutzt ein Handwerk, das ich schon übe: Observability, Karten, Musik, Hardware, Local-First-Software.",
-  moreTitle: "Öffentliche Repositories",
   signalTitle: "Signal",
   signalLede: "Dieser Schreibtisch beobachtet sich selbst. Transportverschlüsselung, Supply-Chain-Audit bei jedem Build, eigene Web Vitals. Kein Tracker Dritter.",
   auditTitle: "npm audit",
@@ -72,7 +71,6 @@ export const ui: UiCopy = {
   cvUnsupported: "Wird nichts angezeigt? In neuem Tab öffnen oder das PDF herunterladen.",
   cvViewerLabel: "Marc Fors — Lebenslauf (PDF)",
   caseStudy: "Fallstudie",
-  atticTitle: "Mehr",
   hits: [
     "Mehr als sieben Jahre",
     "Observability, Fintech, Banking und Verwaltung",

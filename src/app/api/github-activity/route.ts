@@ -1,6 +1,15 @@
 import { fetchGitHubActivity } from "@/lib/githubActivity";
+import { clientIp, createRateLimiter } from "@/lib/rateLimit";
 
-export async function GET() {
+export const dynamic = "force-dynamic";
+
+const limited = createRateLimiter({ max: 60 });
+
+export async function GET(request: Request) {
+  if (limited(clientIp(request))) {
+    return Response.json({ error: "rate limited" }, { status: 429 });
+  }
+
   const snapshot = await fetchGitHubActivity();
   const unavailable = snapshot.events === null && snapshot.calendar === null;
   return Response.json(snapshot, {
