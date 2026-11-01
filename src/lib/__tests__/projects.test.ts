@@ -30,8 +30,12 @@ describe("featured work", () => {
     expect(gatto?.blurb.en).toMatch(/Spanish, Catalan and English/);
   });
 
+  it("features Fors Photography first in selected work", () => {
+    expect(featured[0]?.name).toBe("Fors Photography");
+  });
+
   it("features Wordkeep right after Mensura, on its own domain, without exposing source", () => {
-    expect(featured.findIndex((item) => item.name === "Wordkeep")).toBe(1);
+    expect(featured.findIndex((item) => item.name === "Wordkeep")).toBe(2);
     const wordkeep = featured.find((item) => item.name === "Wordkeep");
     expect(wordkeep).toMatchObject({
       stack: ["React", "TypeScript", "Three.js", "Hono", "Claude API"],
