@@ -182,7 +182,7 @@ describe("featured work", () => {
   it("points Fors Design System at the org repo and Pages site", () => {
     const item = featured.find((project) => project.name === "Fors Design System");
     expect(item?.repo).toMatch(/^https:\/\/github.com\/Fors-Corp\//);
-    expect(item?.live).toMatch(/^https:\/\/fors-corp.github.io\//);
+    expect(item?.live).toMatch(/^https:\/\/fors-corp\.github\.io\//);
     expect(item?.caseStudy).toBe("fors-design-system");
   });
 
