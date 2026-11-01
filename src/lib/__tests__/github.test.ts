@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { fetchPublicRepos, isListedRepo, type GhRepo } from "@/lib/github";
 import { skipRepos } from "@/data/projects";
-import { GITHUB_USER } from "@/lib/site";
+import { GITHUB_ORG, GITHUB_USER } from "@/lib/site";
 
 function repo(overrides: Partial<GhRepo> = {}): GhRepo {
   return {
@@ -37,19 +37,40 @@ describe("isListedRepo", () => {
 });
 
 describe("fetchPublicRepos", () => {
-  it("requests the configured user's repos and returns the filtered list", async () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => [repo({ name: "keep-me" }), repo({ name: "a-fork", fork: true })],
+  it("requests user and org repos, merges them, and returns the filtered list", async () => {
+    const fetchMock = vi.fn().mockImplementation(async (url: string) => {
+      const rows = String(url).includes(`/orgs/${GITHUB_ORG}/`)
+        ? [repo({ name: "org-keep", html_url: "https://github.com/Fors-Corp/org-keep" })]
+        : [
+            repo({ name: "keep-me", html_url: "https://github.com/marcfs31/keep-me" }),
+            repo({ name: "a-fork", fork: true, html_url: "https://github.com/marcfs31/a-fork" }),
+          ];
+      return { ok: true, json: async () => rows };
     });
     vi.stubGlobal("fetch", fetchMock);
 
     const rows = await fetchPublicRepos();
-    expect(rows.map((r) => r.name)).toEqual(["keep-me"]);
-    expect(String(fetchMock.mock.calls[0][0])).toContain(`/users/${GITHUB_USER}/repos`);
+    expect(rows.map((r) => r.name).sort()).toEqual(["keep-me", "org-keep"]);
+    const urls = fetchMock.mock.calls.map((call) => String(call[0]));
+    expect(urls.some((url) => url.includes(`/users/${GITHUB_USER}/repos`))).toBe(true);
+    expect(urls.some((url) => url.includes(`/orgs/${GITHUB_ORG}/repos`))).toBe(true);
   });
 
-  it("returns an empty list and logs on a non-ok response", async () => {
+  it("dedupes the same html_url across user and org responses", async () => {
+    const shared = repo({
+      name: "marcfors.com",
+      html_url: "https://github.com/Fors-Corp/marcfors.com",
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({ ok: true, json: async () => [shared] }),
+    );
+    const rows = await fetchPublicRepos();
+    expect(rows).toHaveLength(1);
+    expect(rows[0]?.html_url).toBe(shared.html_url);
+  });
+
+  it("returns an empty list and logs when both sources are non-ok", async () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: false, status: 403, json: async () => ({}) }));
     expect(await fetchPublicRepos()).toEqual([]);

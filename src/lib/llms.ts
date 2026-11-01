@@ -15,7 +15,7 @@ export function llmsTxt(): string {
     const onSite = project.caseStudy ? localeUrl("en", `/work/${project.caseStudy}`, SITE_URL) : undefined;
     const destination = onSite ?? project.live ?? project.repo;
     if (!destination) return [];
-    const source = project.repo ? ` Source: ${project.repo}.` : "";
+    const source = project.repo && !project.private ? ` Source: ${project.repo}.` : "";
     return [`- ${project.name} (${destination}). ${project.blurb.en}${source}`];
   });
 

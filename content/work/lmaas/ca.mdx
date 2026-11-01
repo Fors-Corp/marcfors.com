@@ -1,0 +1,21 @@
+---
+project: "LMaaS"
+stack:
+  - "Go"
+  - "React"
+  - "TypeScript"
+live: "https://mlaas-console.vercel.app"
+order: 12
+description: "Servei de models autoallotjat a Apple Silicon: API compatible amb OpenAI per a LLM locals, i ML amb train/serve/retrain sota SemVer."
+---
+## Problema
+
+Les meves pròpies apps necessitaven inferència local de models de llenguatge i releases d'ML versionats sense dependre d'un proveïdor cloud a cada crida.
+
+## Enfocament
+
+LMaaS és un servei autoallotjat a Apple Silicon: una API en Go compatible amb OpenAI per a models locals, més fluxos de train, serve i retrain darrere de releases SemVer, amb una consola React.
+
+## Resultat
+
+Un escriptori de models privat al qual els meus productes poden cridar en local, amb consola en viu i codi sense publicar.

@@ -4,6 +4,16 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+## 0.24.0 — 2026-11-01
+
+- Add case studies for Fors Photography, marcfors.com, Fors Corp, FerreTodo Lepant,
+  Agent Switchboard, Finance Dashboard, LMaaS, forsight and Fors Design System
+  (seven locales each); keep Fors Photography first in selected work.
+- Never show Source for private projects; drop private repo URLs from project data
+  and JSON-LD (including forsight).
+- Fetch Fors-Corp public repos into the GitHub extras feed; point fileshelf,
+  iTerm Studio and Media Downloader at Fors-Corp URLs.
+
 ## 0.23.0 — 2026-11-01
 
 - Put Fors Photography first in selected work on the desk.

@@ -1,0 +1,21 @@
+---
+project: "forsight"
+stack:
+  - "Go"
+  - "TypeScript"
+  - "React"
+live: "https://fors-corp.github.io/forsight/"
+order: 13
+description: "Plateforme d’observabilité : agent Go avec API métriques, tableau de bord embarqué, anomalies et prévisions ML, plus sa bibliothèque React."
+---
+## Problème
+
+Je voulais une pile d’observabilité versionnable en deux artefacts depuis un même arbre : l’agent qui collecte et sert, et la bibliothèque React avec laquelle il s’affiche.
+
+## Approche
+
+forsight livre un agent Go qui collecte des métriques, expose une API HTTP et embarque son tableau de bord, avec notation d’anomalies et prévisions par ML, plus la bibliothèque de composants React. Le site Pages public est la démo.
+
+## Résultat
+
+Un instrument d’observabilité vivant avec démo publique et code source privé.
