@@ -122,7 +122,7 @@ describe("featured work", () => {
     expect(privateWithSource).toEqual([]);
     for (const project of featured) {
       if (!project.private && project.repo) {
-        expect(project.repo, project.name).toMatch(/^https:\/\/github.com\/(marcfs31|Fors-Corp)\//);
+        expect(project.repo, project.name).toMatch(/^https:\/\/github\.com\/(marcfs31|Fors-Corp)\//);
       }
     }
   });
@@ -181,7 +181,7 @@ describe("featured work", () => {
 
   it("points Fors Design System at the org repo and Pages site", () => {
     const item = featured.find((project) => project.name === "Fors Design System");
-    expect(item?.repo).toMatch(/^https:\/\/github.com\/Fors-Corp\//);
+    expect(item?.repo).toMatch(/^https:\/\/github\.com\/Fors-Corp\//);
     expect(item?.live).toMatch(/^https:\/\/fors-corp\.github\.io\//);
     expect(item?.caseStudy).toBe("fors-design-system");
   });

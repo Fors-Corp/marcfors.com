@@ -23,4 +23,8 @@ export function resolveTheme(choice: Theme, prefersLight: boolean): PaletteTheme
   return choice;
 }
 
-export const ANTI_FLASH_SCRIPT = `(function(){try{var choices=${JSON.stringify(THEME_CHOICES)};var palettes=${JSON.stringify(PALETTE_THEMES)};var stored=localStorage.getItem(${JSON.stringify(THEME_KEY)});var choice=(stored&&choices.indexOf(stored)!==-1)?stored:${JSON.stringify(DEFAULT_THEME)};var light=window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches;var resolved=(choice==="system")?(light?"light":"dark"):choice;if(palettes.indexOf(resolved)===-1)resolved="dark";document.documentElement.setAttribute("data-theme",resolved);document.documentElement.setAttribute("data-theme-choice",choice);}catch(e){}})();`;
+// Literal boot script — theme constants are compile-time fixed, so embed them
+// directly instead of interpolating JSON.stringify (which CodeQL treats as an
+// inadequate sanitizer for code construction).
+export const ANTI_FLASH_SCRIPT =
+  '(function(){try{var choices=["system","light","dark","green","blue","red"];var palettes=["light","dark","green","blue","red"];var stored=localStorage.getItem("marcfors-theme");var choice=(stored&&choices.indexOf(stored)!==-1)?stored:"system";var light=window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches;var resolved=(choice==="system")?(light?"light":"dark"):choice;if(palettes.indexOf(resolved)===-1)resolved="dark";document.documentElement.setAttribute("data-theme",resolved);document.documentElement.setAttribute("data-theme-choice",choice);}catch(e){}})();';
