@@ -28,9 +28,11 @@ test("Wordkeep atlas responds to a real touch tap, not just a mouse hover", asyn
   const canvas = page.locator(".atlas-canvas");
   await expect(canvas).toBeVisible();
 
-  // `page.touchscreen.tap` taps literal viewport pixels, so the canvas has to
-  // actually be scrolled into view first, same as the desktop click test.
-  await canvas.scrollIntoViewIfNeeded();
+  // Scroll the stage (not the canvas): the sim mutates canvas size during boot,
+  // which makes Playwright's scrollIntoViewIfNeeded wait forever for stability.
+  const stage = page.locator(".atlas-stage");
+  await stage.evaluate((el) => el.scrollIntoView({ block: "center" }));
+  await expect(canvas).toHaveAttribute("data-atlas-sized", /\d+x\d+/);
   const box = await canvas.boundingBox();
   if (!box) throw new Error("atlas canvas has no layout box");
   const hit = await findAtlasNodePoint(page, box);
