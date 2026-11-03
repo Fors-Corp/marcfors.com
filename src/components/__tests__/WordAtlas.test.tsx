@@ -45,6 +45,20 @@ describe("WordAtlas", () => {
     }
   });
 
+  it("keeps an optional overlay on the plot and the legend outside the stage", () => {
+    const { container } = render(
+      <WordAtlas locale="en" variant="hero" overlay={<p data-testid="plot-overlay">Overlay</p>} />,
+    );
+    const plot = container.querySelector(".atlas-plot");
+    const stage = container.querySelector(".atlas-stage");
+    const legend = container.querySelector("figcaption.atlas-legend");
+    const overlay = screen.getByTestId("plot-overlay");
+    expect(plot).toContainElement(stage as HTMLElement);
+    expect(plot).toContainElement(overlay);
+    expect(plot).not.toContainElement(legend as HTMLElement);
+    expect(container.querySelector("figure.atlas--hero")).toContainElement(legend as HTMLElement);
+  });
+
   it(
     "has no axe violations",
     async () => {

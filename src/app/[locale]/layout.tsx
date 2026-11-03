@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
-import { Fraunces, IBM_Plex_Mono } from "next/font/google";
+import { Spectral, Manrope } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { isLocale, languageAlternates, LOCALES, localeUrl, OG_LOCALES, type Locale } from "@/lib/locale";
 import { JsonLd } from "@/components/JsonLd";
@@ -26,18 +26,19 @@ export function generateStaticParams() {
 // still emits the `latin-ext` @font-face rules with their `unicode-range`, so if
 // such a character ever lands in copy (or in a remote GitHub repo name) the
 // browser fetches that file lazily instead of showing tofu. `fontSubset.test.ts`
-// guards the assumption. `weight: ["500"]` on the mono stays — it is the body
-// font and `font-synthesis: none` (globals.css) forbids a faux-bold fallback.
-const serif = Fraunces({
+// guards the assumption. Manrope carries the UI/body voice; Spectral is display. `font-synthesis: none`
+// (globals.css) forbids faux-bold fallbacks.
+const serif = Spectral({
   subsets: ["latin"],
+  weight: ["400", "600", "700"],
   variable: "--font-serif-loaded",
   display: "swap",
   adjustFontFallback: true,
 });
 
-const mono = IBM_Plex_Mono({
+const mono = Manrope({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-mono-loaded",
   display: "swap",
   adjustFontFallback: true,
@@ -48,8 +49,8 @@ const mono = IBM_Plex_Mono({
 export const viewport: Viewport = {
   colorScheme: "dark light",
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#10141c" },
-    { media: "(prefers-color-scheme: light)", color: "#f4efe4" },
+    { media: "(prefers-color-scheme: dark)", color: "#070b14" },
+    { media: "(prefers-color-scheme: light)", color: "#eef2f8" },
   ],
 };
 
@@ -115,8 +116,8 @@ export default async function LocaleLayout({
       <body
         style={
           {
-            "--serif": "var(--font-serif-loaded), Fraunces, Georgia, serif",
-            "--mono": "var(--font-mono-loaded), ui-monospace, monospace",
+            "--serif": "var(--font-serif-loaded), Spectral, Georgia, serif",
+            "--mono": "var(--font-mono-loaded), Manrope, system-ui, sans-serif",
           } as CSSProperties
         }
       >

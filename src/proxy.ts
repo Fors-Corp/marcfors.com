@@ -54,5 +54,10 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  // Exclude every `/_next/*` route — not only static/image. Turbopack HMR
+  // upgrades `ws://…/_next/hmr`; if this proxy runs on that path (even with
+  // NextResponse.next()), the handshake returns an invalid HTTP response and
+  // the client never hydrates. Keep the in-body SKIP for `_next` as defense
+  // in depth when the matcher is widened elsewhere.
+  matcher: ["/((?!_next/|favicon.ico).*)"],
 };

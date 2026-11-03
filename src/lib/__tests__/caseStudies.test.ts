@@ -61,6 +61,7 @@ describe("case studies", () => {
       expect(study?.repo).toBeUndefined();
       expect(study?.stack).toEqual(expect.arrayContaining(["Three.js", "Hono", "Claude API"]));
       const body = caseStudyBody("wordkeep", locale)!;
+      expect(study?.description ?? body).toMatch(/App Store/i);
       for (const fact of ["Claude", "SM-2", "IndexedDB", "AES-GCM", "PBKDF2", "Three.js", "200", "30"]) {
         expect(body, `${locale}: ${fact}`).toContain(fact);
       }

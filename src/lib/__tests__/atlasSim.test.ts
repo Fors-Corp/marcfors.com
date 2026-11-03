@@ -18,7 +18,7 @@ describe("seedRing", () => {
     for (const p of pts) {
       expect(p.vx).toBe(0);
       expect(p.vy).toBe(0);
-      expect(Math.hypot(p.x - 0.5, p.y - 0.5)).toBeCloseTo(0.36, 6);
+      expect(Math.hypot(p.x - 0.5, p.y - 0.5)).toBeCloseTo(0.42, 6);
     }
     // No randomness: a second seed is byte-identical.
     expect(seedRing(8)).toEqual(pts);

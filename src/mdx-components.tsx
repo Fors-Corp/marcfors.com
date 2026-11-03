@@ -1,7 +1,7 @@
 import type { MDXComponents } from "mdx/types";
 
 /**
- * Themes case-study prose to the desk instead of leaving it at browser
+ * Themes case-study prose to the atlas instead of leaving it at browser
  * defaults. Headings need no override — `h2 { ... }` in globals.css already
  * styles the small-caps brass label every case-study section heading uses.
  * `.case-body` (wrapping the compiled MDX in work/[slug]/page.tsx) carries the

@@ -17,7 +17,7 @@ export type Neighbor = { other: number; rel: AtlasRelation };
 export function seedRing(count: number): SimPoint[] {
   return Array.from({ length: count }, (_, i) => {
     const a = (i / count) * Math.PI * 2;
-    return { x: 0.5 + Math.cos(a) * 0.36, y: 0.5 + Math.sin(a) * 0.36, vx: 0, vy: 0 };
+    return { x: 0.5 + Math.cos(a) * 0.42, y: 0.5 + Math.sin(a) * 0.42, vx: 0, vy: 0 };
   });
 }
 
@@ -68,8 +68,8 @@ export function stepForces(
       fx += dx * rep;
       fy += dy * rep;
     }
-    fx += (0.5 - a.x) * 0.02;
-    fy += (0.5 - a.y) * 0.02;
+    fx += (0.5 - a.x) * 0.014;
+    fy += (0.5 - a.y) * 0.014;
     a.vx = (a.vx + fx) * 0.82;
     a.vy = (a.vy + fy) * 0.82;
   }

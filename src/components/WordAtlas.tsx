@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef, type ReactNode } from "react";
 import type { Locale } from "@/lib/locale";
 import {
   buildAdjacency,
-  nodeAt,
   seedRing,
   settle,
   shouldAnimate,
@@ -30,21 +29,36 @@ const LANGS: Array<{ code: string; count: number }> = [
 
 /**
  * A frozen snapshot of the Wordkeep Atlas, drawn to a canvas with a tiny
- * self-contained force layout — no graph library. Themed from the desk's CSS
+ * self-contained force layout — no graph library. Themed from the atlas CSS
  * variables; links out to the live 3D version.
  */
-export function WordAtlas({ locale }: { locale: Locale }) {
+export function WordAtlas({
+  locale,
+  variant = "embed",
+  overlay,
+}: {
+  locale: Locale;
+  /** `hero` = full-bleed first-viewport atlas; `embed` = case-study figure. */
+  variant?: "embed" | "hero";
+  /** Drawn over the canvas only (not the legend) — e.g. hero identity block. */
+  overlay?: ReactNode;
+}) {
   const t = ATLAS_COPY[locale];
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const readoutRef = useRef<HTMLDivElement>(null);
+  const isHero = variant === "hero";
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const wrapNode = wrapRef.current;
     const canvasNode = canvasRef.current;
     if (!wrapNode || !canvasNode) return;
+    wrapNode.dataset.atlasEffect = "mounted";
     const context = canvasNode.getContext("2d");
-    if (!context) return; // no 2d context (e.g. jsdom) — the legend + links still stand alone
+    if (!context) {
+      wrapNode.dataset.atlasEffect = "no-2d";
+      return; // no 2d context (e.g. jsdom) — the legend + links still stand alone
+    }
 
     // Re-bind with explicit non-null types: the nested draw/loop/resize
     // functions below are closures, and TS does not carry the narrowing from
@@ -89,11 +103,31 @@ export function WordAtlas({ locale }: { locale: Locale }) {
       r === "syn" ? COL.syn : r === "ant" ? COL.ant : r === "tr" ? COL.tr : COL.rel;
     const relDash = (r: AtlasRelation) => (r === "ant" ? [5, 4] : r === "rel" ? [1.5, 4] : []);
 
-    const px = (p: SimPoint) => p.x * W;
-    const py = (p: SimPoint) => p.y * H;
+    // Compact (narrow) layout insets the unit square so labels/nodes keep a
+    // margin from the canvas edge instead of clipping on portrait phones.
+    const mapX = (x: number) => {
+      if (W >= 560) return x * W;
+      const pad = 0.07;
+      return (pad + x * (1 - 2 * pad)) * W;
+    };
+    const mapY = (y: number) => {
+      if (W >= 560) return y * H;
+      const pad = 0.09;
+      return (pad + y * (1 - 2 * pad)) * H;
+    };
+    const px = (p: SimPoint) => mapX(p.x);
+    const py = (p: SimPoint) => mapY(p.y);
+    // Degree rank for sparse mobile labels — hubs stay named, leaves stay dots.
+    const degree = adj.map((n) => n.length);
+    const degreeOrder = degree
+      .map((d, i) => ({ d, i }))
+      .sort((a, b) => b.d - a.d || a.i - b.i)
+      .map((row) => row.i);
+    const hubSet = new Set(degreeOrder.slice(0, Math.min(14, Math.ceil(N * 0.28))));
 
     function draw() {
       const f = focus();
+      const compact = W < 560;
       ctx.clearRect(0, 0, W, H);
       const near = new Set<number>();
       if (f >= 0) {
@@ -105,9 +139,9 @@ export function WordAtlas({ locale }: { locale: Locale }) {
       edges.forEach(([a, b, r]) => {
         const lit = f >= 0 && (a === f || b === f);
         const faded = f >= 0 && !lit;
-        ctx.globalAlpha = faded ? 0.06 : 0.55;
+        ctx.globalAlpha = faded ? 0.06 : compact ? 0.42 : 0.55;
         ctx.strokeStyle = relColor(r);
-        ctx.lineWidth = lit ? 1.8 : 1;
+        ctx.lineWidth = lit ? 1.8 : compact ? 0.9 : 1;
         ctx.setLineDash(relDash(r));
         ctx.beginPath();
         ctx.moveTo(px(pts[a]), py(pts[a]));
@@ -118,10 +152,14 @@ export function WordAtlas({ locale }: { locale: Locale }) {
 
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
+      const focusR = compact ? 5.5 : 6.5;
+      const nodeR = compact ? 2.6 : 3.2;
+      const focusFont = compact ? "600 12px" : "600 13px";
+      const nodeFont = compact ? "500 9.5px" : "500 11px";
       pts.forEach((p, i) => {
         const isFocus = i === f;
         const faded = f >= 0 && !near.has(i);
-        const r = isFocus ? 6.5 : 3.2;
+        const r = isFocus ? focusR : nodeR;
         ctx.globalAlpha = faded ? 0.18 : 1;
         ctx.beginPath();
         ctx.arc(px(p), py(p), r, 0, Math.PI * 2);
@@ -132,11 +170,13 @@ export function WordAtlas({ locale }: { locale: Locale }) {
           ctx.strokeStyle = COL.tr;
           ctx.stroke();
         }
-        if (near.has(i) || f < 0) {
-          ctx.globalAlpha = faded ? 0.2 : isFocus ? 1 : 0.75;
+        const showLabel =
+          near.has(i) || (!compact && f < 0) || (compact && f < 0 && hubSet.has(i));
+        if (showLabel) {
+          ctx.globalAlpha = faded ? 0.2 : isFocus ? 1 : compact ? 0.7 : 0.75;
           ctx.fillStyle = isFocus ? COL.label : COL.node;
-          ctx.font = `${isFocus ? "600 13px" : "500 11px"} ${COL.serif}`;
-          ctx.fillText(WORD_ATLAS.nodes[i].label, px(p), py(p) - r - 8);
+          ctx.font = `${isFocus ? focusFont : nodeFont} ${COL.serif}`;
+          ctx.fillText(WORD_ATLAS.nodes[i].label, px(p), py(p) - r - (compact ? 6 : 8));
         }
       });
       ctx.globalAlpha = 1;
@@ -151,27 +191,49 @@ export function WordAtlas({ locale }: { locale: Locale }) {
     }
 
     function resize() {
+      const rect = wrap.getBoundingClientRect();
+      const nextW = Math.max(wrap.clientWidth, canvas.clientWidth, Math.round(rect.width));
+      const nextH = Math.max(wrap.clientHeight, canvas.clientHeight, Math.round(rect.height));
+      // Layout can report 0 on the first paint (sticky/full-bleed). Skip until real.
+      if (nextW < 2 || nextH < 2) return false;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      W = wrap.clientWidth;
-      H = wrap.clientHeight;
-      canvas.width = W * dpr;
-      canvas.height = H * dpr;
+      // Avoid redundant buffer resets that clear the frame.
+      if (Math.abs(nextW - W) < 0.5 && Math.abs(nextH - H) < 0.5 && canvas.width === Math.round(W * dpr)) {
+        return true;
+      }
+      W = nextW;
+      H = nextH;
+      canvas.width = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
       canvas.style.width = `${W}px`;
       canvas.style.height = `${H}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      canvas.dataset.atlasSized = `${Math.round(W)}x${Math.round(H)}`;
+      wrap.dataset.atlasEffect = "sized";
       draw();
+      return true;
     }
 
-    resize();
     if (reduce) {
       settle(pts, edges);
-      draw();
-    } else {
-      loop();
     }
-
-    const ro = new ResizeObserver(resize);
+    // Observe first so the initial layout callback cannot be missed, then poll briefly.
+    const ro = new ResizeObserver(() => {
+      if (resize() && !raf && !reduce) raf = requestAnimationFrame(loop);
+    });
     ro.observe(wrap);
+    window.addEventListener("resize", resize);
+    let boots = 0;
+    const bootId = window.setInterval(() => {
+      boots += 1;
+      if (resize() || boots > 40) window.clearInterval(bootId);
+    }, 50);
+    if (!reduce) {
+      loop();
+    } else {
+      resize();
+      draw();
+    }
 
     const onThemeChange = () => {
       COL = readColors();
@@ -182,7 +244,31 @@ export function WordAtlas({ locale }: { locale: Locale }) {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     mq.addEventListener("change", onThemeChange);
 
-    const hit = (mx: number, my: number) => nodeAt(mx, my, pts, W, H);
+    function unmapX(mx: number) {
+      if (W >= 560) return mx / W;
+      const pad = 0.07;
+      return (mx / W - pad) / (1 - 2 * pad);
+    }
+    function unmapY(my: number) {
+      if (W >= 560) return my / H;
+      const pad = 0.09;
+      return (my / H - pad) / (1 - 2 * pad);
+    }
+    function hit(mx: number, my: number) {
+      const radius = W < 560 ? 22 : 20;
+      let bd = radius * radius;
+      let best = -1;
+      for (let i = 0; i < pts.length; i++) {
+        const dx = mapX(pts[i].x) - mx;
+        const dy = mapY(pts[i].y) - my;
+        const d = dx * dx + dy * dy;
+        if (d < bd) {
+          bd = d;
+          best = i;
+        }
+      }
+      return best;
+    }
     function localXY(ev: PointerEvent) {
       const rect = canvas.getBoundingClientRect();
       return { mx: ev.clientX - rect.left, my: ev.clientY - rect.top };
@@ -230,8 +316,8 @@ export function WordAtlas({ locale }: { locale: Locale }) {
     const onMove = (ev: PointerEvent) => {
       const { mx, my } = localXY(ev);
       if (dragIdx >= 0) {
-        pts[dragIdx].x = Math.min(0.98, Math.max(0.02, mx / W));
-        pts[dragIdx].y = Math.min(0.97, Math.max(0.03, my / H));
+        pts[dragIdx].x = Math.min(0.98, Math.max(0.02, unmapX(mx)));
+        pts[dragIdx].y = Math.min(0.97, Math.max(0.03, unmapY(my)));
         ev.preventDefault();
         return;
       }
@@ -266,8 +352,10 @@ export function WordAtlas({ locale }: { locale: Locale }) {
     canvas.addEventListener("pointerleave", onLeave);
 
     return () => {
+      window.clearInterval(bootId);
       if (raf) cancelAnimationFrame(raf);
       ro.disconnect();
+      window.removeEventListener("resize", resize);
       mo.disconnect();
       mq.removeEventListener("change", onThemeChange);
       canvas.removeEventListener("pointerdown", onDown);
@@ -283,15 +371,18 @@ export function WordAtlas({ locale }: { locale: Locale }) {
   }, []);
 
   return (
-    <figure className="atlas">
-      <div className="atlas-stage" ref={wrapRef}>
-        <canvas
-          ref={canvasRef}
-          className="atlas-canvas"
-          role="img"
-          aria-label={`Wordkeep Atlas — ${ATLAS_STATS.words} words in ${ATLAS_STATS.languages} languages, ${ATLAS_STATS.links} links`}
-        />
-        <div className="atlas-readout" ref={readoutRef} aria-live="polite" />
+    <figure className={isHero ? "atlas atlas--hero" : "atlas"}>
+      <div className="atlas-plot">
+        <div className="atlas-stage" ref={wrapRef}>
+          <canvas
+            ref={canvasRef}
+            className="atlas-canvas"
+            role="img"
+            aria-label={`Wordkeep Atlas — ${ATLAS_STATS.words} words in ${ATLAS_STATS.languages} languages, ${ATLAS_STATS.links} links`}
+          />
+          <div className="atlas-readout" ref={readoutRef} aria-live="polite" />
+        </div>
+        {overlay}
       </div>
       <figcaption className="atlas-legend">
         <span className="atlas-count">{t.hint}</span>
@@ -310,14 +401,16 @@ export function WordAtlas({ locale }: { locale: Locale }) {
           ))}
         </span>
       </figcaption>
-      <div className="links atlas-links">
-        <a href={WORDKEEP_GRAPH_URL} target="_blank" rel="noopener noreferrer">
-          {t.open}
-        </a>
-        <a href={WORDKEEP_URL} target="_blank" rel="noopener noreferrer">
-          {t.visit}
-        </a>
-      </div>
+      {!isHero ? (
+        <div className="links atlas-links">
+          <a href={WORDKEEP_GRAPH_URL} target="_blank" rel="noopener noreferrer">
+            {t.open}
+          </a>
+          <a href={WORDKEEP_URL} target="_blank" rel="noopener noreferrer">
+            {t.visit}
+          </a>
+        </div>
+      ) : null}
     </figure>
   );
 }

@@ -9,6 +9,10 @@ async function headerRules() {
 }
 
 describe("next.config headers()", () => {
+  it("allows 127.0.0.1 as a Turbopack HMR origin in local preview", () => {
+    expect(nextConfig.allowedDevOrigins).toEqual(expect.arrayContaining(["127.0.0.1"]));
+  });
+
   it("applies the security headers to every path", async () => {
     const rules = await headerRules();
     const all = rules.find((r) => r.source === "/:path*");

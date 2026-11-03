@@ -4,7 +4,7 @@ This file is the Grok equivalent of a `CLAUDE.md`. Grok loads it automatically. 
 
 ## What this is
 
-Public personal portfolio for Marc Fors, hosted at **https://marcfors.com**. Observatory / signal-desk visual (ink, brass, paper, signal green). Next.js App Router, React 19, no Tailwind, Fraunces + IBM Plex Mono.
+Public personal portfolio for Marc Fors, hosted at **https://marcfors.com**. Semantic Atlas visual world (night cartography, phosphor edges, force-graph nodes, legend HUD). Next.js App Router, React 19, no Tailwind, Spectral + Manrope. Signal-desk (ink/brass/paper) is the retired anti-reference — do not restore it.
 
 ## Privacy (do not leak)
 
@@ -25,10 +25,11 @@ Public personal portfolio for Marc Fors, hosted at **https://marcfors.com**. Obs
 
 ## Stack & UI
 
-- Next.js 16 App Router, React 19, CSS custom properties in `src/app/globals.css`.
+- Next.js 16 App Router, React 19, CSS custom properties in `src/app/globals.css` (tokens from `src/lib/themePalettes.ts`).
 - No Tailwind, no shadcn, no hardcoded `bg-emerald-*`.
 - Locale is in the URL (`/` English, `/es`, `/de`, …) with `hreflang`. Cookie still remembers the last pick.
-- `prefers-reduced-motion` hides the pointer spotlight.
+- `prefers-reduced-motion` freezes the atlas to a settled layout and hides decorative motion.
+- Wordkeep is featured work #1; UI copy uses brand casing **Wordkeep**; App Store release is pending.
 - Copy lives in `src/data/copy/<locale>.ts` (one file per locale: `ui`, `experience`, `careerBreak`, `education`, `languages`); `src/data/copy.ts` is the barrel that assembles the `Record<Locale, …>` maps, plus locale-independent `skills` / `contact` in `src/data/copy/shared.ts`. Featured work in `src/data/projects.ts`. Domain/email constants in `src/lib/site.ts`.
 - Case-study prose is MDX: `content/work/<slug>/<locale>.mdx`, one self-contained file per locale (YAML frontmatter — `project`, `stack`, `live`, `repo`, `order`, `description` — plus a free-form body). `src/data/caseStudies.ts` reads frontmatter only, via `gray-matter`; `work/[slug]/page.tsx` dynamically imports the `.mdx` body. Add a study by adding the directory — nothing else to wire up.
 
@@ -83,7 +84,7 @@ pure logic stays in `*.test.ts` (node). CI is `.github/workflows/ci.yml` — a
 
 <!-- BEGIN:nextjs-agent-rules -->
 
-# This is NOT the Next.js you know
+## This is NOT the Next.js you know
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 

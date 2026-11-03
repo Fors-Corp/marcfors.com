@@ -2,9 +2,9 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { careerBreak, contact, copy, education, experience, languages, skills } from "@/data/copy";
-import { featured, lab } from "@/data/projects";
+import { featured } from "@/data/projects";
 
-// `app/[locale]/layout.tsx` preloads only the `latin` subset of Fraunces and IBM
+// `app/[locale]/layout.tsx` preloads only the `latin` subset of Spectral and IBM
 // Plex Mono. That is safe exactly as long as no shipped string needs a glyph that
 // lives in `latin-ext` instead — so this guard fails the build the moment one does.
 //
@@ -54,7 +54,7 @@ function mdxFiles(dir: string): string[] {
 describe("font subset", () => {
   it("ships no copy that the preloaded `latin` subset cannot render", () => {
     const bundled = JSON.stringify({
-      copy, contact, careerBreak, education, experience, languages, skills, featured, lab,
+      copy, contact, careerBreak, education, experience, languages, skills, featured,
     });
     expect(needsLatinExt(bundled)).toEqual([]);
   });
@@ -74,7 +74,7 @@ describe("font subset", () => {
     // `body { font-family: var(--mono) }` plus `font-synthesis: none` means a
     // missing 500 renders as 400 with no faux-bold — dropping it is a silent
     // visual regression, not an optimisation.
-    expect(layout).toMatch(/weight: \["400", "500"\]/);
+    expect(layout).toMatch(/weight: \["400", "500", "600", "700"\]/);
     expect(readFileSync(path.join(SRC, "app/globals.css"), "utf8")).toMatch(/font-synthesis: none/);
   });
 });

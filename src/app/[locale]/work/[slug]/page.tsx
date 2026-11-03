@@ -5,14 +5,15 @@ import { notFound } from "next/navigation";
 import { BrandMark } from "@/components/BrandMark";
 import { ButtonArrow } from "@/components/ButtonArrow";
 import { JsonLd } from "@/components/JsonLd";
-import { WordAtlas } from "@/components/WordAtlas";
 import { TechnologyChips } from "@/components/TechnologyChips";
+import { WordAtlasLazy } from "@/components/WordAtlasLazy";
 import { caseStudyBySlug, listCaseStudySlugs } from "@/data/caseStudies";
 import { copy } from "@/data/copy";
 import { ATLAS_COPY } from "@/data/wordAtlas";
 import { isLocale, languageAlternates, LOCALES, localeUrl, withLocale } from "@/lib/locale";
 import { caseStudyJsonLd, pageSocialMetadata } from "@/lib/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
+
 
 export function generateStaticParams() {
   return LOCALES.flatMap((locale) => listCaseStudySlugs().map((slug) => ({ locale, slug })));
@@ -121,7 +122,7 @@ export default async function CaseStudyPage({
         <section className="atlas-block" aria-label={ATLAS_COPY[locale].heading}>
           <h2>{ATLAS_COPY[locale].heading}</h2>
           <p className="lede">{ATLAS_COPY[locale].lede}</p>
-          <WordAtlas locale={locale} />
+          <WordAtlasLazy locale={locale} />
         </section>
       ) : null}
       <footer className="case-footer">

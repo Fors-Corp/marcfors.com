@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-03T17:40:00.000Z",
+  "title": "Design System: marcfors.com Semantic Atlas",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "neutral",
+        "displayName": "Night ink"
+      },
+      "chart": {
+        "role": "primary",
+        "displayName": "Chart blue"
+      },
+      "phosphor": {
+        "role": "accent",
+        "displayName": "Phosphor"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Atlas hero and brand titles."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "UI and reading copy via Manrope."
+      }
+    },
+    "motion": [
+      {
+        "name": "atlas-rise",
+        "value": "0.9s cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "First-viewport atlas stage settles into focus."
+      },
+      {
+        "name": "focus-in",
+        "value": "0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Blur-to-sharp entrance without opacity CLS."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "legend-2col",
+        "value": "720px"
+      }
+    ],
+    "aliases": {
+      "--brass": "chart blue accent",
+      "--signal": "phosphor live accent",
+      "--ink": "night cartography ground"
+    },
+    "antiReference": [
+      "signal-desk",
+      "observatory brass/paper",
+      "Fraunces + IBM Plex Mono"
+    ]
+  },
+  "components": [
+    {
+      "name": "Hire CTA",
+      "kind": "nav",
+      "refersTo": "nav-hire",
+      "description": "Pinned header Hire action.",
+      "html": "<a class=\"ds-nav-hire\" href=\"#\">Hire me</a>",
+      "css": ".ds-nav-hire{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid #4d7cff;border-radius:999px;color:#4d7cff;text-decoration:none;letter-spacing:.12em;text-transform:uppercase;font:500 12px Manrope,system-ui,sans-serif}.ds-nav-hire:hover{background:rgba(77,124,255,.12)}.ds-nav-hire:focus-visible{outline:2px solid #4d7cff;outline-offset:2px}"
+    },
+    {
+      "name": "Atlas live pill",
+      "kind": "chip",
+      "refersTo": "hud-pill",
+      "description": "HUD status chip beside Hire.",
+      "html": "<span class=\"ds-hud-pill\">Atlas live</span>",
+      "css": ".ds-hud-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(77,124,255,.7);border-radius:6px;color:#9db4ff;font:500 11px Manrope,system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase}"
+    },
+    {
+      "name": "Primary CTA",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Filled chart action.",
+      "html": "<a class=\"ds-cta\" href=\"#\">Commission work</a>",
+      "css": ".ds-cta{display:inline-flex;align-items:center;padding:12px 18px;border-radius:10px;background:#4d7cff;color:#070b14;font:600 14px Manrope,system-ui,sans-serif;text-decoration:none}.ds-cta:hover{filter:brightness(1.08)}.ds-cta:focus-visible{outline:2px solid #7dffb3;outline-offset:3px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The portfolio is a living language graph; Wordkeep atlas is the first-viewport thesis.",
+    "overview": "Semantic Atlas replaces the signal-desk. Night cartography, phosphor edges, and a selectable Wordkeep force graph lead the Experience. Hire stays in chrome; App Store pending is a stage ribbon.",
+    "keyCharacteristics": [
+      "Full-bleed interactive atlas hero",
+      "Chart blue + phosphor on night ink",
+      "Spectral display / Manrope UI",
+      "Legend HUD strip under the stage"
+    ],
+    "rules": [
+      {
+        "name": "Atlas leads",
+        "body": "The first viewport must be the graph, not a brochure hero.",
+        "section": "layout"
+      },
+      {
+        "name": "Alias honesty",
+        "body": "--brass means chart; --signal means phosphor. Do not reintroduce warm brass fills.",
+        "section": "colors"
+      }
+    ],
+    "dos": [
+      "Lead with Wordkeep atlas interaction",
+      "Keep Hire pinned in the sticky HUD",
+      "Respect prefers-reduced-motion"
+    ],
+    "donts": [
+      "Do not restore signal-desk paper/brass costume",
+      "Do not put a kicker above the hero title",
+      "Do not add third-party trackers"
+    ]
+  }
+}

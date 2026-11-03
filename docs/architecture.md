@@ -14,7 +14,7 @@ flowchart LR
   D --> I["client islands"]
 ```
 
-`src/proxy.ts` is the Next.js 16 proxy (the former middleware). It runs on every path except `_next/static`, `_next/image` and `favicon.ico`, and its own `SKIP` pattern lets `/api`, `/_next`, icons, OG images, `robots.txt`, `sitemap.xml`, the manifest, `/.well-known`, any path containing a `.`, and exactly `/donate` pass through untouched. For everything else:
+`src/proxy.ts` is the Next.js 16 proxy (the former middleware). It runs on every path except `/_next/*` and `favicon.ico`, and its own `SKIP` pattern lets `/api`, `/_next`, icons, OG images, `robots.txt`, `sitemap.xml`, the manifest, `/.well-known`, any path containing a `.`, and exactly `/donate` pass through untouched. For everything else:
 
 | Request | Result |
 | --- | --- |

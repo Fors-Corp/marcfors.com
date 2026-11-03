@@ -14,6 +14,23 @@ export type Project = {
 
 export const featured: Project[] = [
   {
+    name: "Wordkeep",
+    blurb: {
+      en: "A language app that teaches seven languages by playing, keeps a personal lexicon from Wiktionary with spaced review, and has Claude break whole phrases down grammatically. Words link across languages in a 3D atlas. Your lexicon stays on the device; optional accounts are end-to-end encrypted. App Store release pending.",
+      es: "Una app de idiomas que enseña siete lenguas jugando, guarda un léxico personal de Wiktionary con repaso espaciado y usa Claude para desglosar frases enteras gramaticalmente. Las palabras se enlazan entre idiomas en un atlas 3D. Tu léxico se queda en el dispositivo; las cuentas opcionales van cifradas de extremo a extremo. Lanzamiento en App Store pendiente.",
+      ca: "Una app d’idiomes que ensenya set llengües jugant, guarda un lèxic personal del Wiktionary amb repàs espaiat i fa servir Claude per desglossar frases senceres gramaticalment. Les paraules s’enllacen entre idiomes en un atles 3D. El lèxic es queda al dispositiu; els comptes opcionals van xifrats d’extrem a extrem. Llançament a l'App Store pendent.",
+      it: "Un’app che insegna sette lingue giocando, custodisce un lessico personale da Wiktionary con ripasso distanziato e usa Claude per scomporre grammaticalmente frasi intere. Le parole si collegano tra lingue in un atlante 3D. Il lessico resta sul dispositivo; gli account facoltativi sono cifrati end-to-end. Rilascio App Store in sospeso.",
+      pt: "Uma app que ensina sete línguas a jogar, guarda um léxico pessoal do Wiktionary com revisão espaçada e usa o Claude para decompor frases inteiras gramaticalmente. As palavras ligam-se entre línguas num atlas 3D. O léxico fica no dispositivo; as contas opcionais são cifradas de ponta a ponta. Lançamento na App Store pendente.",
+      de: "Eine Sprach-App, die sieben Sprachen spielerisch lehrt, ein persönliches Lexikon aus dem Wiktionary mit verteilter Wiederholung führt und ganze Sätze mit Claude grammatisch zerlegt. Wörter verbinden sich sprachübergreifend in einem 3D-Atlas. Das Lexikon bleibt auf dem Gerät; optionale Konten sind Ende-zu-Ende-verschlüsselt. App-Store-Release ausstehend.",
+      fr: "Une app qui enseigne sept langues en jouant, tient un lexique personnel tiré du Wiktionnaire avec révision espacée et demande à Claude de décomposer des phrases entières. Les mots se relient d’une langue à l’autre dans un atlas 3D. Le lexique reste sur l’appareil ; les comptes facultatifs sont chiffrés de bout en bout. Sortie App Store en attente.",
+    },
+    stack: ["React", "TypeScript", "Three.js", "Hono", "Claude API"],
+    live: "https://wordkeep.me",
+    caseStudy: "wordkeep",
+    private: true,
+    spotlight: true,
+  },
+  {
     name: "Fors Photography",
     blurb: {
       en: "My own print shop on forsphoto.com: 18 signed fine-art prints in four collections, from the Pacific coast, the desert Southwest and Europe, printed to order in four sizes. Six languages, Stripe-hosted checkout, no database, accounts or analytics.",
@@ -48,32 +65,15 @@ export const featured: Project[] = [
     spotlight: true,
   },
   {
-    name: "Wordkeep",
-    blurb: {
-      en: "A language app that teaches seven languages by playing, keeps a personal lexicon from Wiktionary with spaced review, and has Claude break whole phrases down grammatically. Words link across languages in a 3D atlas. Your lexicon stays on the device; optional accounts are end-to-end encrypted.",
-      es: "Una app de idiomas que enseña siete lenguas jugando, guarda un léxico personal de Wiktionary con repaso espaciado y usa Claude para desglosar frases enteras gramaticalmente. Las palabras se enlazan entre idiomas en un atlas 3D. Tu léxico se queda en el dispositivo; las cuentas opcionales van cifradas de extremo a extremo.",
-      ca: "Una app d’idiomes que ensenya set llengües jugant, guarda un lèxic personal del Wiktionary amb repàs espaiat i fa servir Claude per desglossar frases senceres gramaticalment. Les paraules s’enllacen entre idiomes en un atles 3D. El lèxic es queda al dispositiu; els comptes opcionals van xifrats d’extrem a extrem.",
-      it: "Un’app che insegna sette lingue giocando, custodisce un lessico personale da Wiktionary con ripasso distanziato e usa Claude per scomporre grammaticalmente frasi intere. Le parole si collegano tra lingue in un atlante 3D. Il lessico resta sul dispositivo; gli account facoltativi sono cifrati end-to-end.",
-      pt: "Uma app que ensina sete línguas a jogar, guarda um léxico pessoal do Wiktionary com revisão espaçada e usa o Claude para decompor frases inteiras gramaticalmente. As palavras ligam-se entre línguas num atlas 3D. O léxico fica no dispositivo; as contas opcionais são cifradas de ponta a ponta.",
-      de: "Eine Sprach-App, die sieben Sprachen spielerisch lehrt, ein persönliches Lexikon aus dem Wiktionary mit verteilter Wiederholung führt und ganze Sätze mit Claude grammatisch zerlegt. Wörter verbinden sich sprachübergreifend in einem 3D-Atlas. Das Lexikon bleibt auf dem Gerät; optionale Konten sind Ende-zu-Ende-verschlüsselt.",
-      fr: "Une app qui enseigne sept langues en jouant, tient un lexique personnel tiré du Wiktionnaire avec révision espacée et demande à Claude de décomposer des phrases entières. Les mots se relient d’une langue à l’autre dans un atlas 3D. Le lexique reste sur l’appareil ; les comptes facultatifs sont chiffrés de bout en bout.",
-    },
-    stack: ["React", "TypeScript", "Three.js", "Hono", "Claude API"],
-    live: "https://wordkeep.me",
-    caseStudy: "wordkeep",
-    private: true,
-    spotlight: true,
-  },
-  {
     name: "marcfors.com",
     blurb: {
-      en: "This desk. Observatory portfolio with first-party vitals, a supply-chain audit on every build, and seven locales. Public source.",
-      es: "Este escritorio. Portfolio observatorio con vitals propios, auditoría de dependencias en cada build y siete idiomas. Código público.",
-      ca: "Aquest escriptori. Portfoli observatori amb vitals propis, auditoria de dependències a cada build i set llengües. Codi públic.",
-      it: "Questa scrivania. Portfolio osservatorio con vitals di prima parte, audit della supply chain a ogni build e sette lingue. Codice pubblico.",
-      pt: "Esta secretária. Portefólio observatório com vitals próprios, auditoria de dependências em cada build e sete línguas. Código público.",
-      de: "Dieser Schreibtisch. Observatoriums-Portfolio mit eigenen Vitals, Supply-Chain-Audit bei jedem Build und sieben Sprachen. Öffentlicher Quellcode.",
-      fr: "Ce bureau. Portfolio observatoire avec des vitals en première partie, un audit de la chaîne d’approvisionnement à chaque build et sept langues. Code source public.",
+      en: "This atlas. Semantic portfolio with first-party vitals, a supply-chain audit on every build, and seven locales. Public source.",
+      es: "Este atlas. Portfolio semántico con vitals propios, auditoría de dependencias en cada build y siete idiomas. Código público.",
+      ca: "Aquest atles. Portfoli semàntic amb vitals propis, auditoria de dependències a cada build i set llengües. Codi públic.",
+      it: "Questo atlante. Portfolio semantico con vitals di prima parte, audit della supply chain a ogni build e sette lingue. Codice pubblico.",
+      pt: "Este atlas. Portefólio semântico com vitals próprios, auditoria de dependências em cada build e sete línguas. Código público.",
+      de: "Dieser Atlas. Semantisches Portfolio mit eigenen Vitals, Supply-Chain-Audit bei jedem Build und sieben Sprachen. Öffentlicher Quellcode.",
+      fr: "Cet atlas. Portfolio sémantique avec des vitals en première partie, un audit de la chaîne d’approvisionnement à chaque build et sept langues. Code source public.",
     },
     stack: ["Next.js 16", "React 19", "TypeScript"],
     repo: "https://github.com/Fors-Corp/marcfors.com",
@@ -341,87 +341,6 @@ export const featured: Project[] = [
   },
 ];
 
-export const lab: Project[] = [
-  {
-    name: "Trace Theater",
-    href: "/lab/trace",
-    blurb: {
-      en: "Replay a web request as a tiny stage: spans enter from the wings, errors as red footlights. Observability you can watch.",
-      es: "Reproducir una petición web como un escenario: los spans salen entre bambalinas, los errores como candilejas rojas.",
-      ca: "Reprodueix una petició web com un escenari: els spans surten entre bambolines, els errors com a candeles vermelles.",
-      it: "Rigioca una richiesta web come un palco: gli span entrano dalle quinte, gli errori come luci rosse.",
-      pt: "Repete um pedido web como um palco: os spans entram pelas coxias, os erros como luzes vermelhas.",
-      de: "Eine Webanfrage als kleine Bühne: Spans kommen aus den Kulissen, Fehler im roten Fußlicht.",
-      fr: "Rejouer une requête web comme une petite scène : les spans entrent depuis les coulisses, les erreurs sous les feux rouges de la rampe. De l’observabilité qu’on peut regarder.",
-    },
-    stack: ["Next.js", "OpenTelemetry JSON"],
-  },
-  {
-    name: "Eixample OS",
-    blurb: {
-      en: "The Cerdà grid as a desktop. Each block is a window. Barcelona as a window manager.",
-      es: "La trama Cerdà como escritorio. Cada manzana es una ventana. Barcelona como window manager.",
-      ca: "La trama Cerdà com a escriptori. Cada illa és una finestra. Barcelona com a window manager.",
-      it: "La griglia Cerdà come desktop. Ogni isolato è una finestra. Barcellona come window manager.",
-      pt: "A malha Cerdà como ambiente de trabalho. Cada quarteirão é uma janela. Barcelona como window manager.",
-      de: "Das Cerdà-Raster als Desktop. Jeder Block ist ein Fenster. Barcelona als Window-Manager.",
-      fr: "La grille Cerdà comme bureau. Chaque îlot est une fenêtre. Barcelone comme gestionnaire de fenêtres.",
-    },
-    stack: ["Idea"],
-  },
-  {
-    name: "Night Bus",
-    blurb: {
-      en: "TMB night buses as a brass departure board. Live arrivals, analog type, no map sludge.",
-      es: "Los NitBus de TMB como un panel de salidas de latón. Llegadas en vivo, tipografía analógica.",
-      ca: "Els NitBus de TMB com un panell de sortides de llautó. Arribades en directe, tipografia analògica.",
-      it: "I NitBus TMB come tabellone partenze in ottone. Arrivi live, tipo analogico.",
-      pt: "Os NitBus da TMB como um painel de partidas de latão. Chegadas ao vivo, tipo analógico.",
-      de: "TMB-Nachtbusse als Messing-Abfahrtstafel. Live-Ankünfte, analoge Schrift, keine Kartenschmiere.",
-      fr: "Les bus de nuit TMB comme un panneau de départs en laiton. Arrivées en direct, typographie analogique, pas de bouillie cartographique.",
-    },
-    stack: ["Idea"],
-  },
-  {
-    name: "Climbing Planetarium",
-    blurb: {
-      en: "A season of escalada as a star chart. Grades are magnitudes. Rest days are dark sky.",
-      es: "Una temporada de escalada como carta estelar. Los grados son magnitudes. El descanso, cielo oscuro.",
-      ca: "Una temporada d'escalada com a carta estel·lar. Els graus són magnituds. El descans, cel fosc.",
-      it: "Una stagione di arrampicata come carta stellare. I gradi sono magnitudini. Il riposo, cielo scuro.",
-      pt: "Uma temporada de escalada como carta estelar. Os graus são magnitudes. O descanso, céu escuro.",
-      de: "Eine Klettersaison als Sternkarte. Grade sind Helligkeiten. Ruhetage sind dunkler Himmel.",
-      fr: "Une saison d’escalade comme une carte du ciel. Les cotations sont des magnitudes. Les jours de repos sont du ciel noir.",
-    },
-    stack: ["Idea"],
-  },
-  {
-    name: "Crate Radar",
-    blurb: {
-      en: "Sweep the music library like ATC. Duplicates ping. BPM as altitude.",
-      es: "Barrido de la biblioteca musical como un control aéreo. Los duplicados pitan. El BPM es altitud.",
-      ca: "Escombrat de la biblioteca musical com un control aeri. Els duplicats piten. El BPM és altitud.",
-      it: "Scansione della libreria musicale come un controllo del traffico aereo. I duplicati bipano. Il BPM è quota.",
-      pt: "Varrimento da biblioteca musical como um controlo aéreo. Os duplicados apitam. O BPM é altitude.",
-      de: "Musikbibliothek wie Flugüberwachung abtasten. Duplikate piepen. BPM als Flughöhe.",
-      fr: "Balayer la bibliothèque musicale comme un contrôleur aérien. Les doublons bipent. Le BPM en altitude.",
-    },
-    stack: ["Idea"],
-  },
-  {
-    name: "Room Frequency",
-    blurb: {
-      en: "Barcelona listings as a shortwave radio. Tune the rent, hear the barrio.",
-      es: "Anuncios de pisos en Barcelona como una radio de onda corta. Sintoniza el alquiler, oye el barrio.",
-      ca: "Anuncis de pisos a Barcelona com una ràdio d'ona curta. Sintonitza el lloguer, sent el barri.",
-      it: "Annunci di case a Barcellona come una radio a onde corte. Sintonizza l'affitto, ascolta il barrio.",
-      pt: "Anúncios de casas em Barcelona como uma rádio de onda curta. Sintoniza a renda, ouve o bairro.",
-      de: "Barcelonas Wohnungsanzeigen als Kurzwellenradio. Miete einstellen, das Viertel hören.",
-      fr: "Les annonces immobilières de Barcelone comme une radio à ondes courtes. Réglez le loyer, écoutez le quartier.",
-    },
-    stack: ["Idea"],
-  },
-];
 
 export const skipRepos = new Set([
   "marcfs31",

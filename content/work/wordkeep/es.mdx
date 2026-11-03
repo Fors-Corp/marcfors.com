@@ -9,8 +9,8 @@ stack:
   - "SQLite"
   - "Claude API"
 live: "https://wordkeep.me"
-order: 2
-description: "Una app de idiomas que enseña siete lenguas jugando, guarda un léxico personal, explica frases con Claude y dibuja tu vocabulario como un atlas 3D."
+order: 1
+description: "App Store release pending. Una app de idiomas que enseña siete lenguas jugando, guarda un léxico personal, explica frases con Claude y dibuja tu vocabulario como un atlas 3D."
 ---
 
 ## El problema
@@ -39,3 +39,7 @@ Las cuentas son opcionales y cifradas de extremo a extremo. La contraseña nunca
 ## Cómo se entrega
 
 Un cliente React y Vite habla con una pequeña API en Hono que ejecuta el mismo código en Vercel, Fly.io o un contenedor Docker, con SQLite o Turso detrás. Cada pull request pasa lint, typecheck, tests unitarios en ambos lados, el build y Playwright de punta a punta. Tras cada push a main, y cada 30 minutos, una comprobación de producción confirma que la web en vivo sirve la versión del repositorio y vuelve a desplegar si se perdió un evento de push.
+
+## App Store
+
+El lanzamiento en App Store está pendiente. Wordkeep ya está en la web en wordkeep.me mientras llega el listado nativo.

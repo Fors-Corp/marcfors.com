@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { featured, lab, skipRepos } from "@/data/projects";
+import { featured, skipRepos } from "@/data/projects";
 import { isListedRepo, type GhRepo } from "@/lib/github";
 
 function repo(partial: Partial<GhRepo> & Pick<GhRepo, "name">): GhRepo {
@@ -30,12 +30,12 @@ describe("featured work", () => {
     expect(gatto?.blurb.en).toMatch(/Spanish, Catalan and English/);
   });
 
-  it("features Fors Photography first in selected work", () => {
-    expect(featured[0]?.name).toBe("Fors Photography");
+  it("features Wordkeep first in selected work", () => {
+    expect(featured[0]?.name).toBe("Wordkeep");
   });
 
-  it("features Wordkeep right after Mensura, on its own domain, without exposing source", () => {
-    expect(featured.findIndex((item) => item.name === "Wordkeep")).toBe(2);
+  it("features Wordkeep on its own domain, without exposing source", () => {
+    expect(featured.findIndex((item) => item.name === "Wordkeep")).toBe(0);
     const wordkeep = featured.find((item) => item.name === "Wordkeep");
     expect(wordkeep).toMatchObject({
       stack: ["React", "TypeScript", "Three.js", "Hono", "Claude API"],
@@ -48,6 +48,7 @@ describe("featured work", () => {
     for (const blurb of Object.values(wordkeep!.blurb)) {
       expect(blurb).toMatch(/Claude/);
       expect(blurb).toMatch(/3D/);
+      expect(blurb).toMatch(/App Store|App-Store/);
     }
   });
 
@@ -149,7 +150,7 @@ describe("featured work", () => {
     expect(skipRepos.has("SmartGarden")).toBe(true);
   });
 
-  it("lists this desk with public source, the live site, and a case study", () => {
+  it("lists this atlas with public source, the live site, and a case study", () => {
     const site = featured.find((item) => item.name === "marcfors.com");
     expect(site?.repo).toBe("https://github.com/Fors-Corp/marcfors.com");
     expect(site?.live).toBe("https://marcfors.com");
@@ -197,7 +198,7 @@ describe("featured work", () => {
   });
 
   it("covers every locale on every project blurb", () => {
-    for (const project of [...featured, ...lab]) {
+    for (const project of featured) {
       expect(Object.keys(project.blurb).sort(), project.name).toEqual(["ca", "de", "en", "es", "fr", "it", "pt"]);
     }
   });
