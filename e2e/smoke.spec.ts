@@ -83,10 +83,11 @@ test("Wordkeep atlas: a click selects a word and shows its links, and the canvas
   // could not be dragged (or reliably tapped) on a touchscreen.
   await expect(canvas).toHaveCSS("touch-action", "none");
 
-  // The case study text pushes the atlas below the fold — `page.mouse.click`
-  // clicks literal viewport pixels, so the canvas has to actually be scrolled
-  // into view first or the coordinates below land past the visible viewport.
-  await canvas.scrollIntoViewIfNeeded();
+  // Scroll the stage (not the canvas): the sim writes canvas width/height every
+  // frame during boot, so Playwright never sees the canvas as layout-stable.
+  const stage = page.locator(".atlas-stage");
+  await stage.evaluate((el) => el.scrollIntoView({ block: "center" }));
+  await expect(canvas).toHaveAttribute("data-atlas-sized", /\d+x\d+/);
   const box = await canvas.boundingBox();
   if (!box) throw new Error("atlas canvas has no layout box");
   const hit = await findAtlasNodePoint(page, box);
