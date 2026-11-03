@@ -34,7 +34,10 @@ export function LanguageSwitcher({ locale, langLabel }: { locale: Locale; langLa
 
   return (
     <details ref={rootRef} className="chrome-menu langs-menu">
-      <summary className="chrome-menu-trigger" aria-label={langLabel}>
+      <summary
+        className="chrome-menu-trigger"
+        aria-label={`${langLabel}: ${LOCALE_CODES[locale]}`}
+      >
         <Flag locale={locale} className="flag" />
         <span className="lang-code">{LOCALE_CODES[locale]}</span>
       </summary>
