@@ -28,9 +28,9 @@ describe("radius scale", () => {
     }
   });
 
-  it("rounds the language select, cards and the language pill through tokens", () => {
-    expect(css).toMatch(/\.lang-select\s*\{[^}]*border-radius:\s*var\(--r-xs\)/);
+  it("rounds the chrome menus, cards and menu triggers through tokens", () => {
+    expect(css).toMatch(/\.chrome-menu-trigger\s*\{[^}]*border-radius:\s*var\(--r-pill\)/);
+    expect(css).toMatch(/\.chrome-menu-panel\s*\{[^}]*border-radius:\s*var\(--r-md\)/);
     expect(css).toMatch(/\.card\s*\{[^}]*border-radius:\s*var\(--r-md\)/);
-    expect(css).toMatch(/\.langs \{[^}]*border-radius:\s*var\(--r-pill\)/);
   });
 });

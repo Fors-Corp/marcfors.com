@@ -19,7 +19,7 @@ export const ui: UiCopy = {
   legendLabel: "Atlas legend",
   headline: "AI software engineer",
   metaTitle: "Marc Fors — AI Software Engineer, LLM agents · Barcelona",
-  metaDescription: "Marc Fors, AI software engineer in Barcelona. Complete products with LLM agents, Claude Code and MCP in React, TypeScript and Go. Open to AI and LLM engineering roles. Lead: Wordkeep (App Store pending).",
+  metaDescription: "Marc Fors, AI software engineer in Barcelona. Builds with LLM agents, Claude Code and MCP in React, TypeScript and Go. Open to AI roles. Lead: Wordkeep (App Store pending).",
   tagline: "I ship complete products with LLM agents — and gate every line they write.",
   lede: "Seven-plus years in observability, fintech, banking and government, now building complete products with LLM agents as the delivery team. I run Claude Code, Codex, Cursor and Grok against versioned standing rules, wire MCP servers into each repository, route each task to the right model, and gate everything they produce behind CI before it merges.",
   proofLine: "LMaaS · Claude Code · Go · React · TypeScript · Barcelona",

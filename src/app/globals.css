@@ -253,7 +253,7 @@
   min-width: 11.5rem;
   padding: 6px;
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: var(--r-md);
   background: color-mix(in srgb, var(--panel) 96%, var(--ink));
   box-shadow: 0 16px 36px -18px color-mix(in srgb, var(--ink) 80%, transparent);
 }
@@ -285,7 +285,7 @@
   width: 100%;
   min-height: 40px;
   padding: 0 10px;
-  border-radius: 10px;
+  border-radius: var(--r-sm);
   color: var(--paper-dim);
   text-decoration: none;
   text-align: left;
@@ -1386,7 +1386,7 @@ footer {
   max-width: min(100%, 820px);
   margin-inline: auto;
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: var(--r-lg);
   overflow: hidden;
   background: var(--bg2);
 }
@@ -1400,13 +1400,13 @@ footer {
 .atlas-hero .atlas-stage--loading {
   min-height: clamp(240px, min(42vh, 40vw), 380px);
   border: 0;
-  border-radius: 0;
+  border-radius: var(--r-none);
   background: var(--panel);
 }
 /* Hero stage must win over the later embed `.atlas-stage` rule. */
 .atlas-hero .atlas-stage {
   height: clamp(240px, min(42vh, 40vw), 380px);
-  border-radius: 0;
+  border-radius: var(--r-none);
   border: 0;
   /* Own surface — graph ink stays inside this panel only. */
   isolation: isolate;
@@ -1423,8 +1423,7 @@ footer {
   margin: 0;
   padding: 12px 18px;
   border: 1px solid var(--signal);
-  /* Explicit px — do not rely on token that may read as sharp at a glance. */
-  border-radius: 14px;
+  border-radius: var(--r-md);
   color: var(--signal);
   font-size: 12px;
   letter-spacing: 0.08em;
@@ -1472,7 +1471,7 @@ footer {
   min-height: 52px;
   padding: 14px 18px;
   border: 1px solid color-mix(in srgb, var(--brass) 42%, var(--line));
-  border-radius: 16px;
+  border-radius: var(--r-lg);
   background:
     linear-gradient(135deg, color-mix(in srgb, var(--brass) 10%, transparent), transparent 55%),
     color-mix(in srgb, var(--panel) 88%, var(--bg2));
@@ -1533,7 +1532,7 @@ footer {
   .atlas-hero-stage {
     max-width: 100%;
     margin-inline: 0;
-    border-radius: 14px;
+    border-radius: var(--r-md);
   }
   /* Compact mobile footprint — inset panel, not a tall full-bleed slab. */
   .atlas-hero .atlas-stage,
@@ -1551,7 +1550,7 @@ footer {
     gap: 8px;
     min-height: 44px;
     padding: 10px 12px;
-    border-radius: 12px;
+    border-radius: var(--r-md);
     font-size: 0.9rem;
   }
   .atlas-legend-strip .strip-icon {
@@ -1568,7 +1567,7 @@ footer {
   .atlas-pending {
     font-size: 11px;
     padding: 12px 14px;
-    border-radius: 12px;
+    border-radius: var(--r-md);
   }
   .atlas-hero .atlas-legend {
     padding: 10px 12px 8px;
@@ -1584,7 +1583,7 @@ footer {
 }
 @media (max-width: 480px) {
   .atlas-hero-stage {
-    border-radius: 12px;
+    border-radius: var(--r-md);
   }
   .atlas-hero .atlas-stage,
   .atlas-hero .atlas-stage--loading {
@@ -1621,7 +1620,7 @@ footer {
 .atlas-hero .atlas-stage--loading {
   min-height: clamp(240px, min(42vh, 40vw), 380px);
   border: 0;
-  border-radius: 0;
+  border-radius: var(--r-none);
 }
 .atlas-stage {
   position: relative;
@@ -1943,9 +1942,8 @@ footer {
   .tip { transform: none; }
   .atlas-readout { transition: none; transform: none; }
   .atlas-hero-stage,
-  .atlas-pending { animation: none !important; filter: none !important; translate: none !important; }
+  .atlas-pending { filter: none !important; translate: none !important; }
   .atlas-legend-strip a { transition: none !important; translate: none !important; }
-  .hud-pill .signal-pip { animation: none !important; }
   .signal-pip { box-shadow: none; }
   .top { backdrop-filter: none; }
 }

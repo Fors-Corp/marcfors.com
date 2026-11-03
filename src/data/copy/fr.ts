@@ -19,7 +19,7 @@ export const ui: UiCopy = {
   legendLabel: "Légende de l'atlas",
   headline: "Ingénieur logiciel IA",
   metaTitle: "Marc Fors — Ingénieur logiciel IA, agents LLM · Barcelone",
-  metaDescription: "Marc Fors, ingénieur logiciel IA à Barcelone. Produits complets avec agents LLM, Claude Code et MCP en React, TypeScript et Go. Ouvert aux postes d’ingénierie IA et LLM. Phare : Wordkeep (App Store en attente).",
+  metaDescription: "Marc Fors, ingénieur logiciel IA à Barcelone. Produits avec agents LLM, Claude Code et MCP en React, TypeScript et Go. Ouvert aux postes IA. Phare : Wordkeep (App Store en attente).",
   tagline: "Je livre des produits complets avec des agents LLM — et je contrôle chaque ligne qu’ils écrivent.",
   lede: "Plus de sept ans dans l’observabilité, la fintech, la banque et l’administration, je construis aujourd’hui des produits complets avec des agents LLM comme équipe de livraison. Je fais tourner Claude Code, Codex, Cursor et Grok sous des règles versionnées, je branche des serveurs MCP à chaque dépôt, j’oriente chaque tâche vers le bon modèle, et tout ce qu’ils produisent passe par la CI avant d’être fusionné.",
   proofLine: "LMaaS · Claude Code · Go · React · TypeScript · Barcelone",
