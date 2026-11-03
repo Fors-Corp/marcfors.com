@@ -4,13 +4,12 @@ import { findAtlasNodePoint } from "./atlasHit";
 // Runs only on the `mobile` project (Pixel 7 viewport), which triggers the
 // compact header where the language <select> replaces the locale link row.
 
-test("compact header: the language select switches locale", async ({ page }) => {
+test("compact header: the language menu switches locale", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1, name: "Marc Fors" })).toBeVisible();
 
-  const select = page.getByRole("combobox");
-  await expect(select).toBeVisible();
-  await select.selectOption("de");
+  await page.locator(".langs-menu > summary").click();
+  await page.getByRole("link", { name: "DE · Deutsch" }).click();
 
   await expect(page).toHaveURL(/\/de$/);
   expect(await page.locator("html").getAttribute("lang")).toBe("de");
