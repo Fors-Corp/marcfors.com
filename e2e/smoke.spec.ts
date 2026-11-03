@@ -24,7 +24,7 @@ test("Gatto links from featured work to a localized success story and the live s
 
 test("language switch changes the URL and the lang attribute", async ({ page }) => {
   await page.goto("/");
-  // Desktop header shows the locale links; the <select> is a mobile-only fallback.
+  await page.locator(".langs-menu > summary").click();
   await page.getByRole("link", { name: "ES · Español" }).click();
   await expect(page).toHaveURL(/\/es$/);
   expect(await page.locator("html").getAttribute("lang")).toBe("es");
@@ -32,7 +32,8 @@ test("language switch changes the URL and the lang attribute", async ({ page }) 
 
 test("a theme pick sticks across a reload", async ({ page }) => {
   await page.goto("/");
-  await page.locator(".theme-dot-blue").click();
+  await page.locator(".themes-menu > summary").click();
+  await page.getByRole("button", { name: copy.en.themeNames.blue }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "blue");
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "blue");

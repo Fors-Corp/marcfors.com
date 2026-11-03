@@ -25,7 +25,7 @@ for (const width of [320, 1280]) {
     await page.route("**/api/github-activity", (route) => route.fulfill({ json: snapshot }));
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
-    const activity = page.locator("#github");
+    const activity = page.locator("section#github.section:not(.activity-skeleton)");
     await activity.scrollIntoViewIfNeeded();
     await expect(activity.getByRole("img")).toBeVisible();
     await expect(activity.locator("svg rect")).toHaveCount(364);
@@ -47,7 +47,7 @@ for (const width of [320, 1280]) {
 test("GitHub errors are visible with a working profile link", async ({ page }) => {
   await page.route("**/api/github-activity", (route) => route.fulfill({ status: 503, json: {} }));
   await page.goto("/de");
-  const activity = page.locator("#github");
+  const activity = page.locator("section#github.section:not(.activity-skeleton)");
   await activity.scrollIntoViewIfNeeded();
   await expect(activity.getByRole("status")).toContainText("vorübergehend nicht verfügbar");
   await expect(activity.getByRole("link", { name: /GitHub-Profil ansehen/ })).toHaveAttribute("href", "https://github.com/marcfs31");
