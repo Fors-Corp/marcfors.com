@@ -3,7 +3,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { careerBreak, contact, copy, education, experience, languages } from "@/data/copy";
 import { caseStudyBySlug, listCaseStudySlugs } from "@/data/caseStudies";
-import { featured, lab } from "@/data/projects";
+import { featured } from "@/data/projects";
 import { LOCALES } from "@/lib/locale";
 import {
   BANNED_PHONE_PATTERNS,
@@ -39,7 +39,6 @@ function corpus(): string {
     experience,
     languages,
     featured,
-    lab,
     caseStudyFrontmatter,
     SITE_HOST,
     SITE_URL,

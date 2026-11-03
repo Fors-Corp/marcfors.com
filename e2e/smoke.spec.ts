@@ -40,7 +40,7 @@ test("a theme pick sticks across a reload", async ({ page }) => {
 
 test("every section is on the page at once, and a nav link jumps to one", async ({ page }) => {
   await page.goto("/");
-  for (const id of ["intro", "projects", "work", "skills", "lab", "contact", "signal", "edu"]) {
+  for (const id of ["intro", "projects", "work", "skills", "contact", "signal", "edu"]) {
     await expect(page.locator(`#${id}`)).toBeVisible();
   }
   // No accordion: section headings are plain, not expand/collapse controls.

@@ -35,6 +35,12 @@ const noindexSources = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   devIndicators: false,
+  // Turbopack HMR rejects Origins that are not the server hostname. Local
+  // preview often opens http://127.0.0.1:3000 while `next dev` binds as
+  // localhost — without this, the WS handshake returns plain "Unauthorized",
+  // Chromium reports ERR_INVALID_HTTP_RESPONSE, and client components never
+  // hydrate (WordAtlas canvas stuck at the default 300×150 buffer).
+  allowedDevOrigins: ["127.0.0.1"],
   async headers() {
     return [
       {

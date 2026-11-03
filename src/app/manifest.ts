@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "AI software engineer in Barcelona.",
     start_url: "/",
     display: "browser",
-    background_color: "#10141c",
-    theme_color: "#10141c",
+    background_color: "#070b14",
+    theme_color: "#070b14",
     icons: [
       {
         src: "/icon.svg",

@@ -1,0 +1,170 @@
+{
+  "title": "Choose the visual world",
+  "question": "Experience-mode redesign for marcfors.com. The roll assigned Museum Product Vitrine (raised). Lock a world, take an alternate, re-roll, or take the category standard.",
+  "options": [
+    {
+      "id": "assigned-vitrine",
+      "kind": "assigned",
+      "label": "Museum Product Vitrine",
+      "kicker": "THE ROLL",
+      "lineage": "museum product plate / device vitrine",
+      "thesis": "Wordkeep sits in a museum case as the lead plate; Hire is a plaque action, App Store pending is the ribbon.",
+      "palette": ["#0c0d10", "#e8e4d8", "#c9a45c", "#6b8f71", "#16181f"],
+      "materials": ["museum glass", "matte casework", "brass plaque", "device plate"],
+      "viewport": "Full-bleed vitrine: Marc Fors + role on the plate, Wordkeep device object, pending ribbon, Hire CTA as plaque; work continues as the gallery below.",
+      "risk": "Can slide into a generic product landing if the case is only decoration around a standard hero.",
+      "raised": [
+        {
+          "from": "challenger-eboy",
+          "raise": "Discoverable depth: the case rewards closer looking — Wordkeep atlas detail appears when you lean in (select/focus), not as chrome clutter."
+        },
+        {
+          "from": "challenger-tensegrity",
+          "raise": "Structural honesty: proof (vitals, audit, CSP) reads as tension members holding the plate up, not a footer strip of badges."
+        },
+        {
+          "from": "challenger-rain",
+          "raise": "One local interactive law: pointer/keyboard around the plate has a single physics — spotlight the object, never re-layout the desk."
+        }
+      ],
+      "html": ".impeccable/mocks/decision/sketches/assigned.html",
+      "comp": ".impeccable/mocks/decision/assigned-vitrine.webp"
+    },
+    {
+      "id": "pick-atlas",
+      "kind": "pick",
+      "label": "Semantic Atlas",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "Wordkeep lexicon cartography",
+      "thesis": "The portfolio is the living language graph; Wordkeep’s atlas leads the first viewport and Hire stays pinned in chrome.",
+      "palette": ["#070b14", "#d9e2f2", "#7dffb3", "#4d7cff", "#0a1020"],
+      "materials": ["night cartography", "phosphor edges", "force-graph nodes", "legend HUD"],
+      "viewport": "Full-bleed atlas with selectable words; name + pending ribbon in a HUD; Hire in the header; legend strip starts the section below.",
+      "risk": "Familiar for a language-product owner — strongest grounded pick, and where many runs would land.",
+      "html": ".impeccable/mocks/decision/sketches/pick-atlas.html",
+      "comp": ".impeccable/mocks/decision/pick-atlas.webp"
+    },
+    {
+      "id": "challenger-ukiyoe",
+      "kind": "challenger",
+      "catalogId": "graphic-worlds-publishing-ukiyoe-block-registration",
+      "label": "Ukiyo-e Block Registration",
+      "verdict": "competitive",
+      "lineage": "edo woodblock print registration",
+      "thesis": "The desk prints one color block at a time until Wordkeep and Hire register as a finished sheet.",
+      "palette": ["#f3ebe0", "#1a1714", "#1d3a6e", "#a33327", "#efe6d8"],
+      "materials": ["kozo paper", "keyblock line", "mineral indigo", "safflower seals"],
+      "viewport": "Keyline sheet first; pigment layers arm in; Wordkeep plate registers; Hire lives in a vertical cartouche.",
+      "case": "Strong craft identification; clarity holds if Hire stays a seal/cartouche, not buried in process theatre.",
+      "risk": "Warm paper + craft serif can drift toward the cream-editorial default if pigments go timid.",
+      "html": ".impeccable/mocks/decision/sketches/challenger-ukiyoe.html",
+      "comp": ".impeccable/mocks/decision/challenger-ukiyoe.webp",
+      "hero": "https://impeccable.style/worlds/cards/graphic-worlds-publishing-ukiyoe-block-registration-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/graphic-worlds-publishing-ukiyoe-block-registration.webp"
+    },
+    {
+      "id": "challenger-drum",
+      "kind": "challenger",
+      "catalogId": "signals-instruments-drum-machine-step-row",
+      "label": "Rhythm Machine Step Row",
+      "verdict": "competitive",
+      "lineage": "early-80s drum machine step row",
+      "thesis": "Shipped products are armed steps; Wordkeep is step one; Hire is RUN on the shared clock.",
+      "palette": ["#1a1c1f", "#d62828", "#e36a1a", "#e6b422", "#f2f0ea"],
+      "materials": ["charcoal panel", "candy step keys", "red LED readout", "silkscreen labels"],
+      "viewport": "Instrument panel with sixteen-step product row; Wordkeep accented; chase light as scroll/now; Hire as RUN.",
+      "case": "Best interactivity clarity of the hand; audience ID is instrument-geek, not every recruiter.",
+      "risk": "Hardware costume can outshine product truth if the step row becomes a toy.",
+      "html": ".impeccable/mocks/decision/sketches/challenger-drum.html",
+      "comp": ".impeccable/mocks/decision/challenger-drum.webp",
+      "hero": "https://impeccable.style/worlds/cards/signals-instruments-drum-machine-step-row-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/signals-instruments-drum-machine-step-row.webp"
+    },
+    {
+      "id": "challenger-algorave",
+      "kind": "challenger",
+      "catalogId": "medium-native-algorave-source-floor",
+      "label": "Algorave Source Floor",
+      "verdict": "competitive",
+      "lineage": "live-coded algorave floor",
+      "thesis": "The page is a live buffer: Wordkeep and Hire edit on the next cycle boundary while proof stays audible.",
+      "palette": ["#050505", "#39ff14", "#ff2bd6", "#d8d8d8", "#0a0a0a"],
+      "materials": ["projector black", "phosphor syntax", "amber pre-change flash", "pattern mixer"],
+      "viewport": "Split stage: offer + live code buffer + pattern mixer; Hire on the downbeat; Wordkeep as lead pattern.",
+      "case": "Highest identification for an LLM-agent engineer; clarity holds only if the offer stays human-readable beside the buffer.",
+      "risk": "Neon black + green is a saturated AI-portfolio cluster — commitment must be the live clock, not glow.",
+      "html": ".impeccable/mocks/decision/sketches/challenger-algorave.html",
+      "comp": ".impeccable/mocks/decision/challenger-algorave.webp",
+      "hero": "https://impeccable.style/worlds/cards/medium-native-algorave-source-floor-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/medium-native-algorave-source-floor.webp"
+    },
+    {
+      "id": "challenger-eboy",
+      "kind": "challenger",
+      "catalogId": "eboy-pixorama-metropolis",
+      "label": "Pixorama Metropolis",
+      "verdict": "declined",
+      "lineage": "eBoy isometric pixorama",
+      "thesis": "A zoomable pixel city of shipped products.",
+      "palette": ["#ff0033", "#00e5ff", "#ffe600", "#111111"],
+      "materials": ["hard pixels", "RGB primaries", "isometric blocks"],
+      "viewport": "Zoomable product city with Wordkeep as a landmark block.",
+      "case": "Loses both axes for recruiter hire clarity; jokes at deep zoom bury the offer.",
+      "kept": "Discoverable depth discipline donated to the vitrine raise.",
+      "hero": "https://impeccable.style/worlds/cards/eboy-pixorama-metropolis-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/eboy-pixorama-metropolis.webp"
+    },
+    {
+      "id": "challenger-tensegrity",
+      "kind": "challenger",
+      "catalogId": "kinetic-sculpture-automata-tensegrity-breathing-column",
+      "label": "Tensegrity Column",
+      "verdict": "declined",
+      "lineage": "tensegrity kinetic sculpture",
+      "thesis": "Proof as opposing forces that make the portfolio stand.",
+      "palette": ["#e8e6e1", "#111111", "#d62828", "#8a8a8a"],
+      "materials": ["carbon rods", "red cord", "concrete ground"],
+      "viewport": "Breathing force diagram as first viewport.",
+      "case": "Loses Wordkeep story and recruiter clarity; too abstract for the product lead.",
+      "kept": "Structural tension/compression honesty donated to the vitrine raise.",
+      "hero": "https://impeccable.style/worlds/cards/kinetic-sculpture-automata-tensegrity-breathing-column-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/kinetic-sculpture-automata-tensegrity-breathing-column.webp"
+    },
+    {
+      "id": "challenger-rain",
+      "kind": "challenger",
+      "catalogId": "dream-surreal-impossible-worlds-gravity-rain-garden",
+      "label": "Gravity Rain Garden",
+      "verdict": "declined",
+      "lineage": "surreal gravity-rain garden",
+      "thesis": "Local gravity laws steer exploration of work.",
+      "palette": ["#2a332e", "#7eb6ff", "#ff6b6b", "#f4f0e6"],
+      "materials": ["dusk garden", "colored rain vectors", "impossible ponds"],
+      "viewport": "Garden regions with local gravity toward projects.",
+      "case": "Loses both axes for a hiring portfolio; surreal habitat obscures Wordkeep and Hire.",
+      "kept": "One local interactive law donated to the vitrine raise.",
+      "hero": "https://impeccable.style/worlds/cards/dream-surreal-impossible-worlds-gravity-rain-garden-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/dream-surreal-impossible-worlds-gravity-rain-garden.webp"
+    }
+  ],
+  "reroll": {
+    "registers": ["safer", "bolder"]
+  },
+  "buildPath": {
+    "value": "code",
+    "toggle": false
+  },
+  "canon": true,
+  "canonCard": {
+    "kind": "canon",
+    "label": "Category standard",
+    "thesis": "Dark recruiter portfolio with clear name, role, Wordkeep lead, and Hire — craft without a foreign world.",
+    "palette": ["#0f1412", "#e7efe8", "#3dff9a", "#2a3a32"],
+    "materials": ["ink ground", "signal accent", "clean project grid"],
+    "viewport": "Name + role + pending Wordkeep line + Hire; three equal work cards begin below.",
+    "risk": "Indistinguishable from other AI-engineer portfolios by design.",
+    "html": ".impeccable/mocks/decision/sketches/canon.html",
+    "comp": ".impeccable/mocks/decision/canon.webp"
+  },
+  "steer": true
+}

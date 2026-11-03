@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { NextRequest } from "next/server";
-import { proxy } from "@/proxy";
+import { config as proxyConfig, proxy } from "@/proxy";
 import { LOCALE_KEY } from "@/lib/locale";
 
 const srcRoot = path.resolve(__dirname, "../..");
@@ -108,4 +108,22 @@ describe("locale proxy", () => {
       expect(res.headers.get("set-cookie"), path).toBeNull();
     }
   });
+
+  it("excludes every /_next path from the matcher so Turbopack HMR can upgrade", () => {
+    const pattern = proxyConfig.matcher[0];
+    expect(pattern).toContain("(?!_next/");
+    expect(pattern).not.toMatch(/\(\?!_next\/static\|_next\/image/);
+    // Negative cases the matcher must not select (proxy never runs → WS ok).
+    for (const path of ["/_next/hmr", "/_next/webpack-hmr", "/_next/static/x.js", "/_next/image"]) {
+      expect(pathMatchesProxy(pattern, path), path).toBe(false);
+    }
+    expect(pathMatchesProxy(pattern, "/")).toBe(true);
+    expect(pathMatchesProxy(pattern, "/es/work")).toBe(true);
+  });
 });
+
+/** Minimal Next-style path-to-regexp check for the single proxy matcher. */
+function pathMatchesProxy(matcher: string, pathname: string): boolean {
+  const body = matcher.startsWith("/") ? matcher.slice(1) : matcher;
+  return new RegExp(`^/${body}$`).test(pathname);
+}

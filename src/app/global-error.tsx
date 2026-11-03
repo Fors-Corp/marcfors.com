@@ -32,7 +32,7 @@ export default function GlobalError({
           alignItems: "center",
           justifyContent: "center",
           gap: "1rem",
-          background: "#10141c",
+          background: "#070b14",
           color: "#efe6d2",
           fontFamily: "Georgia, 'Times New Roman', serif",
           textAlign: "center",
@@ -44,7 +44,7 @@ export default function GlobalError({
         </p>
         <h1 style={{ fontSize: "1.6rem", fontWeight: 500, margin: 0 }}>Something went dark.</h1>
         <p style={{ color: "#c9bba0", maxWidth: "36ch", margin: 0 }}>
-          The desk hit an unexpected error. Reloading usually clears it.
+          The atlas hit an unexpected error. Reloading usually clears it.
         </p>
         <button
           type="button"

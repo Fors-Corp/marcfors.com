@@ -16,11 +16,10 @@ test("compact header: the language select switches locale", async ({ page }) => 
   expect(await page.locator("html").getAttribute("lang")).toBe("de");
 });
 
-test("all sections are on the page on a phone, including lab, with no More archive", async ({ page }) => {
+test("all sections are on the page on a phone, with no More archive", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#projects")).toBeVisible();
   await expect(page.locator("#work")).toBeVisible();
-  await expect(page.locator("#lab")).toBeVisible();
   await expect(page.locator("#contact")).toBeVisible();
   await expect(page.locator("details#more")).toHaveCount(0);
 });

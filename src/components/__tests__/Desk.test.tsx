@@ -52,41 +52,37 @@ describe("Desk", () => {
     expect(screen.getByText(copy.en.headline)).toBeInTheDocument();
   });
 
-  it("puts Fors Photography first in featured work with live shop and case study, never Source", () => {
+  it("puts Wordkeep first in featured work with live app and case study, never Source", () => {
     renderDesk();
     const firstCard = document.querySelector("#projects .project-card") as HTMLElement;
     expect(firstCard).toBeTruthy();
-    expect(within(firstCard).getByRole("heading", { name: "Fors Photography" })).toBeInTheDocument();
-    expect(within(firstCard).getByRole("link", { name: /view live: fors photography/i })).toHaveAttribute(
+    expect(within(firstCard).getByRole("heading", { name: "Wordkeep" })).toBeInTheDocument();
+    expect(within(firstCard).getByRole("link", { name: /view live: wordkeep/i })).toHaveAttribute(
       "href",
-      "https://www.forsphoto.com",
+      "https://wordkeep.me",
     );
-    expect(within(firstCard).getByRole("link", { name: /case study for fors photography/i })).toHaveAttribute(
+    expect(within(firstCard).getByRole("link", { name: /case study for wordkeep/i })).toHaveAttribute(
       "href",
-      "/work/fors-photography",
+      "/work/wordkeep",
     );
     expect(within(firstCard).queryByRole("link", { name: copy.en.source })).toBeNull();
     expect(within(firstCard).getByText(copy.en.private)).toHaveClass("private");
   });
 
-  it("features Mensura second with its case study, and Wordkeep third with the live app", () => {
+  it("features Fors Photography second and Mensura third with case studies", () => {
     renderDesk();
     const cards = document.querySelectorAll("#projects .project-card");
-    const mensura = cards[1] as HTMLElement;
-    const wordkeep = cards[2] as HTMLElement;
+    const photo = cards[1] as HTMLElement;
+    const mensura = cards[2] as HTMLElement;
+    expect(within(photo).getByRole("heading", { name: "Fors Photography" })).toBeInTheDocument();
+    expect(within(photo).getByRole("link", { name: /view live: fors photography/i })).toHaveAttribute(
+      "href",
+      "https://www.forsphoto.com",
+    );
     expect(within(mensura).getByRole("heading", { name: "Mensura" })).toBeInTheDocument();
     expect(within(mensura).getByRole("link", { name: /case study for mensura/i })).toHaveAttribute(
       "href",
       "/work/mensura",
-    );
-    expect(within(wordkeep).getByRole("heading", { name: "Wordkeep" })).toBeInTheDocument();
-    expect(within(wordkeep).getByRole("link", { name: /view live: wordkeep/i })).toHaveAttribute(
-      "href",
-      "https://wordkeep.me",
-    );
-    expect(within(wordkeep).getByRole("link", { name: /case study for wordkeep/i })).toHaveAttribute(
-      "href",
-      "/work/wordkeep",
     );
   });
 
@@ -118,7 +114,7 @@ describe("Desk", () => {
 
   it("renders every section, all visible on load — no accordion", () => {
     const { container } = renderDesk();
-    for (const id of ["intro", "projects", "work", "skills", "lab", "contact", "signal", "edu"]) {
+    for (const id of ["intro", "projects", "work", "skills", "contact", "signal", "edu"]) {
       const section = container.querySelector(`#${id}`);
       expect(section, id).toBeTruthy();
       expect(section, id).toBeVisible();
@@ -127,7 +123,7 @@ describe("Desk", () => {
     expect(container.querySelector(".fold-head")).toBeNull();
     expect(container.querySelector("[aria-expanded]")).toBeNull();
     expect(container.querySelector("details#more")).toBeNull();
-    for (const label of [copy.en.projectsTitle, copy.en.workTitle, copy.en.labTitle, copy.en.contactTitle]) {
+    for (const label of [copy.en.projectsTitle, copy.en.workTitle, copy.en.contactTitle]) {
       expect(screen.getByRole("heading", { level: 2, name: label })).toBeInTheDocument();
     }
   });
@@ -154,7 +150,8 @@ describe("Desk", () => {
     // Same tab, and a plain <a>: <Link> would prefetch /donate and fire its redirect.
     expect(support).not.toHaveAttribute("target");
     expect(support.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
-    expect(support.nextElementSibling).toHaveClass("nav-hire");
+    expect(support.nextElementSibling).toHaveClass("hud-pill");
+    expect(support.nextElementSibling?.nextElementSibling).toHaveClass("nav-hire");
   });
 
   it("links the footer to the CV viewer page", () => {

@@ -4,6 +4,15 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+## 0.26.0 — 2026-11-04
+
+- Replace the signal-desk world with **Semantic Atlas**: Wordkeep atlas as the
+  first-viewport thesis, night-cartography tokens, Spectral + Manrope.
+- Feature Wordkeep first with honest “App Store release pending” copy across
+  seven locales; drop the homepage Laboratorio section.
+- Compact chrome: language/theme dropdowns, bordered HUD header and intro,
+  inset atlas stage (not full-bleed), mobile-friendly graph labels and strip.
+
 ## 0.25.0 — 2026-11-01
 
 - Redesign the signal desk: denser atmosphere, sticky brass header, live

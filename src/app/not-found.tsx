@@ -27,7 +27,7 @@ export default function NotFound() {
           alignItems: "center",
           justifyContent: "center",
           gap: "1rem",
-          background: "#10141c",
+          background: "#070b14",
           color: "#efe6d2",
           fontFamily: "Georgia, 'Times New Roman', serif",
           textAlign: "center",
@@ -39,7 +39,7 @@ export default function NotFound() {
         </p>
         <h1 style={{ fontSize: "1.6rem", fontWeight: 500, margin: 0 }}>Page not found</h1>
         <p style={{ color: "#c9bba0", maxWidth: "44ch", margin: 0 }}>
-          That address is not part of this desk.
+          That address is not part of this atlas.
         </p>
         <Link
           href="/"
@@ -52,7 +52,7 @@ export default function NotFound() {
             textDecoration: "none",
           }}
         >
-          Back to the desk
+          Back to the atlas
         </Link>
       </body>
     </html>

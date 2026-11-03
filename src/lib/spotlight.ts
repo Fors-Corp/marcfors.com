@@ -1,5 +1,5 @@
 /**
- * Pointer-driven spotlight for the desk background.
+ * Pointer-driven spotlight for the atlas field.
  *
  * The raw `pointermove` stream fires at input frequency; writing two CSS custom
  * properties on every event is wasteful. `createSpotlightMove` coalesces writes to

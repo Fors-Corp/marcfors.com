@@ -20,6 +20,12 @@ export type UiCopy = {
   place: string;
   now: string;
   kicker: string;
+  /** HUD pill in the sticky chrome — atlas is live. */
+  atlasLive: string;
+  /** Wordkeep App Store status ribbon on the hero stage. */
+  pendingRibbon: string;
+  /** Aria label for the first-viewport legend strip. */
+  legendLabel: string;
   headline: string;
   /** <title> of the home page: name first, then the role phrasings recruiters search for. */
   metaTitle: string;
@@ -31,8 +37,6 @@ export type UiCopy = {
   workTitle: string;
   breakTitle: string;
   projectsTitle: string;
-  labTitle: string;
-  labLede: string;
   signalTitle: string;
   signalLede: string;
   auditTitle: string;

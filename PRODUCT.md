@@ -16,7 +16,7 @@ Public personal portfolio for Marc Fors at https://marcfors.com. Convince a recr
 
 ## Positioning
 
-An observatory desk that watches itself: first-party web vitals, supply-chain audit on every build, strict CSP, no third-party trackers. The desk *is* the proof, not a brochure about proof.
+A semantic atlas that watches itself: Wordkeep’s living language graph leads the first viewport; first-party web vitals, a supply-chain audit on every build, and a strict CSP prove the engineering bar. The atlas *is* the proof, not a brochure about proof.
 
 ## Operating Context
 
@@ -27,15 +27,18 @@ Next.js App Router on Vercel; locales in the URL; theme preference in localStora
 - Locales: en, es, ca, de, fr, it, pt with hreflang.
 - No cookie banner by design; adding a tracker requires a consent flow first.
 - Public mailbox only: developer@marcfors.com.
-- No Tailwind / shadcn; CSS custom properties; Fraunces + IBM Plex Mono (brief-pinned).
-- Signal-desk visual world is brief-pinned in AGENTS.md (ink, brass, paper, signal green).
+- No Tailwind / shadcn; CSS custom properties; Spectral + Manrope (Semantic Atlas world).
+- Semantic Atlas visual world is brief-pinned in AGENTS.md (night cartography, phosphor, chart blue).
 - [inferred] No accordion on the home desk — every primary section is open and stacked.
+- Featured product lead: Wordkeep (brand casing Wordkeep); App Store release pending.
 
 ## Brand Commitments
 
 - Name: Marc Fors / SITE_NAME.
-- Visual: Observatory / signal-desk (ink, brass, paper, signal green).
+- Visual: Semantic Atlas — night cartography, phosphor edges, force-graph nodes, legend HUD (`#070b14` / `#d9e2f2` / `#7dffb3` / `#4d7cff` / `#0a1020`).
+- Anti-reference: the retired signal-desk (ink, brass, paper grid) — do not restore it.
 - Role line: AI software engineer (open to work).
+- Product brand: Wordkeep (never “WordKeep” / “wordkeep” in UI copy).
 - LinkedIn vanity: linkedin.com/in/marc-fors.
 - GitHub user marcfs31 is public; private repos must not be linked unless explicitly opted in.
 
@@ -48,8 +51,8 @@ Next.js App Router on Vercel; locales in the URL; theme preference in localStora
 
 ## Product Principles
 
-1. Recruiter scan first: name, role, proof, Hire CTA above the fold.
-2. The desk demonstrates the engineering bar it claims (vitals, CSP, audit).
+1. Recruiter scan first: name, role, Hire pinned in chrome; Wordkeep atlas owns the first viewport.
+2. The atlas demonstrates the engineering bar it claims (vitals, CSP, audit).
 3. Privacy by default: first-party only, no trackers.
 4. Motion and polish never cost CLS or hide content under reduced-motion.
 5. Every copy / project / privacy change ships with a test.
