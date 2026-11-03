@@ -40,7 +40,7 @@ export function ThemeSwitcher({ label, names }: { label: string; names: ThemeNam
 
   return (
     <details ref={rootRef} className="chrome-menu themes-menu">
-      <summary className="chrome-menu-trigger" aria-label={label}>
+      <summary className="chrome-menu-trigger" aria-label={`${label}: ${names[theme]}`}>
         <span className={`theme-swatch theme-dot-${theme}`} aria-hidden="true" />
         <span className="chrome-menu-label">{names[theme]}</span>
       </summary>

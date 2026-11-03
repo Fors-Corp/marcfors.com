@@ -24,7 +24,7 @@ describe("LanguageSwitcher", () => {
     const { container } = render(<LanguageSwitcher locale="de" langLabel={copy.de.lang} />);
     expect(screen.getByRole("group", { name: copy.de.lang })).toBeInTheDocument();
     const trigger = container.querySelector("summary.chrome-menu-trigger");
-    expect(trigger).toHaveAttribute("aria-label", copy.de.lang);
+    expect(trigger).toHaveAttribute("aria-label", `${copy.de.lang}: DE`);
     expect(trigger).toHaveTextContent("DE");
 
     await userEvent.click(trigger!);
