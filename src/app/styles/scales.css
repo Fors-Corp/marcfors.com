@@ -3,6 +3,7 @@
 @layer tokens {
   :root {
     /* Corner radius: tiny badges → small controls → panels → bars → pills. */
+    --r-none: 0;
     --r-2xs: 4px;
     --r-xs: 6px;
     --r-sm: 10px;
