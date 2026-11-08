@@ -84,3 +84,15 @@ export function significantTokens(question: string): string[] {
   }
   return out;
 }
+
+/**
+ * True when the retrieved text actually contains the question's content words.
+ * One shared name ("Marc") is not enough; two content words must appear.
+ */
+export function contextCoversQuestion(blob: string, question: string): boolean {
+  const tokens = significantTokens(question);
+  if (tokens.length === 0) return blob.trim().length > 0;
+  const haystack = blob.toLowerCase();
+  const hits = tokens.filter((token) => haystack.includes(token.toLowerCase()));
+  return hits.length >= Math.min(2, tokens.length);
+}
