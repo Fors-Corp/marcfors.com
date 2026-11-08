@@ -1,0 +1,13 @@
+# marcfors.com
+
+## Problem
+
+A personal site that recruiters actually scan needed to prove engineering taste without third-party analytics, cookie banners or a fragile CMS.
+
+## Approach
+
+The desk is a Next.js App Router portfolio: Fraunces and IBM Plex Mono, CSS tokens, seven URL locales, first-party Core Web Vitals, a dependency audit on every build, and case studies as MDX. The public mailbox is the only contact on the page.
+
+## Result
+
+A live observatory desk whose source is public under Fors-Corp, with privacy and security headers treated as product features.

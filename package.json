@@ -1,6 +1,6 @@
 {
   "name": "marcfors.com",
-  "version": "0.26.0",
+  "version": "0.27.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -12,19 +12,22 @@
     "start": "next start",
     "prebuild": "node scripts/gen-tokens.mjs && node scripts/audit-snapshot.mjs",
     "gen:tokens": "node scripts/gen-tokens.mjs",
+    "rag:seed": "tsx scripts/rag/seed.ts",
     "lint": "eslint src",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "privacy": "node scripts/check-privacy.mjs",
     "cv:update": "node scripts/update-cv-contributions.mjs",
-    "audit": "npm audit --omit=dev --audit-level=high",
+    "audit": "node scripts/run-audit.mjs",
     "ci": "npm run privacy && npm run test:coverage && npm run typecheck && npm run lint && npm run audit && npm run build",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "pretest:e2e": "next build"
   },
   "dependencies": {
+    "@huggingface/transformers": "^4.3.2",
     "@mdx-js/react": "^3.1.1",
+    "@neondatabase/serverless": "^1.2.0",
     "@vercel/analytics": "^2.0.1",
     "next": "^16.4.3",
     "react": "19.3.1",
@@ -46,12 +49,14 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitest/coverage-v8": "^5.0.5",
+    "dotenv": "^18.0.9",
     "eslint": "^10",
     "eslint-config-next": "^16.4.3",
     "jsdom": "^30.1.3",
     "remark-frontmatter": "^5.0.0",
     "remark-gfm": "^4.0.1",
     "remark-mdx-frontmatter": "^6.0.0",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^5.0.0",
     "vitest-axe": "^0.1.0"
@@ -59,5 +64,12 @@
   "overrides": {
     "minimatch": "^11.0.1",
     "toml": "^5.0.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "onnxruntime-node@1.30.0": true,
+    "protobufjs@7.6.6": true,
+    "sharp@0.34.5": true,
+    "sharp@0.35.5": true
   }
 }

@@ -1,0 +1,81 @@
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { axe } from "vitest-axe";
+import { PortfolioAsk } from "@/components/PortfolioAsk";
+import { copy } from "@/data/copy";
+
+const strings = {
+  title: copy.en.askTitle,
+  lede: copy.en.askLede,
+  placeholder: copy.en.askPlaceholder,
+  submit: copy.en.askSubmit,
+  busy: copy.en.askBusy,
+  empty: copy.en.askEmpty,
+  error: copy.en.askError,
+  unavailable: copy.en.askUnavailable,
+  citations: copy.en.askCitations,
+  samplesLabel: copy.en.askSamplesLabel,
+  samples: copy.en.askSamples,
+  sourcesLabel: copy.en.askSourcesLabel,
+  sourcesEmpty: copy.en.askSourcesEmpty,
+  sourcesUnavailable: copy.en.askSourcesUnavailable,
+};
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+  vi.clearAllMocks();
+});
+
+describe("PortfolioAsk", () => {
+  it("renders sample prompts and has no serious a11y violations", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({ files: ["about.md"], embedding_model: "local/x" }),
+      }),
+    );
+    const { container } = render(<PortfolioAsk strings={strings} />);
+    expect(screen.getByRole("heading", { level: 1, name: copy.en.askTitle })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: copy.en.askSamples[0] })).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText("about.md")).toBeInTheDocument());
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it("posts a question and shows the answer with citations", async () => {
+    const user = userEvent.setup();
+    const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input);
+      if (url.includes("/api/rag-sources")) {
+        return {
+          ok: true,
+          status: 200,
+          text: async () => JSON.stringify({ files: ["projects.md"], embedding_model: "local/x" }),
+        };
+      }
+      expect(init?.method).toBe("POST");
+      return {
+        ok: true,
+        status: 200,
+        text: async () =>
+          JSON.stringify({
+            answer: "Embedded RAG is classic retrieval-augmented generation.",
+            citations: [{ source_path: "work/embedded-rag.md", chunk_index: 0, distance: 0.12 }],
+            embedding_model: "local/x",
+            chat_model: "claude-sonnet-5-5",
+            run_id: null,
+          }),
+      };
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    render(<PortfolioAsk strings={strings} />);
+    await user.type(screen.getByPlaceholderText(copy.en.askPlaceholder), "What is Embedded RAG?");
+    await user.click(screen.getByRole("button", { name: copy.en.askSubmit }));
+    expect(
+      await screen.findByText("Embedded RAG is classic retrieval-augmented generation."),
+    ).toBeInTheDocument();
+    expect(screen.getByText("work/embedded-rag.md")).toBeInTheDocument();
+  });
+});

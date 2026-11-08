@@ -10,12 +10,12 @@ const lastModified = new Date(`${RELEASE_DATE}T00:00:00.000Z`);
 function priorityFor(path: string): number {
   if (path === "/") return 1;
   if (path.startsWith("/work/")) return 0.8;
-  if (path === "/cv") return 0.6;
+  if (path === "/cv" || path === "/ask") return 0.6;
   return 0.3;
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const pages = ["/", "/cv", "/privacy", ...listCaseStudySlugs().map((slug) => `/work/${slug}`)];
+  const pages = ["/", "/cv", "/ask", "/privacy", ...listCaseStudySlugs().map((slug) => `/work/${slug}`)];
   return LOCALES.flatMap((locale) =>
     pages.map((path) => ({
       url: localeUrl(locale, path, SITE_URL),

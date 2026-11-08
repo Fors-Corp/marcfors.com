@@ -4,10 +4,18 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+## 0.27.0 — 2026-11-08
+
 - Feature **Embedded RAG** first in Selected work with live demo
   `https://embedded-rag.vercel.app`, public repo, and seven-locale case study
   (classic pgvector + Claude RAG, MiniLM, cited answers / abstain, dual Python
   + Vercel).
+- Add portfolio Ask (`/ask`): Embedded RAG ask path forked into Next.js with
+  portfolio corpus, citations/abstain, Fors design-system UI, and nav link.
+- Seed script (`npm run rag:seed`) indexes `corpus/` into Neon pgvector with RLS.
+- Document `ANTHROPIC_API_KEY` + `DATABASE_URL`/`POSTGRES_URL` (no invented secrets).
+- Mensura homepage blurbs: private on-device tracker + self-made ML wording
+  (no substance/drug phrasing). Privacy notice covers Ask → Anthropic + Neon.
 - Publish the phone-free AI CV under `docs/cv/` and as `public/marc-fors-cv.pdf`
   (Embedded RAG, Wordkeep, Mensura; Italian intermediate; open to remote roles;
   Agent Switchboard removed).

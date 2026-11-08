@@ -1,0 +1,14 @@
+# iTerm Studio
+
+
+## Problem
+
+A complete iTerm2 look is four separate knobs — colours, font, blur, and the Powerlevel10k prompt — so people copy screenshots and never get the same terminal twice.
+
+## Approach
+
+A public gallery of 121 presets. Each one is a full look. A local server applies it to the real iTerm2 profile, not a fake preview.
+
+## Result
+
+One click to a consistent terminal. Source is public; the hosted gallery is the proof.

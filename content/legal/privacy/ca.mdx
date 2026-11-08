@@ -27,6 +27,8 @@ marcfors.com l'edita Marc Fors, enginyer de programari autònom establert a Barc
 
 **Activitat de GitHub.** `/api/github-activity` obté al servidor els esdeveniments públics i el calendari del perfil públic de Marc Fors a GitHub, amb una memòria cau de cinc minuts. Els totals poden incloure contribucions privades anònimes, però no es demanen ni es mostren noms o continguts de repositoris privats. El navegador només contacta amb aquest lloc; no envia a GitHub la teva IP, galetes ni capçaleres. No s’utilitzen widgets de GitHub, scripts de tercers ni emmagatzematge addicional. En obrir un enllaç de GitHub, s’aplica la seva política de privacitat.
 
+**Ask (RAG del portfoli).** Si uses `/ask`, el navegador envia el text de la pregunta a `/api/ask` en aquest lloc. El servidor incrusta la pregunta, recupera fragments d’un índex Neon Postgres (pgvector) del corpus del propi portfoli d’en Marc i envia aquest context més la pregunta a l’API Claude d’Anthropic per generar una resposta amb citacions (o una negativa fixa). El text es processa per respondre’t i no s’utilitza per a publicitat. Neon només desa els fragments del portfoli precarregats, no les teves preguntes. Anthropic tracta la petició segons [la seva política de privacitat](https://www.anthropic.com/legal/privacy). Base jurídica: interès legítim (RGPD art. 6(1)(f)) i la teva sol·licitud en enviar la pregunta (art. 6(1)(b)). No enganxis secrets ni dades personals sensibles a Ask.
+
 ## Galetes i emmagatzematge del navegador
 
 - **`marcfors-locale`** (galeta pròpia, un any): només s'estableix quan tries un idioma al selector, perquè el lloc es torni a obrir en aquest idioma.
@@ -37,7 +39,7 @@ Aquestes dades recorden una tria que has fet tu mateix, cosa que les eximeix de 
 
 ## Qui rep dades
 
-Vercel Inc. (allotjament, registres de peticions, mesura d'audiència) i Stripe (pagaments) tracten dades en nom meu, i Stripe actua també com a responsable independent pel que fa a les seves pròpies obligacions legals. Tots dos estan certificats d'acord amb l'EU-US Data Privacy Framework, i les transferències als Estats Units es basen a més en les Clàusules Contractuals Tipus de la Comissió Europea. No venc dades personals ni les comparteixo amb finalitats publicitàries.
+Vercel Inc. (allotjament, registres de peticions, mesura d'audiència), Stripe (pagaments), Neon (índex vectorial del portfoli per a Ask) i Anthropic (generació Ask) tracten dades en nom meu, i Stripe actua també com a responsable independent pel que fa a les seves pròpies obligacions legals. Tots dos estan certificats d'acord amb l'EU-US Data Privacy Framework, i les transferències als Estats Units es basen a més en les Clàusules Contractuals Tipus de la Comissió Europea. No venc dades personals ni les comparteixo amb finalitats publicitàries.
 
 ## Els teus drets
 

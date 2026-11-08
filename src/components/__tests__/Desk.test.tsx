@@ -52,6 +52,12 @@ describe("Desk", () => {
     expect(screen.getByText(copy.en.headline)).toBeInTheDocument();
   });
 
+  it("links Ask in the primary nav", () => {
+    renderDesk();
+    const nav = screen.getByRole("navigation", { name: copy.en.navLabel });
+    expect(within(nav).getByRole("link", { name: copy.en.askNav })).toHaveAttribute("href", "/ask");
+  });
+
   it("puts Embedded RAG first in featured work with live demo, public source and case study", () => {
     renderDesk();
     const firstCard = document.querySelector("#projects .project-card") as HTMLElement;
