@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useSyncExternalStore } from "react";
 import { usePathname } from "next/navigation";
 
 import {
@@ -11,11 +11,24 @@ import type { Locale } from "@/lib/locale";
 
 const STORAGE_KEY = "marcfors-ask-widget-open";
 
+const TABBABLE = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([type='hidden']):not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+].join(", ");
+
 export type AskChatWidgetStrings = PortfolioAskStrings & {
   open: string;
   close: string;
   launcher: string;
 };
+
+const openListeners = new Set<() => void>();
+// Used only when sessionStorage throws. A successful read always wins so tests
+// can reset the preference by clearing storage.
+let openFallback: boolean | null = null;
 
 function readOpenDefault(): boolean {
   if (typeof window === "undefined") return true;
@@ -24,9 +37,80 @@ function readOpenDefault(): boolean {
     if (stored === "0") return false;
     if (stored === "1") return true;
   } catch {
-    // sessionStorage can throw in private mode — stay open by default.
+    if (openFallback !== null) return openFallback;
   }
   return true;
+}
+
+function serverOpen(): boolean {
+  return true;
+}
+
+function subscribeOpen(listener: () => void) {
+  openListeners.add(listener);
+  const onStorage = (event: StorageEvent) => {
+    if (event.key === STORAGE_KEY) listener();
+  };
+  window.addEventListener("storage", onStorage);
+  return () => {
+    openListeners.delete(listener);
+    window.removeEventListener("storage", onStorage);
+  };
+}
+
+function emitOpen() {
+  for (const listener of openListeners) listener();
+}
+
+function writeOpen(next: boolean) {
+  try {
+    window.sessionStorage.setItem(STORAGE_KEY, next ? "1" : "0");
+    openFallback = null;
+  } catch {
+    openFallback = next;
+  }
+  emitOpen();
+}
+
+function tabbableIn(panel: HTMLElement): HTMLElement[] {
+  return Array.from(panel.querySelectorAll<HTMLElement>(TABBABLE)).filter((el) => {
+    if (el.getAttribute("tabindex") === "-1") return false;
+    const hidden = el.closest("[hidden]");
+    return hidden === null || hidden === el;
+  });
+}
+
+function focusField(panel: HTMLElement) {
+  const field = panel.querySelector<HTMLElement>(
+    "input:not([disabled]), textarea:not([disabled])",
+  );
+  const target = field ?? tabbableIn(panel)[0] ?? panel;
+  target.focus({ preventScroll: true });
+}
+
+function trapTab(event: KeyboardEvent, panel: HTMLElement) {
+  if (event.key !== "Tab" || event.altKey || event.ctrlKey || event.metaKey) return;
+  const items = tabbableIn(panel);
+  if (items.length === 0) {
+    event.preventDefault();
+    panel.focus({ preventScroll: true });
+    return;
+  }
+  const first = items[0]!;
+  const last = items[items.length - 1]!;
+  const active = document.activeElement;
+  const inside = active instanceof Node && panel.contains(active);
+  if (event.shiftKey) {
+    if (!inside || active === first) {
+      event.preventDefault();
+      last.focus({ preventScroll: true });
+    }
+    return;
+  }
+  if (!inside || active === last) {
+    event.preventDefault();
+    first.focus({ preventScroll: true });
+  }
 }
 
 export function AskChatWidget({
@@ -37,46 +121,77 @@ export function AskChatWidget({
   locale?: Locale;
 }) {
   const panelId = useId();
+  const titleId = useId();
   const pathname = usePathname();
-  const [open, setOpen] = useState(true);
-  const [hydrated, setHydrated] = useState(false);
+  const panelRef = useRef<HTMLElement>(null);
+  const launcherRef = useRef<HTMLButtonElement>(null);
+  // Focus moves only when the visitor opens or closes the panel. It is open
+  // by default; moving focus on load would skip the rest of the page.
+  const focusIntent = useRef<"panel" | "launcher" | null>(null);
+  const open = useSyncExternalStore(subscribeOpen, readOpenDefault, serverOpen);
+  const onAskPage = pathname?.endsWith("/ask") ?? false;
 
-  useEffect(() => {
-    setOpen(readOpenDefault());
-    setHydrated(true);
+  const openPanel = useCallback(() => {
+    focusIntent.current = "panel";
+    writeOpen(true);
+  }, []);
+
+  const closePanel = useCallback(() => {
+    focusIntent.current = "launcher";
+    writeOpen(false);
   }, []);
 
   useEffect(() => {
-    if (!hydrated) return;
-    try {
-      window.sessionStorage.setItem(STORAGE_KEY, open ? "1" : "0");
-    } catch {
-      // ignore
+    if (onAskPage) return;
+    if (!open) {
+      if (focusIntent.current === "launcher") {
+        focusIntent.current = null;
+        launcherRef.current?.focus({ preventScroll: true });
+      }
+      return;
     }
-  }, [hydrated, open]);
+
+    const panel = panelRef.current;
+    if (panel && focusIntent.current === "panel") {
+      focusIntent.current = null;
+      focusField(panel);
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closePanel();
+        return;
+      }
+      const current = panelRef.current;
+      if (current) trapTab(event, current);
+    };
+    document.addEventListener("keydown", onKeyDown, true);
+    return () => document.removeEventListener("keydown", onKeyDown, true);
+  }, [closePanel, onAskPage, open]);
 
   // Full /ask page already hosts the chat — skip the floating duplicate.
-  if (pathname?.endsWith("/ask")) {
+  if (onAskPage) {
     return null;
   }
 
   return (
     <div className={`ask-fab${open ? " ask-fab-open" : ""}`}>
       <section
+        ref={panelRef}
         id={panelId}
         className="ask-fab-panel"
-        aria-label={strings.title}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
         hidden={!open}
       >
         <header className="ask-fab-chrome">
-          <p className="ask-fab-label">{strings.launcher}</p>
-          <button
-            type="button"
-            className="ask-fab-close"
-            aria-controls={panelId}
-            aria-expanded={open}
-            onClick={() => setOpen(false)}
-          >
+          <p id={titleId} className="ask-fab-label">
+            {strings.launcher}
+          </p>
+          <button type="button" className="ask-fab-close" onClick={closePanel}>
             {strings.close}
           </button>
         </header>
@@ -84,16 +199,18 @@ export function AskChatWidget({
           strings={strings}
           variant="widget"
           locale={locale}
-          onSourceNavigate={() => setOpen(false)}
+          onSourceNavigate={closePanel}
         />
       </section>
       {open ? null : (
         <button
+          ref={launcherRef}
           type="button"
           className="ask-fab-launcher"
           aria-controls={panelId}
           aria-expanded="false"
-          onClick={() => setOpen(true)}
+          aria-haspopup="dialog"
+          onClick={openPanel}
         >
           {strings.open}
         </button>
