@@ -247,21 +247,34 @@ export function PortfolioAsk({ strings, variant = "page" }: PortfolioAskProps) {
         <label className="vh" htmlFor={`${formId}-input`}>
           {strings.placeholder}
         </label>
-        <textarea
-          id={`${formId}-input`}
-          name="question"
-          rows={isWidget ? 2 : 3}
-          value={question}
-          disabled={busy}
-          placeholder={strings.placeholder}
-          onChange={(event) => setQuestion(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" && !event.shiftKey) {
-              event.preventDefault();
-              void ask(question);
-            }
-          }}
-        />
+        {isWidget ? (
+          <input
+            id={`${formId}-input`}
+            name="question"
+            type="text"
+            autoComplete="off"
+            value={question}
+            disabled={busy}
+            placeholder={strings.placeholder}
+            onChange={(event) => setQuestion(event.target.value)}
+          />
+        ) : (
+          <textarea
+            id={`${formId}-input`}
+            name="question"
+            rows={3}
+            value={question}
+            disabled={busy}
+            placeholder={strings.placeholder}
+            onChange={(event) => setQuestion(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                void ask(question);
+              }
+            }}
+          />
+        )}
         <button type="submit" className="ask-submit" disabled={busy || !question.trim()}>
           {busy ? strings.busy : strings.submit}
         </button>
