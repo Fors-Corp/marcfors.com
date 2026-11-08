@@ -14,6 +14,9 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Stop the Wordkeep atlas embed from widening on every resize. The canvas was
+  sized to the stage border box, so the figure grew and a phone page scrolled
+  sideways; a tap measured against the old box missed the word.
 - Make the page behind the open Ask panel inert, so a pointer cannot operate
   the background that the modal dialog already hides from assistive technology.
   The portfolio stays visible. Closing the panel removes inert and returns

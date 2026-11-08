@@ -191,9 +191,12 @@ export function WordAtlas({
     }
 
     function resize() {
-      const rect = wrap.getBoundingClientRect();
-      const nextW = Math.max(wrap.clientWidth, canvas.clientWidth, Math.round(rect.width));
-      const nextH = Math.max(wrap.clientHeight, canvas.clientHeight, Math.round(rect.height));
+      // Content box only. The stage border is outside clientWidth; sizing the
+      // canvas to getBoundingClientRect made it 2px too wide, and the grid
+      // column took that as min-content, so every resize grew the figure and
+      // the embed walked off a phone viewport.
+      const nextW = wrap.clientWidth;
+      const nextH = wrap.clientHeight;
       // Layout can report 0 on the first paint (sticky/full-bleed). Skip until real.
       if (nextW < 2 || nextH < 2) return false;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -205,8 +208,8 @@ export function WordAtlas({
       H = nextH;
       canvas.width = Math.round(W * dpr);
       canvas.height = Math.round(H * dpr);
-      canvas.style.width = `${W}px`;
-      canvas.style.height = `${H}px`;
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       canvas.dataset.atlasSized = `${Math.round(W)}x${Math.round(H)}`;
       wrap.dataset.atlasEffect = "sized";

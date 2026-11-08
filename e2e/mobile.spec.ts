@@ -36,6 +36,16 @@ test("Wordkeep atlas responds to a real touch tap, not just a mouse hover", asyn
   const stage = page.locator(".atlas-stage");
   await stage.evaluate((el) => el.scrollIntoView({ block: "center" }));
   await expect(canvas).toHaveAttribute("data-atlas-sized", /\d+x\d+/);
+  // A border-box canvas size used to grow the figure on every resize. Give
+  // that loop time to overflow the phone, then require the page to stay put.
+  const sized = await canvas.getAttribute("data-atlas-sized");
+  await page.waitForTimeout(500);
+  await expect(canvas).toHaveAttribute("data-atlas-sized", sized!);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
   const box = await canvas.boundingBox();
   if (!box) throw new Error("atlas canvas has no layout box");
   const hit = await findAtlasNodePoint(page, box);
