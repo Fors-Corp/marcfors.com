@@ -11,3 +11,10 @@ LMaaS is a self-hosted service on Apple Silicon: a Go API that speaks an OpenAI-
 ## Result
 
 A private model desk my products can call locally, with a console demo live and source unpublished.
+
+## Links
+
+Stack: Go, React, TypeScript.
+Live: https://mlaas-console.vercel.app
+Private source.
+Case study: /work/lmaas

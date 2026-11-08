@@ -1,6 +1,6 @@
 # Experience
 
-## Fors Corp · independent practice — Dec 2025 — present
+## Fors Corp · AI Software Engineer · independent practice — Dec 2025 — present
 Building complete products with LLM agents as the delivery team — design systems, an observability agent, a self-retraining model service. Open to AI engineering roles and to custom app work. Open to remote roles.
 
 ## Dynatrace — Software Engineer — May 2022 — Nov 2025

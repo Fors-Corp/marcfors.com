@@ -14,3 +14,10 @@ The site now opens with what it offers and where, gives sound baths their own pa
 ## Result
 
 A five-page prototype on Vercel with a strict Content Security Policy, no build step and no trackers. It is not indexed because it has not been adopted yet: it is a proposal for what the site could be.
+
+## Links
+
+Stack: HTML5, CSS3, JavaScript.
+Live: https://cescju-prototype.vercel.app
+Private source.
+Case study: /work/francesc-cescju

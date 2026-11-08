@@ -31,3 +31,10 @@ A React and Vite client talks to a small Hono API that runs the same code on Ver
 ## App Store
 
 An App Store release is pending. Wordkeep is already live on the web at wordkeep.me while the native listing catches up.
+
+## Links
+
+Stack: React, TypeScript, Three.js, Hono, Claude API.
+Live: https://wordkeep.me
+Private source. App Store release pending.
+Case study: /work/wordkeep
