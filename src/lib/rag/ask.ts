@@ -1,3 +1,4 @@
+import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
 import {
   ASK_INSTRUCTIONS,
   CHAT_MODEL,
@@ -8,6 +9,22 @@ import { retrieve } from "./retrieve";
 import type { AskResult, ChunkRow, Citation } from "./types";
 
 const CACHE_CONTROL = { type: "ephemeral" as const };
+
+/** Fixed names only. A request locale is never interpolated into the prompt. */
+const ANSWER_LANGUAGE: Record<Locale, string> = {
+  en: "English",
+  es: "Spanish (informal tú)",
+  ca: "Catalan (informal tu)",
+  it: "Italian (informal tu)",
+  pt: "European Portuguese (informal tu)",
+  de: "German (informal du)",
+  fr: "French (formal vous)",
+};
+
+export function answerLanguageInstruction(locale: Locale = DEFAULT_LOCALE): string {
+  const language = ANSWER_LANGUAGE[locale];
+  return `Answer in ${language}. Cite each corpus source path exactly as written in the context (English filenames). If the context does not support an answer, reply with exactly this English sentence and nothing else:\n${REFUSAL}`;
+}
 
 export function citationsForAnswer(answer: string, rows: ChunkRow[]): Citation[] {
   if (answer === REFUSAL) return [];
@@ -24,6 +41,7 @@ export async function askClaude(
   apiKey: string,
   question: string,
   context: string,
+  locale: Locale = DEFAULT_LOCALE,
 ): Promise<string> {
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -41,6 +59,10 @@ export async function askClaude(
           type: "text",
           text: ASK_INSTRUCTIONS,
           cache_control: CACHE_CONTROL,
+        },
+        {
+          type: "text",
+          text: answerLanguageInstruction(locale),
         },
         {
           type: "text",
@@ -72,8 +94,13 @@ export async function askClaude(
   return text;
 }
 
-export async function runAsk(question: string, apiKey: string): Promise<AskResult> {
+export async function runAsk(
+  question: string,
+  apiKey: string,
+  locale: Locale = DEFAULT_LOCALE,
+): Promise<AskResult> {
   const rows = await retrieve(question);
+  // citationsForAnswer treats only the exact English REFUSAL as abstain.
   if (rows.length === 0) {
     return {
       answer: REFUSAL,
@@ -86,7 +113,7 @@ export async function runAsk(question: string, apiKey: string): Promise<AskResul
   const context = rows
     .map((row) => `[source_path: ${row.source_path}]\n${row.content}`)
     .join("\n\n");
-  const answer = await askClaude(apiKey, question, context);
+  const answer = await askClaude(apiKey, question, context, locale);
   return {
     answer,
     citations: citationsForAnswer(answer, rows),

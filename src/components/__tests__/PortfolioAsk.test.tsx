@@ -70,13 +70,18 @@ describe("PortfolioAsk", () => {
       };
     });
     vi.stubGlobal("fetch", fetchMock);
-    render(<PortfolioAsk strings={strings} />);
+    render(<PortfolioAsk strings={strings} locale="es" />);
     await user.type(screen.getByPlaceholderText(copy.en.askPlaceholder), "What is Embedded RAG?");
     await user.click(screen.getByRole("button", { name: copy.en.askSubmit }));
     expect(
       await screen.findByText("Embedded RAG is classic retrieval-augmented generation."),
     ).toBeInTheDocument();
     expect(screen.getByText("work/embedded-rag.md")).toBeInTheDocument();
+    const askCall = fetchMock.mock.calls.find(([input]) => String(input).includes("/api/ask"));
+    expect(JSON.parse(String(askCall?.[1]?.body))).toEqual({
+      question: "What is Embedded RAG?",
+      locale: "es",
+    });
   });
 
   it("renders markdown in assistant answers", async () => {
