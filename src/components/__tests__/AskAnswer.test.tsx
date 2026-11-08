@@ -35,10 +35,9 @@ describe("AskAnswer", () => {
       "href",
       "https://marcfors.com",
     );
-    expect(screen.getByRole("link", { name: "work/mensura.md" })).toHaveAttribute(
-      "href",
-      "/work/mensura",
-    );
+    const source = screen.getByRole("link", { name: "work/mensura.md" });
+    expect(source).toHaveAttribute("href", "/work/mensura");
+    expect(source).toHaveClass("ask-source");
   });
 
   it("does not interpret raw HTML", () => {

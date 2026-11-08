@@ -2151,19 +2151,45 @@ footer {
   .ask-answer a:hover {
     color: var(--paper);
   }
+  .ask-answer,
+  .ask-turn {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  /* Inline corpus paths stay in the sentence and wrap instead of clipping. */
+  a.ask-source {
+    color: var(--brass);
+    font-weight: 650;
+    font-size: inherit;
+    font-family: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.16em;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  a.ask-source:hover {
+    color: var(--paper);
+  }
   a.ask-cite,
-  .ask-cite,
   .ask-citations code {
+    display: inline-block;
+    max-width: 100%;
+    box-sizing: border-box;
     font-style: normal;
     font-family: var(--mono);
     font-size: 0.84em;
     font-weight: 650;
+    line-height: 1.35;
     color: var(--brass);
     background: color-mix(in srgb, var(--brass) 18%, transparent);
     border: 1px solid color-mix(in srgb, var(--brass) 45%, var(--line));
     border-radius: var(--r-xs);
     padding: 0.08em 0.4em;
     text-decoration: none;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    vertical-align: baseline;
   }
   a.ask-cite:hover {
     background: color-mix(in srgb, var(--brass) 32%, transparent);
@@ -2269,8 +2295,8 @@ footer {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    height: min(36rem, calc(100dvh - 2.5rem));
-    max-height: min(36rem, calc(100dvh - 2.5rem));
+    height: auto;
+    max-height: min(70dvh, 34rem);
     overflow: hidden;
     border: 1px solid var(--line);
     border-radius: var(--r-md);
@@ -2374,11 +2400,12 @@ footer {
     line-height: 1.25;
   }
   .ask-shell.ask-shell-widget .ask-thread {
-    flex: 1 1 auto;
+    flex: 0 1 auto;
     order: 1;
     min-height: 0;
-    max-height: none;
-    overflow: auto;
+    max-height: min(42dvh, 18rem);
+    overflow-x: hidden;
+    overflow-y: auto;
     gap: 0.5rem;
   }
   .ask-shell.ask-shell-widget .ask-empty {
@@ -2442,8 +2469,11 @@ footer {
       inset-block-end: max(0.75rem, env(safe-area-inset-bottom, 0px));
     }
     .ask-fab-panel {
-      height: min(32rem, calc(100dvh - 1.5rem));
-      max-height: min(32rem, calc(100dvh - 1.5rem));
+      height: auto;
+      max-height: min(64dvh, 30rem);
+    }
+    .ask-shell.ask-shell-widget .ask-thread {
+      max-height: min(36dvh, 14rem);
     }
   }
 
@@ -2456,8 +2486,11 @@ footer {
       width: auto;
     }
     .ask-fab-panel {
-      height: min(42dvh, 22rem);
-      max-height: min(46dvh, 24rem);
+      height: auto;
+      max-height: min(58dvh, 24rem);
+    }
+    .ask-shell.ask-shell-widget .ask-thread {
+      max-height: min(28dvh, 11rem);
     }
     .ask-fab {
       --ask-fab-pad: 0.7rem;

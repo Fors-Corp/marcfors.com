@@ -25,6 +25,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   portfolio section it describes without leaving the chat.
 - Shrink the phone Ask sheet, and trace the Linux onnxruntime binding into
   the Ask function so preview stops returning a non-JSON 500.
+- Let the Ask panel grow with the reply up to a cap short of the screen, and
+  wrap source links instead of clipping them.
 
 ## 0.27.0 — 2026-11-08
 
