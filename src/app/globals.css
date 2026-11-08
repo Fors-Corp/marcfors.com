@@ -1995,6 +1995,12 @@ footer {
     }
   }
 
+  /* Site-wide `section { margin: 72px 0 }` must not apply inside Ask —
+     it collapses the thread and pushes the composer out of the panel. */
+  .ask-shell section {
+    margin: 0;
+  }
+
   .ask-intro { grid-area: intro; }
   .ask-intro h1 {
     margin: 0 0 0.45rem;
@@ -2211,7 +2217,7 @@ footer {
 
   /* Floating Ask chatbot — bottom-right, open by default, closable. */
   .ask-fab {
-    --ask-fab-pad: 0.75rem;
+    --ask-fab-pad: 1rem;
     position: fixed;
     inset-inline-end: max(0.85rem, env(safe-area-inset-right, 0px));
     inset-block-end: max(0.85rem, env(safe-area-inset-bottom, 0px));
