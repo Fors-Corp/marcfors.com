@@ -15,6 +15,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   across portfolio pages; full `/ask` page remains.
 - Compact the floating Ask panel into a fixed-height chat column with the
   composer pinned to the bottom (no clipped input / tall empty thread).
+- Equal fab padding on bottom/sides, single-line Ask input, samples always
+  visible above the thread.
 
 ## 0.27.0 — 2026-11-08
 
