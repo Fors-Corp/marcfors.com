@@ -204,6 +204,7 @@ export function Desk({
             <a href="#projects">{t.projectsTitle}</a>
             <a href="#work">{t.workTitle}</a>
             <a href="#contact">{t.contactTitle}</a>
+            <Link href={withLocale(locale, "/ask")}>{t.askNav}</Link>
             <a
               href={SITE_REPO}
               target="_blank"

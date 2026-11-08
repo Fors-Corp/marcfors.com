@@ -33,6 +33,9 @@ export default defineConfig({
         // an ever-growing goalpost on code that was never meant to be
         // unit-covered in the first place.
         "src/components/WordAtlas.tsx",
+        // MiniLM / onnxruntime wiring — covered via seed/ask integration, not jsdom.
+        "src/lib/rag/embed.ts",
+        "src/lib/rag/retrieve.ts",
       ],
       thresholds: {
         lines: 75,
@@ -47,7 +50,7 @@ export default defineConfig({
         test: {
           name: "node",
           environment: "node",
-          include: ["src/**/*.test.ts", "scripts/**/*.test.mjs"],
+          include: ["src/**/*.test.ts", "scripts/**/*.test.ts", "scripts/**/*.test.mjs"],
           exclude: ["src/**/*.dom.test.ts"],
         },
       },

@@ -34,10 +34,18 @@ describe("sitemap", () => {
     }
   });
 
+  it("lists the Ask page in every locale", () => {
+    const entries = sitemap();
+    for (const locale of LOCALES) {
+      const url = locale === "en" ? `${SITE_URL}/ask` : `${SITE_URL}/${locale}/ask`;
+      expect(entries.some((entry) => entry.url === url), `ask for ${locale}`).toBe(true);
+    }
+  });
+
   it("covers the home page and every case study in every locale", () => {
     const entries = sitemap();
-    // home + /cv + /privacy + one per case study
-    const pages = 3 + slugs.length;
+    // home + /cv + /ask + /privacy + one per case study
+    const pages = 4 + slugs.length;
     expect(entries).toHaveLength(LOCALES.length * pages);
 
     for (const locale of LOCALES) {
@@ -47,6 +55,7 @@ describe("sitemap", () => {
       expect(homeEntry?.priority).toBe(1);
       expect(homeEntry?.images).toEqual([localeUrl(locale, "/opengraph-image", SITE_URL)]);
       const cv = entries.find((entry) => entry.url === (locale === "en" ? `${SITE_URL}/cv` : `${SITE_URL}/${locale}/cv`));
+      const ask = entries.find((entry) => entry.url === (locale === "en" ? `${SITE_URL}/ask` : `${SITE_URL}/${locale}/ask`));
       const privacy = entries.find(
         (entry) => entry.url === (locale === "en" ? `${SITE_URL}/privacy` : `${SITE_URL}/${locale}/privacy`),
       );
@@ -55,6 +64,7 @@ describe("sitemap", () => {
           entry.url === (locale === "en" ? `${SITE_URL}/work/${slugs[0]}` : `${SITE_URL}/${locale}/work/${slugs[0]}`),
       );
       expect(cv?.priority).toBe(0.6);
+      expect(ask?.priority).toBe(0.6);
       expect(privacy?.priority).toBe(0.3);
       expect(privacy?.changeFrequency).toBe("yearly");
       expect(studyEntry?.priority).toBe(0.8);

@@ -29,6 +29,7 @@ export function llmsTxt(): string {
     "## Canonical pages",
     ...locales,
     `- CV: ${SITE_URL}/cv (${SITE_URL}${CV_PATH})`,
+    `- Ask (portfolio RAG): ${SITE_URL}/ask`,
     `- Privacy: ${SITE_URL}/privacy`,
     "",
     "## Profiles",
@@ -41,7 +42,7 @@ export function llmsTxt(): string {
     "## Selected work",
     ...works,
     "",
-    "The site stores only a locale preference the visitor chooses. It does not use third-party analytics.",
+    "The site stores only a locale preference the visitor chooses. Ask posts questions to /api/ask for portfolio-grounded answers (Neon pgvector + Anthropic). It does not use third-party analytics trackers.",
     "",
   ].join("\n");
 }

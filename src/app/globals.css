@@ -1821,6 +1821,13 @@ footer {
 }
 
 @media screen and (prefers-reduced-motion: no-preference) {
+  .ask-turn {
+    animation: ask-rise 280ms ease both;
+  }
+  .ask-sample {
+    transition: border-color 160ms ease, background 160ms ease, translate 160ms ease;
+  }
+
   /* Blur Text: hero lines come into focus in sequence. No opacity change, so the
      LCP element is painted on the first frame. */
   .hero > * {
@@ -1920,6 +1927,11 @@ footer {
   to { filter: none; translate: 0 0; }
 }
 
+@keyframes ask-rise {
+  from { filter: blur(4px); translate: 0 8px; }
+  to { filter: none; translate: 0 0; }
+}
+
 @keyframes focus-in {
   from { filter: blur(10px); transform: translateY(14px); }
 }
@@ -1951,4 +1963,219 @@ footer {
   .atlas-legend-strip a { transition: none !important; translate: none !important; }
   .signal-pip { box-shadow: none; }
   .top { backdrop-filter: none; }
+}
+
+/* Portfolio Ask — Embedded RAG chat, styled with atlas tokens (not the demo chrome). */
+@layer components {
+  .ask-page {
+    padding-block: clamp(1.5rem, 4vw, 2.75rem);
+  }
+
+  .ask-shell {
+    display: grid;
+    gap: 1.25rem 1.5rem;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "intro"
+      "samples"
+      "sources"
+      "thread"
+      "composer";
+  }
+
+  @media (min-width: 900px) {
+    .ask-shell {
+      grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
+      grid-template-areas:
+        "intro intro"
+        "sources samples"
+        "sources thread"
+        "composer composer";
+      align-items: start;
+    }
+  }
+
+  .ask-intro { grid-area: intro; }
+  .ask-intro h1 {
+    margin: 0 0 0.45rem;
+    font-family: var(--serif);
+    font-size: clamp(1.85rem, 4vw, 2.6rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--paper);
+  }
+  .ask-lede {
+    margin: 0;
+    max-width: 46rem;
+    color: var(--paper-dim);
+    font-size: 1.02rem;
+  }
+
+  .ask-samples { grid-area: samples; }
+  .ask-samples-label,
+  .ask-sources h2,
+  .ask-citations-label {
+    margin: 0 0 0.55rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--brass);
+  }
+  .ask-samples ul,
+  .ask-sources ul,
+  .ask-citations ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .ask-sources ul {
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .ask-sample {
+    appearance: none;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    background: color-mix(in srgb, var(--panel) 88%, transparent);
+    color: var(--paper);
+    font: inherit;
+    font-size: 0.92rem;
+    padding: 0.55rem 0.8rem;
+    text-align: left;
+    cursor: pointer;
+  }
+  .ask-sample:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--brass) 55%, var(--line));
+    background: color-mix(in srgb, var(--panel) 70%, var(--brass) 8%);
+    translate: 0 -1px;
+  }
+  .ask-sample:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  .ask-sources {
+    grid-area: sources;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    background:
+      linear-gradient(160deg, color-mix(in srgb, var(--signal) 8%, transparent), transparent 55%),
+      var(--panel);
+  }
+  .ask-sources h2 { font: inherit; }
+  .ask-sources-note {
+    margin: 0;
+    color: var(--paper-dim);
+    font-size: 0.9rem;
+  }
+  .ask-sources code,
+  .ask-citations code {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--paper);
+  }
+
+  .ask-thread {
+    grid-area: thread;
+    min-height: 14rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .ask-empty,
+  .ask-busy {
+    margin: 0;
+    color: var(--paper-dim);
+  }
+  .ask-error {
+    margin: 0;
+    color: color-mix(in srgb, var(--brass) 55%, #ff8a8a);
+  }
+  .ask-turn {
+    margin: 0;
+    padding: 0.85rem 1rem;
+    border-radius: var(--r-md);
+    border: 1px solid var(--line);
+  }
+  .ask-turn p { margin: 0; white-space: pre-wrap; }
+  .ask-turn-user {
+    background: color-mix(in srgb, var(--brass) 12%, var(--panel));
+    border-color: color-mix(in srgb, var(--brass) 35%, var(--line));
+  }
+  .ask-turn-assistant {
+    background: color-mix(in srgb, var(--panel) 92%, transparent);
+  }
+  .ask-citations {
+    margin-top: 0.75rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  }
+  .ask-citations ul { flex-direction: column; gap: 0.35rem; }
+  .ask-citations li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.75rem;
+    align-items: baseline;
+  }
+  .ask-distance {
+    font-size: 0.78rem;
+    color: var(--paper-dim);
+    letter-spacing: 0.04em;
+  }
+
+  .ask-composer {
+    grid-area: composer;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    padding-top: 0.35rem;
+    border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  }
+  .ask-composer textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 4.5rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    background: var(--panel);
+    color: var(--paper);
+    font: inherit;
+    line-height: 1.45;
+  }
+  .ask-composer textarea:focus-visible {
+    outline: 2px solid var(--brass);
+    outline-offset: 2px;
+  }
+  .ask-submit {
+    appearance: none;
+    min-height: 44px;
+    padding: 0 1.15rem;
+    border: 1px solid color-mix(in srgb, var(--brass) 55%, var(--line));
+    border-radius: var(--r-pill);
+    background: color-mix(in srgb, var(--brass) 22%, var(--panel));
+    color: var(--paper);
+    font: inherit;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .ask-submit:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--brass) 34%, var(--panel));
+  }
+  .ask-submit:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 640px) {
+    .ask-composer {
+      grid-template-columns: 1fr;
+    }
+    .ask-submit { width: 100%; }
+  }
 }

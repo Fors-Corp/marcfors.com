@@ -7,13 +7,13 @@ marcfors.com is published by Marc Fors, a self-employed software engineer based 
 - No advertising and no cross-site tracking. No Google Analytics, no social-media pixels, no third-party scripts.
 - One cookie, `marcfors-locale`, written only when you pick a language. Your language and theme choices also stay in your browser's localStorage. None of these identifies you.
 - That is why there is no cookie banner: the law asks for consent only for cookies that are not strictly necessary or that track you.
-- The site processes very little personal data: the server logs needed to run it, performance measurements without identifiers, and whatever you send me by e-mail or through a tip on Stripe.
+- The site processes very little personal data: the server logs needed to run it, performance measurements without identifiers, optional Ask questions you submit, and whatever you send me by e-mail or through a tip on Stripe.
 
 ## What is processed, and why
 
 **Serving the pages.** When you load a page, the hosting provider, Vercel Inc. (USA), receives your IP address, user agent and the URL requested, as any web server does. These request logs exist to deliver the site, defend it against abuse and debug failures. Vercel keeps them briefly; the site itself stores none. Legal basis: legitimate interest (GDPR art. 6(1)(f)).
 
-**Rate limiting.** The two beacon endpoints below count requests per IP address in memory for one minute, then forget them. Nothing is written to disk.
+**Rate limiting.** The beacon endpoints and `/api/ask` count requests per IP address in memory for one minute, then forget them. Nothing is written to disk.
 
 **Performance measurements (web vitals).** Your browser sends five timing metrics (LCP, INP, CLS, FCP, TTFB) to `/api/vitals`. Each report carries the metric name, its value and a random id for that page load, and nothing else: no IP address, no cookie, no account. They are logged so I can keep the site fast. Legal basis: legitimate interest.
 
@@ -27,6 +27,8 @@ marcfors.com is published by Marc Fors, a self-employed software engineer based 
 
 **GitHub activity.** `/api/github-activity` retrieves Marc Fors's public GitHub events and public-profile contribution calendar on the server, with a five-minute cache. Calendar totals may include anonymous private contributions, but no private repository names or contents are requested or displayed. Your browser contacts this site only; it sends no visitor IP address, cookies or browser headers to GitHub. No GitHub widget, third-party script or additional browser storage is used. Opening a GitHub link takes you to GitHub under its own privacy policy.
 
+**Ask (portfolio RAG).** If you use `/ask`, your browser posts the question text to `/api/ask` on this site. The server embeds the question, retrieves chunks from a Neon Postgres (pgvector) index of Marc’s own portfolio corpus, and sends the retrieved context plus your question to Anthropic’s Claude API to generate an answer with citations (or a fixed abstain). The question text is processed to answer you and is not used to build advertising profiles. Neon stores only the pre-seeded portfolio chunks, not your questions. Anthropic processes the request under [its privacy policy](https://www.anthropic.com/legal/privacy). Legal basis: legitimate interest in answering visitor questions about the portfolio (GDPR art. 6(1)(f)), and your request when you submit a question (art. 6(1)(b)). Do not paste secrets, health data or other sensitive personal data into Ask.
+
 ## Cookies and browser storage
 
 - **`marcfors-locale`** (first-party cookie, one year): set only when you pick a language in the switcher, so the site reopens in that language.
@@ -37,7 +39,7 @@ These remember a choice you made yourself, which exempts them from consent under
 
 ## Who receives data
 
-Vercel Inc. (hosting, request logs, audience measurement) and Stripe (payments) process data on my behalf, and Stripe also acts as an independent controller for its own legal obligations. Both are certified under the EU-US Data Privacy Framework, and transfers to the United States additionally rely on the European Commission's Standard Contractual Clauses. I do not sell personal data and I do not share it for advertising.
+Vercel Inc. (hosting, request logs, audience measurement), Stripe (payments), Neon (portfolio vector index for Ask) and Anthropic (Ask generation) process data on my behalf or as independent controllers for their own services. Vercel, Stripe and Anthropic are certified under the EU-US Data Privacy Framework where applicable, and transfers to the United States additionally rely on the European Commission's Standard Contractual Clauses. I do not sell personal data and I do not share it for advertising.
 
 ## Your rights
 

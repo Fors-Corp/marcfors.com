@@ -35,6 +35,13 @@ const noindexSources = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   devIndicators: false,
+  // MiniLM / onnxruntime must stay external — bundling them into the Ask route
+  // breaks native bindings and blows past the serverless size budget.
+  serverExternalPackages: [
+    "@huggingface/transformers",
+    "onnxruntime-node",
+    "sharp",
+  ],
   // Turbopack HMR rejects Origins that are not the server hostname. Local
   // preview often opens http://127.0.0.1:3000 while `next dev` binds as
   // localhost — without this, the WS handshake returns plain "Unauthorized",

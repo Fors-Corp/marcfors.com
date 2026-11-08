@@ -27,6 +27,8 @@ marcfors.com è pubblicato da Marc Fors, ingegnere del software libero professio
 
 **Attività GitHub.** `/api/github-activity` recupera sul server gli eventi pubblici e il calendario del profilo pubblico di Marc Fors su GitHub, con una cache di cinque minuti. I totali possono includere contributi privati anonimi, ma non vengono richiesti né mostrati nomi o contenuti di repository privati. Il browser contatta solo questo sito; non invia a GitHub il tuo IP, cookie o intestazioni. Non si usano widget GitHub, script di terze parti o ulteriore archiviazione. Aprendo un link GitHub si applica la sua informativa sulla privacy.
 
+**Ask (RAG del portfolio).** Se usi `/ask`, il browser invia il testo della domanda a `/api/ask` su questo sito. Il server incorpora la domanda, recupera chunk da un indice Neon Postgres (pgvector) del corpus del portfolio di Marc e invia quel contesto più la domanda all’API Claude di Anthropic per generare una risposta con citazioni (o un rifiuto fisso). Il testo è elaborato per risponderti e non per pubblicità. Neon conserva solo i chunk del portfolio pre-indicizzati, non le tue domande. Anthropic tratta la richiesta secondo [la sua privacy policy](https://www.anthropic.com/legal/privacy). Base giuridica: interesse legittimo (GDPR art. 6(1)(f)) e la tua richiesta quando invii la domanda (art. 6(1)(b)). Non incollare segreti o dati personali sensibili in Ask.
+
 ## Cookie e archiviazione del browser
 
 - **`marcfors-locale`** (cookie di prima parte, un anno): impostato solo quando scegli una lingua nel selettore, così il sito si riapre in quella lingua.
@@ -37,7 +39,7 @@ Questi elementi ricordano una scelta che hai fatto tu stesso, il che li esenta d
 
 ## Chi riceve i dati
 
-Vercel Inc. (hosting, log delle richieste, misurazione del pubblico) e Stripe (pagamenti) trattano dati per mio conto, e Stripe agisce anche come titolare autonomo del trattamento per i propri obblighi di legge. Entrambe sono certificate nell'ambito dell'EU-US Data Privacy Framework, e i trasferimenti verso gli Stati Uniti si basano inoltre sulle clausole contrattuali standard della Commissione europea. Non vendo dati personali e non li condivido a fini pubblicitari.
+Vercel Inc. (hosting, log delle richieste, misurazione del pubblico), Stripe (pagamenti), Neon (indice vettoriale del portfolio per Ask) e Anthropic (generazione Ask) trattano dati per mio conto, e Stripe agisce anche come titolare autonomo del trattamento per i propri obblighi di legge. Entrambe sono certificate nell'ambito dell'EU-US Data Privacy Framework, e i trasferimenti verso gli Stati Uniti si basano inoltre sulle clausole contrattuali standard della Commissione europea. Non vendo dati personali e non li condivido a fini pubblicitari.
 
 ## I tuoi diritti
 

@@ -1,0 +1,14 @@
+# Portfolio RAG corpus — attribution
+
+License: content authored by Marc Fors for marcfors.com; commercial use permitted
+as the site owner's own portfolio material (not third-party copyrighted dumps).
+
+Upstream sources (all first-party):
+- https://github.com/Fors-Corp/marcfors.com — `content/work/*/en.mdx`, `src/data/projects.ts`, `src/data/copy/en.ts`
+- Public CV facts mirrored in about/experience prose (phone never included)
+
+Mensura: corpus wording follows agent-store preferences — private on-device tracking
+and a self-made ML model that auto-learns from the user's own logs; no substance/drug wording.
+
+Retrieval stack adapted from https://github.com/Fors-Corp/embedded-rag (classic
+pgvector + MiniLM + Claude ask path).

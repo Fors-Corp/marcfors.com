@@ -10,13 +10,20 @@ const read = (locale: string) => fs.readFileSync(path.join(ROOT, `${locale}.mdx`
 const headings = (body: string) => body.split("\n").filter((line) => line.startsWith("## ")).length;
 
 describe("privacy and legal notice", () => {
-  it("dates the GitHub activity disclosure", () => {
-    expect(PRIVACY_UPDATED).toBe("2026-10-16");
+  it("dates the Ask and GitHub activity disclosures", () => {
+    expect(PRIVACY_UPDATED).toBe("2026-11-08");
   });
 
   it.each(LOCALES)("%s discloses the first-party GitHub activity endpoint", (locale) => {
     expect(read(locale)).toContain("/api/github-activity");
     expect(read(locale)).toContain("GitHub");
+  });
+
+  it.each(LOCALES)("%s discloses portfolio Ask (Neon + Anthropic)", (locale) => {
+    const body = read(locale);
+    expect(body).toContain("/api/ask");
+    expect(body).toContain("Neon");
+    expect(body).toContain("Anthropic");
   });
 
   it.each(LOCALES)("has a non-empty %s file", (locale) => {

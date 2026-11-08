@@ -110,6 +110,22 @@ export type UiCopy = {
   privacyTitle: string; // page <h1> and <title>
   privacyLede: string; // <meta description> and lede paragraph
   privacyUpdated: string; // "Last updated" label shown before the date
+  /** Short nav / CTA label for the portfolio Ask (RAG) page. */
+  askNav: string;
+  askTitle: string;
+  askLede: string;
+  askPlaceholder: string;
+  askSubmit: string;
+  askBusy: string;
+  askEmpty: string;
+  askError: string;
+  askUnavailable: string;
+  askCitations: string;
+  askSamplesLabel: string;
+  askSamples: readonly string[];
+  askSourcesLabel: string;
+  askSourcesEmpty: string;
+  askSourcesUnavailable: string;
   traceTitle: string;
   traceLede: string;
   tracePaste: string;
