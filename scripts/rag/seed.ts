@@ -98,20 +98,23 @@ async function main(): Promise<void> {
     )
   `;
   // App connects as table owner — FORCE RLS so owner bypass cannot void policies.
+  // Seed and /api/ask share DATABASE_URL, so the policy names current_user only.
+  // There is no per-user predicate: the server reads the shared corpus.
+  // Drop-and-create is one transaction, so a leftover PUBLIC policy cannot stay
+  // OR-ed in beside the role policy (permissive policies are combined with OR).
   await sql`ALTER TABLE rag_chunks ENABLE ROW LEVEL SECURITY`;
   await sql`ALTER TABLE rag_chunks FORCE ROW LEVEL SECURITY`;
   await sql`
     DO $$
+    DECLARE
+      ask_role text := current_user;
     BEGIN
-      IF NOT EXISTS (
-        SELECT 1 FROM pg_policies
-        WHERE tablename = 'rag_chunks' AND policyname = 'rag_chunks_all'
-      ) THEN
-        CREATE POLICY rag_chunks_all ON rag_chunks
-          FOR ALL
-          USING (true)
-          WITH CHECK (true);
-      END IF;
+      EXECUTE 'REVOKE ALL ON TABLE rag_chunks FROM PUBLIC';
+      EXECUTE 'DROP POLICY IF EXISTS rag_chunks_all ON rag_chunks';
+      EXECUTE format(
+        'CREATE POLICY rag_chunks_all ON rag_chunks FOR ALL TO %I USING (true) WITH CHECK (true)',
+        ask_role
+      );
     END
     $$
   `;

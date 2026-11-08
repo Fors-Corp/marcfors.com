@@ -8,6 +8,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 - Index education, spoken languages, hire and contact paths, and every featured project in the Ask corpus so questions can be answered from the public site.
 
+### Security
+
+- Ask is not end-to-end encrypted: the server and the model see the question; the transcript is not stored.
+
 ### Fixed
 
 - Link Ask citations for education, contact, privacy, and Trace Theater to the
