@@ -4,6 +4,13 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+- Publish the phone-free AI CV under `docs/cv/` and as `public/marc-fors-cv.pdf`
+  (Embedded RAG, Wordkeep, Mensura; Italian intermediate; open to remote roles;
+  Agent Switchboard removed).
+- Add `npm run cv:update` plus Grok skill `update-cv` and weekly workflow
+  `.github/workflows/cv-contributions.yml` to refresh GitHub contribution /
+  PR counts on the downloadable CV.
+
 ## 0.26.0 — 2026-11-04
 
 - Replace the signal-desk world with **Semantic Atlas**: Wordkeep atlas as the

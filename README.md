@@ -23,7 +23,12 @@ fabricating zero activity. No cron or deployment configuration is required.
 
 Source: [github.com/Fors-Corp/marcfors.com](https://github.com/Fors-Corp/marcfors.com). Live: [marcfors.com](https://marcfors.com).
 
-The CV is the source of truth for employment, education, skills and languages. GitHub supplies the live public-repo list. Public repositories get a source link; private work is listed without exposing the repo.
+The CV is the source of truth for employment, education, skills and languages
+(`docs/cv/Marc_Fors_CV_AI.docx`, downloadable at `/marc-fors-cv.pdf`). Phone
+stays out of git; refresh GitHub activity counts with `npm run cv:update` (or
+the weekly `CV contributions` workflow). GitHub also supplies the live
+public-repo list on the site. Public repositories get a source link; private
+work is listed without exposing the repo.
 
 Recruiters and custom-app inquiries: [developer@marcfors.com](mailto:developer@marcfors.com).
 
