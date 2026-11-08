@@ -160,13 +160,17 @@ export function PortfolioAsk({ strings, variant = "page" }: PortfolioAskProps) {
 
   return (
     <div className={`ask-shell${isWidget ? " ask-shell-widget" : ""}`}>
-      <header className="ask-intro">
-        {isWidget ? <h2 className="ask-widget-title">{strings.title}</h2> : <h1>{strings.title}</h1>}
-        {!isWidget ? <p className="ask-lede">{strings.lede}</p> : null}
-      </header>
+      {!isWidget ? (
+        <header className="ask-intro">
+          <h1>{strings.title}</h1>
+          <p className="ask-lede">{strings.lede}</p>
+        </header>
+      ) : null}
 
       <section className="ask-samples" aria-label={strings.samplesLabel}>
-        <p className="ask-samples-label">{strings.samplesLabel}</p>
+        {!isWidget ? (
+          <p className="ask-samples-label">{strings.samplesLabel}</p>
+        ) : null}
         <ul>
           {samplePrompts.map((sample) => (
             <li key={sample}>

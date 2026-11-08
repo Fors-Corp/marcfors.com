@@ -13,6 +13,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 - Show Ask as a bottom-right floating chatbot (open by default, closable)
   across portfolio pages; full `/ask` page remains.
+- Compact the floating Ask panel into a fixed-height chat column with the
+  composer pinned to the bottom (no clipped input / tall empty thread).
 
 ## 0.27.0 — 2026-11-08
 
