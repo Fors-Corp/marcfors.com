@@ -29,7 +29,8 @@ describe("AskChatWidget", () => {
     );
     render(<AskChatWidget strings={strings} />);
     expect(screen.getByRole("button", { name: copy.en.askWidgetClose })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { level: 2, name: copy.en.askTitle })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(copy.en.askPlaceholder)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: copy.en.askSamples[0] })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: copy.en.askWidgetClose }));
     expect(screen.getByRole("button", { name: copy.en.askWidgetOpen })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
