@@ -39,7 +39,7 @@ function renderInline(text: string, keyPrefix: string, locale: Locale): ReactNod
       if (href.length < token.length) nodes.push(token.slice(href.length));
     } else if (token.endsWith(".md")) {
       nodes.push(
-        <Link key={key} href={sourceHref(token, locale)} className="ask-cite">
+        <Link key={key} href={sourceHref(token, locale)} className="ask-source">
           {token}
         </Link>,
       );
