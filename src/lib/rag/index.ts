@@ -6,7 +6,9 @@ export {
 } from "./constants";
 export { databaseUrl, getSql } from "./db";
 export {
+  askJson,
   guardAskRequest,
+  maxAskBodyBytes,
   publicError,
   validateQuestion,
 } from "./guard";
