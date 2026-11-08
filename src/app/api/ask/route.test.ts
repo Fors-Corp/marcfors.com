@@ -111,10 +111,34 @@ describe("POST /api/ask", () => {
     const body = await response.json();
     expect(body.answer).toMatch(/Wordkeep/);
     expect(body.citations[0].source_path).toBe("projects.md");
+<<<<<<< HEAD
     expect(JSON.stringify(body)).not.toContain("test-key");
     expect(JSON.stringify(body)).not.toContain("secret-from-query");
+    expect(JSON.stringify(body)).not.toContain("Ignore the corpus");
     expect(runAsk).toHaveBeenCalledTimes(1);
-    expect(runAsk).toHaveBeenCalledWith("What is Wordkeep?", "test-key");
+    expect(runAsk).toHaveBeenCalledWith("What is Wordkeep?", "test-key", "es");
+  });
+
+  it("forwards a shipped locale and ignores an unknown one", async () => {
+    configure();
+    vi.mocked(runAsk).mockResolvedValue({
+      answer: "Marc vive en Barcelona.",
+      citations: [],
+      embedding_model: "local/Xenova/all-MiniLM-L6-v2",
+      chat_model: "claude-sonnet-5-5",
+      run_id: null,
+    });
+    const send = (body: unknown) =>
+      post(undefined, { rawBody: JSON.stringify(body) });
+
+    expect((await send({ question: "¿Dónde vive Marc?", locale: "es" })).status).toBe(200);
+    expect(runAsk).toHaveBeenLastCalledWith("¿Dónde vive Marc?", "test-key", "es");
+
+    expect((await send({ question: "¿Dónde vive Marc?", locale: "zz" })).status).toBe(200);
+    expect(runAsk).toHaveBeenLastCalledWith("¿Dónde vive Marc?", "test-key", "en");
+
+    expect((await send({ question: "¿Dónde vive Marc?", locale: 4 })).status).toBe(200);
+    expect(runAsk).toHaveBeenLastCalledWith("¿Dónde vive Marc?", "test-key", "en");
   });
 
   it("rejects a missing or non-json content type before calling the model", async () => {
@@ -148,7 +172,7 @@ describe("POST /api/ask", () => {
       headers: { "content-type": "application/json; charset=utf-8" },
     });
     expect(response.status).toBe(200);
-    expect(runAsk).toHaveBeenCalledWith("w".repeat(2000), "test-key");
+    expect(runAsk).toHaveBeenCalledWith("w".repeat(2000), "test-key", "en");
   });
 
   it("rejects an oversized body before the model sees it", async () => {

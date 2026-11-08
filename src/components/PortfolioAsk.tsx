@@ -144,7 +144,7 @@ export function PortfolioAsk({
       const response = await fetch("/api/ask", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ question: next }),
+        body: JSON.stringify({ question: next, locale }),
       });
       const payload = await readJson<AskResponse & { error?: unknown }>(response);
       if (!response.ok) {

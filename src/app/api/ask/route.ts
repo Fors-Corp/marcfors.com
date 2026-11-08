@@ -1,3 +1,4 @@
+import { DEFAULT_LOCALE, isLocale, type Locale } from "@/lib/locale";
 import { readJsonBody } from "@/lib/requestBody";
 import {
   askJson,
@@ -8,6 +9,12 @@ import {
   runAsk,
   validateQuestion,
 } from "@/lib/rag";
+
+function localeFromBody(body: unknown): Locale {
+  if (!body || typeof body !== "object" || !("locale" in body)) return DEFAULT_LOCALE;
+  const locale = (body as { locale: unknown }).locale;
+  return isLocale(locale) ? locale : DEFAULT_LOCALE;
+}
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -50,7 +57,7 @@ export async function POST(request: Request) {
       return askJson({ error: parsed.error }, 400);
     }
 
-    const result = await runAsk(parsed.question, apiKey);
+    const result = await runAsk(parsed.question, apiKey, localeFromBody(body));
     return askJson(result, 200);
   } catch (error) {
     // Do not log `error`: driver messages can include the question and the connection string.

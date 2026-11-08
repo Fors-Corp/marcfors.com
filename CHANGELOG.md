@@ -21,6 +21,11 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Changed
 
+- Answer portfolio Ask in the page locale. The chat sends `locale` with each
+  `/api/ask` question, and the model is told to reply in that language while
+  citing corpus source paths as written. Ask UI strings are hand-written in
+  every shipped locale. The abstain sentence stays the English refusal so a
+  missing answer still returns no citations.
 - Show Ask as a bottom-right floating chatbot (open by default, closable)
   across portfolio pages; full `/ask` page remains.
 - Compact the floating Ask panel into a fixed-height chat column with the
