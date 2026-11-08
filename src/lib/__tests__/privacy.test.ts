@@ -16,7 +16,14 @@ import {
 } from "@/lib/site";
 // The published-asset scanner CI runs, imported rather than reimplemented so a
 // gap here is a gap there. scripts/check-privacy.mjs is a thin CLI over it.
-import { ascii85, pdfText } from "../../../scripts/lib/pdf.mjs";
+import {
+  ascii85,
+  decodeMappedHex,
+  expandMappedStrings,
+  parseToUnicodeMaps,
+  pdfText,
+  utf16BeHex,
+} from "../../../scripts/lib/pdf.mjs";
 import { scanPublicAssets } from "../../../scripts/lib/privacy.mjs";
 
 const repoRoot = path.resolve(__dirname, "../../..");
@@ -130,6 +137,27 @@ describe("published-asset scanner", () => {
     expect(ascii85("<~87cURD]i,\"Ebo80~>").toString("latin1")).toBe("Hello World!");
     // z is the all-zeros shorthand
     expect([...ascii85("z")]).toEqual([0, 0, 0, 0]);
+  });
+
+  it("maps LibreOffice-style ToUnicode hex operands back to text", () => {
+    // Regression: writer_pdf_Export emits <01><02>… Tj with a ToUnicode CMap
+    // instead of literal (developer@…) Tj. A scan that only inflates streams
+    // still cannot see the mailbox.
+    expect(utf16BeHex("0040")).toBe("@");
+    const cmap = [
+      "begincmap",
+      "1 beginbfchar",
+      "<01> <0040>",
+      "endbfchar",
+      "1 beginbfrange",
+      "<02> <04> <0061>",
+      "endbfrange",
+      "endcmap",
+    ].join("\n");
+    const maps = parseToUnicodeMaps(cmap);
+    expect(maps).toHaveLength(1);
+    expect(decodeMappedHex("01020304", maps[0])).toBe("@abc");
+    expect(expandMappedStrings(`${cmap}\nBT <01020304>Tj ET`)).toContain("@abc");
   });
 
   it("recovers text from inside the shipped PDF’s compressed streams", () => {
