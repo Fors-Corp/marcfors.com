@@ -2,8 +2,11 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import type { FormEvent } from "react";
+import Link from "next/link";
 
 import { AskAnswer } from "@/components/AskAnswer";
+import type { Locale } from "@/lib/locale";
+import { sourceHref } from "@/lib/rag/sourceHref";
 
 export type AskCitation = {
   source_path: string;
@@ -40,6 +43,7 @@ export type PortfolioAskProps = {
   strings: PortfolioAskStrings;
   /** Compact floating-chat layout hides the sources rail. */
   variant?: "page" | "widget";
+  locale?: Locale;
 };
 
 type Message = {
@@ -74,7 +78,7 @@ async function readJson<T>(response: Response): Promise<T> {
   }
 }
 
-export function PortfolioAsk({ strings, variant = "page" }: PortfolioAskProps) {
+export function PortfolioAsk({ strings, variant = "page", locale = "en" }: PortfolioAskProps) {
   const formId = useId();
   const isWidget = variant === "widget";
   const [question, setQuestion] = useState("");
@@ -213,7 +217,7 @@ export function PortfolioAsk({ strings, variant = "page" }: PortfolioAskProps) {
             className={`ask-turn ask-turn-${message.role}`}
           >
             {message.role === "assistant" ? (
-              <AskAnswer text={message.text} />
+              <AskAnswer text={message.text} locale={locale} />
             ) : (
               <p>{message.text}</p>
             )}
@@ -223,7 +227,9 @@ export function PortfolioAsk({ strings, variant = "page" }: PortfolioAskProps) {
                 <ul>
                   {message.meta.citations.map((citation) => (
                     <li key={`${citation.source_path}-${citation.chunk_index}`}>
-                      <code>{citation.source_path}</code>
+                      <Link className="ask-cite" href={sourceHref(citation.source_path, locale)}>
+                        {citation.source_path}
+                      </Link>
                       <span className="ask-distance">
                         d={citation.distance.toFixed(3)}
                       </span>

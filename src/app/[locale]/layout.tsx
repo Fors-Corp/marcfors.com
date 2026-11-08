@@ -128,7 +128,7 @@ export default async function LocaleLayout({
         {/* application/ld+json: WebSite + Person graph, shared by every page. */}
         <JsonLd data={siteJsonLd()} />
         {children}
-        <AskChatWidget strings={askChatWidgetStrings(t)} />
+        <AskChatWidget strings={askChatWidgetStrings(t)} locale={locale} />
         <Analytics />
       </body>
     </html>

@@ -21,6 +21,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   clipping the Ask / Close controls.
 - Size the Ask panel for desktop, tablet, and phone, and highlight answer
   links plus corpus citations.
+- Match Ask message type to the sample prompts, and link each source to the
+  portfolio section it describes without leaving the chat.
 
 ## 0.27.0 — 2026-11-08
 

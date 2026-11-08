@@ -54,7 +54,7 @@ export default async function AskPage({ params }: { params: Promise<{ locale: st
         </nav>
       </header>
       <main id="main" className="sheet ask-page" tabIndex={-1}>
-        <PortfolioAsk strings={portfolioAskStrings(t)} />
+        <PortfolioAsk strings={portfolioAskStrings(t)} locale={locale} />
       </main>
     </div>
   );
