@@ -4,8 +4,8 @@ import { describe, expect, it } from "vitest";
 import { careerBreak, contact, copy, education, experience, languages, skills } from "@/data/copy";
 import { featured } from "@/data/projects";
 
-// `app/[locale]/layout.tsx` preloads only the `latin` subset of Spectral and IBM
-// Plex Mono. That is safe exactly as long as no shipped string needs a glyph that
+// `app/[locale]/layout.tsx` preloads only the `latin` subset of Spectral and
+// Manrope. That is safe exactly as long as no shipped string needs a glyph that
 // lives in `latin-ext` instead — so this guard fails the build the moment one does.
 //
 // Failing is the point. next/font still emits the `latin-ext` @font-face rules

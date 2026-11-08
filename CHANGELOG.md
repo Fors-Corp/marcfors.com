@@ -14,6 +14,7 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Name Spectral and Manrope in the security note that lists the self-hosted fonts.
 - Link Ask citations for education, contact, privacy, and Trace Theater to the
   section or page that actually holds them.
 - Make the floating Ask panel a modal dialog labelled by its visible title:
