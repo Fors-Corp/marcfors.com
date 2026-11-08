@@ -44,7 +44,7 @@ Next.js App Router on Vercel; locales in the URL; theme preference in localStora
 
 ## Evidence on Hand
 
-- `Marc_Fors_CV_AI_v2.pdf` / public CV path.
+- `docs/cv/Marc_Fors_CV_AI.docx` (public, phone-free) → `public/marc-fors-cv.pdf`.
 - Featured work and case studies in `src/data/projects.ts` and `content/work/`.
 - Live npm audit snapshot and `/api/health`, `/api/vitals`.
 - Do not fabricate customers, metrics, or employment claims beyond the CV and committed copy.

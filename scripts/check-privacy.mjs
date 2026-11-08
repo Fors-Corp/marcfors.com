@@ -41,9 +41,11 @@ for (const pattern of patterns) {
 // Published assets need their own pass: the grep above skips binaries (`-I`),
 // and a PDF keeps its text inside compressed streams, so a leak in `public/`
 // scans clean either way. See scripts/lib/privacy.mjs.
-for (const { file, label, match } of scanPublicAssets()) {
-  failed = true;
-  console.error(`Privacy leak: ${label} found in published asset ${file}: ${match}`);
+for (const dir of ["public", "docs/cv"]) {
+  for (const { file, label, match } of scanPublicAssets(dir)) {
+    failed = true;
+    console.error(`Privacy leak: ${label} found in published asset ${file}: ${match}`);
+  }
 }
 
 if (failed) {

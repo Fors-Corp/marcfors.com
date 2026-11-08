@@ -16,6 +16,7 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "privacy": "node scripts/check-privacy.mjs",
+    "cv:update": "node scripts/update-cv-contributions.mjs",
     "audit": "npm audit --omit=dev --audit-level=high",
     "ci": "npm run privacy && npm run test:coverage && npm run typecheck && npm run lint && npm run audit && npm run build",
     "test:coverage": "vitest run --coverage",

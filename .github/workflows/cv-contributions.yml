@@ -1,0 +1,72 @@
+name: CV contributions
+
+# Weekly refresh of the downloadable CV's GitHub activity clause.
+# Grok (and humans) can also run `npm run cv:update` locally — see
+# `.grok/skills/update-cv/SKILL.md`.
+
+on:
+  schedule:
+    - cron: "17 6 * * 1" # Mondays 06:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: cv-contributions
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install LibreOffice
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq libreoffice-writer libreoffice-common
+      - run: npm ci
+      - name: Refresh CV activity clause
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run cv:update
+      - name: Privacy scan
+        run: npm run privacy
+      - name: Open PR when the CV changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet -- docs/cv/Marc_Fors_CV_AI.docx docs/cv/Marc_Fors_CV_AI.pdf public/marc-fors-cv.pdf; then
+            echo "CV already current"
+            exit 0
+          fi
+          git config user.email "developer@marcfors.com"
+          git config user.name "Marc Fors"
+          git checkout -B chore/cv-contributions
+          git add docs/cv/Marc_Fors_CV_AI.docx docs/cv/Marc_Fors_CV_AI.pdf public/marc-fors-cv.pdf
+          git commit -m "chore: refresh CV GitHub contribution stats"
+          git push -u origin chore/cv-contributions --force-with-lease
+          if gh pr view chore/cv-contributions --json number >/dev/null 2>&1; then
+            echo "PR already open for chore/cv-contributions"
+          else
+            gh pr create \
+              --base main \
+              --head chore/cv-contributions \
+              --title "chore: refresh CV GitHub contribution stats" \
+              --body "$(cat <<'EOF'
+          Automated refresh of the downloadable CV activity clause
+          (`docs/cv/Marc_Fors_CV_AI.docx` → `public/marc-fors-cv.pdf`).
+
+          Stats come from the public contribution calendar (trailing year) and
+          the GitHub Search API (PRs created / merged in the last 30 days).
+
+          Triggered by `.github/workflows/cv-contributions.yml`. Grok skill:
+          `.grok/skills/update-cv/`.
+          EOF
+          )"
+          fi
