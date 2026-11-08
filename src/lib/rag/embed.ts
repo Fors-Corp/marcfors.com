@@ -1,18 +1,21 @@
-import { env, pipeline, type FeatureExtractionPipeline } from "@huggingface/transformers";
+import type { FeatureExtractionPipeline } from "@huggingface/transformers";
 
 import { EMBEDDING_DIM, EMBEDDING_MODEL } from "./constants";
-
-if (env.backends.onnx?.wasm) {
-  env.backends.onnx.wasm.numThreads = 1;
-}
-env.allowLocalModels = false;
-// Vercel /var/task is read-only; cache model files under /tmp.
-env.cacheDir = process.env.TRANSFORMERS_CACHE || "/tmp/transformers-cache";
 
 let extractor: FeatureExtractionPipeline | null = null;
 
 async function getExtractor(): Promise<FeatureExtractionPipeline> {
   if (extractor) return extractor;
+  // Dynamic import so a missing native binding becomes a JSON 500 from the
+  // route, not an HTML platform error before the handler runs.
+  const { env, pipeline } = await import("@huggingface/transformers");
+  if (env.backends.onnx?.wasm) {
+    env.backends.onnx.wasm.numThreads = 1;
+  }
+  env.allowLocalModels = false;
+  // Vercel /var/task is read-only; cache model files under /tmp.
+  env.cacheDir = process.env.TRANSFORMERS_CACHE || "/tmp/transformers-cache";
+
   // @huggingface/transformers ≥4 accepts cuda|webgpu|cpu — not wasm.
   const preferred = (process.env.EMBED_DEVICE || "cpu").toLowerCase();
   const allowed = new Set(["cpu", "webgpu", "cuda"]);

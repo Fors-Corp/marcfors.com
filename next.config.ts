@@ -40,8 +40,26 @@ const nextConfig: NextConfig = {
   serverExternalPackages: [
     "@huggingface/transformers",
     "onnxruntime-node",
+    "onnxruntime-common",
     "sharp",
   ],
+  // The Ask route loads MiniLM through onnxruntime-node. Next's tracer does not
+  // follow that native require, so the preview function 500s with
+  // "Cannot find module 'onnxruntime-node'". Ship only the Linux x64 binding.
+  outputFileTracingIncludes: {
+    "/api/ask": [
+      "./node_modules/onnxruntime-node/package.json",
+      "./node_modules/onnxruntime-node/dist/**/*",
+      "./node_modules/onnxruntime-node/bin/napi-v6/linux/x64/**/*",
+      "./node_modules/onnxruntime-common/**/*",
+    ],
+    "/api/rag-sources": [
+      "./node_modules/onnxruntime-node/package.json",
+      "./node_modules/onnxruntime-node/dist/**/*",
+      "./node_modules/onnxruntime-node/bin/napi-v6/linux/x64/**/*",
+      "./node_modules/onnxruntime-common/**/*",
+    ],
+  },
   // Turbopack HMR rejects Origins that are not the server hostname. Local
   // preview often opens http://127.0.0.1:3000 while `next dev` binds as
   // localhost — without this, the WS handshake returns plain "Unauthorized",

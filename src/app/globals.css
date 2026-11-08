@@ -2456,8 +2456,11 @@ footer {
       width: auto;
     }
     .ask-fab-panel {
-      height: min(70dvh, 34rem);
-      max-height: calc(100dvh - 1rem - env(safe-area-inset-bottom, 0px));
+      height: min(42dvh, 22rem);
+      max-height: min(46dvh, 24rem);
+    }
+    .ask-fab {
+      --ask-fab-pad: 0.7rem;
     }
     .ask-shell.ask-shell-widget .ask-sample {
       min-height: 44px;
