@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { AskChatWidget } from "@/components/AskChatWidget";
+import { AskChatWidget, askVisualBottomGap } from "@/components/AskChatWidget";
 import { askChatWidgetStrings } from "@/lib/askStrings";
 import { copy } from "@/data/copy";
 
@@ -9,6 +9,7 @@ const strings = askChatWidgetStrings(copy.en);
 
 vi.mock("next/navigation", () => ({
   usePathname: () => "/",
+  useRouter: () => ({ push: vi.fn(), prefetch: vi.fn() }),
 }));
 
 afterEach(() => {
@@ -35,5 +36,40 @@ describe("AskChatWidget", () => {
     expect(screen.getByRole("button", { name: copy.en.askWidgetOpen })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
     expect(screen.getByRole("button", { name: copy.en.askWidgetClose })).toBeInTheDocument();
+  });
+
+  it("closes on a source link and keeps the thread", async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        text: async () =>
+          JSON.stringify({
+            answer: "He builds products at his practice (experience.md).",
+            citations: [{ source_path: "experience.md", chunk_index: 0, distance: 0.12 }],
+            embedding_model: "local/x",
+            chat_model: "claude",
+            run_id: null,
+          }),
+      }),
+    );
+    render(<AskChatWidget strings={strings} />);
+    await user.click(screen.getByRole("button", { name: copy.en.askSamples[0] }));
+    const sources = await screen.findAllByRole("link", { name: "experience.md" });
+    await user.click(sources[0]!);
+    expect(screen.getByRole("button", { name: copy.en.askWidgetOpen })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "experience.md" })).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
+    expect(screen.getByText(/He builds products at his practice/)).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: "experience.md" }).length).toBeGreaterThan(0);
+  });
+});
+
+describe("askVisualBottomGap", () => {
+  it("is the layout viewport hanging below the visible viewport", () => {
+    expect(askVisualBottomGap(800, { height: 700, offsetTop: 0 })).toBe(100);
+    expect(askVisualBottomGap(800, { height: 820, offsetTop: 40 })).toBe(0);
   });
 });

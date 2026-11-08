@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { AskAnswer } from "@/components/AskAnswer";
 
 describe("AskAnswer", () => {
@@ -38,6 +39,14 @@ describe("AskAnswer", () => {
     const source = screen.getByRole("link", { name: "work/mensura.md" });
     expect(source).toHaveAttribute("href", "/work/mensura");
     expect(source).toHaveClass("ask-source");
+  });
+
+  it("notifies when a source link is opened", async () => {
+    const user = userEvent.setup();
+    const onSourceNavigate = vi.fn();
+    render(<AskAnswer text="See experience.md." onSourceNavigate={onSourceNavigate} />);
+    await user.click(screen.getByRole("link", { name: "experience.md" }));
+    expect(onSourceNavigate).toHaveBeenCalledOnce();
   });
 
   it("does not interpret raw HTML", () => {

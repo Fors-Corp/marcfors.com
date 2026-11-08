@@ -2281,11 +2281,12 @@ footer {
      Desktop card, tablet card, phone sheet. */
   .ask-fab {
     --ask-fab-pad: 1rem;
+    --ask-edge: max(1.25rem, env(safe-area-inset-right, 0px));
     position: fixed;
-    inset-inline-end: max(1.25rem, env(safe-area-inset-right, 0px));
-    inset-block-end: max(1.25rem, env(safe-area-inset-bottom, 0px));
+    inset-inline-end: var(--ask-edge);
+    inset-block-end: calc(var(--ask-edge) + var(--ask-vv-bottom, 0px));
     z-index: 60;
-    width: min(28rem, calc(100vw - 2.5rem));
+    width: min(28rem, calc(100vw - (var(--ask-edge) * 2)));
     pointer-events: none;
   }
   .ask-fab > * {
@@ -2296,13 +2297,16 @@ footer {
     flex-direction: column;
     box-sizing: border-box;
     height: auto;
-    max-height: min(70dvh, 34rem);
+    max-height: min(70dvh, 34rem, calc(100dvh - (var(--ask-edge) * 2) - var(--ask-vv-bottom, 0px)));
     overflow: hidden;
     border: 1px solid var(--line);
     border-radius: var(--r-md);
     background: color-mix(in srgb, var(--panel) 97%, transparent);
     backdrop-filter: blur(10px);
     box-shadow: 0 18px 40px color-mix(in srgb, #000 28%, transparent);
+  }
+  .ask-fab-panel[hidden] {
+    display: none;
   }
   .ask-fab-chrome {
     flex: 0 0 auto;
@@ -2365,7 +2369,8 @@ footer {
     min-height: 0;
     box-sizing: border-box;
     gap: 0.5rem;
-    padding: var(--ask-fab-pad);
+    padding-block: var(--ask-fab-pad);
+    padding-inline: var(--ask-fab-pad);
     margin: 0;
     overflow: hidden;
     grid-template-columns: none;
@@ -2400,10 +2405,9 @@ footer {
     line-height: 1.25;
   }
   .ask-shell.ask-shell-widget .ask-thread {
-    flex: 0 1 auto;
+    flex: 1 1 auto;
     order: 1;
     min-height: 0;
-    max-height: min(42dvh, 18rem);
     overflow-x: hidden;
     overflow-y: auto;
     gap: 0.5rem;
@@ -2419,7 +2423,9 @@ footer {
     align-items: center;
     gap: 0.5rem;
     margin: 0;
-    padding: var(--ask-fab-pad) 0 0;
+    padding-block-start: var(--ask-fab-pad);
+    padding-inline: 0;
+    padding-block-end: 0;
     border-top: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
   }
   .ask-shell.ask-shell-widget .ask-composer input[type="text"] {
@@ -2464,36 +2470,26 @@ footer {
   /* Tablet: narrower card, still a corner panel. */
   @media (max-width: 1024px) {
     .ask-fab {
-      width: min(24rem, calc(100vw - 1.5rem));
-      inset-inline-end: max(0.75rem, env(safe-area-inset-right, 0px));
-      inset-block-end: max(0.75rem, env(safe-area-inset-bottom, 0px));
+      --ask-edge: max(0.75rem, env(safe-area-inset-right, 0px));
+      width: min(24rem, calc(100vw - (var(--ask-edge) * 2)));
     }
     .ask-fab-panel {
       height: auto;
-      max-height: min(64dvh, 30rem);
-    }
-    .ask-shell.ask-shell-widget .ask-thread {
-      max-height: min(36dvh, 14rem);
+      max-height: min(64dvh, 30rem, calc(100dvh - (var(--ask-edge) * 2) - var(--ask-vv-bottom, 0px)));
     }
   }
 
   /* Phone: full-width sheet above the home indicator. */
   @media (max-width: 640px) {
     .ask-fab {
-      inset-inline-start: max(0.5rem, env(safe-area-inset-left, 0px));
-      inset-inline-end: max(0.5rem, env(safe-area-inset-right, 0px));
-      inset-block-end: max(0.5rem, env(safe-area-inset-bottom, 0px));
+      --ask-edge: max(0.5rem, env(safe-area-inset-right, 0px));
+      --ask-fab-pad: 0.7rem;
+      inset-inline-start: var(--ask-edge);
       width: auto;
     }
     .ask-fab-panel {
       height: auto;
-      max-height: min(58dvh, 24rem);
-    }
-    .ask-shell.ask-shell-widget .ask-thread {
-      max-height: min(28dvh, 11rem);
-    }
-    .ask-fab {
-      --ask-fab-pad: 0.7rem;
+      max-height: min(58dvh, 24rem, calc(100dvh - (var(--ask-edge) * 2) - var(--ask-vv-bottom, 0px)));
     }
     .ask-shell.ask-shell-widget .ask-sample {
       min-height: 44px;
