@@ -98,7 +98,11 @@ export function PortfolioAsk({
   const samplePrompts = isWidget ? strings.samples.slice(0, 3) : strings.samples;
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView?.({ behavior: "smooth" });
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    bottomRef.current?.scrollIntoView?.({
+      block: "nearest",
+      behavior: reduce ? "auto" : "smooth",
+    });
   }, [messages, busy]);
 
   useEffect(() => {

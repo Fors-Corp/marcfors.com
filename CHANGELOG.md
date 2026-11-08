@@ -16,6 +16,9 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 - Link Ask citations for education, contact, privacy, and Trace Theater to the
   section or page that actually holds them.
+- Make the floating Ask panel a modal dialog labelled by its visible title:
+  Escape closes it, focus moves into the question field when it is opened and
+  back to the launcher when it closes, and Tab stays inside the panel.
 - Render Ask assistant replies as lightweight Markdown (bold, lists, links)
   instead of raw `**…**` / `-` source in the thread.
 
