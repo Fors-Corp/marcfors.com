@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { copy } from "../src/data/copy";
 import { findAtlasNodePoint } from "./atlasHit";
+import { dismissAsk } from "./dismissAsk";
 
 test("home renders the desk in English", async ({ page }) => {
   await page.goto("/");
@@ -15,6 +16,7 @@ test("Gatto links from featured work to a localized success story and the live s
   await expect(card.locator(".technology-icon")).toHaveCount(3);
   await expect(card.locator('a[href="https://gatto-psi.vercel.app"]')).toBeVisible();
   await expect(card.locator('a[href*="github.com"]')).toHaveCount(0);
+  await dismissAsk(page);
   await card.locator('a[href="/ca/work/gatto"]').click();
   await expect(page.getByRole("heading", { name: "Gatto", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Resultat" })).toBeVisible();
@@ -24,6 +26,7 @@ test("Gatto links from featured work to a localized success story and the live s
 
 test("language switch changes the URL and the lang attribute", async ({ page }) => {
   await page.goto("/");
+  await dismissAsk(page);
   await page.locator(".langs-menu > summary").click();
   await page.getByRole("link", { name: "ES · Español" }).click();
   await expect(page).toHaveURL(/\/es$/);
@@ -32,6 +35,7 @@ test("language switch changes the URL and the lang attribute", async ({ page }) 
 
 test("a theme pick sticks across a reload", async ({ page }) => {
   await page.goto("/");
+  await dismissAsk(page);
   await page.locator(".themes-menu > summary").click();
   await page.getByRole("button", { name: copy.en.themeNames.blue }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "blue");
@@ -49,6 +53,7 @@ test("every section is on the page at once, and a nav link jumps to one", async 
   await expect(page.locator("[aria-expanded]")).toHaveCount(0);
   await expect(page.locator("details#more")).toHaveCount(0);
 
+  await dismissAsk(page);
   await page.getByRole("link", { name: "Selected work" }).first().click();
   await expect(page).toHaveURL(/#projects$/);
 });
@@ -95,6 +100,7 @@ test("Wordkeep atlas: a click selects a word and shows its links, and the canvas
 
   // The real assertion: an actual mouse click at that spot selects the word.
   const readout = page.locator(".atlas-readout");
+  await dismissAsk(page);
   await page.mouse.click(box.x + box.width * hit!.gx, box.y + box.height * hit!.gy);
   await expect(readout).toHaveClass(/\bon\b/);
   await expect(readout.locator("strong")).not.toBeEmpty();

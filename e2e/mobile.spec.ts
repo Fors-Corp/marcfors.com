@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { findAtlasNodePoint } from "./atlasHit";
+import { dismissAsk } from "./dismissAsk";
 
 // Runs only on the `mobile` project (Pixel 7 viewport), which triggers the
 // compact header where the language <select> replaces the locale link row.
@@ -8,6 +9,7 @@ test("compact header: the language menu switches locale", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1, name: "Marc Fors" })).toBeVisible();
 
+  await dismissAsk(page);
   await page.locator(".langs-menu > summary").click();
   await page.getByRole("link", { name: "DE · Deutsch" }).click();
 
@@ -25,6 +27,7 @@ test("all sections are on the page on a phone, with no More archive", async ({ p
 
 test("Wordkeep atlas responds to a real touch tap, not just a mouse hover", async ({ page }) => {
   await page.goto("/work/wordkeep");
+  await dismissAsk(page);
   const canvas = page.locator(".atlas-canvas");
   await expect(canvas).toBeVisible();
 
