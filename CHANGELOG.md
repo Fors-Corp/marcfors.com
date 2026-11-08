@@ -24,6 +24,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Changed
 
+- State in every privacy locale that the Ask server and Anthropic see the
+  question and that this site does not store the transcript.
 - Answer portfolio Ask in the page locale. The chat sends `locale` with each
   `/api/ask` question, and the model is told to reply in that language while
   citing corpus source paths as written. Ask UI strings are hand-written in
