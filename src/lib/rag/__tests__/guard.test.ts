@@ -91,6 +91,13 @@ describe("rag guard", () => {
     expect(requireAskSecret(ask())).toBeNull();
   });
 
+  it("does not tell operators to set a secret the browser cannot send", () => {
+    const example = readFileSync(path.join(process.cwd(), ".env.example"), "utf8");
+    expect(example).not.toMatch(/RAG_ASK_SECRET\s*=/);
+    expect(example).toContain("Leave RAG_ASK_SECRET unset");
+    expect(example).toContain("401");
+  });
+
   it("fails closed when the ask secret is blank or does not match", () => {
     process.env.RAG_ASK_SECRET = "   ";
     expect(requireAskSecret(ask())).toBe("unauthorized");
