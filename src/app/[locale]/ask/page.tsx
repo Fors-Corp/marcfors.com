@@ -6,6 +6,7 @@ import { PortfolioAsk } from "@/components/PortfolioAsk";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { copy } from "@/data/copy";
+import { portfolioAskStrings } from "@/lib/askStrings";
 import { isLocale, languageAlternates, localeUrl, withLocale } from "@/lib/locale";
 import { pageSocialMetadata } from "@/lib/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
@@ -53,24 +54,7 @@ export default async function AskPage({ params }: { params: Promise<{ locale: st
         </nav>
       </header>
       <main id="main" className="sheet ask-page" tabIndex={-1}>
-        <PortfolioAsk
-          strings={{
-            title: t.askTitle,
-            lede: t.askLede,
-            placeholder: t.askPlaceholder,
-            submit: t.askSubmit,
-            busy: t.askBusy,
-            empty: t.askEmpty,
-            error: t.askError,
-            unavailable: t.askUnavailable,
-            citations: t.askCitations,
-            samplesLabel: t.askSamplesLabel,
-            samples: t.askSamples,
-            sourcesLabel: t.askSourcesLabel,
-            sourcesEmpty: t.askSourcesEmpty,
-            sourcesUnavailable: t.askSourcesUnavailable,
-          }}
-        />
+        <PortfolioAsk strings={portfolioAskStrings(t)} />
       </main>
     </div>
   );

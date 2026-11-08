@@ -4,8 +4,10 @@ import { notFound } from "next/navigation";
 import { Spectral, Manrope } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { isLocale, languageAlternates, LOCALES, localeUrl, OG_LOCALES, type Locale } from "@/lib/locale";
+import { AskChatWidget } from "@/components/AskChatWidget";
 import { JsonLd } from "@/components/JsonLd";
 import { copy } from "@/data/copy";
+import { askChatWidgetStrings } from "@/lib/askStrings";
 import { OG_SIZE, OG_TYPE } from "@/lib/og";
 import { FAMILY_NAME, GIVEN_NAME, OCCUPATIONS, siteJsonLd } from "@/lib/seo";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
@@ -110,6 +112,7 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
+  const t = copy[locale];
 
   return (
     <html lang={locale} className={`${serif.variable} ${mono.variable}`} suppressHydrationWarning>
@@ -125,6 +128,7 @@ export default async function LocaleLayout({
         {/* application/ld+json: WebSite + Person graph, shared by every page. */}
         <JsonLd data={siteJsonLd()} />
         {children}
+        <AskChatWidget strings={askChatWidgetStrings(t)} />
         <Analytics />
       </body>
     </html>

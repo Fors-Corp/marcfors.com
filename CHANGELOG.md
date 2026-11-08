@@ -4,6 +4,16 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+### Fixed
+
+- Render Ask assistant replies as lightweight Markdown (bold, lists, links)
+  instead of raw `**…**` / `-` source in the thread.
+
+### Changed
+
+- Show Ask as a bottom-right floating chatbot (open by default, closable)
+  across portfolio pages; full `/ask` page remains.
+
 ## 0.27.0 — 2026-11-08
 
 - Feature **Embedded RAG** first in Selected work with live demo
