@@ -78,4 +78,40 @@ describe("PortfolioAsk", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("work/embedded-rag.md")).toBeInTheDocument();
   });
+
+  it("renders markdown in assistant answers", async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL) => {
+        const url = String(input);
+        if (url.includes("/api/rag-sources")) {
+          return {
+            ok: true,
+            status: 200,
+            text: async () => JSON.stringify({ files: ["about.md"], embedding_model: "local/x" }),
+          };
+        }
+        return {
+          ok: true,
+          status: 200,
+          text: async () =>
+            JSON.stringify({
+              answer: "Marc works on **agents**.\n\n- **Focus:** LLM tooling (about.md).",
+              citations: [{ source_path: "about.md", chunk_index: 0, distance: 0.2 }],
+              embedding_model: "local/x",
+              chat_model: "claude-sonnet-5-5",
+              run_id: null,
+            }),
+        };
+      }),
+    );
+    render(<PortfolioAsk strings={strings} />);
+    await user.type(screen.getByPlaceholderText(copy.en.askPlaceholder), "Who is Marc?");
+    await user.click(screen.getByRole("button", { name: copy.en.askSubmit }));
+    expect(await screen.findByText("agents")).toBeInTheDocument();
+    expect(screen.getByText("agents").tagName).toBe("STRONG");
+    expect(screen.getByText("Focus:")).toBeInTheDocument();
+    expect(screen.getByText("Focus:").closest("li")).not.toBeNull();
+  });
 });

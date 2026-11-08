@@ -3,6 +3,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 import type { FormEvent } from "react";
 
+import { AskAnswer } from "@/components/AskAnswer";
+
 export type AskCitation = {
   source_path: string;
   chunk_index: number;
@@ -32,6 +34,12 @@ export type PortfolioAskStrings = {
   sourcesLabel: string;
   sourcesEmpty: string;
   sourcesUnavailable: string;
+};
+
+export type PortfolioAskProps = {
+  strings: PortfolioAskStrings;
+  /** Compact floating-chat layout hides the sources rail. */
+  variant?: "page" | "widget";
 };
 
 type Message = {
@@ -66,8 +74,9 @@ async function readJson<T>(response: Response): Promise<T> {
   }
 }
 
-export function PortfolioAsk({ strings }: { strings: PortfolioAskStrings }) {
+export function PortfolioAsk({ strings, variant = "page" }: PortfolioAskProps) {
   const formId = useId();
+  const isWidget = variant === "widget";
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [busy, setBusy] = useState(false);
@@ -75,12 +84,14 @@ export function PortfolioAsk({ strings }: { strings: PortfolioAskStrings }) {
   const [files, setFiles] = useState<string[]>([]);
   const [sourcesNote, setSourcesNote] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
+  const samplePrompts = isWidget ? strings.samples.slice(0, 3) : strings.samples;
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView?.({ behavior: "smooth" });
   }, [messages, busy]);
 
   useEffect(() => {
+    if (isWidget) return;
     let cancelled = false;
     (async () => {
       try {
@@ -109,7 +120,7 @@ export function PortfolioAsk({ strings }: { strings: PortfolioAskStrings }) {
     return () => {
       cancelled = true;
     };
-  }, [strings.sourcesEmpty, strings.sourcesUnavailable, strings.unavailable]);
+  }, [isWidget, strings.sourcesEmpty, strings.sourcesUnavailable, strings.unavailable]);
 
   async function ask(raw: string) {
     const next = raw.trim();
@@ -148,16 +159,16 @@ export function PortfolioAsk({ strings }: { strings: PortfolioAskStrings }) {
   }
 
   return (
-    <div className="ask-shell">
+    <div className={`ask-shell${isWidget ? " ask-shell-widget" : ""}`}>
       <header className="ask-intro">
-        <h1>{strings.title}</h1>
-        <p className="ask-lede">{strings.lede}</p>
+        {isWidget ? <h2 className="ask-widget-title">{strings.title}</h2> : <h1>{strings.title}</h1>}
+        {!isWidget ? <p className="ask-lede">{strings.lede}</p> : null}
       </header>
 
       <section className="ask-samples" aria-label={strings.samplesLabel}>
         <p className="ask-samples-label">{strings.samplesLabel}</p>
         <ul>
-          {strings.samples.map((sample) => (
+          {samplePrompts.map((sample) => (
             <li key={sample}>
               <button
                 type="button"
@@ -172,19 +183,21 @@ export function PortfolioAsk({ strings }: { strings: PortfolioAskStrings }) {
         </ul>
       </section>
 
-      <aside className="ask-sources" aria-label={strings.sourcesLabel}>
-        <h2>{strings.sourcesLabel}</h2>
-        {sourcesNote ? <p className="ask-sources-note">{sourcesNote}</p> : null}
-        {files.length > 0 ? (
-          <ul>
-            {files.map((file) => (
-              <li key={file}>
-                <code>{file}</code>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-      </aside>
+      {!isWidget ? (
+        <aside className="ask-sources" aria-label={strings.sourcesLabel}>
+          <h2>{strings.sourcesLabel}</h2>
+          {sourcesNote ? <p className="ask-sources-note">{sourcesNote}</p> : null}
+          {files.length > 0 ? (
+            <ul>
+              {files.map((file) => (
+                <li key={file}>
+                  <code>{file}</code>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </aside>
+      ) : null}
 
       <section className="ask-thread" aria-live="polite">
         {messages.length === 0 && !busy ? (
@@ -195,7 +208,11 @@ export function PortfolioAsk({ strings }: { strings: PortfolioAskStrings }) {
             key={`${message.role}-${index}`}
             className={`ask-turn ask-turn-${message.role}`}
           >
-            <p>{message.text}</p>
+            {message.role === "assistant" ? (
+              <AskAnswer text={message.text} />
+            ) : (
+              <p>{message.text}</p>
+            )}
             {message.meta && message.meta.citations.length > 0 ? (
               <div className="ask-citations">
                 <p className="ask-citations-label">{strings.citations}</p>
@@ -229,7 +246,7 @@ export function PortfolioAsk({ strings }: { strings: PortfolioAskStrings }) {
         <textarea
           id={`${formId}-input`}
           name="question"
-          rows={3}
+          rows={isWidget ? 2 : 3}
           value={question}
           disabled={busy}
           placeholder={strings.placeholder}

@@ -2099,13 +2099,43 @@ footer {
     border-radius: var(--r-md);
     border: 1px solid var(--line);
   }
-  .ask-turn p { margin: 0; white-space: pre-wrap; }
+  .ask-turn-user > p { margin: 0; white-space: pre-wrap; }
   .ask-turn-user {
     background: color-mix(in srgb, var(--brass) 12%, var(--panel));
     border-color: color-mix(in srgb, var(--brass) 35%, var(--line));
   }
   .ask-turn-assistant {
     background: color-mix(in srgb, var(--panel) 92%, transparent);
+  }
+  .ask-answer {
+    display: grid;
+    gap: 0.65rem;
+  }
+  .ask-answer p {
+    margin: 0;
+    white-space: normal;
+  }
+  .ask-answer ul {
+    margin: 0;
+    padding-inline-start: 1.2rem;
+    display: grid;
+    gap: 0.35rem;
+    list-style: disc;
+  }
+  .ask-answer li {
+    margin: 0;
+  }
+  .ask-answer strong {
+    font-weight: 650;
+    color: var(--paper);
+  }
+  .ask-answer a {
+    color: var(--brass);
+    text-underline-offset: 0.12em;
+  }
+  .ask-answer code {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.92em;
   }
   .ask-citations {
     margin-top: 0.75rem;
@@ -2177,5 +2207,117 @@ footer {
       grid-template-columns: 1fr;
     }
     .ask-submit { width: 100%; }
+  }
+
+  /* Floating Ask chatbot — bottom-right, open by default, closable. */
+  .ask-fab {
+    position: fixed;
+    inset-inline-end: max(0.85rem, env(safe-area-inset-right, 0px));
+    inset-block-end: max(0.85rem, env(safe-area-inset-bottom, 0px));
+    z-index: 60;
+    width: min(23rem, calc(100vw - 1.5rem));
+    pointer-events: none;
+  }
+  .ask-fab > * {
+    pointer-events: auto;
+  }
+  .ask-fab-panel {
+    display: flex;
+    flex-direction: column;
+    max-height: min(38rem, calc(100dvh - 1.75rem));
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    background: color-mix(in srgb, var(--panel) 96%, transparent);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 18px 40px color-mix(in srgb, #000 28%, transparent);
+  }
+  .ask-fab-chrome {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 75%, transparent);
+  }
+  .ask-fab-label {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--paper);
+  }
+  .ask-fab-close,
+  .ask-fab-launcher {
+    appearance: none;
+    border: 1px solid color-mix(in srgb, var(--brass) 45%, var(--line));
+    border-radius: var(--r-md);
+    background: color-mix(in srgb, var(--brass) 18%, var(--panel));
+    color: var(--paper);
+    font: inherit;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+  }
+  .ask-fab-close {
+    min-height: 36px;
+    padding: 0 0.75rem;
+    font-size: 0.85rem;
+  }
+  .ask-fab-launcher {
+    min-height: 48px;
+    padding: 0 1.1rem;
+    margin-inline-start: auto;
+    display: block;
+  }
+  .ask-fab-close:hover,
+  .ask-fab-launcher:hover {
+    background: color-mix(in srgb, var(--brass) 30%, var(--panel));
+  }
+  .ask-fab-close:focus-visible,
+  .ask-fab-launcher:focus-visible {
+    outline: 2px solid var(--brass);
+    outline-offset: 2px;
+  }
+  .ask-shell-widget {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "intro"
+      "samples"
+      "thread"
+      "composer";
+    gap: 0.7rem;
+    padding: 0.65rem 0.85rem 0.85rem;
+    min-height: 0;
+    overflow: auto;
+  }
+  .ask-shell-widget .ask-widget-title {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+  }
+  .ask-shell-widget .ask-thread {
+    min-height: 8rem;
+    max-height: 14rem;
+  }
+  .ask-shell-widget .ask-composer textarea {
+    min-height: 3.4rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ask-fab-panel,
+    .ask-fab-launcher {
+      transition: none;
+    }
+  }
+
+  @media print {
+    .ask-fab {
+      display: none !important;
+    }
   }
 }

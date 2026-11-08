@@ -126,6 +126,12 @@ export type UiCopy = {
   askSourcesLabel: string;
   askSourcesEmpty: string;
   askSourcesUnavailable: string;
+  /** Floating widget launcher when the panel is closed. */
+  askWidgetOpen: string;
+  /** Floating widget close control. */
+  askWidgetClose: string;
+  /** Short chrome label inside the open floating panel. */
+  askWidgetLauncher: string;
   traceTitle: string;
   traceLede: string;
   tracePaste: string;
