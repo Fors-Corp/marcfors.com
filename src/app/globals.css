@@ -2291,8 +2291,8 @@ footer {
     .ask-submit { width: 100%; }
   }
 
-  /* Floating Ask chatbot — bottom-right, open by default, closable.
-     Desktop card, tablet card, phone sheet. */
+  /* Floating Ask chatbot — bottom-right. Mounts after idle and opens by
+     default; closable. Desktop card, tablet card, phone sheet. */
   .ask-fab {
     --ask-fab-pad: 1rem;
     --ask-edge: max(1.25rem, env(safe-area-inset-right, 0px));

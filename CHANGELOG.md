@@ -14,6 +14,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Defer the floating Ask panel until the browser is idle or the visitor
+  interacts, so the open dialog is not in the first paint. Mounting it there
+  marked the page inert during load and pushed mobile Total Blocking Time over
+  the 250ms budget. It still opens by default once that idle callback runs.
 - Stop the Wordkeep atlas embed from widening on every resize. The canvas was
   sized to the stage border box, so the figure grew and a phone page scrolled
   sideways; a tap measured against the old box missed the word.

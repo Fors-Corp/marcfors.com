@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Spectral, Manrope } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { isLocale, languageAlternates, LOCALES, localeUrl, OG_LOCALES, type Locale } from "@/lib/locale";
-import { AskChatWidget } from "@/components/AskChatWidget";
+import { DeferredAskWidget } from "@/components/DeferredAskWidget";
 import { JsonLd } from "@/components/JsonLd";
 import { copy } from "@/data/copy";
 import { askChatWidgetStrings } from "@/lib/askStrings";
@@ -132,7 +132,7 @@ export default async function LocaleLayout({
           {children}
           <Analytics />
         </div>
-        <AskChatWidget strings={askChatWidgetStrings(t)} locale={locale} />
+        <DeferredAskWidget strings={askChatWidgetStrings(t)} locale={locale} />
       </body>
     </html>
   );
