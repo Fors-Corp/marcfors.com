@@ -4,6 +4,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+### Security
+
+- Ask is not end-to-end encrypted: the server and the model see the question; the transcript is not stored.
+
 ### Fixed
 
 - Render Ask assistant replies as lightweight Markdown (bold, lists, links)
