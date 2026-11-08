@@ -44,6 +44,8 @@ export type PortfolioAskProps = {
   /** Compact floating-chat layout hides the sources rail. */
   variant?: "page" | "widget";
   locale?: Locale;
+  /** Close the floating panel when a source is opened. The thread stays mounted. */
+  onSourceNavigate?: () => void;
 };
 
 type Message = {
@@ -78,7 +80,12 @@ async function readJson<T>(response: Response): Promise<T> {
   }
 }
 
-export function PortfolioAsk({ strings, variant = "page", locale = "en" }: PortfolioAskProps) {
+export function PortfolioAsk({
+  strings,
+  variant = "page",
+  locale = "en",
+  onSourceNavigate,
+}: PortfolioAskProps) {
   const formId = useId();
   const isWidget = variant === "widget";
   const [question, setQuestion] = useState("");
@@ -217,7 +224,7 @@ export function PortfolioAsk({ strings, variant = "page", locale = "en" }: Portf
             className={`ask-turn ask-turn-${message.role}`}
           >
             {message.role === "assistant" ? (
-              <AskAnswer text={message.text} locale={locale} />
+              <AskAnswer text={message.text} locale={locale} onSourceNavigate={onSourceNavigate} />
             ) : (
               <p>{message.text}</p>
             )}
@@ -227,7 +234,11 @@ export function PortfolioAsk({ strings, variant = "page", locale = "en" }: Portf
                 <ul>
                   {message.meta.citations.map((citation) => (
                     <li key={`${citation.source_path}-${citation.chunk_index}`}>
-                      <Link className="ask-cite" href={sourceHref(citation.source_path, locale)}>
+                      <Link
+                        className="ask-cite"
+                        href={sourceHref(citation.source_path, locale)}
+                        onClick={onSourceNavigate}
+                      >
                         {citation.source_path}
                       </Link>
                       <span className="ask-distance">

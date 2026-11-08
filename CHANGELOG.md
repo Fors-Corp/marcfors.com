@@ -27,6 +27,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   the Ask function so preview stops returning a non-JSON 500.
 - Let the Ask panel grow with the reply up to a cap short of the screen, and
   wrap source links instead of clipping them.
+- Match the Ask panel's bottom inset to its right inset, and close the panel
+  when a source is opened without clearing the thread.
 
 ## 0.27.0 — 2026-11-08
 

@@ -11,7 +11,12 @@ import type { Locale } from "@/lib/locale";
 const INLINE =
   /(\*\*[^*]+\*\*|\*[^*\n]+\*|`[^`]+`|\[[^\]]+\]\(https:\/\/[^)\s]+\)|https:\/\/[^\s)]+|[\w./-]+\.md)/g;
 
-function renderInline(text: string, keyPrefix: string, locale: Locale): ReactNode[] {
+function renderInline(
+  text: string,
+  keyPrefix: string,
+  locale: Locale,
+  onSourceNavigate?: () => void,
+): ReactNode[] {
   const nodes: ReactNode[] = [];
   const pattern = new RegExp(INLINE.source, "g");
   let last = 0;
@@ -39,7 +44,12 @@ function renderInline(text: string, keyPrefix: string, locale: Locale): ReactNod
       if (href.length < token.length) nodes.push(token.slice(href.length));
     } else if (token.endsWith(".md")) {
       nodes.push(
-        <Link key={key} href={sourceHref(token, locale)} className="ask-source">
+        <Link
+          key={key}
+          href={sourceHref(token, locale)}
+          className="ask-source"
+          onClick={onSourceNavigate}
+        >
           {token}
         </Link>,
       );
@@ -109,7 +119,15 @@ function parseBlocks(text: string): Block[] {
   return blocks;
 }
 
-export function AskAnswer({ text, locale = "en" }: { text: string; locale?: Locale }) {
+export function AskAnswer({
+  text,
+  locale = "en",
+  onSourceNavigate,
+}: {
+  text: string;
+  locale?: Locale;
+  onSourceNavigate?: () => void;
+}) {
   const blocks = parseBlocks(text);
   return (
     <div className="ask-answer">
@@ -119,7 +137,7 @@ export function AskAnswer({ text, locale = "en" }: { text: string; locale?: Loca
             <ul key={`b-${blockIndex}`}>
               {block.items.map((item, itemIndex) => (
                 <li key={`b-${blockIndex}-i-${itemIndex}`}>
-                  {renderInline(item, `b${blockIndex}i${itemIndex}`, locale)}
+                  {renderInline(item, `b${blockIndex}i${itemIndex}`, locale, onSourceNavigate)}
                 </li>
               ))}
             </ul>
@@ -130,7 +148,7 @@ export function AskAnswer({ text, locale = "en" }: { text: string; locale?: Loca
             {block.lines.map((line, lineIndex) => (
               <span key={`b-${blockIndex}-l-${lineIndex}`}>
                 {lineIndex > 0 ? <br /> : null}
-                {renderInline(line, `b${blockIndex}l${lineIndex}`, locale)}
+                {renderInline(line, `b${blockIndex}l${lineIndex}`, locale, onSourceNavigate)}
               </span>
             ))}
           </p>
