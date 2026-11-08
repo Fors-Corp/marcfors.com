@@ -17,6 +17,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   composer pinned to the bottom (no clipped input / tall empty thread).
 - Equal fab padding on bottom/sides, single-line Ask input, samples always
   visible above the thread.
+- Stop the site-wide section margin from collapsing the Ask thread and
+  clipping the Ask / Close controls.
 
 ## 0.27.0 — 2026-11-08
 
