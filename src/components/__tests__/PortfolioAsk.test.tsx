@@ -119,4 +119,78 @@ describe("PortfolioAsk", () => {
     expect(screen.getByText("Focus:")).toBeInTheDocument();
     expect(screen.getByText("Focus:").closest("li")).not.toBeNull();
   });
+
+  it("scrolls the thread without smooth motion when reduced motion is requested", async () => {
+    const user = userEvent.setup();
+    Element.prototype.scrollIntoView = () => {};
+    const scrollIntoView = vi.spyOn(Element.prototype, "scrollIntoView").mockImplementation(() => {});
+    vi.spyOn(window, "matchMedia").mockImplementation((query: string) => ({
+      matches: query.includes("prefers-reduced-motion"),
+      media: query,
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    }));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL) => {
+        const url = String(input);
+        if (url.includes("/api/rag-sources")) {
+          return {
+            ok: true,
+            status: 200,
+            text: async () => JSON.stringify({ files: ["about.md"], embedding_model: "local/x" }),
+          };
+        }
+        return {
+          ok: true,
+          status: 200,
+          text: async () =>
+            JSON.stringify({
+              answer: "Marc works on agents.",
+              citations: [],
+              embedding_model: "local/x",
+              chat_model: "claude",
+              run_id: null,
+            }),
+        };
+      }),
+    );
+    try {
+      render(<PortfolioAsk strings={strings} />);
+      await user.click(screen.getByRole("button", { name: copy.en.askSamples[0] }));
+      await screen.findByText("Marc works on agents.");
+      expect(scrollIntoView).toHaveBeenCalledWith({ block: "nearest", behavior: "auto" });
+      expect(
+        scrollIntoView.mock.calls.every((call) => {
+          const options = call[0];
+          return typeof options === "object" && options !== null && options.behavior === "auto";
+        }),
+      ).toBe(true);
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
+
+  it("smooth-scrolls the thread when reduced motion is not requested", async () => {
+    Element.prototype.scrollIntoView = () => {};
+    const scrollIntoView = vi.spyOn(Element.prototype, "scrollIntoView").mockImplementation(() => {});
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({ files: [], embedding_model: "local/x" }),
+      }),
+    );
+    try {
+      render(<PortfolioAsk strings={strings} />);
+      expect(scrollIntoView).toHaveBeenCalledWith({ block: "nearest", behavior: "smooth" });
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
 });

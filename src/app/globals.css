@@ -2103,7 +2103,7 @@ footer {
   }
   .ask-error {
     margin: 0;
-    color: color-mix(in srgb, var(--brass) 55%, #ff8a8a);
+    color: var(--danger);
   }
   .ask-turn {
     margin: 0;
@@ -2196,6 +2196,15 @@ footer {
     text-decoration: underline;
     text-underline-offset: 0.14em;
   }
+  /* Chip fill sits under brass text and drops it below AA. Paper text keeps the
+     brass edge; the underline is the link cue, not the color alone. */
+  a.ask-cite {
+    color: var(--paper);
+    text-decoration: underline;
+    text-decoration-color: var(--brass);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.14em;
+  }
   .ask-answer code {
     font-family: var(--mono);
     font-size: 0.92em;
@@ -2247,6 +2256,11 @@ footer {
   .ask-composer textarea:focus-visible {
     outline: 2px solid var(--brass);
     outline-offset: 2px;
+  }
+  .ask-composer textarea::placeholder,
+  .ask-shell.ask-shell-widget .ask-composer input[type="text"]::placeholder {
+    color: var(--paper-dim);
+    opacity: 1;
   }
   .ask-submit {
     appearance: none;
@@ -2309,9 +2323,14 @@ footer {
   .ask-fab-panel[hidden] {
     display: none;
   }
+  .ask-fab-panel :focus-visible {
+    outline: 2px solid var(--brass);
+    outline-offset: 2px;
+  }
   .ask-fab-chrome {
     flex: 0 0 auto;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
@@ -2404,6 +2423,9 @@ footer {
   .ask-shell.ask-shell-widget .ask-sample {
     padding: 0.35rem 0.6rem;
     line-height: 1.25;
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
   .ask-shell.ask-shell-widget .ask-thread {
     flex: 1 1 auto;
@@ -2494,7 +2516,9 @@ footer {
       max-height: calc(100dvh - var(--ask-bottom) - 0.5rem);
     }
     .ask-shell.ask-shell-widget .ask-sample {
+      min-width: 44px;
       min-height: 44px;
+      max-width: 100%;
     }
     .ask-shell.ask-shell-widget .ask-composer {
       grid-template-columns: minmax(0, 1fr) auto;
@@ -2504,12 +2528,27 @@ footer {
       min-height: 44px;
       height: 44px;
     }
+    .ask-shell.ask-shell-widget .ask-composer input[type="text"] {
+      font-size: 16px;
+      line-height: 44px;
+    }
     .ask-shell.ask-shell-widget .ask-submit {
       width: auto;
+      min-width: 44px;
     }
     .ask-fab-close,
     .ask-fab-launcher {
+      min-width: 44px;
       min-height: 44px;
+    }
+  }
+
+  @media (max-width: 340px) {
+    .ask-shell.ask-shell-widget .ask-composer {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .ask-shell.ask-shell-widget .ask-submit {
+      width: 100%;
     }
   }
 
