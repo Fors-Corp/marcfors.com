@@ -22,7 +22,9 @@ describe("AskAnswer", () => {
     const link = screen.getByRole("link", { name: "site" });
     expect(link).toHaveAttribute("href", "https://marcfors.com");
     expect(link).toHaveAttribute("rel", "noopener noreferrer");
-    expect(screen.getAllByText("about.md").every((node) => node.tagName === "CITE")).toBe(true);
+    const cites = screen.getAllByRole("link", { name: "about.md" });
+    expect(cites.length).toBeGreaterThan(0);
+    expect(cites[0]).toHaveAttribute("href", "/#intro");
   });
 
   it("highlights bare https links and corpus citations", () => {
@@ -33,7 +35,10 @@ describe("AskAnswer", () => {
       "href",
       "https://marcfors.com",
     );
-    expect(screen.getByText("work/mensura.md").tagName).toBe("CITE");
+    expect(screen.getByRole("link", { name: "work/mensura.md" })).toHaveAttribute(
+      "href",
+      "/work/mensura",
+    );
   });
 
   it("does not interpret raw HTML", () => {

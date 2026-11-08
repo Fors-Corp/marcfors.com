@@ -2054,6 +2054,12 @@ footer {
     text-align: left;
     cursor: pointer;
   }
+  .ask-turn,
+  .ask-answer,
+  .ask-turn p,
+  .ask-answer li {
+    font-size: 0.92rem;
+  }
   .ask-sample:hover:not(:disabled) {
     border-color: color-mix(in srgb, var(--brass) 55%, var(--line));
     background: color-mix(in srgb, var(--panel) 70%, var(--brass) 8%);
@@ -2145,6 +2151,7 @@ footer {
   .ask-answer a:hover {
     color: var(--paper);
   }
+  a.ask-cite,
   .ask-cite,
   .ask-citations code {
     font-style: normal;
@@ -2156,6 +2163,12 @@ footer {
     border: 1px solid color-mix(in srgb, var(--brass) 45%, var(--line));
     border-radius: var(--r-xs);
     padding: 0.08em 0.4em;
+    text-decoration: none;
+  }
+  a.ask-cite:hover {
+    background: color-mix(in srgb, var(--brass) 32%, transparent);
+    text-decoration: underline;
+    text-underline-offset: 0.14em;
   }
   .ask-answer code {
     font-family: var(--mono);
@@ -2348,8 +2361,15 @@ footer {
     flex-wrap: wrap;
     gap: 0.35rem;
   }
-  .ask-shell.ask-shell-widget .ask-sample {
+  .ask-shell.ask-shell-widget .ask-sample,
+  .ask-shell.ask-shell-widget .ask-turn,
+  .ask-shell.ask-shell-widget .ask-answer,
+  .ask-shell.ask-shell-widget .ask-turn p,
+  .ask-shell.ask-shell-widget .ask-answer li {
     font-size: 0.78rem;
+    line-height: 1.35;
+  }
+  .ask-shell.ask-shell-widget .ask-sample {
     padding: 0.35rem 0.6rem;
     line-height: 1.25;
   }

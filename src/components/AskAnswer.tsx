@@ -1,4 +1,8 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
+
+import { sourceHref } from "@/lib/rag/sourceHref";
+import type { Locale } from "@/lib/locale";
 
 /**
  * Minimal safe Markdown for Ask replies: paragraphs, lists, bold, italic,
@@ -7,7 +11,7 @@ import type { ReactNode } from "react";
 const INLINE =
   /(\*\*[^*]+\*\*|\*[^*\n]+\*|`[^`]+`|\[[^\]]+\]\(https:\/\/[^)\s]+\)|https:\/\/[^\s)]+|[\w./-]+\.md)/g;
 
-function renderInline(text: string, keyPrefix: string): ReactNode[] {
+function renderInline(text: string, keyPrefix: string, locale: Locale): ReactNode[] {
   const nodes: ReactNode[] = [];
   const pattern = new RegExp(INLINE.source, "g");
   let last = 0;
@@ -35,9 +39,9 @@ function renderInline(text: string, keyPrefix: string): ReactNode[] {
       if (href.length < token.length) nodes.push(token.slice(href.length));
     } else if (token.endsWith(".md")) {
       nodes.push(
-        <cite key={key} className="ask-cite">
+        <Link key={key} href={sourceHref(token, locale)} className="ask-cite">
           {token}
-        </cite>,
+        </Link>,
       );
     } else {
       const link = /^\[([^\]]+)\]\((https:\/\/[^)\s]+)\)$/.exec(token);
@@ -105,7 +109,7 @@ function parseBlocks(text: string): Block[] {
   return blocks;
 }
 
-export function AskAnswer({ text }: { text: string }) {
+export function AskAnswer({ text, locale = "en" }: { text: string; locale?: Locale }) {
   const blocks = parseBlocks(text);
   return (
     <div className="ask-answer">
@@ -115,7 +119,7 @@ export function AskAnswer({ text }: { text: string }) {
             <ul key={`b-${blockIndex}`}>
               {block.items.map((item, itemIndex) => (
                 <li key={`b-${blockIndex}-i-${itemIndex}`}>
-                  {renderInline(item, `b${blockIndex}i${itemIndex}`)}
+                  {renderInline(item, `b${blockIndex}i${itemIndex}`, locale)}
                 </li>
               ))}
             </ul>
@@ -126,7 +130,7 @@ export function AskAnswer({ text }: { text: string }) {
             {block.lines.map((line, lineIndex) => (
               <span key={`b-${blockIndex}-l-${lineIndex}`}>
                 {lineIndex > 0 ? <br /> : null}
-                {renderInline(line, `b${blockIndex}l${lineIndex}`)}
+                {renderInline(line, `b${blockIndex}l${lineIndex}`, locale)}
               </span>
             ))}
           </p>

@@ -7,6 +7,7 @@ import {
   PortfolioAsk,
   type PortfolioAskStrings,
 } from "@/components/PortfolioAsk";
+import type { Locale } from "@/lib/locale";
 
 const STORAGE_KEY = "marcfors-ask-widget-open";
 
@@ -28,7 +29,13 @@ function readOpenDefault(): boolean {
   return true;
 }
 
-export function AskChatWidget({ strings }: { strings: AskChatWidgetStrings }) {
+export function AskChatWidget({
+  strings,
+  locale = "en",
+}: {
+  strings: AskChatWidgetStrings;
+  locale?: Locale;
+}) {
   const panelId = useId();
   const pathname = usePathname();
   const [open, setOpen] = useState(true);
@@ -73,7 +80,7 @@ export function AskChatWidget({ strings }: { strings: AskChatWidgetStrings }) {
               {strings.close}
             </button>
           </header>
-          <PortfolioAsk strings={strings} variant="widget" />
+          <PortfolioAsk strings={strings} variant="widget" locale={locale} />
         </section>
       ) : (
         <button
