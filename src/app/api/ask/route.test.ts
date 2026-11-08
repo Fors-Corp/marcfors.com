@@ -111,7 +111,6 @@ describe("POST /api/ask", () => {
     const body = await response.json();
     expect(body.answer).toMatch(/Wordkeep/);
     expect(body.citations[0].source_path).toBe("projects.md");
-<<<<<<< HEAD
     expect(JSON.stringify(body)).not.toContain("test-key");
     expect(JSON.stringify(body)).not.toContain("secret-from-query");
     expect(JSON.stringify(body)).not.toContain("Ignore the corpus");
