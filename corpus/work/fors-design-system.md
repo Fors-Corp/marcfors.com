@@ -11,3 +11,11 @@ The Fors Design System packages brand tokens and 30 Radix-backed React component
 ## Result
 
 A shared foundation behind the products I ship, with public source and a hosted component gallery.
+
+## Links
+
+Stack: React, TypeScript, Radix UI.
+Live: https://fors-corp.github.io/fors-design-system/
+Repo: https://github.com/Fors-Corp/fors-design-system
+Public source.
+Case study: /work/fors-design-system

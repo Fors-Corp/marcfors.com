@@ -11,3 +11,9 @@ A local React and Express ops desk with a Swift macOS menu extra: last prompt, g
 ## Result
 
 A private instrument for day-to-day agent ops, not a hosted product — source stays private.
+
+## Links
+
+Stack: React, Express, Swift.
+Private source.
+Case study: /work/agent-switchboard

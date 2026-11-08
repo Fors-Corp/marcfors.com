@@ -4,6 +4,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+### Added
+
+- Index education, spoken languages, hire and contact paths, and every featured project in the Ask corpus so questions can be answered from the public site.
+
 ### Fixed
 
 - Render Ask assistant replies as lightweight Markdown (bold, lists, links)

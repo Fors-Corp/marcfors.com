@@ -12,3 +12,10 @@ Day templates, busy intervals, and push reminders in Spanish and English, plus a
 ## Result
 
 A live product a recruiter can click. Source stays private; the app is the proof.
+
+## Links
+
+Stack: Next.js 16, Clerk, Neon, Drizzle.
+Live: https://habit-breaker-blush.vercel.app
+Private source.
+Case study: /work/habit-breaker

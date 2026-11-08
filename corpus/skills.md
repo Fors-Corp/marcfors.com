@@ -13,3 +13,5 @@ Git, CI/CD, Jenkins, Agile, Code reviews, Mentoring
 Java, Spring, Struts, REST APIs, Oracle, SQL Server
 
 Current practice emphasis: LLM agents, Claude Code, MCP, React, TypeScript, Go, Next.js, Vercel, Neon/pgvector for RAG products.
+
+Topics named on the site: LLM agents, agentic coding, Claude Code, Claude Agent SDK, Model Context Protocol (MCP), prompt engineering, retrieval-augmented generation (RAG), React, TypeScript, Go, Next.js, and observability.

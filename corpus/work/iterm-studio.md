@@ -12,3 +12,11 @@ A public gallery of 121 presets. Each one is a full look. A local server applies
 ## Result
 
 One click to a consistent terminal. Source is public; the hosted gallery is the proof.
+
+## Links
+
+Stack: Python.
+Live: https://fors-corp.github.io/iterm-studio/
+Repo: https://github.com/Fors-Corp/iterm-studio
+Public source.
+Case study: /work/iterm-studio

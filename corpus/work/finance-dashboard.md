@@ -11,3 +11,9 @@ A single-user Next.js app on Prisma and SQLite tracks metals, crypto and portfol
 ## Result
 
 A private finance desk for one operator — no public source link.
+
+## Links
+
+Stack: Next.js, Prisma, SQLite.
+Private source.
+Case study: /work/finance-dashboard

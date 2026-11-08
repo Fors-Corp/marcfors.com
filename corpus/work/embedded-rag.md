@@ -12,3 +12,11 @@ Embedded RAG is classic retrieval-augmented generation: one pgvector search, the
 ## Result
 
 A live demo at embedded-rag.vercel.app where a visitor can try sample prompts or upload their own material and get a cited answer — or an honest refusal — in seconds. Public source under Fors-Corp.
+
+## Links
+
+Stack: Python, React, TypeScript, Neon, Claude API.
+Live: https://embedded-rag.vercel.app
+Repo: https://github.com/Fors-Corp/embedded-rag
+Public source.
+Case study: /work/embedded-rag
