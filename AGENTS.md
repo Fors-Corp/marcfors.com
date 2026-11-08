@@ -29,7 +29,7 @@ Public personal portfolio for Marc Fors, hosted at **https://marcfors.com**. Sem
 - No Tailwind, no shadcn, no hardcoded `bg-emerald-*`.
 - Locale is in the URL (`/` English, `/es`, `/de`, …) with `hreflang`. Cookie still remembers the last pick.
 - `prefers-reduced-motion` freezes the atlas to a settled layout and hides decorative motion.
-- Wordkeep is featured work #1; UI copy uses brand casing **Wordkeep**; App Store release is pending.
+- Embedded RAG is featured work #1 (live demo + public case study). Wordkeep follows; UI copy uses brand casing **Wordkeep**; App Store release is pending.
 - Copy lives in `src/data/copy/<locale>.ts` (one file per locale: `ui`, `experience`, `careerBreak`, `education`, `languages`); `src/data/copy.ts` is the barrel that assembles the `Record<Locale, …>` maps, plus locale-independent `skills` / `contact` in `src/data/copy/shared.ts`. Featured work in `src/data/projects.ts`. Domain/email constants in `src/lib/site.ts`.
 - Case-study prose is MDX: `content/work/<slug>/<locale>.mdx`, one self-contained file per locale (YAML frontmatter — `project`, `stack`, `live`, `repo`, `order`, `description` — plus a free-form body). `src/data/caseStudies.ts` reads frontmatter only, via `gray-matter`; `work/[slug]/page.tsx` dynamically imports the `.mdx` body. Add a study by adding the directory — nothing else to wire up.
 

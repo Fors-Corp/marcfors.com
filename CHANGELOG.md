@@ -4,6 +4,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+- Feature **Embedded RAG** first in Selected work with live demo
+  `https://embedded-rag.vercel.app`, public repo, and seven-locale case study
+  (classic pgvector + Claude RAG, MiniLM, cited answers / abstain, dual Python
+  + Vercel).
 - Publish the phone-free AI CV under `docs/cv/` and as `public/marc-fors-cv.pdf`
   (Embedded RAG, Wordkeep, Mensura; Italian intermediate; open to remote roles;
   Agent Switchboard removed).

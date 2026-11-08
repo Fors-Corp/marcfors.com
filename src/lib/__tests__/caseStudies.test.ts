@@ -6,6 +6,7 @@ describe("case studies", () => {
   it("lists every case study, sorted by order", () => {
     const slugs = listCaseStudySlugs();
     expect(slugs).toEqual([
+      "embedded-rag",
       "fors-photography",
       "mensura",
       "wordkeep",
@@ -51,6 +52,21 @@ describe("case studies", () => {
       for (const locale of LOCALES.filter((l) => l !== "en")) {
         expect(caseStudyBody(slug, locale), `${slug}/${locale} body`).not.toBe(en);
       }
+    }
+  });
+
+  it("documents Embedded RAG with live demo, public source and classic RAG facts", () => {
+    for (const locale of LOCALES) {
+      const study = caseStudyBySlug("embedded-rag", locale);
+      expect(study?.live).toBe("https://embedded-rag.vercel.app");
+      expect(study?.repo).toBe("https://github.com/Fors-Corp/embedded-rag");
+      expect(study?.stack).toEqual(["Python", "React", "TypeScript", "Neon", "Claude API"]);
+      expect(study?.order).toBe(-1);
+      const body = caseStudyBody("embedded-rag", locale)!;
+      for (const fact of ["pgvector", "Claude", "MiniLM", "The answer is not in the documents."]) {
+        expect(body, `${locale}: ${fact}`).toContain(fact);
+      }
+      expect(body).not.toMatch(/@gmail\.com|mailto:|tel:/i);
     }
   });
 
