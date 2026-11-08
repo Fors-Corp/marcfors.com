@@ -83,6 +83,35 @@ describe("POST /api/ask", () => {
     const body = await response.json();
     expect(body.answer).toMatch(/Wordkeep/);
     expect(body.citations[0].source_path).toBe("projects.md");
-    expect(runAsk).toHaveBeenCalledWith("What is Wordkeep?", "test-key");
+    expect(runAsk).toHaveBeenCalledWith("What is Wordkeep?", "test-key", "en");
+  });
+
+  it("forwards a shipped locale and ignores an unknown one", async () => {
+    vi.mocked(databaseUrl).mockReturnValue("postgresql://example");
+    process.env.ANTHROPIC_API_KEY = "test-key";
+    vi.mocked(runAsk).mockResolvedValue({
+      answer: "Marc vive en Barcelona.",
+      citations: [],
+      embedding_model: "local/Xenova/all-MiniLM-L6-v2",
+      chat_model: "claude-sonnet-5-5",
+      run_id: null,
+    });
+    const post = (body: unknown) =>
+      POST(
+        new Request("http://localhost/api/ask", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(body),
+        }),
+      );
+
+    expect((await post({ question: "¿Dónde vive Marc?", locale: "es" })).status).toBe(200);
+    expect(runAsk).toHaveBeenLastCalledWith("¿Dónde vive Marc?", "test-key", "es");
+
+    expect((await post({ question: "¿Dónde vive Marc?", locale: "zz" })).status).toBe(200);
+    expect(runAsk).toHaveBeenLastCalledWith("¿Dónde vive Marc?", "test-key", "en");
+
+    expect((await post({ question: "¿Dónde vive Marc?", locale: 4 })).status).toBe(200);
+    expect(runAsk).toHaveBeenLastCalledWith("¿Dónde vive Marc?", "test-key", "en");
   });
 });
