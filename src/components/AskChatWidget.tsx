@@ -11,22 +11,6 @@ import type { Locale } from "@/lib/locale";
 
 const STORAGE_KEY = "marcfors-ask-widget-open";
 
-/** Gap between the layout viewport and the visible viewport (iOS toolbar). */
-export function askVisualBottomGap(
-  layoutHeight: number,
-  visual: { height: number; offsetTop: number },
-): number {
-  return Math.max(0, Math.round(layoutHeight - visual.height - visual.offsetTop));
-}
-
-function syncVisualBottomGap(): void {
-  const visual = window.visualViewport;
-  const gap = visual
-    ? askVisualBottomGap(window.innerHeight, visual)
-    : 0;
-  document.documentElement.style.setProperty("--ask-vv-bottom", `${gap}px`);
-}
-
 export type AskChatWidgetStrings = PortfolioAskStrings & {
   open: string;
   close: string;
@@ -70,20 +54,6 @@ export function AskChatWidget({
       // ignore
     }
   }, [hydrated, open]);
-
-  useEffect(() => {
-    syncVisualBottomGap();
-    const visual = window.visualViewport;
-    visual?.addEventListener("resize", syncVisualBottomGap);
-    visual?.addEventListener("scroll", syncVisualBottomGap);
-    window.addEventListener("resize", syncVisualBottomGap);
-    return () => {
-      visual?.removeEventListener("resize", syncVisualBottomGap);
-      visual?.removeEventListener("scroll", syncVisualBottomGap);
-      window.removeEventListener("resize", syncVisualBottomGap);
-      document.documentElement.style.removeProperty("--ask-vv-bottom");
-    };
-  }, []);
 
   // Full /ask page already hosts the chat — skip the floating duplicate.
   if (pathname?.endsWith("/ask")) {

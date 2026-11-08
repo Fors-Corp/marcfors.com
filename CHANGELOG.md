@@ -29,6 +29,7 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   wrap source links instead of clipping them.
 - Match the Ask panel's bottom inset to its right inset, and close the panel
   when a source is opened without clearing the thread.
+- Sit the Ask panel on the bottom of the visible page with a small padding.
 
 ## 0.27.0 — 2026-11-08
 

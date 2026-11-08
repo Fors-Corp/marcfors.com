@@ -2282,9 +2282,10 @@ footer {
   .ask-fab {
     --ask-fab-pad: 1rem;
     --ask-edge: max(1.25rem, env(safe-area-inset-right, 0px));
+    --ask-bottom: 0.75rem;
     position: fixed;
     inset-inline-end: var(--ask-edge);
-    inset-block-end: calc(var(--ask-edge) + var(--ask-vv-bottom, 0px));
+    inset-block-end: var(--ask-bottom);
     z-index: 60;
     width: min(28rem, calc(100vw - (var(--ask-edge) * 2)));
     pointer-events: none;
@@ -2297,7 +2298,7 @@ footer {
     flex-direction: column;
     box-sizing: border-box;
     height: auto;
-    max-height: min(70dvh, 34rem, calc(100dvh - (var(--ask-edge) * 2) - var(--ask-vv-bottom, 0px)));
+    max-height: min(70dvh, 34rem, calc(100dvh - var(--ask-bottom) - 0.75rem));
     overflow: hidden;
     border: 1px solid var(--line);
     border-radius: var(--r-md);
@@ -2475,7 +2476,7 @@ footer {
     }
     .ask-fab-panel {
       height: auto;
-      max-height: min(64dvh, 30rem, calc(100dvh - (var(--ask-edge) * 2) - var(--ask-vv-bottom, 0px)));
+      max-height: min(64dvh, 30rem, calc(100dvh - var(--ask-bottom) - 0.75rem));
     }
   }
 
@@ -2483,13 +2484,14 @@ footer {
   @media (max-width: 640px) {
     .ask-fab {
       --ask-edge: max(0.5rem, env(safe-area-inset-right, 0px));
+      --ask-bottom: 0.5rem;
       --ask-fab-pad: 0.7rem;
       inset-inline-start: var(--ask-edge);
       width: auto;
     }
     .ask-fab-panel {
       height: auto;
-      max-height: min(58dvh, 24rem, calc(100dvh - (var(--ask-edge) * 2) - var(--ask-vv-bottom, 0px)));
+      max-height: min(58dvh, 24rem, calc(100dvh - var(--ask-bottom) - 0.5rem));
     }
     .ask-shell.ask-shell-widget .ask-sample {
       min-height: 44px;
