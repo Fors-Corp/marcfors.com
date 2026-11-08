@@ -23,6 +23,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   links plus corpus citations.
 - Match Ask message type to the sample prompts, and link each source to the
   portfolio section it describes without leaving the chat.
+- Shrink the phone Ask sheet, and trace the Linux onnxruntime binding into
+  the Ask function so preview stops returning a non-JSON 500.
 
 ## 0.27.0 — 2026-11-08
 
