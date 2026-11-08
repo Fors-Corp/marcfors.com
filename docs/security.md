@@ -78,7 +78,7 @@ The locale cookie is not `HttpOnly` because the proxy reads it server-side but c
 
 ## Third-party requests
 
-- From the visitor's browser: none to other origins. The CSP restricts `connect-src`, `img-src`, `font-src` and `script-src` to `'self'` (plus `data:` images). Fonts (Fraunces, IBM Plex Mono) are loaded through `next/font/google`, which downloads and self-hosts them at build time.
+- From the visitor's browser: none to other origins. The CSP restricts `connect-src`, `img-src`, `font-src` and `script-src` to `'self'` (plus `data:` images). Fonts (Spectral, Manrope) are loaded through `next/font/google`, which downloads and self-hosts them at build time.
 - Vercel Web Analytics: `src/app/[locale]/layout.tsx` renders `<Analytics />` from `@vercel/analytics`. On Vercel the script is served from the site's own origin (`/_vercel/insights/...`), so the CSP allows it. The privacy notice describes it as cookie-less, aggregate page-view counting.
 - Server-side, from the site's servers: `api.github.com` and `github.com` (activity, contribution calendar, public repo list). No visitor headers or cookies are forwarded.
 - Links out (GitHub, LinkedIn, the Stripe Payment Link, case-study live URLs) are ordinary navigations.
