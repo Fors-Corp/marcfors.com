@@ -5,7 +5,7 @@ import {
 } from "./constants";
 import { getSql } from "./db";
 import { embedText, vectorLiteral } from "./embed";
-import { escapeIlike, significantTokens } from "./lexical";
+import { contextCoversQuestion, escapeIlike, significantTokens } from "./lexical";
 import type { ChunkRow } from "./types";
 
 export async function lexicalFallback(question: string): Promise<ChunkRow[]> {
@@ -87,6 +87,12 @@ export async function retrieve(question: string): Promise<ChunkRow[]> {
   const hard = mapped.filter(
     (row) => Number.isFinite(row.distance) && row.distance <= MAX_DISTANCE,
   );
-  if (hard.length > 0) return hard;
-  return lexicalFallback(question);
+  const covered = contextCoversQuestion(
+    hard.map((row) => `${row.source_path}\n${row.content}`).join("\n"),
+    question,
+  );
+  if (hard.length > 0 && covered) return hard;
+  const lexical = await lexicalFallback(question);
+  if (lexical.length === 0) return hard;
+  return lexical;
 }

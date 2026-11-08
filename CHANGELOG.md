@@ -31,6 +31,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   when a source is opened without clearing the thread.
 - Sit the Ask panel on the bottom of the visible page with a small padding.
 - Give the phone Ask panel about three quarters of the viewport.
+- Answer the remote-roles question from about.md and experience.md when the
+  nearest vector chunks do not contain that fact.
 
 ## 0.27.0 — 2026-11-08
 

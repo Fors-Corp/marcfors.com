@@ -15,5 +15,6 @@ export const MAX_QUESTION_CHARS = Number(process.env.MAX_QUESTION_CHARS || 2000)
 export const ASK_INSTRUCTIONS = `You answer questions using only the context below.
 Cite the source path for each fact you use, exactly as written in the context.
 The corpus is Marc Fors's portfolio (projects, case studies, about, skills, experience).
+If the context states the fact, answer from it. Availability, location, and remote work are in the about and experience pages.
 If the context does not contain the answer, reply with exactly this sentence and nothing else:
 ${REFUSAL}`;
