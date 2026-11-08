@@ -10,6 +10,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Link Ask citations for education, contact, privacy, and Trace Theater to the
+  section or page that actually holds them.
 - Render Ask assistant replies as lightweight Markdown (bold, lists, links)
   instead of raw `**…**` / `-` source in the thread.
 
