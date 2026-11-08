@@ -14,6 +14,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Make the page behind the open Ask panel inert, so a pointer cannot operate
+  the background that the modal dialog already hides from assistive technology.
+  The portfolio stays visible. Closing the panel removes inert and returns
+  focus to the launcher.
 - Name Spectral and Manrope in the security note that lists the self-hosted fonts.
 - Link Ask citations for education, contact, privacy, and Trace Theater to the
   section or page that actually holds them.

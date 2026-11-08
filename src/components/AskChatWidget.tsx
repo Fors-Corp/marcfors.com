@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useId, useRef, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useSyncExternalStore,
+} from "react";
 import { usePathname } from "next/navigation";
 
 import {
@@ -88,6 +95,20 @@ function focusField(panel: HTMLElement) {
   target.focus({ preventScroll: true });
 }
 
+function setInert(element: HTMLElement, next: boolean) {
+  // Content attribute, not the IDL property: jsdom does not reflect `inert`,
+  // and browsers treat the attribute as the inert flag.
+  element.toggleAttribute("inert", next);
+}
+
+function pageRootsBeside(host: HTMLElement): HTMLElement[] {
+  const parent = host.parentElement;
+  if (!parent) return [];
+  return Array.from(parent.children).filter((node): node is HTMLElement => {
+    return node instanceof HTMLElement && node !== host && node.hasAttribute("data-page-root");
+  });
+}
+
 function trapTab(event: KeyboardEvent, panel: HTMLElement) {
   if (event.key !== "Tab" || event.altKey || event.ctrlKey || event.metaKey) return;
   const items = tabbableIn(panel);
@@ -124,6 +145,7 @@ export function AskChatWidget({
   const titleId = useId();
   const pathname = usePathname();
   const panelRef = useRef<HTMLElement>(null);
+  const hostRef = useRef<HTMLDivElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
   // Focus moves only when the visitor opens or closes the panel. It is open
   // by default; moving focus on load would skip the rest of the page.
@@ -170,13 +192,28 @@ export function AskChatWidget({
     return () => document.removeEventListener("keydown", onKeyDown, true);
   }, [closePanel, onAskPage, open]);
 
+  // aria-modal hides the background from assistive tech. The page root is a
+  // sibling of this widget, so marking it inert blocks pointer and keyboard
+  // use without disabling the dialog or covering the portfolio. Re-apply on
+  // pathname so a client navigation cannot drop the attribute.
+  useLayoutEffect(() => {
+    if (onAskPage || !open) return;
+    const host = hostRef.current;
+    if (!host) return;
+    const pages = pageRootsBeside(host);
+    for (const page of pages) setInert(page, true);
+    return () => {
+      for (const page of pages) setInert(page, false);
+    };
+  }, [onAskPage, open, pathname]);
+
   // Full /ask page already hosts the chat — skip the floating duplicate.
   if (onAskPage) {
     return null;
   }
 
   return (
-    <div className={`ask-fab${open ? " ask-fab-open" : ""}`}>
+    <div ref={hostRef} className={`ask-fab${open ? " ask-fab-open" : ""}`}>
       <section
         ref={panelRef}
         id={panelId}
