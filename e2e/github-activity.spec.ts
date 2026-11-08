@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { dismissAsk } from "./dismissAsk";
 
 const calendar = Array.from({ length: 364 }, (_, i) => ({
   date: new Date(Date.UTC(2025, 9, 19 + i)).toISOString().slice(0, 10),
@@ -25,6 +26,7 @@ for (const width of [320, 1280]) {
     await page.route("**/api/github-activity", (route) => route.fulfill({ json: snapshot }));
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
+    await dismissAsk(page);
     const activity = page.locator("section#github.section:not(.activity-skeleton)");
     await activity.scrollIntoViewIfNeeded();
     await expect(activity.getByRole("img")).toBeVisible();
@@ -47,6 +49,7 @@ for (const width of [320, 1280]) {
 test("GitHub errors are visible with a working profile link", async ({ page }) => {
   await page.route("**/api/github-activity", (route) => route.fulfill({ status: 503, json: {} }));
   await page.goto("/de");
+  await dismissAsk(page);
   const activity = page.locator("section#github.section:not(.activity-skeleton)");
   await activity.scrollIntoViewIfNeeded();
   await expect(activity.getByRole("status")).toContainText("vorübergehend nicht verfügbar");

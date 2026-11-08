@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { dismissAsk } from "./dismissAsk";
 
 for (const width of [320, 390, 768, 1280]) {
   for (const locale of ["en", "ca", "de"]) {
@@ -31,6 +32,13 @@ for (const width of [320, 390, 768, 1280]) {
 test("the keyboard skip link moves focus to main content", async ({ page }) => {
   for (const path of ["/", "/de/work/iterm-studio"]) {
     await page.goto(path);
+    await dismissAsk(page);
+    // Closing the panel leaves focus on the launcher. Put the navigation
+    // start back at the document so the next Tab is the skip link.
+    await page.evaluate(() => {
+      document.documentElement.tabIndex = -1;
+      document.documentElement.focus();
+    });
     await page.keyboard.press("Tab");
     await expect(page.locator(".skip")).toBeFocused();
     await page.keyboard.press("Enter");
