@@ -2490,8 +2490,8 @@ footer {
       width: auto;
     }
     .ask-fab-panel {
-      height: auto;
-      max-height: min(58dvh, 24rem, calc(100dvh - var(--ask-bottom) - 0.5rem));
+      height: 75dvh;
+      max-height: calc(100dvh - var(--ask-bottom) - 0.5rem);
     }
     .ask-shell.ask-shell-widget .ask-sample {
       min-height: 44px;
