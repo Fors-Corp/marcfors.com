@@ -6,8 +6,14 @@ A personal site that recruiters actually scan needed to prove engineering taste 
 
 ## Approach
 
-The desk is a Next.js App Router portfolio: Fraunces and IBM Plex Mono, CSS tokens, seven URL locales, first-party Core Web Vitals, a dependency audit on every build, and case studies as MDX. The public mailbox is the only contact on the page.
+marcfors.com is this Semantic Atlas: a Next.js App Router portfolio with first-party web vitals, a supply-chain audit on every build, and seven locales (English, Spanish, Catalan, Italian, Portuguese, German and French). Case studies are MDX. Ask answers questions about Marc's projects, experience and skills from an indexed portfolio corpus, with citations, or a fixed abstain when the documents do not support the answer. The public mailbox developer@marcfors.com is the contact on the page. There is no phone number on the site.
 
 ## Result
 
-A live observatory desk whose source is public under Fors-Corp, with privacy and security headers treated as product features.
+A live atlas whose source is public under Fors-Corp, with privacy and security headers treated as product features.
+
+Stack: Next.js 16, React 19, TypeScript.
+Live: https://marcfors.com
+Repo: https://github.com/Fors-Corp/marcfors.com
+Case study: /work/marcfors-com
+Ask: https://marcfors.com/ask

@@ -11,3 +11,10 @@ A single Next.js page in Spanish, Catalan, English and French: live open-now sta
 ## Result
 
 A live storefront that answers hours and contact first, with private source and no tracking stack.
+
+## Links
+
+Stack: Next.js 16, Tailwind CSS, TypeScript.
+Live: https://ferretodo-lepant.vercel.app
+Private source.
+Case study: /work/ferretodo-lepant

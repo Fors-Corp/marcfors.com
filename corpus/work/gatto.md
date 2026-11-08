@@ -14,3 +14,10 @@ Directions and contact use direct links rather than embedded third-party widgets
 ## Result
 
 A live, three-language storefront deployed on Vercel, with no build step, runtime dependencies or trackers. Visitors can discover the work, plan a visit and contact the shop from one page.
+
+## Links
+
+Stack: HTML5, CSS3, JavaScript.
+Live: https://gatto-psi.vercel.app
+Private source.
+Case study: /work/gatto

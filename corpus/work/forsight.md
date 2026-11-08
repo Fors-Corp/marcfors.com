@@ -11,3 +11,10 @@ forsight ships a Go agent that collects metrics, serves an HTTP API and embeds i
 ## Result
 
 A living observability instrument with a public demo and private source.
+
+## Links
+
+Stack: Go, TypeScript, React.
+Live: https://fors-corp.github.io/forsight/
+Private source.
+Case study: /work/forsight

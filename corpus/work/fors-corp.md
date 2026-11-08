@@ -11,3 +11,10 @@ forscorp.es is statically prerendered in Spanish, Catalan and English on the For
 ## Result
 
 A live company site that demonstrates the same constraints the consultancy ships to clients, with the implementation kept private.
+
+## Links
+
+Stack: Next.js 16, React 19, TypeScript.
+Live: https://forscorp.es
+Private source.
+Case study: /work/fors-corp

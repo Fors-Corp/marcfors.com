@@ -16,3 +16,10 @@ Optional access key encryption covers local data and automatic backups in the br
 
 Live: https://mensura.cc
 Stack: Vite, React, TypeScript.
+
+## Links
+
+Stack: Vite, React, TypeScript.
+Live: https://mensura.cc
+Private source.
+Case study: /work/mensura
