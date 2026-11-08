@@ -52,37 +52,44 @@ describe("Desk", () => {
     expect(screen.getByText(copy.en.headline)).toBeInTheDocument();
   });
 
-  it("puts Wordkeep first in featured work with live app and case study, never Source", () => {
+  it("puts Embedded RAG first in featured work with live demo, public source and case study", () => {
     renderDesk();
     const firstCard = document.querySelector("#projects .project-card") as HTMLElement;
     expect(firstCard).toBeTruthy();
-    expect(within(firstCard).getByRole("heading", { name: "Wordkeep" })).toBeInTheDocument();
-    expect(within(firstCard).getByRole("link", { name: /view live: wordkeep/i })).toHaveAttribute(
+    expect(within(firstCard).getByRole("heading", { name: "Embedded RAG" })).toBeInTheDocument();
+    expect(within(firstCard).getByRole("link", { name: /view live: embedded rag/i })).toHaveAttribute(
+      "href",
+      "https://embedded-rag.vercel.app",
+    );
+    expect(within(firstCard).getByRole("link", { name: /case study for embedded rag/i })).toHaveAttribute(
+      "href",
+      "/work/embedded-rag",
+    );
+    expect(within(firstCard).getByRole("link", { name: /source code for embedded rag/i })).toHaveAttribute(
+      "href",
+      "https://github.com/Fors-Corp/embedded-rag",
+    );
+    expect(within(firstCard).queryByText(copy.en.private)).toBeNull();
+  });
+
+  it("features Wordkeep second and Fors Photography third with case studies", () => {
+    renderDesk();
+    const cards = document.querySelectorAll("#projects .project-card");
+    const wordkeep = cards[1] as HTMLElement;
+    const photo = cards[2] as HTMLElement;
+    expect(within(wordkeep).getByRole("heading", { name: "Wordkeep" })).toBeInTheDocument();
+    expect(within(wordkeep).getByRole("link", { name: /view live: wordkeep/i })).toHaveAttribute(
       "href",
       "https://wordkeep.me",
     );
-    expect(within(firstCard).getByRole("link", { name: /case study for wordkeep/i })).toHaveAttribute(
+    expect(within(wordkeep).getByRole("link", { name: /case study for wordkeep/i })).toHaveAttribute(
       "href",
       "/work/wordkeep",
     );
-    expect(within(firstCard).queryByRole("link", { name: copy.en.source })).toBeNull();
-    expect(within(firstCard).getByText(copy.en.private)).toHaveClass("private");
-  });
-
-  it("features Fors Photography second and Mensura third with case studies", () => {
-    renderDesk();
-    const cards = document.querySelectorAll("#projects .project-card");
-    const photo = cards[1] as HTMLElement;
-    const mensura = cards[2] as HTMLElement;
     expect(within(photo).getByRole("heading", { name: "Fors Photography" })).toBeInTheDocument();
     expect(within(photo).getByRole("link", { name: /view live: fors photography/i })).toHaveAttribute(
       "href",
       "https://www.forsphoto.com",
-    );
-    expect(within(mensura).getByRole("heading", { name: "Mensura" })).toBeInTheDocument();
-    expect(within(mensura).getByRole("link", { name: /case study for mensura/i })).toHaveAttribute(
-      "href",
-      "/work/mensura",
     );
   });
 

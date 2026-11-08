@@ -14,6 +14,23 @@ export type Project = {
 
 export const featured: Project[] = [
   {
+    name: "Embedded RAG",
+    blurb: {
+      en: "Classic RAG: one pgvector search, then one Claude answer with citations — or a fixed abstain when the corpus does not support the question. Python and Vercel/Neon share MiniLM embeddings and the same grounding rules. Live demo; public source.",
+      es: "RAG clásico: una búsqueda pgvector y luego una respuesta de Claude con citas — o una negativa fija cuando el corpus no sostiene la pregunta. Python y Vercel/Neon comparten embeddings MiniLM y las mismas reglas de anclaje. Demo en vivo; código público.",
+      ca: "RAG clàssic: una cerca pgvector i després una resposta de Claude amb citacions — o una negativa fixa quan el corpus no sosté la pregunta. Python i Vercel/Neon comparteixen embeddings MiniLM i les mateixes regles d'ancoratge. Demo en viu; codi públic.",
+      it: "RAG classico: una ricerca pgvector, poi una risposta Claude con citazioni — o un rifiuto fisso quando il corpus non sostiene la domanda. Python e Vercel/Neon condividono embedding MiniLM e le stesse regole di ancoraggio. Demo live; codice pubblico.",
+      pt: "RAG clássico: uma pesquisa pgvector e depois uma resposta Claude com citações — ou uma recusa fixa quando o corpus não sustenta a pergunta. Python e Vercel/Neon partilham embeddings MiniLM e as mesmas regras de fundamentação. Demo em direto; código público.",
+      de: "Klassisches RAG: eine pgvector-Suche, danach eine Claude-Antwort mit Zitaten — oder eine feste Ablehnung, wenn der Corpus die Frage nicht stützt. Python und Vercel/Neon teilen MiniLM-Embeddings und dieselben Grounding-Regeln. Live-Demo; öffentlicher Quellcode.",
+      fr: "RAG classique : une recherche pgvector, puis une réponse Claude avec citations — ou un refus fixe lorsque le corpus ne soutient pas la question. Python et Vercel/Neon partagent les embeddings MiniLM et les mêmes règles d’ancrage. Démo en direct ; code source public.",
+    },
+    stack: ["Python", "React", "TypeScript", "Neon", "Claude API"],
+    repo: "https://github.com/Fors-Corp/embedded-rag",
+    live: "https://embedded-rag.vercel.app",
+    caseStudy: "embedded-rag",
+    spotlight: true,
+  },
+  {
     name: "Wordkeep",
     blurb: {
       en: "A language app that teaches seven languages by playing, keeps a personal lexicon from Wiktionary with spaced review, and has Claude break whole phrases down grammatically. Words link across languages in a 3D atlas. Your lexicon stays on the device; optional accounts are end-to-end encrypted. App Store release pending.",

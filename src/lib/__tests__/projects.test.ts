@@ -30,12 +30,25 @@ describe("featured work", () => {
     expect(gatto?.blurb.en).toMatch(/Spanish, Catalan and English/);
   });
 
-  it("features Wordkeep first in selected work", () => {
-    expect(featured[0]?.name).toBe("Wordkeep");
+  it("features Embedded RAG first in selected work", () => {
+    expect(featured[0]?.name).toBe("Embedded RAG");
+    const embedded = featured[0];
+    expect(embedded).toMatchObject({
+      stack: ["Python", "React", "TypeScript", "Neon", "Claude API"],
+      live: "https://embedded-rag.vercel.app",
+      repo: "https://github.com/Fors-Corp/embedded-rag",
+      caseStudy: "embedded-rag",
+      spotlight: true,
+    });
+    expect(embedded?.private).toBeUndefined();
+    for (const blurb of Object.values(embedded!.blurb)) {
+      expect(blurb).toMatch(/pgvector|MiniLM|Claude/);
+      expect(blurb).toMatch(/abstain|negativa|rifiuto|recusa|Ablehnung|refus/i);
+    }
   });
 
-  it("features Wordkeep on its own domain, without exposing source", () => {
-    expect(featured.findIndex((item) => item.name === "Wordkeep")).toBe(0);
+  it("features Wordkeep second on its own domain, without exposing source", () => {
+    expect(featured.findIndex((item) => item.name === "Wordkeep")).toBe(1);
     const wordkeep = featured.find((item) => item.name === "Wordkeep");
     expect(wordkeep).toMatchObject({
       stack: ["React", "TypeScript", "Three.js", "Hono", "Claude API"],
