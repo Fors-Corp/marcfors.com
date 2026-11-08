@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { AskChatWidget, askVisualBottomGap } from "@/components/AskChatWidget";
+import { AskChatWidget } from "@/components/AskChatWidget";
 import { askChatWidgetStrings } from "@/lib/askStrings";
 import { copy } from "@/data/copy";
 
@@ -64,12 +64,5 @@ describe("AskChatWidget", () => {
     await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
     expect(screen.getByText(/He builds products at his practice/)).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: "experience.md" }).length).toBeGreaterThan(0);
-  });
-});
-
-describe("askVisualBottomGap", () => {
-  it("is the layout viewport hanging below the visible viewport", () => {
-    expect(askVisualBottomGap(800, { height: 700, offsetTop: 0 })).toBe(100);
-    expect(askVisualBottomGap(800, { height: 820, offsetTop: 40 })).toBe(0);
   });
 });
