@@ -22,6 +22,18 @@ describe("AskAnswer", () => {
     const link = screen.getByRole("link", { name: "site" });
     expect(link).toHaveAttribute("href", "https://marcfors.com");
     expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    expect(screen.getAllByText("about.md").every((node) => node.tagName === "CITE")).toBe(true);
+  });
+
+  it("highlights bare https links and corpus citations", () => {
+    render(
+      <AskAnswer text="Portfolio: https://marcfors.com. See work/mensura.md." />,
+    );
+    expect(screen.getByRole("link", { name: "https://marcfors.com" })).toHaveAttribute(
+      "href",
+      "https://marcfors.com",
+    );
+    expect(screen.getByText("work/mensura.md").tagName).toBe("CITE");
   });
 
   it("does not interpret raw HTML", () => {

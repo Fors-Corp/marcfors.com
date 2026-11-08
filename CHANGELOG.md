@@ -19,6 +19,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   visible above the thread.
 - Stop the site-wide section margin from collapsing the Ask thread and
   clipping the Ask / Close controls.
+- Size the Ask panel for desktop, tablet, and phone, and highlight answer
+  links plus corpus citations.
 
 ## 0.27.0 — 2026-11-08
 

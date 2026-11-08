@@ -4,10 +4,12 @@ import type { ReactNode } from "react";
  * Minimal safe Markdown for Ask replies: paragraphs, lists, bold, italic,
  * inline code, and https links. No raw HTML.
  */
+const INLINE =
+  /(\*\*[^*]+\*\*|\*[^*\n]+\*|`[^`]+`|\[[^\]]+\]\(https:\/\/[^)\s]+\)|https:\/\/[^\s)]+|[\w./-]+\.md)/g;
+
 function renderInline(text: string, keyPrefix: string): ReactNode[] {
   const nodes: ReactNode[] = [];
-  const pattern =
-    /(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`|\[[^\]]+\]\(https:\/\/[^)\s]+\))/g;
+  const pattern = new RegExp(INLINE.source, "g");
   let last = 0;
   let match: RegExpExecArray | null;
   let index = 0;
@@ -23,6 +25,20 @@ function renderInline(text: string, keyPrefix: string): ReactNode[] {
       nodes.push(<em key={key}>{token.slice(1, -1)}</em>);
     } else if (token.startsWith("`") && token.endsWith("`")) {
       nodes.push(<code key={key}>{token.slice(1, -1)}</code>);
+    } else if (token.startsWith("https://")) {
+      const href = token.replace(/[.,;:]+$/, "");
+      nodes.push(
+        <a key={key} href={href} rel="noopener noreferrer" target="_blank">
+          {href}
+        </a>,
+      );
+      if (href.length < token.length) nodes.push(token.slice(href.length));
+    } else if (token.endsWith(".md")) {
+      nodes.push(
+        <cite key={key} className="ask-cite">
+          {token}
+        </cite>,
+      );
     } else {
       const link = /^\[([^\]]+)\]\((https:\/\/[^)\s]+)\)$/.exec(token);
       if (link) {
