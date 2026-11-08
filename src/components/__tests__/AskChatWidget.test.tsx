@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -24,14 +25,26 @@ function FocusOutside() {
   );
 }
 
+function PageWithAsk() {
+  return (
+    <>
+      <main data-page-root="">
+        <a href="#work">Work</a>
+      </main>
+      <AskChatWidget strings={strings} />
+    </>
+  );
+}
+
 vi.mock("next/navigation", () => ({
-  usePathname: () => "/",
+  usePathname: vi.fn(() => "/"),
   useRouter: () => ({ push: vi.fn(), prefetch: vi.fn() }),
 }));
 
 afterEach(() => {
   vi.unstubAllGlobals();
   sessionStorage.clear();
+  vi.mocked(usePathname).mockReturnValue("/");
 });
 
 describe("AskChatWidget", () => {
@@ -109,6 +122,48 @@ describe("AskChatWidget", () => {
     expect(dialog.querySelector(".ask-thread")).toHaveAttribute("aria-live", "polite");
 
     expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it("inerts the page while the panel is open and clears it on close", async () => {
+    const user = userEvent.setup();
+    render(<PageWithAsk />);
+
+    const page = document.querySelector("main");
+    const link = document.querySelector("main a");
+    const dialog = screen.getByRole("dialog");
+    expect(page).toHaveAttribute("inert");
+    expect(link?.closest("[inert]")).toBe(page);
+    expect(page).not.toHaveAttribute("hidden");
+    expect(page).toHaveTextContent("Work");
+    expect(dialog).not.toHaveAttribute("inert");
+    expect(dialog.closest("[inert]")).toBeNull();
+    expect(screen.getByRole("textbox", { name: copy.en.askPlaceholder })).not.toHaveFocus();
+
+    await user.keyboard("{Escape}");
+    expect(page).not.toHaveAttribute("inert");
+    expect(link?.closest("[inert]")).toBeNull();
+    expect(screen.getByRole("link", { name: "Work" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: copy.en.askWidgetOpen })).toHaveFocus();
+
+    await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
+    expect(page).toHaveAttribute("inert");
+    expect(screen.getByRole("dialog").closest("[inert]")).toBeNull();
+    expect(screen.getByRole("textbox", { name: copy.en.askPlaceholder })).toHaveFocus();
+  });
+
+  it("does not inert the page when the panel is closed or on the full Ask page", () => {
+    sessionStorage.setItem("marcfors-ask-widget-open", "0");
+    const { unmount } = render(<PageWithAsk />);
+    expect(document.querySelector("main")).not.toHaveAttribute("inert");
+    expect(screen.getByRole("link", { name: "Work" })).toBeInTheDocument();
+    unmount();
+
+    sessionStorage.clear();
+    vi.mocked(usePathname).mockReturnValue("/es/ask");
+    render(<PageWithAsk />);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(document.querySelector("main")).not.toHaveAttribute("inert");
+    expect(screen.getByRole("link", { name: "Work" })).toBeInTheDocument();
   });
 
   it("closes on Escape and restores focus to the launcher", async () => {

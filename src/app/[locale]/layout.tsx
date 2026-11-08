@@ -124,12 +124,15 @@ export default async function LocaleLayout({
           } as CSSProperties
         }
       >
-        <script dangerouslySetInnerHTML={{ __html: ANTI_FLASH_SCRIPT }} />
-        {/* application/ld+json: WebSite + Person graph, shared by every page. */}
-        <JsonLd data={siteJsonLd()} />
-        {children}
+        {/* Sibling of the Ask widget so the open dialog can mark the page inert. */}
+        <div data-page-root="">
+          <script dangerouslySetInnerHTML={{ __html: ANTI_FLASH_SCRIPT }} />
+          {/* application/ld+json: WebSite + Person graph, shared by every page. */}
+          <JsonLd data={siteJsonLd()} />
+          {children}
+          <Analytics />
+        </div>
         <AskChatWidget strings={askChatWidgetStrings(t)} locale={locale} />
-        <Analytics />
       </body>
     </html>
   );
