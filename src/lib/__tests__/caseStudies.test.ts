@@ -152,6 +152,15 @@ describe("case studies", () => {
     expect(study?.live).toBe("https://marcfors.com");
   });
 
+  it("names the fonts the homepage ships", () => {
+    for (const locale of LOCALES) {
+      const body = caseStudyBody("marcfors-com", locale)!;
+      expect(body, locale).toContain("Spectral");
+      expect(body, locale).toContain("Manrope");
+      expect(body, locale).not.toMatch(/Fraunces|IBM Plex Mono/);
+    }
+  });
+
   it("keeps private product studies free of repo URLs", () => {
     for (const slug of [
       "fors-corp",
