@@ -95,7 +95,7 @@ export const ui: UiCopy = {
   skillsTitle: "Stack",
   langsTitle: "Idiomas",
   footer: `Barcelona · ${SITE_HOST} · el código es público cuando el repo lo es`,
-  homeCta: "Volver al atlas",
+  homeCta: "Ir al inicio",
   supportLink: "Apoyar · 1,99 €",
   supportNav: "Apoyar",
   supportPath: "Código abierto",

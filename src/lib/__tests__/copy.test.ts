@@ -67,4 +67,18 @@ describe("locale copy", () => {
     expect(skills.backend).toContain("Spring");
     expect(languages.en).toMatch(/German beginner/i);
   });
+
+  it("labels the home CTA as go-to-homepage, not back-to-atlas", () => {
+    expect(copy.en.homeCta).toBe("Go to homepage");
+    expect(copy.es.homeCta).toBe("Ir al inicio");
+    expect(copy.ca.homeCta).toBe("Vés a l'inici");
+    expect(copy.de.homeCta).toBe("Zur Startseite");
+    expect(copy.fr.homeCta).toBe("Aller à l’accueil");
+    expect(copy.it.homeCta).toBe("Vai alla home");
+    expect(copy.pt.homeCta).toBe("Ir para o início");
+    for (const locale of LOCALES) {
+      expect(copy[locale].homeCta, `${locale}.homeCta`).not.toMatch(/atlas|atles|atlante/i);
+      expect(copy[locale].homeCta.trim()).not.toBe("");
+    }
+  });
 });
