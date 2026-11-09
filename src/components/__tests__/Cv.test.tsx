@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { CvViewer } from "@/components/CvViewer";
 import { copy } from "@/data/copy";
 import { cvPdfEmbedSrc } from "@/lib/cvPdfFit";
@@ -44,16 +45,43 @@ describe("CvViewer", () => {
     expect(open).toHaveAttribute("rel", expect.stringContaining("noopener"));
   });
 
-  it("embeds the PDF in a titled page-width canvas shell, not an iframe", () => {
+  it("embeds the PDF in a titled, keyboard-focusable page-width region, not an iframe", async () => {
+    const user = userEvent.setup();
     render(<CvViewer locale="en" />);
-    // getByRole(img) is how a screen reader finds the labelled canvas region.
-    const frame = screen.getByRole("img", { name: copy.en.cvViewerLabel });
+    // role=region + tabindex=0: axe scrollable-region-focusable; role=img blocked
+    // keyboard PageDown/arrows even when focused. onKeyDown scrolls explicitly
+    // because Chromium often ignores Arrow/Page on overflow regions.
+    const frame = screen.getByRole("region", { name: copy.en.cvViewerLabel });
     expect(frame.tagName).toBe("DIV");
     expect(frame).toHaveClass("cv-frame--canvas");
+    expect(frame).toHaveAttribute("tabindex", "0");
     expect(frame.querySelector(".cv-pages")).not.toBeNull();
     // Native PDF chrome used to live here as an <iframe src={CV_PATH}>; that
     // path zoomed past the phone width. Keep it out of the JS tree.
     expect(document.querySelector("iframe.cv-frame")).toBeNull();
+
+    Object.defineProperty(frame, "clientHeight", { configurable: true, value: 200 });
+    Object.defineProperty(frame, "scrollHeight", { configurable: true, value: 800 });
+    let scrollTop = 0;
+    Object.defineProperty(frame, "scrollTop", {
+      configurable: true,
+      get: () => scrollTop,
+      set: (v: number) => {
+        scrollTop = v;
+      },
+    });
+    frame.focus();
+    await user.keyboard("{PageDown}");
+    expect(scrollTop).toBeGreaterThan(0);
+  });
+
+  it("focuses the download control when the URL hash targets it", async () => {
+    window.location.hash = `#${CV_DOWNLOAD_HASH}`;
+    render(<CvViewer locale="en" />);
+    await waitFor(() => {
+      expect(screen.getByRole("link", { name: copy.en.cvDownload })).toHaveFocus();
+    });
+    window.location.hash = "";
   });
 
   it("keeps a visible way out when the browser will not render inline", () => {
@@ -65,7 +93,7 @@ describe("CvViewer", () => {
     for (const locale of LOCALES) {
       const { unmount } = render(<CvViewer locale={locale} />);
       expect(screen.getByRole("link", { name: copy[locale].cvDownload })).toBeInTheDocument();
-      expect(screen.getByRole("img", { name: copy[locale].cvViewerLabel })).toBeInTheDocument();
+      expect(screen.getByRole("region", { name: copy[locale].cvViewerLabel })).toBeInTheDocument();
       unmount();
     }
   });

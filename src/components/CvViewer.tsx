@@ -1,4 +1,5 @@
 import { CvPdfEmbedLazy } from "@/components/CvPdfEmbedLazy";
+import { FocusHashTarget } from "@/components/FocusHashTarget";
 import { copy } from "@/data/copy";
 import { cvPdfEmbedSrc } from "@/lib/cvPdfFit";
 import type { Locale } from "@/lib/locale";
@@ -10,10 +11,11 @@ import { CV_DOWNLOAD_HASH, CV_FILENAME, CV_PATH } from "@/lib/site";
  * The visible embed is a client canvas (pdf.js) scaled to the container width
  * so mobile Safari cannot open the file at an oversized native zoom. It loads
  * through `CvPdfEmbedLazy` (`next/dynamic`, `ssr: false`) so pdfjs-dist never
- * lands in the homepage client graph. Download and Open stay plain links. A
- * <noscript> iframe with `#view=FitH` covers the no-JS path; CSP still keeps
- * `object-src 'none'`, so that fallback is an iframe (the PDF is served with
- * `frame-ancestors 'self'`).
+ * lands in the homepage client graph. The scrollport is a labelled region
+ * (`tabIndex={0}`) so keyboard users can PageDown through pages; canvases are
+ * aria-hidden. Download and Open stay plain links. A <noscript> iframe with
+ * `#view=FitH` covers the no-JS path; CSP still keeps `object-src 'none'`, so
+ * that fallback is an iframe (the PDF is served with `frame-ancestors 'self'`).
  *
  * The download control keeps id={CV_DOWNLOAD_HASH} so Ask CV citations can
  * deep-link here (`/cv#cv-download`) and scroll/focus the affordance.
@@ -23,6 +25,7 @@ export function CvViewer({ locale }: { locale: Locale }) {
   const fitSrc = cvPdfEmbedSrc(CV_PATH);
   return (
     <div className="cv">
+      <FocusHashTarget id={CV_DOWNLOAD_HASH} />
       <div className="cta-row">
         <a id={CV_DOWNLOAD_HASH} className="cta" href={CV_PATH} download={CV_FILENAME}>
           {t.cvDownload}

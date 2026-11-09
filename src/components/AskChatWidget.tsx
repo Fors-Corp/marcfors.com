@@ -38,7 +38,11 @@ const openListeners = new Set<() => void>();
 let openFallback: boolean | null = null;
 
 function readOpenDefault(): boolean {
-  if (typeof window === "undefined") return true;
+  // Closed by default: an open modal marks the page inert and traps Tab. Auto-
+  // opening after a deferred mount (pointer/key/idle) locked keyboard users out
+  // of the portfolio without an intentional Open. sessionStorage still remembers
+  // an explicit open for the tab.
+  if (typeof window === "undefined") return false;
   try {
     const stored = window.sessionStorage.getItem(STORAGE_KEY);
     if (stored === "0") return false;
@@ -46,11 +50,20 @@ function readOpenDefault(): boolean {
   } catch {
     if (openFallback !== null) return openFallback;
   }
-  return true;
+  return false;
 }
 
 function serverOpen(): boolean {
-  return true;
+  return false;
+}
+
+function focusHashTarget() {
+  const id = window.location.hash.replace(/^#/, "");
+  if (!id) return;
+  const el = document.getElementById(id);
+  if (el instanceof HTMLElement) {
+    el.focus({ preventScroll: false });
+  }
 }
 
 function subscribeOpen(listener: () => void) {
@@ -147,9 +160,9 @@ export function AskChatWidget({
   const panelRef = useRef<HTMLElement>(null);
   const hostRef = useRef<HTMLDivElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
-  // Focus moves only when the visitor opens or closes the panel. It is open
-  // by default; moving focus on load would skip the rest of the page.
-  const focusIntent = useRef<"panel" | "launcher" | null>(null);
+  // Focus moves only when the visitor opens or closes the panel, or follows a
+  // source link (hash target). Passive mount stays closed so focus is untouched.
+  const focusIntent = useRef<"panel" | "launcher" | "hash" | null>(null);
   const open = useSyncExternalStore(subscribeOpen, readOpenDefault, serverOpen);
   const onAskPage = pathname?.endsWith("/ask") ?? false;
 
@@ -163,12 +176,24 @@ export function AskChatWidget({
     writeOpen(false);
   }, []);
 
+  // Source links navigate away (or to a hash). Do not return focus to the
+  // launcher — that stole focus from targets like /cv#cv-download.
+  const closeForNavigation = useCallback(() => {
+    focusIntent.current = "hash";
+    writeOpen(false);
+  }, []);
+
   useEffect(() => {
     if (onAskPage) return;
     if (!open) {
       if (focusIntent.current === "launcher") {
         focusIntent.current = null;
         launcherRef.current?.focus({ preventScroll: true });
+      } else if (focusIntent.current === "hash") {
+        focusIntent.current = null;
+        // Next.js may apply the hash after this close; retry once on the next frame.
+        focusHashTarget();
+        requestAnimationFrame(() => focusHashTarget());
       }
       return;
     }
@@ -236,7 +261,7 @@ export function AskChatWidget({
           strings={strings}
           variant="widget"
           locale={locale}
-          onSourceNavigate={closePanel}
+          onSourceNavigate={closeForNavigation}
         />
       </section>
       {open ? null : (

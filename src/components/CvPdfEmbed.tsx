@@ -1,8 +1,48 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 import { pageWidthScale } from "@/lib/cvPdfFit";
 import { CV_PATH } from "@/lib/site";
+
+/** Chromium does not always scroll a focused overflow region on Arrow/Page keys. */
+function scrollFrameOnKey(event: ReactKeyboardEvent<HTMLDivElement>) {
+  if (event.altKey || event.ctrlKey || event.metaKey) return;
+  const el = event.currentTarget;
+  const page = Math.max(40, el.clientHeight * 0.9);
+  let delta = 0;
+  switch (event.key) {
+    case "ArrowDown":
+      delta = 40;
+      break;
+    case "ArrowUp":
+      delta = -40;
+      break;
+    case "PageDown":
+      delta = page;
+      break;
+    case "PageUp":
+      delta = -page;
+      break;
+    case "Home":
+      delta = -el.scrollHeight;
+      break;
+    case "End":
+      delta = el.scrollHeight;
+      break;
+    case " ":
+      delta = event.shiftKey ? -page : page;
+      break;
+    default:
+      return;
+  }
+  const max = el.scrollHeight - el.clientHeight;
+  if (max <= 0) return;
+  const next = Math.min(max, Math.max(0, el.scrollTop + delta));
+  if (next === el.scrollTop) return;
+  event.preventDefault();
+  el.scrollTop = next;
+}
 
 const WORKER_SRC = "/pdf.worker.min.mjs";
 
@@ -72,6 +112,8 @@ export function CvPdfEmbed({ title }: Props) {
           const wrap = document.createElement("div");
           wrap.className = "cv-page";
           const canvas = document.createElement("canvas");
+          // Parent is a labelled region, not role=img — hide raw canvases from AT.
+          canvas.setAttribute("aria-hidden", "true");
           wrap.appendChild(canvas);
           pagesRoot.appendChild(wrap);
           canvases.push(canvas);
@@ -175,9 +217,11 @@ export function CvPdfEmbed({ title }: Props) {
       ref={containerRef}
       className="cv-frame cv-frame--canvas"
       data-cv-status={status}
-      role="img"
+      role="region"
       aria-label={title}
+      tabIndex={0}
       aria-busy={status === "loading" ? true : undefined}
+      onKeyDown={scrollFrameOnKey}
     >
       <div ref={pagesRef} className="cv-pages" />
     </div>
