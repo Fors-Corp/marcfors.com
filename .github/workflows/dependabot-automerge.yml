@@ -14,6 +14,15 @@ name: Dependabot auto-merge
 # Lighthouse never merges. This workflow does NOT use GitHub native auto-merge
 # (`gh pr merge --auto`): with no branch protection on `main` that merges
 # immediately, before checks finish. It polls the CI run instead.
+#
+# The job never checks out the repo, so `gh` cannot infer it from a local .git:
+# every call names the repo explicitly (`GH_REPO` for the job, plus `--repo` on
+# `gh run list` / `gh pr merge`). Without that, `gh run list` dies with
+# "failed to determine base repo" and nothing ever merges.
+#
+# No `gh pr review --approve`: `main` has no branch protection, so an approval
+# gates nothing, and the API refuses it anyway unless the org/repo setting
+# "Allow GitHub Actions to create and approve pull requests" is on.
 
 on: pull_request
 
@@ -25,6 +34,8 @@ jobs:
   automerge:
     if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
+    env:
+      GH_REPO: ${{ github.repository }}
     steps:
       - name: Read Dependabot metadata
         id: meta
@@ -59,20 +70,19 @@ jobs:
         if: steps.gate.outputs.safe == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          gh pr review --approve "$PR_URL" || true
           echo "Polling the CI workflow run for $HEAD_SHA — merge only when it is green."
           for _ in $(seq 1 60); do
-            state=$(gh run list --branch "$HEAD_REF" --workflow CI --limit 8 \
+            state=$(gh run list --repo "$GH_REPO" --branch "$HEAD_REF" --workflow CI --limit 8 \
               --json headSha,status,conclusion \
               --jq "map(select(.headSha==\"$HEAD_SHA\")) | first | (.status // \"missing\") + \"/\" + (.conclusion // \"\")")
             echo "CI run: $state"
             case "$state" in
               completed/success)
-                gh pr merge --squash --delete-branch "$PR_URL"
+                gh pr merge "$PR_NUMBER" --repo "$GH_REPO" --squash --delete-branch
                 echo "Merged."
                 exit 0
                 ;;
