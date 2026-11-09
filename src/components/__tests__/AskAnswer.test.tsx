@@ -41,6 +41,22 @@ describe("AskAnswer", () => {
     expect(source).toHaveClass("ask-source");
   });
 
+  it("highlights CV PDF citations as links to the CV download control", () => {
+    render(
+      <AskAnswer
+        locale="es"
+        text="Experiencia en Dynatrace (cv/marc-fors-cv.pdf) y contacto (contact.md)."
+      />,
+    );
+    const cv = screen.getByRole("link", { name: "cv/marc-fors-cv.pdf" });
+    expect(cv).toHaveAttribute("href", "/es/cv#cv-download");
+    expect(cv).toHaveClass("ask-source");
+    const contact = screen.getByRole("link", { name: "contact.md" });
+    // Next.js Link may normalize `/es/#contact` to `/es#contact`.
+    expect(contact.getAttribute("href")).toMatch(/^\/es\/?#contact$/);
+    expect(contact).toHaveClass("ask-source");
+  });
+
   it("notifies when a source link is opened", async () => {
     const user = userEvent.setup();
     const onSourceNavigate = vi.fn();

@@ -25,6 +25,8 @@ export const LINKEDIN_URL = "https://www.linkedin.com/in/marc-fors";
  */
 export const CV_PATH = "/marc-fors-cv.pdf";
 export const CV_FILENAME = "Marc-Fors-CV.pdf";
+/** Fragment / element id for the Download PDF control on `/cv` (Ask CV cites). */
+export const CV_DOWNLOAD_HASH = "cv-download";
 
 export const BANNED_PUBLIC_PATTERNS = [/@gmail\.com/i, /marcfors\.me/i] as const;
 
