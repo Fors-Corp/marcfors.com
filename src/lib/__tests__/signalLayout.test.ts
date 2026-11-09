@@ -25,7 +25,9 @@ describe("displayed signals keep a stable layout", () => {
     expect(css).toContain(`min-height: ${HEALTH_LINE_MIN_PX}px`);
     expect(css).toMatch(/\.hero \{[\s\S]*contain: layout/);
     expect(css).toMatch(/\.card \{[\s\S]*contain: layout/);
-    expect(css).toContain("scrollbar-gutter: stable");
+    expect(css).toContain("scrollbar-width: none");
+    expect(css).toMatch(/html::-webkit-scrollbar\s*\{\s*display:\s*none/);
+    expect(css).not.toContain("scrollbar-gutter: stable");
     expect(css).toMatch(/\.tip \{[\s\S]*position: absolute/);
     expect(css).toContain("white-space: nowrap");
   });

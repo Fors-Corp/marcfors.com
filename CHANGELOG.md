@@ -15,6 +15,9 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Hide the native document scrollbar so only the atlas `.signal-rail`
+  progress indicator shows on page scroll (wheel, touch, and keyboard
+  scrolling still work; nested Ask / activity panes keep their own bars).
 - Highlight inline Ask citations of the indexed CV (`cv/marc-fors-cv.pdf`) as
   source links that open the locale `/cv` page at the Download PDF control.
 - Keep the floating Ask panel off the mobile Total Blocking Time window harder:
