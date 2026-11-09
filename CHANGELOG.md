@@ -15,10 +15,16 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
-- Defer the floating Ask panel until the browser is idle or the visitor
-  interacts, so the open dialog is not in the first paint. Mounting it there
-  marked the page inert during load and pushed mobile Total Blocking Time over
-  the 250ms budget. It still opens by default once that idle callback runs.
+- Keep the floating Ask panel off the mobile Total Blocking Time window harder:
+  mount on the first pointer or key, or only after `load` plus a 45s delay and
+  then idle (an early idle still imported the open dialog inside Lighthouse’s
+  quiet window at ~305ms against the 250ms budget). Prefetch of the Ask nav
+  link is off on the homepage for the same reason. The panel still opens by
+  default once it mounts.
+- Settle the Wordkeep atlas layout once on mount instead of running the
+  260-frame entrance force loop after first paint, and code-split the canvas
+  chunk behind `WordAtlasLazy`, so those force ticks are not on the homepage
+  critical path.
 - Stop the Wordkeep atlas embed from widening on every resize. The canvas was
   sized to the stage border box, so the figure grew and a phone page scrolled
   sideways; a tap measured against the old box missed the word.

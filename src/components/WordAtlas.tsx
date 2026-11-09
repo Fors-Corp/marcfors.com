@@ -67,7 +67,6 @@ export function WordAtlas({
     const canvas: HTMLCanvasElement = canvasNode;
     const ctx: CanvasRenderingContext2D = context;
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const N = WORD_ATLAS.nodes.length;
     const edges = WORD_ATLAS.edges;
 
@@ -217,12 +216,14 @@ export function WordAtlas({
       return true;
     }
 
-    if (reduce) {
-      settle(pts, edges);
-    }
+    // Settle once up front for every visitor. The old 260-frame entrance rAF
+    // loop kept stepping forces after FCP and showed up in mobile Total
+    // Blocking Time. Drag still restarts `loop` below when the pointer grabs a
+    // node; resize only redraws the settled layout.
+    settle(pts, edges);
     // Observe first so the initial layout callback cannot be missed, then poll briefly.
     const ro = new ResizeObserver(() => {
-      if (resize() && !raf && !reduce) raf = requestAnimationFrame(loop);
+      if (resize() && !raf) draw();
     });
     ro.observe(wrap);
     window.addEventListener("resize", resize);
@@ -231,12 +232,8 @@ export function WordAtlas({
       boots += 1;
       if (resize() || boots > 40) window.clearInterval(bootId);
     }, 50);
-    if (!reduce) {
-      loop();
-    } else {
-      resize();
-      draw();
-    }
+    resize();
+    draw();
 
     const onThemeChange = () => {
       COL = readColors();
