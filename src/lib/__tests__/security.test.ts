@@ -20,6 +20,8 @@ describe("security headers", () => {
     expect(CONTENT_SECURITY_POLICY).toContain("upgrade-insecure-requests");
     expect(CONTENT_SECURITY_POLICY).toContain("frame-ancestors 'none'");
     expect(CONTENT_SECURITY_POLICY).toContain("object-src 'none'");
+    // pdf.js loads /pdf.worker.min.mjs same-origin on /cv.
+    expect(CONTENT_SECURITY_POLICY).toContain("worker-src 'self'");
     expect(CONTENT_SECURITY_POLICY).not.toContain("unsafe-eval");
   });
 

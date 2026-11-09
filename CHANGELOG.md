@@ -15,6 +15,11 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Fit the CV PDF to the viewport width on `/cv` with a pdf.js canvas viewer
+  (page-width scale for every page). Mobile Safari’s native iframe PDF chrome
+  was opening the resume massively zoomed and clipping the right edge;
+  `#view=FitH` remains on the Open link and `<noscript>` iframe for browsers
+  that honour it.
 - Hide the native document scrollbar so only the atlas `.signal-rail`
   progress indicator shows on page scroll (wheel, touch, and keyboard
   scrolling still work; nested Ask / activity panes keep their own bars).

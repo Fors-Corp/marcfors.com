@@ -49,3 +49,6 @@ next-env.d.ts
 
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 /graft/
+
+# pdf.js worker copied from node_modules by scripts/copy-pdf-worker.mjs
+/public/pdf.worker.min.mjs

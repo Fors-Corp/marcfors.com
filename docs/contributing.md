@@ -22,7 +22,8 @@ No environment variables are required to run the site. Copy `.env.example` to `.
 | `dev` | `next dev` |
 | `build` | `next build` (runs `prebuild` first) |
 | `start` | `next start` on an existing build |
-| `prebuild` | Runs `gen-tokens.mjs` then `audit-snapshot.mjs` |
+| `prebuild` | Runs `copy-pdf-worker.mjs`, `gen-tokens.mjs`, then `audit-snapshot.mjs` |
+| `postinstall` | Copies `pdfjs-dist`’s worker to `public/pdf.worker.min.mjs` for the `/cv` viewer |
 | `gen:tokens` | Regenerates `src/app/styles/tokens.css` from `src/lib/themePalettes.ts` |
 | `lint` | `eslint src` |
 | `typecheck` | `tsc --noEmit` |

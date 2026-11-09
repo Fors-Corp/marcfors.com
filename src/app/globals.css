@@ -1746,7 +1746,9 @@ footer {
   margin-top: 18px;
 }
 /* Tall enough to show a full A4 page without inner scrolling on a laptop,
-   capped so it never outgrows the viewport on short screens. */
+   capped so it never outgrows the viewport on short screens. The canvas
+   variant sizes its height from the page aspect once pdf.js paints; the
+   min-height keeps the shell stable while loading. */
 .cv-frame {
   display: block;
   width: 100%;
@@ -1756,12 +1758,42 @@ footer {
   border-radius: var(--r-md);
   background: var(--paper);
 }
+.cv-frame--canvas {
+  height: auto;
+  max-height: min(82vh, 1040px);
+  min-height: min(50vh, 480px);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.cv-pages {
+  display: grid;
+  gap: 12px;
+  padding: 8px;
+}
+.cv-page {
+  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+}
+.cv-frame--canvas canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
 .cv-hint {
   margin-top: 10px;
 }
 @media (max-width: 640px) {
   .cv-frame {
     height: min(70vh, 720px);
+  }
+  .cv-frame--canvas {
+    height: auto;
+    max-height: min(70vh, 720px);
+    min-height: min(45vh, 420px);
+  }
+  .cv-pages {
+    gap: 8px;
+    padding: 6px;
   }
 }
 

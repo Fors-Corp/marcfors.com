@@ -74,7 +74,8 @@ const nextConfig: NextConfig = {
       },
       ...noindexSources.map((source) => ({ source, headers: NOINDEX })),
       // Last rule wins per header key, so this re-sends Content-Security-Policy
-      // and X-Frame-Options for the CV alone, letting /cv frame it same-origin.
+      // and X-Frame-Options for the CV alone, letting the /cv <noscript> iframe
+      // frame it same-origin. The primary viewer is pdf.js canvas.
       // Anything not listed here (HSTS, nosniff, Referrer-Policy, COOP/CORP…)
       // still comes from the site-wide rule above.
       { source: CV_PATH, headers: EMBEDDABLE_ASSET_HEADERS },
