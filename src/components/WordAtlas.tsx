@@ -221,19 +221,24 @@ export function WordAtlas({
     // Blocking Time. Drag still restarts `loop` below when the pointer grabs a
     // node; resize only redraws the settled layout.
     settle(pts, edges);
-    // Observe first so the initial layout callback cannot be missed, then poll briefly.
+    // Observe first so the initial layout callback cannot be missed, then retry
+    // a few animation frames — not a 2s setInterval poll, which stacked short
+    // main-thread work into mobile Total Blocking Time on CI.
     const ro = new ResizeObserver(() => {
       if (resize() && !raf) draw();
     });
     ro.observe(wrap);
     window.addEventListener("resize", resize);
     let boots = 0;
-    const bootId = window.setInterval(() => {
+    let bootRaf = 0;
+    const boot = () => {
       boots += 1;
-      if (resize() || boots > 40) window.clearInterval(bootId);
-    }, 50);
+      if (resize() || boots > 8) return;
+      bootRaf = requestAnimationFrame(boot);
+    };
     resize();
     draw();
+    bootRaf = requestAnimationFrame(boot);
 
     const onThemeChange = () => {
       COL = readColors();
@@ -352,7 +357,7 @@ export function WordAtlas({
     canvas.addEventListener("pointerleave", onLeave);
 
     return () => {
-      window.clearInterval(bootId);
+      if (bootRaf) cancelAnimationFrame(bootRaf);
       if (raf) cancelAnimationFrame(raf);
       ro.disconnect();
       window.removeEventListener("resize", resize);

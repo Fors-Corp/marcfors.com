@@ -17,7 +17,7 @@ import { linkLabel } from "@/lib/labels";
 import { CV_FILENAME, CV_PATH, SITE_HOST, SITE_NAME, SITE_REPO } from "@/lib/site";
 import { SUPPORT_PATH } from "@/lib/support";
 import { SpotlightLayer } from "@/components/SpotlightLayer";
-import { SignalBoard, type SignalStrings } from "@/components/SignalBoard";
+import type { SignalStrings } from "@/components/SignalBoard";
 import { WordAtlasLazy } from "@/components/WordAtlasLazy";
 
 const GitHubActivity = dynamic(
@@ -28,6 +28,15 @@ const GitHubActivity = dynamic(
         <div className="skeleton-block" />
       </section>
     ),
+  },
+);
+
+// Below-the-fold: keep SignalBoard (and its web-vitals import) off the first
+// homepage JS so mobile Total Blocking Time has headroom under the 250ms budget.
+const SignalBoard = dynamic(
+  () => import("@/components/SignalBoard").then((mod) => mod.SignalBoard),
+  {
+    loading: () => <div className="signal-board" aria-busy="true" />,
   },
 );
 
