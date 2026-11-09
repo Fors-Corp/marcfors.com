@@ -8,6 +8,9 @@ export const CHUNK_SIZE = 800;
 export const CHUNK_OVERLAP = 120;
 
 export const CHAT_MODEL = process.env.CHAT_MODEL || "claude-sonnet-5-5";
+/** Output cap for Ask. Sonnet 5.5 adaptive thinking counts against this, so keep
+ *  headroom for thinking + a full answer (1024 was cutting replies mid-sentence). */
+export const ASK_MAX_TOKENS = Number(process.env.ASK_MAX_TOKENS || 8192);
 export const TOP_K = Number(process.env.TOP_K || 4);
 export const MAX_DISTANCE = Number(process.env.MAX_DISTANCE || 0.65);
 export const MAX_QUESTION_CHARS = Number(process.env.MAX_QUESTION_CHARS || 2000);

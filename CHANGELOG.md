@@ -15,6 +15,11 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Stop Ask answers truncating mid-sentence (e.g. “• Es un C” above the
+  citations rule). Claude Sonnet 5.5 adaptive thinking was consuming the old
+  1024 `max_tokens` budget; Ask now skips up-front thinking, uses low effort,
+  raises the output cap, and refuses a `max_tokens` stop instead of rendering
+  a clipped reply.
 - Hide the native document scrollbar so only the atlas `.signal-rail`
   progress indicator shows on page scroll (wheel, touch, and keyboard
   scrolling still work; nested Ask / activity panes keep their own bars).
