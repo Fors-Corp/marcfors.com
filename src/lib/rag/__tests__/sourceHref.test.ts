@@ -26,9 +26,11 @@ describe("sourceHref", () => {
     expect(sourceHref("trace-theater.md", "it")).toBe("/it/lab/trace");
   });
 
-  it("maps CV citations onto the on-site CV viewer", () => {
-    expect(sourceHref("cv/marc-fors-cv.pdf", "en")).toBe("/cv");
-    expect(sourceHref("cv/marc-fors-cv.pdf", "es")).toBe("/es/cv");
+  it("maps CV citations onto the on-site CV download control", () => {
+    expect(sourceHref("cv/marc-fors-cv.pdf", "en")).toBe("/cv#cv-download");
+    expect(sourceHref("cv/marc-fors-cv.pdf", "es")).toBe("/es/cv#cv-download");
+    expect(sourceHref("cv/other.pdf", "en")).toBe("/cv#cv-download");
+    expect(sourceHref("marc-fors-cv.pdf", "fr")).toBe("/fr/cv#cv-download");
   });
 
   it("keeps projects without a case study on the projects section", () => {

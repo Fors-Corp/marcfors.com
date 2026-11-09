@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { CvViewer } from "@/components/CvViewer";
 import { copy } from "@/data/copy";
 import { LOCALES } from "@/lib/locale";
-import { CV_FILENAME, CV_PATH } from "@/lib/site";
+import { CV_DOWNLOAD_HASH, CV_FILENAME, CV_PATH } from "@/lib/site";
 
 describe("CvViewer", () => {
   it("offers the PDF as a download with a named file", () => {
@@ -12,6 +12,8 @@ describe("CvViewer", () => {
     expect(download).toHaveAttribute("href", CV_PATH);
     // Without `download` the browser navigates to the PDF instead of saving it.
     expect(download).toHaveAttribute("download", CV_FILENAME);
+    // Ask CV citations deep-link here via /cv#cv-download.
+    expect(download).toHaveAttribute("id", CV_DOWNLOAD_HASH);
   });
 
   it("opens the PDF in a new tab without handing it window.opener", () => {

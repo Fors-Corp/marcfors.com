@@ -1,15 +1,15 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 
-import { sourceHref } from "@/lib/rag/sourceHref";
+import { isAskSourcePath, sourceHref } from "@/lib/rag/sourceHref";
 import type { Locale } from "@/lib/locale";
 
 /**
  * Minimal safe Markdown for Ask replies: paragraphs, lists, bold, italic,
- * inline code, and https links. No raw HTML.
+ * inline code, https links, and corpus citations (.md + CV PDF). No raw HTML.
  */
 const INLINE =
-  /(\*\*[^*]+\*\*|\*[^*\n]+\*|`[^`]+`|\[[^\]]+\]\(https:\/\/[^)\s]+\)|https:\/\/[^\s)]+|[\w./-]+\.md)/g;
+  /(\*\*[^*]+\*\*|\*[^*\n]+\*|`[^`]+`|\[[^\]]+\]\(https:\/\/[^)\s]+\)|https:\/\/[^\s)]+|cv\/[\w./-]+\.pdf|marc-fors-cv\.pdf|[\w./-]+\.md)/g;
 
 function renderInline(
   text: string,
@@ -42,7 +42,7 @@ function renderInline(
         </a>,
       );
       if (href.length < token.length) nodes.push(token.slice(href.length));
-    } else if (token.endsWith(".md")) {
+    } else if (isAskSourcePath(token)) {
       nodes.push(
         <Link
           key={key}

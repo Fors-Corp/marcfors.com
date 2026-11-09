@@ -15,6 +15,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Highlight inline Ask citations of the indexed CV (`cv/marc-fors-cv.pdf`) as
+  source links that open the locale `/cv` page at the Download PDF control.
 - Keep the floating Ask panel off the mobile Total Blocking Time window harder:
   mount on the first pointer or key, or only after `load` plus a 45s delay and
   then idle (an early idle still imported the open dialog inside Lighthouse’s

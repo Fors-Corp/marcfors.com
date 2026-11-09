@@ -1,6 +1,6 @@
 import { copy } from "@/data/copy";
 import type { Locale } from "@/lib/locale";
-import { CV_FILENAME, CV_PATH } from "@/lib/site";
+import { CV_DOWNLOAD_HASH, CV_FILENAME, CV_PATH } from "@/lib/site";
 
 /**
  * Renders the designed CV PDF inline and offers it for download.
@@ -16,13 +16,16 @@ import { CV_FILENAME, CV_PATH } from "@/lib/site";
  * Browsers without an inline PDF viewer (most mobile ones) paint an empty
  * frame rather than falling back to the element's children, so the two buttons
  * above it and the hint below are the real fallback path.
+ *
+ * The download control keeps id={CV_DOWNLOAD_HASH} so Ask CV citations can
+ * deep-link here (`/cv#cv-download`) and scroll/focus the affordance.
  */
 export function CvViewer({ locale }: { locale: Locale }) {
   const t = copy[locale];
   return (
     <div className="cv">
       <div className="cta-row">
-        <a className="cta" href={CV_PATH} download={CV_FILENAME}>
+        <a id={CV_DOWNLOAD_HASH} className="cta" href={CV_PATH} download={CV_FILENAME}>
           {t.cvDownload}
         </a>
         <a className="cta ghost" href={CV_PATH} target="_blank" rel="noopener noreferrer">
