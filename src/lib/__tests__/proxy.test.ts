@@ -28,7 +28,7 @@ describe("locale proxy", () => {
   });
 
   it("passes API, asset and well-known paths straight through", () => {
-    for (const p of ["/api/health", "/_next/static/x.js", "/robots.txt", "/llms.txt", "/.well-known/security.txt", "/icon.svg"]) {
+    for (const p of ["/api/health", "/_next/static/x.js", "/robots.txt", "/llms.txt", "/llms-full.txt", "/.well-known/security.txt", "/icon.svg"]) {
       const res = proxy(request(p));
       expect(isPassThrough(res), p).toBe(true);
       expect(rewrite(res), p).toBeNull();
