@@ -10,6 +10,10 @@ import { copy } from "@/data/copy";
 
 const strings = askChatWidgetStrings(copy.en);
 
+function rememberOpen() {
+  sessionStorage.setItem("marcfors-ask-widget-open", "1");
+}
+
 function FocusOutside() {
   const ref = useRef<HTMLButtonElement>(null);
   useLayoutEffect(() => {
@@ -30,6 +34,9 @@ function PageWithAsk() {
     <>
       <main data-page-root="">
         <a href="#work">Work</a>
+        <section id="work" tabIndex={-1}>
+          Work section
+        </section>
       </main>
       <AskChatWidget strings={strings} />
     </>
@@ -45,10 +52,11 @@ afterEach(() => {
   vi.unstubAllGlobals();
   sessionStorage.clear();
   vi.mocked(usePathname).mockReturnValue("/");
+  window.location.hash = "";
 });
 
 describe("AskChatWidget", () => {
-  it("opens by default and can be closed then reopened", async () => {
+  it("starts closed and can be opened then closed", async () => {
     const user = userEvent.setup();
     vi.stubGlobal(
       "fetch",
@@ -59,16 +67,17 @@ describe("AskChatWidget", () => {
       }),
     );
     render(<AskChatWidget strings={strings} />);
+    expect(screen.getByRole("button", { name: copy.en.askWidgetOpen })).toBeInTheDocument();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
     expect(screen.getByRole("button", { name: copy.en.askWidgetClose })).toBeInTheDocument();
     expect(screen.getByPlaceholderText(copy.en.askPlaceholder)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: copy.en.askSamples[0] })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: copy.en.askWidgetClose }));
     expect(screen.getByRole("button", { name: copy.en.askWidgetOpen })).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
-    expect(screen.getByRole("button", { name: copy.en.askWidgetClose })).toBeInTheDocument();
   });
 
-  it("closes on a source link and keeps the thread", async () => {
+  it("closes on a source link, focuses the hash target, and keeps the thread", async () => {
     const user = userEvent.setup();
     vi.stubGlobal(
       "fetch",
@@ -85,6 +94,13 @@ describe("AskChatWidget", () => {
           }),
       }),
     );
+    // Hash target must exist for close-for-navigation to land focus there.
+    document.body.insertAdjacentHTML(
+      "beforeend",
+      '<section id="work" tabindex="-1">Work section</section>',
+    );
+    window.history.replaceState(null, "", "/#work");
+    rememberOpen();
     render(<AskChatWidget strings={strings} />);
     await user.click(screen.getByRole("button", { name: copy.en.askSamples[0] }));
     const sources = await screen.findAllByRole("link", { name: "experience.md" });
@@ -94,14 +110,17 @@ describe("AskChatWidget", () => {
       expect(source).not.toHaveAttribute("title");
     }
     await user.click(sources[0]!);
-    expect(screen.getByRole("button", { name: copy.en.askWidgetOpen })).toHaveFocus();
+    expect(document.getElementById("work")).toHaveFocus();
+    expect(screen.getByRole("button", { name: copy.en.askWidgetOpen })).not.toHaveFocus();
     expect(screen.queryByRole("link", { name: "experience.md" })).not.toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
     expect(screen.getByText(/He builds products at his practice/)).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: "experience.md" }).length).toBeGreaterThan(0);
+    document.getElementById("work")?.remove();
   });
 
   it("is a modal dialog labelled by the visible title", async () => {
+    rememberOpen();
     const { container } = render(<AskChatWidget strings={strings} />);
     const dialog = screen.getByRole("dialog");
     expect(dialog).toHaveAttribute("aria-modal", "true");
@@ -130,6 +149,10 @@ describe("AskChatWidget", () => {
 
     const page = document.querySelector("main");
     const link = document.querySelector("main a");
+    expect(page).not.toHaveAttribute("inert");
+    expect(screen.getByRole("button", { name: copy.en.askWidgetOpen })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
     const dialog = screen.getByRole("dialog");
     expect(page).toHaveAttribute("inert");
     expect(link?.closest("[inert]")).toBe(page);
@@ -137,7 +160,7 @@ describe("AskChatWidget", () => {
     expect(page).toHaveTextContent("Work");
     expect(dialog).not.toHaveAttribute("inert");
     expect(dialog.closest("[inert]")).toBeNull();
-    expect(screen.getByRole("textbox", { name: copy.en.askPlaceholder })).not.toHaveFocus();
+    expect(screen.getByRole("textbox", { name: copy.en.askPlaceholder })).toHaveFocus();
 
     await user.keyboard("{Escape}");
     expect(page).not.toHaveAttribute("inert");
@@ -152,13 +175,11 @@ describe("AskChatWidget", () => {
   });
 
   it("does not inert the page when the panel is closed or on the full Ask page", () => {
-    sessionStorage.setItem("marcfors-ask-widget-open", "0");
     const { unmount } = render(<PageWithAsk />);
     expect(document.querySelector("main")).not.toHaveAttribute("inert");
     expect(screen.getByRole("link", { name: "Work" })).toBeInTheDocument();
     unmount();
 
-    sessionStorage.clear();
     vi.mocked(usePathname).mockReturnValue("/es/ask");
     render(<PageWithAsk />);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -169,6 +190,7 @@ describe("AskChatWidget", () => {
   it("closes on Escape and restores focus to the launcher", async () => {
     const user = userEvent.setup();
     render(<AskChatWidget strings={strings} />);
+    await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     await user.keyboard("{Escape}");
     const launcher = screen.getByRole("button", { name: copy.en.askWidgetOpen });
@@ -183,9 +205,7 @@ describe("AskChatWidget", () => {
   it("moves focus into the question field when opened", async () => {
     const user = userEvent.setup();
     render(<AskChatWidget strings={strings} />);
-    await user.click(screen.getByRole("button", { name: copy.en.askWidgetClose }));
     const launcher = screen.getByRole("button", { name: copy.en.askWidgetOpen });
-    expect(launcher).toHaveFocus();
     await user.click(launcher);
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(screen.getByRole("textbox", { name: copy.en.askPlaceholder })).toHaveFocus();
@@ -193,6 +213,7 @@ describe("AskChatWidget", () => {
 
   it("keeps Tab inside the open dialog", async () => {
     const user = userEvent.setup();
+    rememberOpen();
     render(
       <>
         <AskChatWidget strings={strings} />
@@ -214,7 +235,8 @@ describe("AskChatWidget", () => {
     expect(after).not.toHaveFocus();
   });
 
-  it("does not move focus on mount when the panel is already open", () => {
+  it("does not move focus on mount when a stored open state is restored", () => {
+    rememberOpen();
     render(<FocusOutside />);
     expect(screen.getByRole("button", { name: "Outside" })).toHaveFocus();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -245,6 +267,7 @@ describe("AskChatWidget", () => {
           }),
       }),
     );
+    rememberOpen();
     render(<AskChatWidget strings={strings} />);
     const thread = document.querySelector(".ask-thread");
     expect(thread).toHaveAttribute("aria-live", "polite");

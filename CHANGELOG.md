@@ -41,10 +41,11 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   source links that open the locale `/cv` page at the Download PDF control.
 - Keep the floating Ask panel off the mobile Total Blocking Time window harder:
   mount on the first pointer or key, or only after `load` plus a 45s delay and
-  then idle (an early idle still imported the open dialog inside Lighthouse’s
+  then idle (an early idle still imported the widget inside Lighthouse’s
   quiet window at ~305ms against the 250ms budget). Prefetch of the Ask nav
-  link is off on the homepage for the same reason. The panel still opens by
-  default once it mounts.
+  link is off on the homepage for the same reason. The panel mounts closed;
+  open is intentional so inert/Tab-trap cannot lock the page under a keyboard
+  visitor.
 - Settle the Wordkeep atlas layout once on mount instead of running the
   260-frame entrance force loop after first paint, and code-split the canvas
   chunk behind `WordAtlasLazy`, so those force ticks are not on the homepage
@@ -76,7 +77,7 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   citing corpus source paths as written. Ask UI strings are hand-written in
   every shipped locale. The abstain sentence stays the English refusal so a
   missing answer still returns no citations.
-- Show Ask as a bottom-right floating chatbot (open by default, closable)
+- Show Ask as a bottom-right floating chatbot (closed by default, closable)
   across portfolio pages; full `/ask` page remains.
 - Compact the floating Ask panel into a fixed-height chat column with the
   composer pinned to the bottom (no clipped input / tall empty thread).
@@ -98,6 +99,23 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 - Give the phone Ask panel about three quarters of the viewport.
 - Answer the remote-roles question from about.md and experience.md when the
   nearest vector chunks do not contain that fact.
+
+## 0.27.1 — 2026-11-09
+
+### Fixed
+
+- Keep the floating Ask panel closed until the visitor opens it. Auto-open after
+  deferred mount marked the page inert and trapped Tab without moving focus into
+  the dialog, so the first key on the homepage could lock keyboard users out of
+  the portfolio. Intentional Open still focuses the question field; Escape still
+  returns focus to the launcher. Source links close the panel and focus the hash
+  target (e.g. `/cv#cv-download`) instead of the FAB.
+- Make the CV pdf.js scrollport a keyboard-focusable labelled region
+  (`role="region"`, `tabIndex={0}`) with an explicit Arrow/Page/Home/End/Space
+  handler so multi-page CVs scroll from the keyboard; `role="img"` blocked
+  keyboard scrolling and Chromium often ignores keys on overflow regions.
+  Painted canvases stay `aria-hidden`. Ask CV citation hashes focus Download PDF
+  via `FocusHashTarget`.
 
 ## 0.27.0 — 2026-11-08
 

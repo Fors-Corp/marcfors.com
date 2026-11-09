@@ -19,9 +19,10 @@ const listen: AddEventListenerOptions = { capture: true, passive: true };
 // Lighthouse Total Blocking Time is measured from FCP until a ~5s main-thread
 // quiet window (TTI), and the audit waits up to ~45s for that quiet window. An
 // early requestIdleCallback (or an 8s timer) still lands inside it on mobile
-// CI (~305ms against a 250ms budget): importing and opening the dialog is
-// itself a long task. Arm idle only after load plus a delay past that max wait;
-// pointer/key still mounts immediately so real visitors are not stuck.
+// CI (~305ms against a 250ms budget): importing the widget is itself a long
+// task. Arm idle only after load plus a delay past that max wait; pointer/key
+// still mounts immediately so real visitors are not stuck. The panel starts
+// closed — auto-open + inert trapped keyboard users after deferred mount.
 export const ASK_POST_LOAD_DELAY_MS = 45_000;
 
 export function DeferredAskWidget({ strings, locale = "en" }: AskWidgetProps) {
