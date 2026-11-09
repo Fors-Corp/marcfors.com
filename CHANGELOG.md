@@ -18,6 +18,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 - Hide the native document scrollbar so only the atlas `.signal-rail`
   progress indicator shows on page scroll (wheel, touch, and keyboard
   scrolling still work; nested Ask / activity panes keep their own bars).
+- Rename the subpage home control from “back to the atlas” to “go to homepage”
+  in every locale (CV, privacy, work, Ask, and the English 404).
+- Give mobile Total Blocking Time headroom on `/`: code-split `SignalBoard`,
+  idle-defer the Wordkeep atlas chunk, and drop the atlas 50ms boot poll.
 - Highlight inline Ask citations of the indexed CV (`cv/marc-fors-cv.pdf`) as
   source links that open the locale `/cv` page at the Download PDF control.
 - Keep the floating Ask panel off the mobile Total Blocking Time window harder:

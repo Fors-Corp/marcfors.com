@@ -61,6 +61,14 @@ describe("static rendering invariants", () => {
     expect(desk).toMatch(/withLocale\(locale,\s*"\/ask"\)[^>]{0,80}prefetch=\{false\}/);
   });
 
+  it("keeps the signal board off the first homepage JS", () => {
+    const desk = read("components/Desk.tsx");
+    expect(desk).toMatch(/const SignalBoard = dynamic\(/);
+    expect(desk).toContain('import type { SignalStrings } from "@/components/SignalBoard"');
+    expect(desk).not.toContain('from "@/components/SignalBoard"\n');
+    expect(desk).not.toMatch(/import \{[^}]*\bSignalBoard\b/);
+  });
+
   it("ships a global-error boundary with its own html/body", () => {
     const globalError = read("app/global-error.tsx");
     expect(globalError).toMatch(/["'`]use client["'`]/);

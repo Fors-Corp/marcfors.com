@@ -52,7 +52,7 @@ export default function NotFound() {
             textDecoration: "none",
           }}
         >
-          Back to the atlas
+          Go to homepage
         </Link>
       </body>
     </html>
