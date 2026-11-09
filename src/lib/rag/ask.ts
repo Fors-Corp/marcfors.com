@@ -1,6 +1,7 @@
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
 import {
   ASK_INSTRUCTIONS,
+  ASK_MAX_TOKENS,
   CHAT_MODEL,
   EMBEDDING_MODEL_ID,
   REFUSAL,
@@ -9,6 +10,12 @@ import { retrieve } from "./retrieve";
 import type { AskResult, ChunkRow, Citation } from "./types";
 
 const CACHE_CONTROL = { type: "ephemeral" as const };
+
+/** Sonnet 5.5 defaults to adaptive thinking at high effort; thinking tokens share
+ *  max_tokens with the visible answer. Portfolio Ask is latency-sensitive RAG
+ *  chat — skip up-front thinking and keep effort low so replies finish. */
+const ASK_THINKING = { type: "between_tools" as const };
+const ASK_OUTPUT_CONFIG = { effort: "low" as const };
 
 /** Fixed names only. A request locale is never interpolated into the prompt. */
 const ANSWER_LANGUAGE: Record<Locale, string> = {
@@ -52,7 +59,9 @@ export async function askClaude(
     },
     body: JSON.stringify({
       model: CHAT_MODEL,
-      max_tokens: 1024,
+      max_tokens: ASK_MAX_TOKENS,
+      thinking: ASK_THINKING,
+      output_config: ASK_OUTPUT_CONFIG,
       cache_control: CACHE_CONTROL,
       system: [
         {
@@ -75,11 +84,18 @@ export async function askClaude(
 
   const payload = (await response.json()) as {
     content?: Array<{ type?: string; text?: string }>;
+    stop_reason?: string;
     error?: { message?: string };
   };
 
   if (!response.ok) {
     throw new Error(payload.error?.message || `Anthropic HTTP ${response.status}`);
+  }
+
+  // max_tokens stop leaves a mid-sentence answer that still gets citations —
+  // refuse rather than render a clipped reply under the citations rule.
+  if (payload.stop_reason === "max_tokens") {
+    throw new Error("chat model hit the output limit before finishing");
   }
 
   const text = (payload.content || [])

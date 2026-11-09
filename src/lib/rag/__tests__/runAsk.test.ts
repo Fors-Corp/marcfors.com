@@ -6,7 +6,7 @@ vi.mock("@/lib/rag/retrieve", () => ({
 
 import { LOCALES } from "@/lib/locale";
 import { answerLanguageInstruction, askClaude, runAsk } from "@/lib/rag/ask";
-import { ASK_INSTRUCTIONS, REFUSAL } from "@/lib/rag/constants";
+import { ASK_INSTRUCTIONS, ASK_MAX_TOKENS, REFUSAL } from "@/lib/rag/constants";
 import { retrieve } from "@/lib/rag/retrieve";
 
 describe("runAsk", () => {
@@ -37,6 +37,7 @@ describe("runAsk", () => {
         ok: true,
         json: async () => ({
           content: [{ type: "text", text: "Marc is based in Barcelona (about.md)." }],
+          stop_reason: "end_turn",
         }),
       }),
     );
@@ -83,7 +84,10 @@ describe("askClaude", () => {
   it("passes the locale into the model instructions", async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({ content: [{ type: "text", text: "D'accord." }] }),
+      json: async () => ({
+        content: [{ type: "text", text: "D'accord." }],
+        stop_reason: "end_turn",
+      }),
     });
     vi.stubGlobal("fetch", fetchMock);
     await askClaude("key", "Où est basé Marc ?", "ctx", "fr");
@@ -95,6 +99,39 @@ describe("askClaude", () => {
     await askClaude("key", "q", "ctx");
     const fallback = JSON.parse(String(fetchMock.mock.calls[1]?.[1]?.body));
     expect(fallback.system[1].text).toBe(answerLanguageInstruction("en"));
+  });
+
+  it("reserves output budget and skips up-front thinking so answers are not cut mid-sentence", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        content: [{ type: "text", text: "Marc builds Wordkeep (projects.md)." }],
+        stop_reason: "end_turn",
+      }),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    await askClaude("key", "What is Wordkeep?", "ctx");
+    const body = JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body));
+    expect(body.max_tokens).toBe(ASK_MAX_TOKENS);
+    expect(body.max_tokens).toBeGreaterThanOrEqual(4096);
+    expect(body.thinking).toEqual({ type: "between_tools" });
+    expect(body.output_config).toEqual({ effort: "low" });
+  });
+
+  it("refuses a max_tokens stop instead of returning a clipped answer", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          content: [{ type: "text", text: "- Es un C" }],
+          stop_reason: "max_tokens",
+        }),
+      }),
+    );
+    await expect(askClaude("key", "q", "ctx")).rejects.toThrow(
+      /output limit before finishing/,
+    );
   });
 
   it("names every shipped locale without copying the locale token into the prompt", () => {
