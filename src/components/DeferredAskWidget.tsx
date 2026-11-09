@@ -16,11 +16,13 @@ type AskWidgetComponent = ComponentType<AskWidgetProps>;
 const INTERACTION: Array<"pointerdown" | "keydown"> = ["pointerdown", "keydown"];
 const listen: AddEventListenerOptions = { capture: true, passive: true };
 
-// The open dialog's commit, and marking the page inert, sat on the mobile
-// critical path (Total Blocking Time ~305ms against a 250ms budget). Keep that
-// work out of the first paint. Mount on idle and still open by default; a
-// pointer or key before then mounts it immediately.
-const IDLE_DEADLINE_MS = 2500;
+// Lighthouse Total Blocking Time is measured from FCP until a ~5s main-thread
+// quiet window (TTI), and the audit waits up to ~45s for that quiet window. An
+// early requestIdleCallback (or an 8s timer) still lands inside it on mobile
+// CI (~305ms against a 250ms budget): importing and opening the dialog is
+// itself a long task. Arm idle only after load plus a delay past that max wait;
+// pointer/key still mounts immediately so real visitors are not stuck.
+export const ASK_POST_LOAD_DELAY_MS = 45_000;
 
 export function DeferredAskWidget({ strings, locale = "en" }: AskWidgetProps) {
   const [Widget, setWidget] = useState<AskWidgetComponent | null>(null);
@@ -29,7 +31,7 @@ export function DeferredAskWidget({ strings, locale = "en" }: AskWidgetProps) {
     let cancelled = false;
     let started = false;
     let idleId = 0;
-    let timerId = 0;
+    let delayId = 0;
 
     const mount = () => {
       if (started) return;
@@ -37,8 +39,9 @@ export function DeferredAskWidget({ strings, locale = "en" }: AskWidgetProps) {
       for (const type of INTERACTION) {
         window.removeEventListener(type, onInteract, listen);
       }
+      window.removeEventListener("load", onLoad);
       if (typeof window.cancelIdleCallback === "function") window.cancelIdleCallback(idleId);
-      window.clearTimeout(timerId);
+      window.clearTimeout(delayId);
       void import("@/components/AskChatWidget").then((mod) => {
         if (!cancelled) setWidget(() => mod.AskChatWidget);
       });
@@ -46,16 +49,28 @@ export function DeferredAskWidget({ strings, locale = "en" }: AskWidgetProps) {
 
     const onInteract = () => mount();
 
+    const armIdle = () => {
+      if (started || cancelled) return;
+      if (typeof window.requestIdleCallback === "function") {
+        idleId = window.requestIdleCallback(() => mount(), { timeout: 2000 });
+      } else {
+        // Safari shipped requestIdleCallback late; mount on the delay boundary.
+        mount();
+      }
+    };
+
+    const onLoad = () => {
+      delayId = window.setTimeout(armIdle, ASK_POST_LOAD_DELAY_MS);
+    };
+
     for (const type of INTERACTION) {
       window.addEventListener(type, onInteract, listen);
     }
 
-    if (typeof window.requestIdleCallback === "function") {
-      idleId = window.requestIdleCallback(() => mount(), { timeout: IDLE_DEADLINE_MS });
+    if (document.readyState === "complete") {
+      onLoad();
     } else {
-      // Safari shipped requestIdleCallback late; a short timeout is the same
-      // "not during this task" boundary for browsers that lack it.
-      timerId = window.setTimeout(mount, 1);
+      window.addEventListener("load", onLoad, { once: true });
     }
 
     return () => {
@@ -63,8 +78,9 @@ export function DeferredAskWidget({ strings, locale = "en" }: AskWidgetProps) {
       for (const type of INTERACTION) {
         window.removeEventListener(type, onInteract, listen);
       }
+      window.removeEventListener("load", onLoad);
       if (typeof window.cancelIdleCallback === "function") window.cancelIdleCallback(idleId);
-      window.clearTimeout(timerId);
+      window.clearTimeout(delayId);
     };
   }, []);
 

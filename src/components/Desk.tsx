@@ -204,7 +204,11 @@ export function Desk({
             <a href="#projects">{t.projectsTitle}</a>
             <a href="#work">{t.workTitle}</a>
             <a href="#contact">{t.contactTitle}</a>
-            <Link href={withLocale(locale, "/ask")}>{t.askNav}</Link>
+            {/* prefetch={false}: Link would otherwise pull /ask RSC during the
+                homepage load and add main-thread work inside the TBT window. */}
+            <Link href={withLocale(locale, "/ask")} prefetch={false}>
+              {t.askNav}
+            </Link>
             <a
               href={SITE_REPO}
               target="_blank"

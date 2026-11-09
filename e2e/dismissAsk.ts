@@ -1,11 +1,15 @@
 import { expect, type Page } from "@playwright/test";
 
 /**
- * The Ask panel is not in the first paint. It mounts on idle (or the first
- * pointer/key) and then opens by default, which marks the page inert. Wait
- * for that widget and close it when it is open, before the test uses the page.
+ * The Ask panel is not in the first paint. It mounts on the first pointer/key,
+ * or after load plus a post-TTI idle delay, then opens by default and marks
+ * the page inert. Nudge the page with a pointer so tests do not wait the full
+ * idle delay, then close the panel before using the page.
  */
 export async function dismissAsk(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    window.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+  });
   const close = page.locator(".ask-fab-close");
   // A closed panel keeps the close control in the DOM under [hidden], before
   // the launcher. Match only a visible control so that hidden button is not

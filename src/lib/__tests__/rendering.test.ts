@@ -51,6 +51,16 @@ describe("static rendering invariants", () => {
     expect(localeLayout).toContain("(prefers-color-scheme: light)");
   });
 
+  it("keeps Ask off the homepage critical path", () => {
+    const localeLayout = read("app/[locale]/layout.tsx");
+    const defer = read("components/DeferredAskWidget.tsx");
+    const desk = read("components/Desk.tsx");
+    expect(localeLayout).toContain("DeferredAskWidget");
+    expect(defer).toContain("ASK_POST_LOAD_DELAY_MS");
+    expect(defer).toMatch(/ASK_POST_LOAD_DELAY_MS\s*=\s*45_000/);
+    expect(desk).toMatch(/withLocale\(locale,\s*"\/ask"\)[^>]{0,80}prefetch=\{false\}/);
+  });
+
   it("ships a global-error boundary with its own html/body", () => {
     const globalError = read("app/global-error.tsx");
     expect(globalError).toMatch(/["'`]use client["'`]/);
