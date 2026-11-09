@@ -105,14 +105,11 @@ describe("DeferredAskWidget", () => {
   });
 
   it("keeps Escape, the focus trap, and focus restore after the deferred mount", async () => {
-    vi.useFakeTimers({ shouldAdvanceTime: true });
-    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
-    const idle = installIdleGate();
+    // Mount via interaction on real timers — fake timers + userEvent Tab leave
+    // focus on <body> instead of hitting AskChatWidget's capture-phase trap.
+    const user = userEvent.setup();
     render(<Page />);
-    await act(async () => {
-      await vi.advanceTimersByTimeAsync(ASK_POST_LOAD_DELAY_MS);
-    });
-    idle.fire();
+    window.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
 
     const input = await screen.findByRole("textbox", { name: copy.en.askPlaceholder });
     const close = screen.getByRole("button", { name: copy.en.askWidgetClose });
