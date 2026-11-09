@@ -60,23 +60,13 @@ type SourcesResponse = {
   error?: string;
 };
 
-function errorFromPayload(
-  payload: { error?: unknown },
-  status: number,
-  fallback: string,
-): string {
-  if (typeof payload.error === "string" && payload.error.trim()) {
-    return payload.error;
-  }
-  return `${fallback} (${status})`;
-}
-
 async function readJson<T>(response: Response): Promise<T> {
   const rawBody = await response.text();
   try {
     return JSON.parse(rawBody) as T;
   } catch {
-    throw new Error(`non-JSON response (${response.status})`);
+    // Machine English belongs in the API contract, not the Ask alert.
+    throw new Error("non-json");
   }
 }
 
@@ -152,17 +142,17 @@ export function PortfolioAsk({
       });
       const payload = await readJson<AskResponse & { error?: unknown }>(response);
       if (!response.ok) {
-        if (response.status === 503) {
-          throw new Error(strings.unavailable);
-        }
-        throw new Error(errorFromPayload(payload, response.status, strings.error));
+        // Keep API machine English (`request failed`, `rate limit exceeded`, …)
+        // out of the alert — 503 already has a localized unavailable string.
+        setError(response.status === 503 ? strings.unavailable : strings.error);
+        return;
       }
       setMessages((prev) => [
         ...prev,
         { role: "assistant", text: payload.answer, meta: payload },
       ]);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : strings.error);
+    } catch {
+      setError(strings.error);
     } finally {
       setBusy(false);
     }
