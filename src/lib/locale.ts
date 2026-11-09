@@ -86,7 +86,7 @@ export function preferredLocale(acceptLanguage: string | null): Locale {
 export function isCrawler(userAgent: string | null): boolean {
   return Boolean(
     userAgent &&
-      /bot|crawler|spider|google|bing|yandex|baidu|slurp|duckduck|facebookexternalhit|preview|linkedinbot/i.test(
+      /bot|crawler|spider|google|bing|yandex|baidu|slurp|duckduck|facebookexternalhit|preview|linkedinbot|claude-user|perplexity-user|chatgpt-user|applebot|ccbot/i.test(
         userAgent,
       ),
   );

@@ -57,6 +57,9 @@ describe("locales", () => {
   it("treats search crawlers as English so indexed URLs stay stable", () => {
     expect(isCrawler("Mozilla/5.0 (compatible; Googlebot/2.1)")).toBe(true);
     expect(isCrawler("bingbot/2.0")).toBe(true);
+    for (const ua of ["Claude-User/1.0", "Perplexity-User/1.0", "ChatGPT-User/1.0", "Applebot-Extended", "CCBot/2.0"]) {
+      expect(isCrawler(ua)).toBe(true);
+    }
     expect(isCrawler("Mozilla/5.0 (Macintosh) AppleWebKit/537.36")).toBe(false);
   });
 });

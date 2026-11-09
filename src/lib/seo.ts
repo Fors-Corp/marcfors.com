@@ -147,6 +147,7 @@ function person() {
       height: OG_SIZE.height,
     },
     email: DEV_EMAIL,
+    description: copy.en.metaDescription,
     jobTitle: OCCUPATIONS[0],
     hasOccupation: OCCUPATIONS.map((name) => ({ "@type": "Occupation", name, occupationLocation: BARCELONA })),
     worksFor: { "@type": "Organization", name: "Fors Corp", url: GITHUB_ORG_URL },

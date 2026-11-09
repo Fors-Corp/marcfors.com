@@ -53,6 +53,7 @@ describe("site JSON-LD graph", () => {
     expect((person.hasOccupation as Node[]).map((o) => o.name)).toEqual([...OCCUPATIONS]);
     expect(OCCUPATIONS).toContain("AI Software Engineer");
     expect(OCCUPATIONS).toContain("LLM Engineer");
+    expect(person.description).toBe(copy.en.metaDescription);
     expect(person.knowsAbout).toEqual([...KNOWS_ABOUT]);
     expect(KNOWS_ABOUT).toContain("Claude Code");
     expect(KNOWS_ABOUT).toContain("Model Context Protocol (MCP)");

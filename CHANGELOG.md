@@ -6,6 +6,14 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Added
 
+- Generative-engine optimization: `robots.txt` now names AI search, user-fetch and
+  training crawlers (OAI-SearchBot, ChatGPT-User, GPTBot, ClaudeBot,
+  Claude-SearchBot, Claude-User, PerplexityBot, Perplexity-User, Google-Extended,
+  Applebot-Extended, CCBot) with an explicit allow; `/llms.txt` gains experience,
+  education, languages and an Optional section; new `/llms-full.txt` inlines every
+  English case study; the `Person` JSON-LD node carries a `description`; and
+  user-triggered AI fetchers (Claude-User, Perplexity-User, ChatGPT-User, Applebot,
+  CCBot) are routed to the default locale like other crawlers.
 - Index the published CV (`cv/marc-fors-cv.pdf`) into Ask RAG via mammoth/pdf-parse, with phone stripping, named-path and CV-prefer retrieve, accent-aware lexical fallback, and RRF hybrid ranking. CV facts win over thinner homepage copy; reindex with `npm run rag:seed`.
 - Index education, spoken languages, hire and contact paths, and every featured project in the Ask corpus so questions can be answered from the public site.
 
