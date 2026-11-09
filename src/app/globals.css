@@ -12,8 +12,15 @@
 @layer reset {
   * { box-sizing: border-box; }
 
+  /* Native document scrollbar off — `.signal-rail` is the only page-scroll
+     indicator. Scroll (wheel, touch, keyboard, programmatic) still works;
+     nested overflow panes (Ask thread, activity days) keep their own bars. */
   html {
-    scrollbar-gutter: stable;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  html::-webkit-scrollbar {
+    display: none;
   }
 
   html, body {
