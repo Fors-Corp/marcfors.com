@@ -44,6 +44,90 @@ describe("PortfolioAsk", () => {
     expect(await axe(container)).toHaveNoViolations();
   });
 
+  it("shows the localized askError instead of English API machine text", async () => {
+    const user = userEvent.setup();
+    const es = {
+      title: copy.es.askTitle,
+      lede: copy.es.askLede,
+      placeholder: copy.es.askPlaceholder,
+      submit: copy.es.askSubmit,
+      busy: copy.es.askBusy,
+      empty: copy.es.askEmpty,
+      error: copy.es.askError,
+      unavailable: copy.es.askUnavailable,
+      citations: copy.es.askCitations,
+      samplesLabel: copy.es.askSamplesLabel,
+      samples: copy.es.askSamples,
+      sourcesLabel: copy.es.askSourcesLabel,
+      sourcesEmpty: copy.es.askSourcesEmpty,
+      sourcesUnavailable: copy.es.askSourcesUnavailable,
+    };
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL) => {
+        const url = String(input);
+        if (url.includes("/api/rag-sources")) {
+          return {
+            ok: true,
+            status: 200,
+            text: async () => JSON.stringify({ files: ["about.md"], embedding_model: "local/x" }),
+          };
+        }
+        return {
+          ok: false,
+          status: 500,
+          text: async () => JSON.stringify({ error: "request failed" }),
+        };
+      }),
+    );
+    render(<PortfolioAsk strings={es} locale="es" />);
+    await user.click(screen.getByRole("button", { name: copy.es.askSamples[0] }));
+    expect(await screen.findByRole("alert")).toHaveTextContent(copy.es.askError);
+    expect(screen.queryByText("request failed")).not.toBeInTheDocument();
+  });
+
+  it("shows the localized unavailable string on a 503 Ask response", async () => {
+    const user = userEvent.setup();
+    const de = {
+      title: copy.de.askTitle,
+      lede: copy.de.askLede,
+      placeholder: copy.de.askPlaceholder,
+      submit: copy.de.askSubmit,
+      busy: copy.de.askBusy,
+      empty: copy.de.askEmpty,
+      error: copy.de.askError,
+      unavailable: copy.de.askUnavailable,
+      citations: copy.de.askCitations,
+      samplesLabel: copy.de.askSamplesLabel,
+      samples: copy.de.askSamples,
+      sourcesLabel: copy.de.askSourcesLabel,
+      sourcesEmpty: copy.de.askSourcesEmpty,
+      sourcesUnavailable: copy.de.askSourcesUnavailable,
+    };
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL) => {
+        const url = String(input);
+        if (url.includes("/api/rag-sources")) {
+          return {
+            ok: true,
+            status: 200,
+            text: async () => JSON.stringify({ files: [], embedding_model: "local/x" }),
+          };
+        }
+        return {
+          ok: false,
+          status: 503,
+          text: async () => JSON.stringify({ error: "DATABASE_URL is not configured" }),
+        };
+      }),
+    );
+    render(<PortfolioAsk strings={de} locale="de" variant="widget" />);
+    await user.click(screen.getByRole("button", { name: copy.de.askSamples[0] }));
+    expect(await screen.findByRole("alert")).toHaveTextContent(copy.de.askUnavailable);
+    expect(screen.queryByText("DATABASE_URL is not configured")).not.toBeInTheDocument();
+  });
+
   it("posts a question and shows the answer with citations", async () => {
     const user = userEvent.setup();
     const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {

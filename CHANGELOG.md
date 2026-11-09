@@ -15,6 +15,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Keep Ask failure alerts in the page locale: non-503 `/api/ask` errors no
+  longer surface English machine strings such as `request failed` or
+  `rate limit exceeded` in the chat alert (localized `askError` /
+  `askUnavailable` instead).
 - Fit the CV PDF to the viewport width on `/cv` with a pdf.js canvas viewer
   (page-width scale for every page). Mobile Safari’s native iframe PDF chrome
   was opening the resume massively zoomed and clipping the right edge;
