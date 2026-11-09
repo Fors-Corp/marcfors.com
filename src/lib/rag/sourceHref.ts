@@ -14,6 +14,7 @@ const HOME_HASH: Record<string, string> = {
 const PAGE_PATH: Record<string, string> = {
   "privacy.md": "/privacy",
   "trace-theater.md": "/lab/trace",
+  "cv/marc-fors-cv.pdf": "/cv",
 };
 
 function hashHref(locale: Locale, hash: string): string {
@@ -23,6 +24,10 @@ function hashHref(locale: Locale, hash: string): string {
 
 /** Portfolio URL for a corpus source. Same-tab so the floating chat stays mounted. */
 export function sourceHref(sourcePath: string, locale: Locale): string {
+  // CV chunks cite cv/marc-fors-cv.pdf — open the on-site viewer.
+  if (sourcePath === "cv/marc-fors-cv.pdf" || sourcePath.startsWith("cv/")) {
+    return withLocale(locale, "/cv");
+  }
   const home = HOME_HASH[sourcePath];
   if (home) return hashHref(locale, home);
   const page = PAGE_PATH[sourcePath];

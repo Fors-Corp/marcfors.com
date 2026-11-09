@@ -6,6 +6,10 @@ as the site owner's own portfolio material (not third-party copyrighted dumps).
 Upstream sources (all first-party):
 - https://github.com/Fors-Corp/marcfors.com — `content/work/*/en.mdx`, `src/data/projects.ts`, `src/data/copy/en.ts`, `src/data/copy/shared.ts`, `src/lib/site.ts`, `content/legal/privacy/en.mdx`
 - Public CV facts mirrored in about/experience/education prose (phone never included)
+- Published CV indexed at seed time from `docs/cv/Marc_Fors_CV_AI.docx` (preferred) or
+  `public/marc-fors-cv.pdf` via mammoth / pdf-parse; cited as `cv/marc-fors-cv.pdf`.
+  CV is authoritative for bio/experience/languages when it conflicts with thinner
+  homepage markdown. Phone lines are stripped before embed.
 
 Mensura: corpus wording follows agent-store preferences — private on-device tracking
 and a self-made ML model that auto-learns from the user's own logs; no substance/drug wording.

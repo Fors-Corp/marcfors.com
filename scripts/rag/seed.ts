@@ -1,11 +1,14 @@
 /**
- * Seed portfolio corpus into Neon pgvector (forked from Fors-Corp/embedded-rag seed).
+ * Seed portfolio corpus + published CV into Neon pgvector
+ * (forked from Fors-Corp/embedded-rag seed).
  *
  * Requires DATABASE_URL or POSTGRES_URL (Neon with pgvector).
  * Does not invent secrets — load them from .env.local / .env (mode 600).
+ *
+ * Indexes curated corpus/**\/*.md|.txt plus one CV at cv/marc-fors-cv.pdf.
+ * Re-run after CV or corpus changes: npm run rag:seed
  */
 import { createHash } from "node:crypto";
-import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -14,6 +17,7 @@ import { config } from "dotenv";
 import { env, pipeline } from "@huggingface/transformers";
 
 import { splitText } from "./chunk.js";
+import { collectSeedDocuments } from "./corpusDocs.js";
 
 config({ path: ".env.local" });
 config({ path: ".env" });
@@ -32,7 +36,6 @@ env.allowLocalModels = false;
 env.cacheDir = process.env.TRANSFORMERS_CACHE || "/tmp/transformers-cache";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
-const corpusDir = path.join(root, "corpus");
 
 function chunkId(sourcePath: string, index: number, digest: string): string {
   return createHash("sha256")
@@ -44,37 +47,11 @@ function vectorLiteral(values: number[]): string {
   return `[${values.join(",")}]`;
 }
 
-async function listMarkdownFiles(dir: string, base = dir): Promise<string[]> {
-  const entries = await readdir(dir, { withFileTypes: true });
-  const files: string[] = [];
-  for (const entry of entries) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...(await listMarkdownFiles(full, base)));
-      continue;
-    }
-    if (!entry.isFile()) continue;
-    if (entry.name === "ATTRIBUTION") continue;
-    if (!/\.(md|txt)$/i.test(entry.name)) continue;
-    files.push(path.relative(base, full));
-  }
-  return files.sort();
-}
-
 async function main(): Promise<void> {
   const url = process.env.DATABASE_URL || process.env.POSTGRES_URL;
   if (!url) throw new Error("DATABASE_URL is required");
 
-  const corpusStat = await stat(corpusDir).catch(() => null);
-  if (!corpusStat?.isDirectory()) {
-    throw new Error(`corpus directory missing: ${corpusDir}`);
-  }
-
-  const relativePaths = await listMarkdownFiles(corpusDir);
-  if (relativePaths.length === 0) {
-    throw new Error("corpus/ has no .md/.txt files to seed");
-  }
-
+  const documents = await collectSeedDocuments(root);
   console.log("loading embedding model…");
   const preferred = (process.env.EMBED_DEVICE || "cpu").toLowerCase();
   const device = ["cpu", "webgpu", "cuda"].includes(preferred)
@@ -121,15 +98,15 @@ async function main(): Promise<void> {
   await sql`DELETE FROM rag_chunks WHERE embedding_model = ${EMBEDDING_MODEL_ID}`;
 
   let count = 0;
-  for (const relative of relativePaths) {
-    const absolute = path.join(corpusDir, relative);
-    const text = await readFile(absolute, "utf8");
-    const sourcePath = relative.split(path.sep).join("/");
-    const parts = splitText(text, CHUNK_SIZE, CHUNK_OVERLAP);
+  for (const doc of documents) {
+    const parts = splitText(doc.text, CHUNK_SIZE, CHUNK_OVERLAP);
+    if (parts.length === 0) {
+      throw new Error(`no extractable text for ${doc.sourcePath}`);
+    }
     for (let index = 0; index < parts.length; index += 1) {
       const content = parts[index]!;
       const digest = createHash("sha256").update(content).digest("hex");
-      const id = chunkId(sourcePath, index, digest);
+      const id = chunkId(doc.sourcePath, index, digest);
       const output = await extractor(content, {
         pooling: "mean",
         normalize: true,
@@ -144,7 +121,7 @@ async function main(): Promise<void> {
           ${id},
           ${content},
           ${vectorLiteral(embedding)}::vector,
-          ${sourcePath},
+          ${doc.sourcePath},
           ${index},
           ${EMBEDDING_MODEL_ID}
         )
@@ -159,7 +136,7 @@ async function main(): Promise<void> {
     }
   }
   console.log(
-    `seeded ${count} chunks from ${relativePaths.length} files as ${EMBEDDING_MODEL_ID}`,
+    `seeded ${count} chunks from ${documents.length} files as ${EMBEDDING_MODEL_ID}`,
   );
 }
 

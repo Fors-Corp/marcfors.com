@@ -31,6 +31,8 @@ No environment variables are required to run the site. Copy `.env.example` to `.
 | `test:e2e` | `playwright test`; `pretest:e2e` builds first |
 | `privacy` | `node scripts/check-privacy.mjs`; fails on a Gmail address, the old `.me` host, or phone patterns in the CV |
 | `cv:update` | Refresh GitHub activity counts on `docs/cv/Marc_Fors_CV_AI.docx` and rebuild `public/marc-fors-cv.pdf` (needs LibreOffice) |
+| `rag:extract-cv` | Print the CV text Ask will index (mammoth DOCX / pdf-parse; no database) |
+| `rag:seed` | Wipe and reload Neon `rag_chunks` for the embedding model: curated `corpus/` plus one CV at `cv/marc-fors-cv.pdf` (needs `DATABASE_URL`) |
 | `audit` | `npm audit --omit=dev --audit-level=high` |
 | `ci` | `privacy`, `test:coverage`, `typecheck`, `lint`, `audit`, `build`, in that order |
 
