@@ -31,6 +31,10 @@ Chunking stays **800 / 120**. Embedding stays `local/Xenova/all-MiniLM-L6-v2` (3
 3. Vector top candidates → `MAX_DISTANCE` → CV boost when distances are close.
 4. If uncovered → accent-aware lexical ILIKE, then RRF hybrid with vector candidates.
 
+## Chat model budget
+
+Ask defaults to `claude-sonnet-5-5`. That model’s adaptive thinking counts toward `max_tokens`. Portfolio Ask sends `thinking: { type: "between_tools" }`, `output_config.effort: "low"`, and `ASK_MAX_TOKENS` (default 8192) so grounded answers finish; a `stop_reason: "max_tokens"` response is treated as an error rather than shown clipped above the citations rule.
+
 ## Ops notes
 
 - After merging CV or corpus copy changes, run `npm run rag:seed` against production/preview Neon and redeploy if needed (seed is offline; the app only reads).
