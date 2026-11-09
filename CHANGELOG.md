@@ -6,6 +6,7 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Added
 
+- Index the published CV (`cv/marc-fors-cv.pdf`) into Ask RAG via mammoth/pdf-parse, with phone stripping, named-path and CV-prefer retrieve, accent-aware lexical fallback, and RRF hybrid ranking. CV facts win over thinner homepage copy; reindex with `npm run rag:seed`.
 - Index education, spoken languages, hire and contact paths, and every featured project in the Ask corpus so questions can be answered from the public site.
 
 ### Security

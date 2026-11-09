@@ -37,6 +37,7 @@ Recruiters and custom-app inquiries: [developer@marcfors.com](mailto:developer@m
 - [docs/architecture.md](docs/architecture.md): request flow, data layout, build steps
 - [docs/security.md](docs/security.md): headers, API protections, env vars, what is stored
 - [docs/contributing.md](docs/contributing.md): setup, scripts, tests, how to add a locale or case study
+- [docs/ask-rag.md](docs/ask-rag.md): Ask corpus, CV indexing, `rag:seed` / retrieve notes
 - [SECURITY.md](SECURITY.md): reporting a vulnerability
 - [AGENTS.md](AGENTS.md): project rules for contributors and coding agents
 

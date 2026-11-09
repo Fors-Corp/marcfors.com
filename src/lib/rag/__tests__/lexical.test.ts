@@ -13,6 +13,12 @@ describe("rag lexical helpers", () => {
     expect(significantTokens("Where is Marc based?")).toEqual(["Marc", "based"]);
   });
 
+  it("tokenizes accented Spanish questions", () => {
+    expect(significantTokens("¿Dónde está Marc?")).toEqual(
+      expect.arrayContaining(["está", "Marc"]),
+    );
+  });
+
   it("treats a chunk as covering the remote-roles question only when the fact is present", () => {
     const question = "Is Marc open to remote roles?";
     expect(
