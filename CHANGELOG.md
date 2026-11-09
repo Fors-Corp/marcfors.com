@@ -23,6 +23,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Emit `dateModified` in the JSON-LD (home ProfilePage, CV, privacy, case
+  studies) as a full ISO 8601 datetime with a time zone (`2026-11-09T00:00:00Z`)
+  instead of a bare date. Google's Rich Results Test flagged the date-only value
+  as an invalid datetime.
 - Keep Ask failure alerts in the page locale: non-503 `/api/ask` errors no
   longer surface English machine strings such as `request failed` or
   `rate limit exceeded` in the chat alert (localized `askError` /

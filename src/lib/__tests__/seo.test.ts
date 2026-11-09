@@ -6,6 +6,7 @@ import {
   caseStudyJsonLd,
   CRAWL_ROBOTS,
   cvPageJsonLd,
+  isoDateTime,
   KNOWS_ABOUT,
   OCCUPATIONS,
   pageSocialMetadata,
@@ -71,7 +72,7 @@ describe("profile page JSON-LD", () => {
     expect(page.isPartOf).toEqual({ "@id": WEBSITE_ID });
     expect(page.url).toBe(localeUrl(locale, "/", SITE_URL));
     expect(page.name).toBe(copy[locale].metaTitle);
-    expect(page.dateModified).toBe(RELEASE_DATE);
+    expect(page.dateModified).toBe(isoDateTime(RELEASE_DATE));
   });
 });
 
@@ -195,7 +196,23 @@ describe("cv and privacy JSON-LD", () => {
     const page = nodeOf(graph, "WebPage")!;
     expect(page.url).toBe(`${SITE_URL}/de/privacy`);
     expect(page.inLanguage).toBe("de");
-    expect(page.dateModified).toBe(PRIVACY_UPDATED);
+    expect(page.dateModified).toBe(isoDateTime(PRIVACY_UPDATED));
     expect(page.about).toEqual({ "@id": PERSON_ID });
+  });
+});
+
+describe("dateModified format", () => {
+  it("is a full ISO 8601 datetime with a time zone, never a bare date", () => {
+    expect(isoDateTime("2026-11-09")).toBe("2026-11-09T00:00:00Z");
+    const iso = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
+    const study = caseStudyBySlug(listCaseStudySlugs()[0], "en")!;
+    const stamps = LOCALES.flatMap((locale) => [
+      profilePageJsonLd(locale).dateModified,
+      (cvPageJsonLd(locale)["@graph"][1] as Node).dateModified,
+      (privacyPageJsonLd(locale)["@graph"][1] as Node).dateModified,
+      (caseStudyJsonLd(locale, study)["@graph"][1] as Node).dateModified,
+    ]);
+    expect(stamps).toHaveLength(LOCALES.length * 4);
+    for (const stamp of stamps) expect(stamp).toMatch(iso);
   });
 });
