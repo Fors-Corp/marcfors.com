@@ -3,19 +3,33 @@ import { expect, type Page } from "@playwright/test";
 /**
  * The Ask panel is not in the first paint. It mounts on the first pointer/key,
  * or after load plus a post-TTI idle delay, then opens by default and marks
- * the page inert. Nudge the page with a pointer so tests do not wait the full
- * idle delay, then close the panel before using the page.
+ * the page inert.
+ *
+ * A single synthetic event can race the DeferredAskWidget effect (listeners
+ * not attached yet). Keep nudging until the FAB is visible so e2e does not
+ * wait the 45s idle path — without putting Ask back on the Lighthouse path.
  */
 export async function dismissAsk(page: Page): Promise<void> {
-  await page.evaluate(() => {
-    window.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
-  });
+  const visible = page.locator(".ask-fab-close:visible, .ask-fab-launcher:visible");
+
+  await expect
+    .poll(
+      async () => {
+        if (await visible.first().isVisible()) return "ready";
+        await page.evaluate(() => {
+          window.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
+          window.dispatchEvent(new KeyboardEvent("keydown", { bubbles: true, key: "Shift" }));
+        });
+        return "waiting";
+      },
+      { timeout: 15_000, intervals: [50, 100, 200, 400] },
+    )
+    .toBe("ready");
+
   const close = page.locator(".ask-fab-close");
   // A closed panel keeps the close control in the DOM under [hidden], before
   // the launcher. Match only a visible control so that hidden button is not
   // the one we wait on.
-  const visible = page.locator(".ask-fab-close:visible, .ask-fab-launcher:visible");
-  await visible.first().waitFor({ state: "visible", timeout: 15_000 });
   if (!(await close.isVisible())) return;
   await close.click({ force: true });
   await expect(page.locator("[data-page-root]")).not.toHaveAttribute("inert");
