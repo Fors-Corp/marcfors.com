@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { PDFDocumentProxy, PDFPageProxy, RenderTask } from "pdfjs-dist";
 import { pageWidthScale } from "@/lib/cvPdfFit";
 import { CV_PATH } from "@/lib/site";
 
@@ -11,10 +10,27 @@ type Props = {
   title: string;
 };
 
+/** Local stand-ins so this module never statically imports `pdfjs-dist`. */
+type PdfDoc = {
+  numPages: number;
+  getPage: (n: number) => Promise<PdfPage>;
+  cleanup: () => Promise<unknown> | unknown;
+};
+type PdfPage = {
+  getViewport: (params: { scale: number }) => { width: number; height: number };
+  render: (params: {
+    canvas: HTMLCanvasElement;
+    canvasContext: CanvasRenderingContext2D;
+    viewport: { width: number; height: number };
+  }) => { promise: Promise<void>; cancel: () => void };
+};
+
 /**
  * Renders every page of the CV PDF into canvases scaled to the container width.
  * Replaces the native <iframe> PDF chrome, which on mobile Safari often opens
  * massively zoomed with the right edge clipped.
+ *
+ * Load only via `CvPdfEmbedLazy` so pdf.js stays off the homepage bundle.
  */
 export function CvPdfEmbed({ title }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -30,20 +46,22 @@ export function CvPdfEmbed({ title }: Props) {
 
     let cancelled = false;
     let resizeObserver: ResizeObserver | undefined;
-    let pdfDoc: PDFDocumentProxy | undefined;
-    const renderTasks = new Map<number, RenderTask>();
+    let pdfDoc: PdfDoc | undefined;
+    const renderTasks = new Map<number, { cancel: () => void }>();
     let paintGeneration = 0;
     const canvases: HTMLCanvasElement[] = [];
 
     async function boot() {
       try {
+        // Dynamic import keeps pdfjs-dist out of any statically analyzed client
+        // graph that might share chunks with `/`.
         const pdfjs = await import("pdfjs-dist");
         pdfjs.GlobalWorkerOptions.workerSrc = WORKER_SRC;
 
-        pdfDoc = await pdfjs.getDocument({ url: CV_PATH }).promise;
+        pdfDoc = (await pdfjs.getDocument({ url: CV_PATH }).promise) as unknown as PdfDoc;
         if (cancelled) return;
 
-        const pdfPages: PDFPageProxy[] = [];
+        const pdfPages: PdfPage[] = [];
         for (let i = 1; i <= pdfDoc.numPages; i += 1) {
           pdfPages.push(await pdfDoc.getPage(i));
           if (cancelled) return;

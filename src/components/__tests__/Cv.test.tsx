@@ -7,7 +7,7 @@ import { LOCALES } from "@/lib/locale";
 import { CV_DOWNLOAD_HASH, CV_FILENAME, CV_PATH } from "@/lib/site";
 
 // Keep pdf.js out of jsdom; page-width math is covered in cvPdfFit.test.ts and
-// the canvas paint path needs real layout + a worker.
+// the canvas paint path needs real layout and a worker.
 vi.mock("pdfjs-dist", () => ({
   GlobalWorkerOptions: { workerSrc: "" },
   getDocument: () => ({
@@ -16,6 +16,13 @@ vi.mock("pdfjs-dist", () => ({
     }),
   }),
 }));
+
+// next/dynamic is async in tests; render the real embed shell immediately so
+// assertions can see the titled canvas region without waiting on a chunk load.
+vi.mock("@/components/CvPdfEmbedLazy", async () => {
+  const { CvPdfEmbed } = await import("@/components/CvPdfEmbed");
+  return { CvPdfEmbedLazy: CvPdfEmbed };
+});
 
 describe("CvViewer", () => {
   it("offers the PDF as a download with a named file", () => {

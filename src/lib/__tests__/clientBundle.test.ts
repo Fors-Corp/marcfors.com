@@ -37,4 +37,34 @@ describe("client/server boundary", () => {
     });
     expect(offenders.map((f) => path.relative(SRC, f))).toEqual([]);
   });
+
+  it("keeps pdfjs-dist off every module except the CV canvas embed", () => {
+    // A static `from "pdfjs-dist"` (even type-only) can pull the library into a
+    // shared client graph and inflate homepage TBT. Only CvPdfEmbed may load it,
+    // and only via dynamic import().
+    const importRe = /(?:from\s+["']pdfjs-dist["']|import\s*\(\s*["']pdfjs-dist["']\s*\))/;
+    const offenders = walk(SRC).filter((file) => {
+      const rel = path.relative(SRC, file);
+      if (rel.includes(`${path.sep}__tests__${path.sep}`)) return false;
+      const text = readFileSync(file, "utf8");
+      if (!importRe.test(text)) return false;
+      // The canvas embed may dynamic-import the package; nothing else may.
+      if (rel === path.join("components", "CvPdfEmbed.tsx")) {
+        return /\bfrom\s+["']pdfjs-dist["']/.test(text);
+      }
+      return true;
+    });
+    expect(offenders.map((file) => path.relative(SRC, file))).toEqual([]);
+  });
+
+  it("loads the CV canvas embed only through the dynamic lazy boundary", () => {
+    const offenders = walk(SRC).filter((file) => {
+      const rel = path.relative(SRC, file);
+      if (rel === path.join("components", "CvPdfEmbedLazy.tsx")) return false;
+      if (rel.includes(`${path.sep}__tests__${path.sep}`)) return false;
+      const text = readFileSync(file, "utf8");
+      return /from\s+["']@\/components\/CvPdfEmbed["']/.test(text);
+    });
+    expect(offenders.map((file) => path.relative(SRC, file))).toEqual([]);
+  });
 });
