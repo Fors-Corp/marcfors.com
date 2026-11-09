@@ -15,6 +15,12 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Fit the CV PDF to the viewport width on `/cv` with a pdf.js canvas viewer
+  (page-width scale for every page). Mobile Safari’s native iframe PDF chrome
+  was opening the resume massively zoomed and clipping the right edge;
+  `#view=FitH` remains on the Open link and `<noscript>` iframe for browsers
+  that honour it. pdf.js loads only on the CV route via `next/dynamic`
+  (`ssr: false`) so it does not inflate homepage Total Blocking Time.
 - Stop Ask answers truncating mid-sentence (e.g. “• Es un C” above the
   citations rule). Claude Sonnet 5.5 adaptive thinking was consuming the old
   1024 `max_tokens` budget; Ask now skips up-front thinking, uses low effort,

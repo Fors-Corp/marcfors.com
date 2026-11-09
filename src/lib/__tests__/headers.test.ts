@@ -59,11 +59,11 @@ describe("next.config headers()", () => {
       cv.flatMap((r) => r.headers).filter((h) => h.key === key).at(-1)?.value;
 
     // Site-wide these are `frame-ancestors 'none'` / DENY, which would block the
-    // PDF from loading in our own /cv iframe. `'self'` still refuses everyone else.
+    // PDF from loading in the /cv <noscript> iframe fallback. `'self'` still
+    // refuses everyone else. The primary viewer is pdf.js canvas, not <object>.
     expect(header("Content-Security-Policy")).toContain("frame-ancestors 'self'");
     expect(header("Content-Security-Policy")).not.toContain("frame-ancestors 'none'");
     expect(header("X-Frame-Options")).toBe("SAMEORIGIN");
-    // The viewer relies on <iframe> precisely because this stays shut.
     expect(header("Content-Security-Policy")).toContain("object-src 'none'");
   });
 

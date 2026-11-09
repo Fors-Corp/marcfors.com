@@ -26,7 +26,8 @@ Notes:
 
 - `'unsafe-inline'` is present for scripts and styles (Next.js inline bootstrap, the theme anti-flash script, JSON-LD). There are no nonces. `'unsafe-eval'` is never allowed in production. Because inline scripts are allowed, JSON-LD is serialized with `serializeJsonLd` (`src/lib/seo.ts`), which escapes `<` and U+2028/U+2029 so frontmatter text can never close its `<script>` block.
 - Development only: `next.config.ts` swaps in `CONTENT_SECURITY_POLICY_DEV`, which adds `'unsafe-eval'` and `https://va.vercel-scripts.com` to `script-src`. Production builds use the strict policy.
-- `/marc-fors-cv.pdf` (`CV_PATH`) gets `frame-ancestors 'self'` and `X-Frame-Options: SAMEORIGIN` so `/cv` can embed it in an `<iframe>`. Other origins still cannot frame it.
+- `/marc-fors-cv.pdf` (`CV_PATH`) gets `frame-ancestors 'self'` and `X-Frame-Options: SAMEORIGIN` so the `/cv` `<noscript>` iframe fallback can embed it. The primary viewer paints with pdf.js (canvas + `/pdf.worker.min.mjs` under `worker-src 'self'`). Other origins still cannot frame the PDF.
+- `worker-src 'self'` allows the CV page’s pdf.js worker; no blob workers or CDN scripts.
 - `/print`, `/lab/*` and `/donate/*` (with and without a locale prefix) also send `X-Robots-Tag: noindex, nofollow`.
 - `poweredByHeader` is off.
 - `src/lib/__tests__/headers.test.ts` and `security.test.ts` guard these values.

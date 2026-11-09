@@ -33,6 +33,11 @@ export default defineConfig({
         // an ever-growing goalpost on code that was never meant to be
         // unit-covered in the first place.
         "src/components/WordAtlas.tsx",
+        // pdf.js canvas paint + ResizeObserver — needs real layout and a worker;
+        // structure is asserted in Cv.test.tsx, scale math in cvPdfFit.test.ts.
+        // The lazy boundary is covered by clientBundle + Cv tests.
+        "src/components/CvPdfEmbed.tsx",
+        "src/components/CvPdfEmbedLazy.tsx",
         // MiniLM / onnxruntime wiring — covered via seed/ask integration, not jsdom.
         "src/lib/rag/embed.ts",
         "src/lib/rag/retrieve.ts",

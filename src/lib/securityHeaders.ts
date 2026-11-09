@@ -5,6 +5,7 @@ const CSP_DIRECTIVES = [
   "img-src 'self' data:",
   "font-src 'self'",
   "connect-src 'self'",
+  "worker-src 'self'",
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -14,14 +15,12 @@ const CSP_DIRECTIVES = [
 
 export const CONTENT_SECURITY_POLICY = CSP_DIRECTIVES.join("; ");
 
-// The CV viewer on /cv renders public/marc-fors-cv.pdf in a same-origin
-// <iframe>. `frame-ancestors` and `X-Frame-Options` govern who may frame a
-// *response*, so the site-wide `'none'` / `DENY` would block that PDF from
-// loading even inside our own page — the embed fails silently, as a blank
-// frame. These override the pair for that one asset: `'self'` still refuses
-// every cross-origin framer, so clickjacking cover is unchanged site-wide and
-// on the PDF itself. `object-src 'none'` is deliberately left intact, which is
-// why the viewer uses <iframe> and not <object>/<embed>.
+// The /cv page paints the PDF with pdf.js (canvas). A <noscript> iframe still
+// embeds public/marc-fors-cv.pdf same-origin, so `frame-ancestors` and
+// `X-Frame-Options` on that asset stay relaxed to `'self'` / SAMEORIGIN —
+// the site-wide `'none'` / `DENY` would blank that fallback frame.
+// `object-src 'none'` stays shut (no <object>/<embed>). `worker-src 'self'`
+// lets the page load `/pdf.worker.min.mjs` for pdf.js.
 export const EMBEDDABLE_ASSET_HEADERS: { key: string; value: string }[] = [
   {
     key: "Content-Security-Policy",

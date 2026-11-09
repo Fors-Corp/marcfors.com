@@ -86,7 +86,8 @@ Everything is `console.*` JSON on stdout/stderr; there is no log shipper or data
 
 `npm run build` first runs `prebuild`:
 
-1. `scripts/gen-tokens.mjs` regenerates `src/app/styles/tokens.css`.
-2. `scripts/audit-snapshot.mjs` runs `npm audit --json --omit=dev` and writes counts to `src/generated/audit.json` (`ok` is true when there are no critical or high findings). The health endpoint and `SignalBoard` read this snapshot.
+1. `scripts/copy-pdf-worker.mjs` copies `pdfjs-dist`’s worker to `public/pdf.worker.min.mjs` for the `/cv` canvas viewer (also run from `postinstall`).
+2. `scripts/gen-tokens.mjs` regenerates `src/app/styles/tokens.css`.
+3. `scripts/audit-snapshot.mjs` runs `npm audit --json --omit=dev` and writes counts to `src/generated/audit.json` (`ok` is true when there are no critical or high findings). The health endpoint and `SignalBoard` read this snapshot.
 
 Then `next build` runs. CI (`.github/workflows/ci.yml`) adds Lighthouse budgets in a `verify` job and Playwright in an `e2e` job; `codeql.yml`, `dependabot-automerge.yml` and `production.yml` handle scanning, dependency PRs and the Vercel deploy.
