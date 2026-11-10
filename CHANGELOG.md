@@ -23,6 +23,7 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Phones: the Ask and Trace text boxes use 16px text on touch screens, so iOS no longer zooms the page when one is focused; the hero and contact email links and the Trace page's home link are 44px tall to tap.
 - Stop the mobile Lighthouse job flaking red on Total Blocking Time: on a shared
   runner the best-of-3 TBT for `/` varies ~240-290 ms for identical build output,
   against a 250 ms budget. The mobile config now allows 350 ms for TBT only; the
