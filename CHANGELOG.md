@@ -23,6 +23,12 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Dependabot auto-merge actually merges again: the job has no checkout, so `gh`
+  could not infer the repo and every run died in ~7s with `failed to determine
+  base repo`. The job now sets `GH_REPO` and passes `--repo` to `gh run list` /
+  `gh pr merge`, and drops the `gh pr review --approve` call the API refused
+  (approvals gate nothing without branch protection). Still waits for `ci.yml`
+  green on the head SHA and never uses `--auto`.
 - Emit `dateModified` in the JSON-LD (home ProfilePage, CV, privacy, case
   studies) as a full ISO 8601 datetime with a time zone (`2026-11-09T00:00:00Z`)
   instead of a bare date. Google's Rich Results Test flagged the date-only value
