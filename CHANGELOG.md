@@ -23,6 +23,12 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Dependabot auto-merge actually merges again: the job has no checkout, so `gh`
+  could not infer the repo and every run died in ~7s with `failed to determine
+  base repo`. The job now sets `GH_REPO` and passes `--repo` to `gh run list` /
+  `gh pr merge`, and drops the `gh pr review --approve` call the API refused
+  (approvals gate nothing without branch protection). Still waits for `ci.yml`
+  green on the head SHA and never uses `--auto`.
 - Keep Ask failure alerts in the page locale: non-503 `/api/ask` errors no
   longer surface English machine strings such as `request failed` or
   `rate limit exceeded` in the chat alert (localized `askError` /

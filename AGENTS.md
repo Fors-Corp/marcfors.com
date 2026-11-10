@@ -56,6 +56,8 @@ Public personal portfolio for Marc Fors, hosted at **https://marcfors.com**. Sem
   and production-dependency **patch**. Everything else gets `needs-manual-review`
   + a comment. It polls the CI run rather than using GitHub native auto-merge —
   `main` has no branch protection, so `--auto` would merge before checks finish.
+  The job has no checkout, so every `gh` call names the repo (`GH_REPO` /
+  `--repo`); it does not approve PRs.
 - `ci.yml`'s "developer mailbox" author check is skipped for `dependabot[bot]`
   and on `push` (merge commits), so a bot PR can actually go green.
 - Held bumps (production minor/major, dev-dep major) → follow the
