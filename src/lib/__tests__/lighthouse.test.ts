@@ -43,7 +43,14 @@ describe("lighthouse budget", () => {
       cpuSlowdownMultiplier: 4,
     });
     expect(mobile.ci.collect.settings.screenEmulation).toMatchObject({ mobile: true, width: 390, disabled: false });
-    expect(mobile.ci.assert).toEqual(config.ci.assert);
+    // Mobile shares every gate with desktop except TBT, which gets CI-noise headroom.
+    const { "total-blocking-time": mobileTbt, ...mobileRest } = mobile.ci.assert.assertions;
+    const { "total-blocking-time": desktopTbt, ...desktopRest } = config.ci.assert.assertions;
+    expect(mobileRest).toEqual(desktopRest);
+    expect(desktopTbt).toEqual(["error", { maxNumericValue: 250 }]);
+    expect(mobileTbt[0]).toBe("error");
+    expect(mobileTbt[1].maxNumericValue).toBeGreaterThan(250);
+    expect(mobileTbt[1].maxNumericValue).toBeLessThanOrEqual(350);
     expect(mobile.ci.upload.outputDir).not.toBe(config.ci.upload.outputDir);
   });
 });
