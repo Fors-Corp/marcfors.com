@@ -22,6 +22,15 @@ import {
  * the off-site profiles (`sameAs`) into a single "Marc Fors" knowledge-graph
  * node. Every other node here points at that id instead of repeating it.
  */
+/**
+ * `dateModified` wants a full ISO 8601 datetime with a time zone: Google's
+ * Rich Results Test flags a date-only value ("2026-10-04") as an invalid
+ * datetime. The site tracks dates as `YYYY-MM-DD`, so stamp them at UTC midnight.
+ */
+export function isoDateTime(date: string): string {
+  return `${date}T00:00:00Z`;
+}
+
 export const GIVEN_NAME = "Marc";
 export const FAMILY_NAME = "Fors";
 export const PERSON_ID = `${SITE_URL}/#person`;
@@ -207,7 +216,7 @@ export function profilePageJsonLd(locale: Locale) {
     description: copy[locale].metaDescription,
     inLanguage: locale,
     primaryImageOfPage: socialImage(locale),
-    dateModified: RELEASE_DATE,
+    dateModified: isoDateTime(RELEASE_DATE),
     isPartOf: { "@id": WEBSITE_ID },
     mainEntity: { "@id": PERSON_ID },
   };
@@ -269,7 +278,7 @@ export function cvPageJsonLd(locale: Locale) {
         url,
         encodingFormat: "application/pdf",
         inLanguage: locale,
-        dateModified: RELEASE_DATE,
+        dateModified: isoDateTime(RELEASE_DATE),
         author: { "@id": PERSON_ID },
         isPartOf: { "@id": WEBSITE_ID },
         associatedMedia: {
@@ -297,7 +306,7 @@ export function privacyPageJsonLd(locale: Locale) {
         description: copy[locale].privacyLede,
         url,
         inLanguage: locale,
-        dateModified: PRIVACY_UPDATED,
+        dateModified: isoDateTime(PRIVACY_UPDATED),
         isPartOf: { "@id": WEBSITE_ID },
         about: { "@id": PERSON_ID },
         breadcrumb: { "@id": `${url}#breadcrumb` },
@@ -322,7 +331,7 @@ export function caseStudyJsonLd(locale: Locale, study: CaseStudy) {
         url,
         image: socialImage(locale),
         inLanguage: locale,
-        dateModified: RELEASE_DATE,
+        dateModified: isoDateTime(RELEASE_DATE),
         isAccessibleForFree: true,
         keywords: study.stack.join(", "),
         author: { "@id": PERSON_ID },
