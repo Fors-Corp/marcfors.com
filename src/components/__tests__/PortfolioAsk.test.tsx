@@ -44,6 +44,47 @@ describe("PortfolioAsk", () => {
     expect(await axe(container)).toHaveNoViolations();
   });
 
+  it("keeps indexed sources collapsed by default and reveals them on demand", async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        text: async () =>
+          JSON.stringify({
+            files: ["about.md", "experience.md", "work/embedded-rag.md"],
+            embedding_model: "local/x",
+          }),
+      }),
+    );
+    const { container } = render(<PortfolioAsk strings={strings} />);
+    const sources = await waitFor(() => {
+      const node = container.querySelector("details.ask-sources");
+      expect(node).not.toBeNull();
+      return node as HTMLDetailsElement;
+    });
+    expect(sources.open).toBe(false);
+    expect(screen.getByText("3")).toBeInTheDocument();
+    await user.click(screen.getByText(copy.en.askSourcesLabel));
+    expect(sources.open).toBe(true);
+    expect(screen.getByText("work/embedded-rag.md")).toBeVisible();
+  });
+
+  it("hides the sources disclosure in the floating widget variant", () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        text: async () => JSON.stringify({ files: ["about.md"], embedding_model: "local/x" }),
+      }),
+    );
+    const { container } = render(<PortfolioAsk strings={strings} variant="widget" />);
+    expect(container.querySelector("details.ask-sources")).toBeNull();
+    expect(screen.queryByText(copy.en.askSourcesLabel)).not.toBeInTheDocument();
+  });
+
   it("shows the localized askError instead of English API machine text", async () => {
     const user = userEvent.setup();
     const es = {
