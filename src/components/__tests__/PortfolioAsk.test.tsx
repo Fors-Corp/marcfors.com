@@ -209,6 +209,33 @@ describe("PortfolioAsk", () => {
     });
   });
 
+  it("blurs the composer after send so the mobile keyboard dismisses", async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        status: 200,
+        text: async () =>
+          JSON.stringify({
+            answer: "Madrid.",
+            citations: [],
+            embedding_model: "local/x",
+            chat_model: "claude",
+            run_id: null,
+          }),
+      }),
+    );
+    render(<PortfolioAsk strings={strings} variant="widget" />);
+    const input = screen.getByRole("textbox", { name: copy.en.askPlaceholder });
+    await user.click(input);
+    expect(input).toHaveFocus();
+    await user.type(input, "Where does Marc live?");
+    await user.click(screen.getByRole("button", { name: copy.en.askSubmit }));
+    expect(input).not.toHaveFocus();
+    expect(await screen.findByText("Madrid.")).toBeInTheDocument();
+  });
+
   it("renders markdown in assistant answers", async () => {
     const user = userEvent.setup();
     vi.stubGlobal(

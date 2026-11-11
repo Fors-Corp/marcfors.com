@@ -205,6 +205,43 @@ describe("AskChatWidget", () => {
     expect(screen.getByRole("textbox", { name: copy.en.askPlaceholder })).toHaveFocus();
   });
 
+  it("lifts the fab with visualViewport insets while the panel is open", async () => {
+    const user = userEvent.setup();
+    const listeners = new Map<string, Set<() => void>>();
+    const vv = {
+      height: 400,
+      offsetTop: 0,
+      addEventListener: (type: string, listener: () => void) => {
+        const set = listeners.get(type) ?? new Set();
+        set.add(listener);
+        listeners.set(type, set);
+      },
+      removeEventListener: (type: string, listener: () => void) => {
+        listeners.get(type)?.delete(listener);
+      },
+    };
+    Object.defineProperty(window, "innerHeight", { configurable: true, value: 844 });
+    vi.stubGlobal("visualViewport", vv);
+
+    const { container } = render(<AskChatWidget strings={strings} />);
+    const fab = container.querySelector(".ask-fab") as HTMLElement;
+    expect(fab).toBeTruthy();
+    expect(fab.style.getPropertyValue("--ask-vv-bottom")).toBe("");
+
+    await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
+    expect(fab.style.getPropertyValue("--ask-vv-bottom")).toBe("444px");
+    expect(fab.style.getPropertyValue("--ask-vv-height")).toBe("400px");
+
+    vv.height = 844;
+    for (const listener of listeners.get("resize") ?? []) listener();
+    expect(fab.style.getPropertyValue("--ask-vv-bottom")).toBe("0px");
+    expect(fab.style.getPropertyValue("--ask-vv-height")).toBe("844px");
+
+    await user.click(screen.getByRole("button", { name: copy.en.askWidgetClose }));
+    expect(fab.style.getPropertyValue("--ask-vv-bottom")).toBe("");
+    expect(fab.style.getPropertyValue("--ask-vv-height")).toBe("");
+  });
+
   it("lets Tab leave the open panel so the rest of the page stays reachable", async () => {
     const user = userEvent.setup();
     rememberOpen();

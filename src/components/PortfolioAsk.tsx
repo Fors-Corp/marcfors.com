@@ -85,6 +85,7 @@ export function PortfolioAsk({
   const [files, setFiles] = useState<string[]>([]);
   const [sourcesNote, setSourcesNote] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
+  const fieldRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
   const samplePrompts = isWidget ? strings.samples.slice(0, 3) : strings.samples;
 
   useEffect(() => {
@@ -130,6 +131,8 @@ export function PortfolioAsk({
   async function ask(raw: string) {
     const next = raw.trim();
     if (!next || busy) return;
+    // Dismiss the mobile keyboard until the visitor taps the field again.
+    fieldRef.current?.blur();
     setQuestion("");
     setError(null);
     setMessages((prev) => [...prev, { role: "user", text: next }]);
@@ -244,10 +247,14 @@ export function PortfolioAsk({
         </label>
         {isWidget ? (
           <input
+            ref={(el) => {
+              fieldRef.current = el;
+            }}
             id={`${formId}-input`}
             name="question"
             type="text"
             autoComplete="off"
+            enterKeyHint="send"
             value={question}
             disabled={busy}
             placeholder={strings.placeholder}
@@ -255,9 +262,13 @@ export function PortfolioAsk({
           />
         ) : (
           <textarea
+            ref={(el) => {
+              fieldRef.current = el;
+            }}
             id={`${formId}-input`}
             name="question"
             rows={3}
+            enterKeyHint="send"
             value={question}
             disabled={busy}
             placeholder={strings.placeholder}
