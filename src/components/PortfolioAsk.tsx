@@ -192,22 +192,6 @@ export function PortfolioAsk({
         </ul>
       </section>
 
-      {!isWidget ? (
-        <aside className="ask-sources" aria-label={strings.sourcesLabel}>
-          <h2>{strings.sourcesLabel}</h2>
-          {sourcesNote ? <p className="ask-sources-note">{sourcesNote}</p> : null}
-          {files.length > 0 ? (
-            <ul>
-              {files.map((file) => (
-                <li key={file}>
-                  <code>{file}</code>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-        </aside>
-      ) : null}
-
       <section className="ask-thread" aria-live="polite">
         {messages.length === 0 && !busy ? (
           <p className="ask-empty">{strings.empty}</p>
@@ -290,6 +274,30 @@ export function PortfolioAsk({
           {busy ? strings.busy : strings.submit}
         </button>
       </form>
+
+      {/* Collapsed by default so chat stays primary; reopen via the summary. */}
+      {!isWidget ? (
+        <details className="ask-sources">
+          <summary>
+            <span className="ask-sources-label">{strings.sourcesLabel}</span>
+            {files.length > 0 ? (
+              <span className="ask-sources-count" aria-hidden="true">
+                {files.length}
+              </span>
+            ) : null}
+          </summary>
+          {sourcesNote ? <p className="ask-sources-note">{sourcesNote}</p> : null}
+          {files.length > 0 ? (
+            <ul>
+              {files.map((file) => (
+                <li key={file}>
+                  <code>{file}</code>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </details>
+      ) : null}
     </div>
   );
 }
