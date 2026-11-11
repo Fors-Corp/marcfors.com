@@ -2362,9 +2362,12 @@ footer {
     --ask-fab-pad: 1rem;
     --ask-edge: max(1.25rem, env(safe-area-inset-right, 0px));
     --ask-bottom: 0.75rem;
+    /* --ask-vv-* set from visualViewport so the sheet clears the soft keyboard. */
+    --ask-vv-bottom: 0px;
+    --ask-vv-height: 100dvh;
     position: fixed;
     inset-inline-end: var(--ask-edge);
-    inset-block-end: var(--ask-bottom);
+    inset-block-end: calc(var(--ask-bottom) + var(--ask-vv-bottom));
     z-index: 60;
     width: min(28rem, calc(100vw - (var(--ask-edge) * 2)));
     pointer-events: none;
@@ -2377,7 +2380,11 @@ footer {
     flex-direction: column;
     box-sizing: border-box;
     height: auto;
-    max-height: min(70dvh, 34rem, calc(100dvh - var(--ask-bottom) - 0.75rem));
+    max-height: min(
+      70dvh,
+      34rem,
+      calc(var(--ask-vv-height) - var(--ask-bottom) - 0.75rem)
+    );
     overflow: hidden;
     border: 1px solid var(--line);
     border-radius: var(--r-md);
@@ -2563,11 +2570,15 @@ footer {
     }
     .ask-fab-panel {
       height: auto;
-      max-height: min(64dvh, 30rem, calc(100dvh - var(--ask-bottom) - 0.75rem));
+      max-height: min(
+        64dvh,
+        30rem,
+        calc(var(--ask-vv-height) - var(--ask-bottom) - 0.75rem)
+      );
     }
   }
 
-  /* Phone: full-width sheet above the home indicator. */
+  /* Phone: full-width sheet above the home indicator / soft keyboard. */
   @media (max-width: 640px) {
     .ask-fab {
       --ask-edge: max(0.5rem, env(safe-area-inset-right, 0px));
@@ -2577,8 +2588,9 @@ footer {
       width: auto;
     }
     .ask-fab-panel {
-      height: 75dvh;
-      max-height: calc(100dvh - var(--ask-bottom) - 0.5rem);
+      /* Cap to the visible viewport — a fixed 75dvh sheet sits under the keys. */
+      height: min(75dvh, calc(var(--ask-vv-height) - var(--ask-bottom) - 0.5rem));
+      max-height: calc(var(--ask-vv-height) - var(--ask-bottom) - 0.5rem);
     }
     .ask-shell.ask-shell-widget .ask-sample {
       min-width: 44px;

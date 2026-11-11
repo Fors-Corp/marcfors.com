@@ -13,6 +13,7 @@ import {
   PortfolioAsk,
   type PortfolioAskStrings,
 } from "@/components/PortfolioAsk";
+import { askFabViewportInsets } from "@/lib/askFabViewport";
 import type { Locale } from "@/lib/locale";
 
 const STORAGE_KEY = "marcfors-ask-widget-open";
@@ -100,6 +101,7 @@ export function AskChatWidget({
   const panelId = useId();
   const titleId = useId();
   const pathname = usePathname();
+  const fabRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
   // Focus moves only when the visitor opens or closes the panel, or follows a
@@ -124,6 +126,42 @@ export function AskChatWidget({
     focusIntent.current = "hash";
     writeOpen(false);
   }, []);
+
+  // Keep the sheet inside the visual viewport so the composer is not trapped
+  // under the iOS keyboard (layout viewport stays tall; fixed bottom UI does not).
+  useEffect(() => {
+    const fab = fabRef.current;
+    if (!fab) return;
+
+    const clear = () => {
+      fab.style.removeProperty("--ask-vv-bottom");
+      fab.style.removeProperty("--ask-vv-height");
+    };
+
+    if (!open || onAskPage) {
+      clear();
+      return;
+    }
+
+    const vv = window.visualViewport;
+    if (!vv) return;
+
+    const sync = () => {
+      const { bottom, height } = askFabViewportInsets(vv, window.innerHeight);
+      fab.style.setProperty("--ask-vv-bottom", `${bottom}px`);
+      fab.style.setProperty("--ask-vv-height", `${height}px`);
+    };
+    sync();
+    vv.addEventListener("resize", sync);
+    vv.addEventListener("scroll", sync);
+    window.addEventListener("resize", sync);
+    return () => {
+      vv.removeEventListener("resize", sync);
+      vv.removeEventListener("scroll", sync);
+      window.removeEventListener("resize", sync);
+      clear();
+    };
+  }, [onAskPage, open]);
 
   useEffect(() => {
     if (onAskPage) return;
@@ -164,7 +202,7 @@ export function AskChatWidget({
   }
 
   return (
-    <div className={`ask-fab${open ? " ask-fab-open" : ""}`}>
+    <div ref={fabRef} className={`ask-fab${open ? " ask-fab-open" : ""}`}>
       <section
         ref={panelRef}
         id={panelId}

@@ -23,6 +23,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Floating Ask on phones keeps the message field above the soft keyboard:
+  sync `--ask-vv-bottom` / `--ask-vv-height` from `visualViewport`, and blur
+  the composer after send so the keyboard dismisses until the field is tapped
+  again.
 - Ask answers with Spanish/Catalan accents no longer render as mojibake
   (`SĂ­` / `estĂˇ` / `pĂˇgina`): repair UTF-8-as-Windows-1250/1252 digraphs in
   `askClaude`, and send/accept JSON with an explicit `charset=utf-8`.
