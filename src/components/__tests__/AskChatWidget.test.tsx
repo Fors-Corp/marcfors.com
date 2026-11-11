@@ -119,11 +119,11 @@ describe("AskChatWidget", () => {
     document.getElementById("work")?.remove();
   });
 
-  it("is a modal dialog labelled by the visible title", async () => {
+  it("is a non-modal dialog labelled by the visible title", async () => {
     rememberOpen();
     const { container } = render(<AskChatWidget strings={strings} />);
     const dialog = screen.getByRole("dialog");
-    expect(dialog).toHaveAttribute("aria-modal", "true");
+    expect(dialog).toHaveAttribute("aria-modal", "false");
     expect(dialog).toHaveAccessibleName(copy.en.askWidgetLauncher);
     const title = document.getElementById(dialog.getAttribute("aria-labelledby") ?? "");
     expect(title).toBeVisible();
@@ -143,38 +143,32 @@ describe("AskChatWidget", () => {
     expect(await axe(container)).toHaveNoViolations();
   });
 
-  it("inerts the page while the panel is open and clears it on close", async () => {
+  it("keeps the page interactive while the panel is open", async () => {
     const user = userEvent.setup();
     render(<PageWithAsk />);
 
     const page = document.querySelector("main");
-    const link = document.querySelector("main a");
     expect(page).not.toHaveAttribute("inert");
     expect(screen.getByRole("button", { name: copy.en.askWidgetOpen })).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
     const dialog = screen.getByRole("dialog");
-    expect(page).toHaveAttribute("inert");
-    expect(link?.closest("[inert]")).toBe(page);
-    expect(page).not.toHaveAttribute("hidden");
-    expect(page).toHaveTextContent("Work");
-    expect(dialog).not.toHaveAttribute("inert");
+    expect(page).not.toHaveAttribute("inert");
+    expect(page?.closest("[inert]")).toBeNull();
     expect(dialog.closest("[inert]")).toBeNull();
+    expect(screen.getByRole("link", { name: "Work" })).toBeEnabled();
     expect(screen.getByRole("textbox", { name: copy.en.askPlaceholder })).toHaveFocus();
+
+    await user.click(screen.getByRole("link", { name: "Work" }));
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
 
     await user.keyboard("{Escape}");
     expect(page).not.toHaveAttribute("inert");
-    expect(link?.closest("[inert]")).toBeNull();
     expect(screen.getByRole("link", { name: "Work" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: copy.en.askWidgetOpen })).toHaveFocus();
-
-    await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
-    expect(page).toHaveAttribute("inert");
-    expect(screen.getByRole("dialog").closest("[inert]")).toBeNull();
-    expect(screen.getByRole("textbox", { name: copy.en.askPlaceholder })).toHaveFocus();
   });
 
-  it("does not inert the page when the panel is closed or on the full Ask page", () => {
+  it("does not mark the page inert when closed or on the full Ask page", () => {
     const { unmount } = render(<PageWithAsk />);
     expect(document.querySelector("main")).not.toHaveAttribute("inert");
     expect(screen.getByRole("link", { name: "Work" })).toBeInTheDocument();
@@ -211,7 +205,7 @@ describe("AskChatWidget", () => {
     expect(screen.getByRole("textbox", { name: copy.en.askPlaceholder })).toHaveFocus();
   });
 
-  it("keeps Tab inside the open dialog", async () => {
+  it("lets Tab leave the open panel so the rest of the page stays reachable", async () => {
     const user = userEvent.setup();
     rememberOpen();
     render(
@@ -220,19 +214,16 @@ describe("AskChatWidget", () => {
         <button type="button">After</button>
       </>,
     );
-    const close = screen.getByRole("button", { name: copy.en.askWidgetClose });
     const input = screen.getByRole("textbox", { name: copy.en.askPlaceholder });
     const after = screen.getByRole("button", { name: "After" });
     expect(screen.getByRole("button", { name: copy.en.askSubmit })).toBeDisabled();
 
     input.focus();
-    await user.tab();
-    expect(close).toHaveFocus();
-    expect(after).not.toHaveFocus();
-
-    await user.tab({ shift: true });
-    expect(input).toHaveFocus();
-    expect(after).not.toHaveFocus();
+    // No focus trap: keep tabbing until focus reaches the sibling control.
+    for (let i = 0; i < 8 && after !== document.activeElement; i += 1) {
+      await user.tab();
+    }
+    expect(after).toHaveFocus();
   });
 
   it("does not move focus on mount when a stored open state is restored", () => {
