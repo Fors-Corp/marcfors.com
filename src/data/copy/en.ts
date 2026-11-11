@@ -27,7 +27,7 @@ export const ui: UiCopy = {
   breakTitle: "Fors Corp · independent practice",
   projectsTitle: "Selected work",
   signalTitle: "Signal",
-  signalLede: "This atlas watches itself. Transport encryption, a supply-chain audit on every build, first-party web vitals. No third-party tracker.",
+  signalLede: "This atlas watches itself. Transport encryption, a supply-chain audit on every build, first-party web vitals. No advertising or cross-site trackers.",
   auditTitle: "npm audit",
   auditBody: "Production dependencies scanned",
   auditClean: "Clean",
@@ -155,7 +155,7 @@ export const ui: UiCopy = {
   },
   controls: {
     tls: "TLS in production, HSTS preload",
-    csp: "Content-Security-Policy, no third-party scripts",
+    csp: "Content-Security-Policy; no ad or cross-site scripts",
     frames: "Clickjacking blocked (frame-ancestors none)",
     cookies: "No tracking cookies. One preference cookie, set only when you pick a language",
     audit: "npm audit on every CI run and at build",

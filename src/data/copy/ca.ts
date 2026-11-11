@@ -27,7 +27,7 @@ export const ui: UiCopy = {
   breakTitle: "Fors Corp · pràctica independent",
   projectsTitle: "Treball seleccionat",
   signalTitle: "Senyal",
-  signalLede: "Aquest atles s'observa a si mateix. Xifratge en trànsit, auditoria de dependències a cada build, web vitals propis. Sense tracker de tercers.",
+  signalLede: "Aquest atles s'observa a si mateix. Xifratge en trànsit, auditoria de dependències a cada build, web vitals propis. Sense publicitat ni trackers entre llocs.",
   auditTitle: "npm audit",
   auditBody: "Dependències de producció escanejades",
   auditClean: "Neteja",
@@ -155,7 +155,7 @@ export const ui: UiCopy = {
   },
   controls: {
     tls: "TLS en producció, HSTS preload",
-    csp: "Content-Security-Policy, sense scripts de tercers",
+    csp: "Content-Security-Policy; sense scripts de publicitat ni de seguiment entre llocs",
     frames: "Clickjacking bloquejat (frame-ancestors none)",
     cookies: "Sense cookies de tracking. Una cookie de preferència, només si tries idioma",
     audit: "npm audit a cada CI i al build",

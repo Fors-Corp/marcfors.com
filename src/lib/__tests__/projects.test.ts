@@ -62,6 +62,10 @@ describe("featured work", () => {
       expect(blurb).toMatch(/Claude/);
       expect(blurb).toMatch(/3D/);
       expect(blurb).toMatch(/App Store|App-Store/);
+      // Live wordkeep.me ships eight course languages including Latin.
+      expect(blurb).toMatch(/eight|ocho|vuit|otto|oito|acht|huit/);
+      expect(blurb).toMatch(/Latin|latín|llatí|latino|latim|Latein|latin/);
+      expect(blurb).not.toMatch(/seven languages|siete lenguas|set llengües|sette lingue|sete línguas|sieben Sprachen|sept langues/);
     }
   });
 

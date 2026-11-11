@@ -31,7 +31,7 @@ const ASK_TRANSCRIPT_NOT_STORED: Record<Locale, string> = {
 
 describe("privacy and legal notice", () => {
   it("dates the Ask and GitHub activity disclosures", () => {
-    expect(PRIVACY_UPDATED).toBe("2026-11-08");
+    expect(PRIVACY_UPDATED).toBe("2026-11-11");
   });
 
   it.each(LOCALES)("%s discloses the first-party GitHub activity endpoint", (locale) => {

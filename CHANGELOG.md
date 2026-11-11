@@ -23,6 +23,11 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Align visitor-facing claims with the live product and privacy notice: Wordkeep
+  blurbs/case studies/corpus say eight languages including Latin and A1–C2;
+  Signal / CSP / `llms.txt` / marcfors.com case study / privacy “In short” no
+  longer claim a blanket ban on third-party analytics while Vercel Web Analytics
+  is mounted and disclosed.
 - Floating Ask on phones keeps the message field above the soft keyboard:
   sync `--ask-vv-bottom` / `--ask-vv-height` from `visualViewport`, and blur
   the composer after send so the keyboard dismisses until the field is tapped
