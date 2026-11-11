@@ -35,6 +35,10 @@ Chunking stays **800 / 120**. Embedding stays `local/Xenova/all-MiniLM-L6-v2` (3
 
 Ask defaults to `claude-sonnet-5-5`. That model’s adaptive thinking counts toward `max_tokens`. Portfolio Ask sends `thinking: { type: "between_tools" }`, `output_config.effort: "low"`, and `ASK_MAX_TOKENS` (default 8192) so grounded answers finish; a `stop_reason: "max_tokens"` response is treated as an error rather than shown clipped above the citations rule.
 
+## Encoding
+
+`/api/ask` responds with `Content-Type: application/json; charset=utf-8`. Answers are passed through `repairUtf8Mojibake` so intermittent UTF-8-as-Windows-1250/1252 digraphs (`SĂ\xad`, `estĂˇ`, `pĂˇgina`) are restored to proper Spanish/Catalan accents before the client renders them.
+
 ## Ops notes
 
 - After merging CV or corpus copy changes, run `npm run rag:seed` against production/preview Neon and redeploy if needed (seed is offline; the app only reads).

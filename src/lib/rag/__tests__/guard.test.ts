@@ -217,6 +217,7 @@ describe("rag guard", () => {
     expect(first?.status).toBe(401);
     expect(second?.status).toBe(429);
     expect(first?.headers.get("cache-control")).toContain("no-store");
+    expect(first?.headers.get("content-type")).toMatch(/application\/json;\s*charset=utf-8/i);
     await expect(second?.json()).resolves.toEqual({ error: "rate limit exceeded" });
   });
 });

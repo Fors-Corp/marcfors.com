@@ -13,4 +13,5 @@ export {
   validateQuestion,
 } from "./guard";
 export { runAsk } from "./ask";
+export { looksLikeUtf8Mojibake, repairUtf8Mojibake } from "./mojibake";
 export type { AskResult, Citation } from "./types";

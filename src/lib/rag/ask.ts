@@ -6,6 +6,7 @@ import {
   EMBEDDING_MODEL_ID,
   REFUSAL,
 } from "./constants";
+import { repairUtf8Mojibake } from "./mojibake";
 import { retrieve } from "./retrieve";
 import type { AskResult, ChunkRow, Citation } from "./types";
 
@@ -53,7 +54,7 @@ export async function askClaude(
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
-      "content-type": "application/json",
+      "content-type": "application/json; charset=utf-8",
       "x-api-key": apiKey,
       "anthropic-version": "2023-06-01",
     },
@@ -107,7 +108,9 @@ export async function askClaude(
   if (!text) {
     throw new Error("chat model returned no text");
   }
-  return text;
+  // Chat answers sometimes arrive with UTF-8 bytes already misread as
+  // Windows-1250/1252 ("SĂ\xad" / "estĂˇ"). Repair before the JSON response.
+  return repairUtf8Mojibake(text);
 }
 
 export async function runAsk(

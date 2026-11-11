@@ -134,6 +134,42 @@ describe("askClaude", () => {
     );
   });
 
+  it("repairs UTF-8 mojibake in Spanish answers before returning", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          content: [
+            {
+              type: "text",
+              text: "SĂ\xAD, Marc estĂˇ abierto a puestos en remoto (about.md).",
+            },
+          ],
+          stop_reason: "end_turn",
+        }),
+      }),
+    );
+    await expect(askClaude("key", "¿Marc acepta remoto?", "ctx", "es")).resolves.toBe(
+      "Sí, Marc está abierto a puestos en remoto (about.md).",
+    );
+  });
+
+  it("leaves already-correct accented answers unchanged", async () => {
+    const answer = "Sí, Marc está abierto a puestos en remoto (about.md).";
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          content: [{ type: "text", text: answer }],
+          stop_reason: "end_turn",
+        }),
+      }),
+    );
+    await expect(askClaude("key", "q", "ctx", "es")).resolves.toBe(answer);
+  });
+
   it("names every shipped locale without copying the locale token into the prompt", () => {
     for (const locale of LOCALES) {
       const text = answerLanguageInstruction(locale);

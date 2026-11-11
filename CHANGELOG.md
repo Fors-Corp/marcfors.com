@@ -23,6 +23,12 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Ask answers with Spanish/Catalan accents no longer render as mojibake
+  (`SĂ­` / `estĂˇ` / `pĂˇgina`): repair UTF-8-as-Windows-1250/1252 digraphs in
+  `askClaude`, and send/accept JSON with an explicit `charset=utf-8`.
+- Floating Ask panel is non-blocking again: drop page `inert`, set
+  `aria-modal="false"`, and let Tab leave the panel so the rest of the site
+  stays clickable while Ask is open (Escape still closes).
 - Stop the mobile Lighthouse job flaking red on Total Blocking Time: on a shared
   runner the best-of-3 TBT for `/` varies ~240-290 ms for identical build output,
   against a 250 ms budget. The mobile config now allows 350 ms for TBT only; the

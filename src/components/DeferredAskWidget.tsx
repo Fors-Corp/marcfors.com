@@ -22,7 +22,7 @@ const listen: AddEventListenerOptions = { capture: true, passive: true };
 // CI (~305ms against a 250ms budget): importing the widget is itself a long
 // task. Arm idle only after load plus a delay past that max wait; pointer/key
 // still mounts immediately so real visitors are not stuck. The panel starts
-// closed — auto-open + inert trapped keyboard users after deferred mount.
+// closed so deferred mount never steals focus or covers the first viewport.
 export const ASK_POST_LOAD_DELAY_MS = 45_000;
 
 export function DeferredAskWidget({ strings, locale = "en" }: AskWidgetProps) {
