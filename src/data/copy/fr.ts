@@ -27,7 +27,7 @@ export const ui: UiCopy = {
   breakTitle: "Fors Corp · activité indépendante",
   projectsTitle: "Travaux choisis",
   signalTitle: "Signal",
-  signalLede: "Cet atlas s’observe lui-même. Chiffrement du transport, audit de la chaîne d’approvisionnement à chaque build, web vitals en première partie. Aucun traceur tiers.",
+  signalLede: "Cet atlas s’observe lui-même. Chiffrement du transport, audit de la chaîne d’approvisionnement à chaque build, web vitals en première partie. Aucune publicité ni traceur inter-sites.",
   auditTitle: "npm audit",
   auditBody: "Dépendances de production analysées",
   auditClean: "Propre",
@@ -155,7 +155,7 @@ export const ui: UiCopy = {
   },
   controls: {
     tls: "TLS en production, préchargement HSTS",
-    csp: "Content-Security-Policy, aucun script tiers",
+    csp: "Content-Security-Policy ; pas de scripts pub ou de suivi inter-sites",
     frames: "Détournement de clic bloqué (frame-ancestors none)",
     cookies: "Aucun cookie de suivi. Un cookie de préférence, posé seulement si vous choisissez une langue",
     audit: "npm audit à chaque exécution de la CI et au build",

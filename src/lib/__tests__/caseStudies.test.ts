@@ -81,6 +81,9 @@ describe("case studies", () => {
       for (const fact of ["Claude", "SM-2", "IndexedDB", "AES-GCM", "PBKDF2", "Three.js", "200", "30"]) {
         expect(body, `${locale}: ${fact}`).toContain(fact);
       }
+      expect(body, `${locale}: CEFR`).toMatch(/A1.{0,8}C2/);
+      expect(body, `${locale}: Latin`).toMatch(/Latin|latín|llatí|latino|latim|Latein|latin/);
+      expect(body).not.toMatch(/A1 to C1|A1 a C1|A1 à C1|A1 bis C1|d’A1 a C1|da A1 a C1/);
       expect(body).not.toMatch(/github\.com|vercel\.app|@gmail\.com|mailto:|tel:/i);
     }
   });

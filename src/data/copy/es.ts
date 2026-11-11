@@ -27,7 +27,7 @@ export const ui: UiCopy = {
   breakTitle: "Fors Corp · práctica independiente",
   projectsTitle: "Trabajo seleccionado",
   signalTitle: "Señal",
-  signalLede: "Este atlas se observa a sí mismo. Cifrado en tránsito, auditoría de dependencias en cada build, web vitals propios. Sin tracker de terceros.",
+  signalLede: "Este atlas se observa a sí mismo. Cifrado en tránsito, auditoría de dependencias en cada build, web vitals propios. Sin publicidad ni trackers entre sitios.",
   auditTitle: "npm audit",
   auditBody: "Dependencias de producción escaneadas",
   auditClean: "Limpio",
@@ -155,7 +155,7 @@ export const ui: UiCopy = {
   },
   controls: {
     tls: "TLS en producción, HSTS preload",
-    csp: "Content-Security-Policy, sin scripts de terceros",
+    csp: "Content-Security-Policy; sin scripts de anuncios ni de seguimiento entre sitios",
     frames: "Clickjacking bloqueado (frame-ancestors none)",
     cookies: "Sin cookies de tracking. Una cookie de preferencia, solo si eliges idioma",
     audit: "npm audit en cada CI y en el build",

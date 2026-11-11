@@ -8,7 +8,7 @@ Repo: https://github.com/Fors-Corp/embedded-rag
 Case study: /work/embedded-rag
 
 ## Wordkeep
-A language app that teaches seven languages by playing, keeps a personal lexicon from Wiktionary with spaced review, and has Claude break whole phrases down grammatically. Words link across languages in a 3D atlas. Your lexicon stays on the device; optional accounts are end-to-end encrypted. App Store release pending.
+A language app that teaches eight languages by playing (including Latin), keeps a personal lexicon from Wiktionary with spaced review, and has Claude break whole phrases down grammatically. Words link across languages in a 3D atlas. Your lexicon stays on the device; optional accounts are end-to-end encrypted. App Store release pending.
 Stack: React, TypeScript, Three.js, Hono, Claude API.
 Live: https://wordkeep.me
 Case study: /work/wordkeep
