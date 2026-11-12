@@ -55,17 +55,26 @@ describe("case studies", () => {
     }
   });
 
-  it("documents Embedded RAG with live demo, public source and classic RAG facts", () => {
+  it("documents Embedded RAG with live demo, private source and hybrid classic RAG facts", () => {
     for (const locale of LOCALES) {
       const study = caseStudyBySlug("embedded-rag", locale);
       expect(study?.live).toBe("https://embedded-rag.vercel.app");
-      expect(study?.repo).toBe("https://github.com/Fors-Corp/embedded-rag");
+      expect(study?.repo).toBeUndefined();
       expect(study?.stack).toEqual(["Python", "React", "TypeScript", "Neon", "Claude API"]);
       expect(study?.order).toBe(-1);
       const body = caseStudyBody("embedded-rag", locale)!;
-      for (const fact of ["pgvector", "Claude", "MiniLM", "The answer is not in the documents."]) {
+      for (const fact of [
+        "pgvector",
+        "Claude",
+        "MiniLM",
+        "Reciprocal Rank Fusion",
+        "The answer is not in the documents.",
+      ]) {
         expect(body, `${locale}: ${fact}`).toContain(fact);
       }
+      expect(body, `${locale}: Vercel Blob`).toMatch(/Vercel[ -]?Blob/);
+      expect(body).toMatch(/paraphrase-multilingual|multilingual MiniLM|MiniLM multiling/i);
+      expect(body).not.toMatch(/github\.com|public source|código público|codi públic|codice pubblico|öffentlicher Quellcode|code source public/i);
       expect(body).not.toMatch(/@gmail\.com|mailto:|tel:/i);
     }
   });
@@ -166,6 +175,7 @@ describe("case studies", () => {
 
   it("keeps private product studies free of repo URLs", () => {
     for (const slug of [
+      "embedded-rag",
       "fors-corp",
       "ferretodo-lepant",
       "agent-switchboard",

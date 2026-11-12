@@ -58,7 +58,7 @@ describe("static rendering invariants", () => {
     expect(localeLayout).toContain("DeferredAskWidget");
     expect(defer).toContain("ASK_IDLE_TIMEOUT_MS");
     expect(defer).toMatch(/ASK_IDLE_TIMEOUT_MS\s*=\s*1_500/);
-    expect(defer).not.toMatch(/ASK_POST_LOAD_DELAY_MS\s*=\s*45_000/);
+    expect(defer).not.toMatch(/ASK_POST_LOAD_DELAY_MS\s*=\s*(8|45)_000/);
     expect(desk).toMatch(/withLocale\(locale,\s*"\/ask"\)[^>]{0,80}prefetch=\{false\}/);
   });
 

@@ -19,7 +19,8 @@ const listen: AddEventListenerOptions = { capture: true, passive: true };
 /**
  * Cap how long we wait for an idle slot after `load` before mounting Ask.
  * Kept short so the launcher appears on first visit without the old 45s
- * Lighthouse-TBT deferral; pointer/key still mounts immediately.
+ * Lighthouse-TBT deferral (and ahead of the interim 8s settle); pointer/key
+ * still mounts immediately. Panel stays closed on mount.
  */
 export const ASK_IDLE_TIMEOUT_MS = 1_500;
 

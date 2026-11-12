@@ -4,6 +4,13 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+### Changed
+
+- Sync Embedded RAG featured work with the live product: hybrid RRF retrieve
+  (vector + lexical) over pgvector, paraphrase-multilingual MiniLM embeddings,
+  broader ingest (images, SQLite, Vercel Blob), and drop the public-repo claim
+  now that Fors-Corp/embedded-rag is private/proprietary.
+
 ### Added
 
 - Generative-engine optimization: `robots.txt` now names AI search, user-fetch and
@@ -23,9 +30,11 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
-- Ask launcher mounts shortly after load (idle ≤1.5s) instead of waiting 45s
-  for Lighthouse TTI; pointer/key still mounts immediately. Citations are
-  fail-closed like current Embedded RAG: only paths named in the answer.
+- Phones: the Ask and Trace text boxes use 16px text on touch screens, so iOS no longer zooms the page when one is focused; the hero and contact email links and the Trace page's home link are 44px tall to tap.
+- Ask launcher mounts shortly after load (idle ≤1.5s) instead of the prior 45s
+  Lighthouse-TBT deferral / interim 8s settle; pointer/key still mounts
+  immediately. Citations are fail-closed like current Embedded RAG: only paths
+  named in the answer (no fallback to every retrieved row).
 - Align visitor-facing claims with the live product and privacy notice: Wordkeep
   blurbs/case studies/corpus say eight languages including Latin and A1–C2;
   Signal / CSP / `llms.txt` / marcfors.com case study / privacy “In short” no
@@ -36,8 +45,9 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   the composer after send so the keyboard dismisses until the field is tapped
   again.
 - Ask answers with Spanish/Catalan accents no longer render as mojibake
-  (`SĂ­` / `estĂˇ` / `pĂˇgina`): repair UTF-8-as-Windows-1250/1252 digraphs in
-  `askClaude`, and send/accept JSON with an explicit `charset=utf-8`.
+  (`estĂĄ` / `estĂˇ` / `estÃ¡`): decode Anthropic and `/api/ask` JSON as UTF-8
+  bytes explicitly, and round-trip any leftover ISO-8859-2 / Windows-1250 /
+  Windows-1252 digraphs in `repairUtf8Mojibake` before render.
 - Floating Ask panel is non-blocking again: drop page `inert`, set
   `aria-modal="false"`, and let Tab leave the panel so the rest of the site
   stays clickable while Ask is open (Escape still closes).

@@ -55,16 +55,23 @@ afterEach(() => {
   window.location.hash = "";
 });
 
+
+function jsonResponse(payload: unknown, init: { ok?: boolean; status?: number } = {}) {
+  const body = new TextEncoder().encode(JSON.stringify(payload));
+  return {
+    ok: init.ok ?? true,
+    status: init.status ?? 200,
+    arrayBuffer: async () =>
+      body.buffer.slice(body.byteOffset, body.byteOffset + body.byteLength),
+  };
+}
+
 describe("AskChatWidget", () => {
   it("starts closed and can be opened then closed", async () => {
     const user = userEvent.setup();
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        status: 200,
-        text: async () => JSON.stringify({ files: [], embedding_model: "local/x" }),
-      }),
+      vi.fn().mockResolvedValue(jsonResponse({ files: [], embedding_model: "local/x" })),
     );
     render(<AskChatWidget strings={strings} />);
     expect(screen.getByRole("button", { name: copy.en.askWidgetOpen })).toBeInTheDocument();
@@ -81,18 +88,13 @@ describe("AskChatWidget", () => {
     const user = userEvent.setup();
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        status: 200,
-        text: async () =>
-          JSON.stringify({
+      vi.fn().mockResolvedValue(jsonResponse({
             answer: "He builds products at his practice (experience.md).",
             citations: [{ source_path: "experience.md", chunk_index: 0, distance: 0.12 }],
             embedding_model: "local/x",
             chat_model: "claude",
             run_id: null,
-          }),
-      }),
+          })),
     );
     // Hash target must exist for close-for-navigation to land focus there.
     document.body.insertAdjacentHTML(
@@ -282,18 +284,13 @@ describe("AskChatWidget", () => {
     const user = userEvent.setup();
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        status: 200,
-        text: async () =>
-          JSON.stringify({
+      vi.fn().mockResolvedValue(jsonResponse({
             answer: "Embedded RAG retrieves portfolio pages.",
             citations: [],
             embedding_model: "local/x",
             chat_model: "claude",
             run_id: null,
-          }),
-      }),
+          })),
     );
     rememberOpen();
     render(<AskChatWidget strings={strings} />);
