@@ -30,6 +30,7 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Phones: the Ask and Trace text boxes use 16px text on touch screens, so iOS no longer zooms the page when one is focused; the hero and contact email links and the Trace page's home link are 44px tall to tap.
 - Show the floating Ask Marc launcher earlier for passive visitors: mount after
   `load` plus an 8s settle delay (then idle), down from 45s, while keeping
   first-paint deferral, closed-on-mount, and pointer/key immediate mount.

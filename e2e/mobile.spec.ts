@@ -56,3 +56,37 @@ test("Wordkeep atlas responds to a real touch tap, not just a mouse hover", asyn
   await page.touchscreen.tap(box.x + box.width * hit!.gx, box.y + box.height * hit!.gy);
   await expect(readout).toHaveClass(/\bon\b/);
 });
+
+for (const path of ["/ask", "/lab/trace"]) {
+  test(`${path}: text fields are at least 16px so iOS does not zoom on focus`, async ({ page }) => {
+    await page.goto(path);
+    const field = page.locator("main textarea").first();
+    await expect(field).toBeVisible();
+    const size = await field.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+    expect(size).toBeGreaterThanOrEqual(16);
+  });
+}
+
+test("stand-alone links are 44px tall to tap; a link inside a sentence is left alone", async ({ page }) => {
+  await page.goto("/");
+  for (const selector of [".hero-email", ".contact-email"]) {
+    const box = await page.locator(selector).first().boundingBox();
+    expect(box?.height, selector).toBeGreaterThanOrEqual(44);
+  }
+  await page.goto("/lab/trace");
+  const home = await page.locator("header.top > a:not(.brand)").boundingBox();
+  expect(home?.height).toBeGreaterThanOrEqual(44);
+
+  await page.goto("/privacy");
+  const inline = await page.locator("main p a").first().boundingBox();
+  expect(inline?.height).toBeLessThan(44);
+});
+
+test("no page scrolls sideways on the narrowest phone", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  for (const path of ["/", "/de", "/ask", "/cv", "/privacy", "/lab/trace", "/work/embedded-rag", "/de/work/wordkeep"]) {
+    await page.goto(path);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    expect(overflow, path).toBeLessThanOrEqual(0);
+  }
+});

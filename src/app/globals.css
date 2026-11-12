@@ -1,6 +1,7 @@
 /* Cascade layers — a later layer beats an earlier one regardless of selector
-   specificity. The two @media blocks at the end of this file are deliberately
-   left UNLAYERED so they override every component rule (print, reduced-motion). */
+   specificity. The print and reduced-motion @media blocks, and the touch-screen
+   block at the very end, are deliberately left UNLAYERED so they override every
+   component rule. */
 @layer reset, tokens, base, components;
 
 /* tokens.css is generated from src/lib/themePalettes.ts by scripts/gen-tokens.mjs
@@ -2640,5 +2641,26 @@ footer {
     .ask-fab {
       display: none !important;
     }
+  }
+}
+
+/* Touch screens. Unlayered, like the print and reduced-motion blocks, so it wins
+   over the component rules above. */
+@media (pointer: coarse) {
+  /* iOS zooms the page when a focused field's text is under 16px and does not
+     zoom back out. Fields inherit the 15px body size, so lift them here. */
+  input:not([type="checkbox"], [type="radio"], [type="range"]),
+  select,
+  textarea {
+    font-size: max(16px, 1em);
+  }
+
+  /* Stand-alone links get a 44px-tall target; links inside a sentence do not. */
+  .hero-email,
+  .contact-email,
+  .top > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
   }
 }
