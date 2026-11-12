@@ -35,6 +35,12 @@ Chunking stays **800 / 120**. Embedding stays `local/Xenova/all-MiniLM-L6-v2` (3
 
 Ask defaults to `claude-sonnet-5-5`. That model’s adaptive thinking counts toward `max_tokens`. Portfolio Ask sends `thinking: { type: "between_tools" }`, `output_config.effort: "low"`, and `ASK_MAX_TOKENS` (default 8192) so grounded answers finish; a `stop_reason: "max_tokens"` response is treated as an error rather than shown clipped above the citations rule.
 
+## Encoding
+
+JSON for Ask is always decoded as UTF-8 bytes (`arrayBuffer` + `TextDecoder("utf-8")`) on both the Anthropic hop and the browser `/api/ask` hop — never via locale-default text decoding. `/api/ask` also responds with `Content-Type: application/json; charset=utf-8`.
+
+If an upstream hop already turned UTF-8 into ISO-8859-2 / Windows-1250 / Windows-1252 digraphs (`estĂĄ`, `estĂˇ`, `estÃ¡`), `repairUtf8Mojibake` round-trips the answer back to proper Spanish/Catalan accents before the client renders them.
+
 ## Ops notes
 
 - After merging CV or corpus copy changes, run `npm run rag:seed` against production/preview Neon and redeploy if needed (seed is offline; the app only reads).

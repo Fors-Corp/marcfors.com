@@ -7,9 +7,8 @@ stack:
   - "Neon"
   - "Claude API"
 live: "https://embedded-rag.vercel.app"
-repo: "https://github.com/Fors-Corp/embedded-rag"
 order: -1
-description: "RAG clásico con una búsqueda pgvector y una respuesta de Claude: embeddings MiniLM, citas y una negativa fija cuando el corpus no sostiene la pregunta."
+description: "RAG clásico con recuperación híbrida sobre pgvector y una respuesta de Claude: embeddings MiniLM multilingües, citas y una negativa fija cuando el corpus no sostiene la pregunta."
 ---
 
 ## Problema
@@ -18,8 +17,8 @@ Los visitantes de la demo que evalúan el trabajo de Fors Corp necesitaban respu
 
 ## Enfoque
 
-Embedded RAG es generación aumentada por recuperación clásica: una búsqueda pgvector y luego una generación con Claude. La doble pila Python y Vercel/Neon comparte troceado, embeddings MiniLM, un umbral de distancia y el mismo texto de negativa. La ingestión multi-formato cubre ficheros y URLs públicas; la ruta de pregunta devuelve citas o la negativa fija: "The answer is not in the documents."
+Embedded RAG es generación aumentada por recuperación clásica: recuperación híbrida sobre pgvector — similitud vectorial y coincidencia léxica fusionadas con Reciprocal Rank Fusion — y luego una generación con Claude. La doble pila Python y Vercel/Neon comparte troceado, embeddings paraphrase-multilingual MiniLM, un umbral de distancia y el mismo texto de negativa. La ingestión multi-formato cubre ficheros (incluidas imágenes y SQLite), URLs públicas y almacenamiento en Vercel Blob; la ruta de pregunta devuelve citas o la negativa fija: "The answer is not in the documents."
 
 ## Resultado
 
-Una demo en vivo en embedded-rag.vercel.app donde un visitante puede probar prompts de muestra o subir su propio material y obtener una respuesta citada — o una negativa honesta — en segundos. Código público en Fors-Corp.
+Una demo en vivo en embedded-rag.vercel.app donde un visitante puede probar el corpus de demo preindexado o añadir sus propios ficheros y sitios web y obtener una respuesta citada — o una negativa honesta — en segundos.

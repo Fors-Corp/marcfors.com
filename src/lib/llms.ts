@@ -84,7 +84,7 @@ function optional(): string[] {
 
 function closing(): string[] {
   return [
-    "The site stores only a locale preference the visitor chooses. Ask posts questions to /api/ask for portfolio-grounded answers (Neon pgvector + Anthropic). It does not use third-party analytics trackers.",
+    "The site stores only a locale preference the visitor chooses. Ask posts questions to /api/ask for portfolio-grounded answers (Neon pgvector + Anthropic). It does not use advertising or cross-site analytics trackers; host Web Analytics is disclosed on /privacy.",
     "",
   ];
 }

@@ -68,6 +68,19 @@ describe("locale copy", () => {
     expect(languages.en).toMatch(/German beginner/i);
   });
 
+  it("does not claim a blanket ban on third-party analytics while host analytics ships", () => {
+    // Vercel Web Analytics is mounted; Signal copy must match /privacy wording.
+    for (const locale of LOCALES) {
+      expect(copy[locale].signalLede, `${locale}.signalLede`).not.toMatch(
+        /No third-party tracker|Sin tracker de terceros|Sense tracker de tercers|Nessun tracker di terzi|Sem tracker de terceiros|Kein Tracker Dritter|Aucun traceur tiers/i,
+      );
+      expect(copy[locale].controls.csp, `${locale}.controls.csp`).not.toMatch(
+        /no third-party scripts|sin scripts de terceros|sense scripts de tercers|nessuno script di terzi|sem scripts de terceiros|keine Drittanbieter-Skripte|aucun script tiers/i,
+      );
+    }
+    expect(copy.en.signalLede).toMatch(/advertising or cross-site trackers/i);
+  });
+
   it("labels the home CTA as go-to-homepage, not back-to-atlas", () => {
     expect(copy.en.homeCta).toBe("Go to homepage");
     expect(copy.es.homeCta).toBe("Ir al inicio");

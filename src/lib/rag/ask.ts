@@ -1,4 +1,5 @@
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
+import { readUtf8Json } from "@/lib/utf8Json";
 import {
   ASK_INSTRUCTIONS,
   ASK_MAX_TOKENS,
@@ -6,6 +7,7 @@ import {
   EMBEDDING_MODEL_ID,
   REFUSAL,
 } from "./constants";
+import { repairUtf8Mojibake } from "./mojibake";
 import { retrieve } from "./retrieve";
 import type { AskResult, ChunkRow, Citation } from "./types";
 
@@ -53,7 +55,7 @@ export async function askClaude(
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
-      "content-type": "application/json",
+      "content-type": "application/json; charset=utf-8",
       "x-api-key": apiKey,
       "anthropic-version": "2023-06-01",
     },
@@ -82,7 +84,10 @@ export async function askClaude(
     }),
   });
 
-  const payload = (await response.json()) as {
+  // Decode the Anthropic body as UTF-8 bytes explicitly. response.json() can
+  // inherit a locale single-byte default in some hosts; that turns "está" into
+  // ISO-8859-2 digraphs ("estĂĄ") before we ever touch the answer string.
+  const payload = (await readUtf8Json(response)) as {
     content?: Array<{ type?: string; text?: string }>;
     stop_reason?: string;
     error?: { message?: string };
@@ -107,7 +112,9 @@ export async function askClaude(
   if (!text) {
     throw new Error("chat model returned no text");
   }
-  return text;
+  // Safety net: if an upstream hop already mis-decoded UTF-8 as Latin-2 /
+  // CP1250 / CP1252, restore accents before we JSON-encode the Ask response.
+  return repairUtf8Mojibake(text);
 }
 
 export async function runAsk(

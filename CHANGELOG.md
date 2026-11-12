@@ -4,6 +4,13 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+### Changed
+
+- Sync Embedded RAG featured work with the live product: hybrid RRF retrieve
+  (vector + lexical) over pgvector, paraphrase-multilingual MiniLM embeddings,
+  broader ingest (images, SQLite, Vercel Blob), and drop the public-repo claim
+  now that Fors-Corp/embedded-rag is private/proprietary.
+
 ### Added
 
 - Generative-engine optimization: `robots.txt` now names AI search, user-fetch and
@@ -24,6 +31,25 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 ### Fixed
 
 - Phones: the Ask and Trace text boxes use 16px text on touch screens, so iOS no longer zooms the page when one is focused; the hero and contact email links and the Trace page's home link are 44px tall to tap.
+- Show the floating Ask Marc launcher earlier for passive visitors: mount after
+  `load` plus an 8s settle delay (then idle), down from 45s, while keeping
+  first-paint deferral, closed-on-mount, and pointer/key immediate mount.
+- Align visitor-facing claims with the live product and privacy notice: Wordkeep
+  blurbs/case studies/corpus say eight languages including Latin and A1–C2;
+  Signal / CSP / `llms.txt` / marcfors.com case study / privacy “In short” no
+  longer claim a blanket ban on third-party analytics while Vercel Web Analytics
+  is mounted and disclosed.
+- Floating Ask on phones keeps the message field above the soft keyboard:
+  sync `--ask-vv-bottom` / `--ask-vv-height` from `visualViewport`, and blur
+  the composer after send so the keyboard dismisses until the field is tapped
+  again.
+- Ask answers with Spanish/Catalan accents no longer render as mojibake
+  (`estĂĄ` / `estĂˇ` / `estÃ¡`): decode Anthropic and `/api/ask` JSON as UTF-8
+  bytes explicitly, and round-trip any leftover ISO-8859-2 / Windows-1250 /
+  Windows-1252 digraphs in `repairUtf8Mojibake` before render.
+- Floating Ask panel is non-blocking again: drop page `inert`, set
+  `aria-modal="false"`, and let Tab leave the panel so the rest of the site
+  stays clickable while Ask is open (Escape still closes).
 - Stop the mobile Lighthouse job flaking red on Total Blocking Time: on a shared
   runner the best-of-3 TBT for `/` varies ~240-290 ms for identical build output,
   against a 250 ms budget. The mobile config now allows 350 ms for TBT only; the

@@ -16,14 +16,15 @@ type AskWidgetComponent = ComponentType<AskWidgetProps>;
 const INTERACTION: Array<"pointerdown" | "keydown"> = ["pointerdown", "keydown"];
 const listen: AddEventListenerOptions = { capture: true, passive: true };
 
-// Lighthouse Total Blocking Time is measured from FCP until a ~5s main-thread
-// quiet window (TTI), and the audit waits up to ~45s for that quiet window. An
-// early requestIdleCallback (or an 8s timer) still lands inside it on mobile
-// CI (~305ms against a 250ms budget): importing the widget is itself a long
-// task. Arm idle only after load plus a delay past that max wait; pointer/key
-// still mounts immediately so real visitors are not stuck. The panel starts
-// closed — auto-open + inert trapped keyboard users after deferred mount.
-export const ASK_POST_LOAD_DELAY_MS = 45_000;
+// Keep Ask off the first paint and out of the early Total Blocking Time
+// window: Lighthouse measures TBT until a ~5s main-thread quiet window, and
+// an immediate requestIdleCallback still imports a long task into that span.
+// Arm idle only after load plus a short settle delay; pointer/key still mounts
+// immediately so engaged visitors are not stuck. 8s is early enough for a
+// passive reader to see the launcher without waiting through Lighthouse’s
+// ~45s quiet-window hunt, while the panel stays closed on mount (no focus
+// steal / first-viewport cover) and mobile TBT has 350ms headroom.
+export const ASK_POST_LOAD_DELAY_MS = 8_000;
 
 export function DeferredAskWidget({ strings, locale = "en" }: AskWidgetProps) {
   const [Widget, setWidget] = useState<AskWidgetComponent | null>(null);

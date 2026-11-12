@@ -15,6 +15,9 @@ const SHARED_RATE_BUCKET = "shared";
 
 const ASK_RESPONSE_HEADERS = {
   "cache-control": "private, no-store",
+  // Response.json() defaults to application/json without charset; spell UTF-8
+  // so clients never guess Latin-1/Windows-125x for accented answers.
+  "content-type": "application/json; charset=utf-8",
   "x-content-type-options": "nosniff",
   "x-robots-tag": "noindex, nofollow",
 } as const;

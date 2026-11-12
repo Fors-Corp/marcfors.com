@@ -63,6 +63,14 @@ afterEach(() => {
 });
 
 describe("DeferredAskWidget", () => {
+  it("keeps a short post-load settle delay before idle mount", () => {
+    // Passive visitors should see Ask well before the old 45s Lighthouse
+    // quiet-window padding, without mounting on the first paint.
+    expect(ASK_POST_LOAD_DELAY_MS).toBe(8_000);
+    expect(ASK_POST_LOAD_DELAY_MS).toBeGreaterThan(0);
+    expect(ASK_POST_LOAD_DELAY_MS).toBeLessThan(45_000);
+  });
+
   it("stays off the first paint, then mounts closed after load delay + idle without locking the page", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     const idle = installIdleGate();
@@ -76,7 +84,12 @@ describe("DeferredAskWidget", () => {
     expect(screen.queryByRole("button", { name: copy.en.askWidgetOpen })).not.toBeInTheDocument();
 
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(ASK_POST_LOAD_DELAY_MS);
+      await vi.advanceTimersByTimeAsync(ASK_POST_LOAD_DELAY_MS - 1);
+    });
+    expect(screen.queryByRole("button", { name: copy.en.askWidgetOpen })).not.toBeInTheDocument();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1);
     });
     expect(screen.queryByRole("button", { name: copy.en.askWidgetOpen })).not.toBeInTheDocument();
 
@@ -106,7 +119,7 @@ describe("DeferredAskWidget", () => {
     expect(screen.getAllByRole("button", { name: copy.en.askWidgetOpen })).toHaveLength(1);
   });
 
-  it("keeps Escape, the focus trap, and focus restore after an intentional open", async () => {
+  it("keeps Escape and focus restore after an intentional open without locking the page", async () => {
     const user = userEvent.setup();
     render(<Page />);
     window.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true }));
@@ -114,12 +127,9 @@ describe("DeferredAskWidget", () => {
     const launcher = await screen.findByRole("button", { name: copy.en.askWidgetOpen });
     await user.click(launcher);
     const input = screen.getByRole("textbox", { name: copy.en.askPlaceholder });
-    const close = screen.getByRole("button", { name: copy.en.askWidgetClose });
-    expect(document.querySelector("main")).toHaveAttribute("inert");
+    expect(document.querySelector("main")).not.toHaveAttribute("inert");
     expect(input).toHaveFocus();
-    await user.tab();
-    expect(close).toHaveFocus();
-    expect(screen.getByRole("link", { name: "Work" })).not.toHaveFocus();
+    expect(screen.getByRole("link", { name: "Work" })).toBeEnabled();
 
     await user.keyboard("{Escape}");
     expect(document.querySelector("main")).not.toHaveAttribute("inert");
@@ -153,7 +163,7 @@ describe("DeferredAskWidget", () => {
     });
     idle.fire();
     expect(await screen.findByRole("dialog")).toBeInTheDocument();
-    expect(document.querySelector("main")).toHaveAttribute("inert");
+    expect(document.querySelector("main")).not.toHaveAttribute("inert");
     expect(screen.getByRole("button", { name: "Outside" })).toHaveFocus();
     expect(screen.getByRole("textbox", { name: copy.en.askPlaceholder })).not.toHaveFocus();
   });

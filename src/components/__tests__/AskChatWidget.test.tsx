@@ -55,16 +55,23 @@ afterEach(() => {
   window.location.hash = "";
 });
 
+
+function jsonResponse(payload: unknown, init: { ok?: boolean; status?: number } = {}) {
+  const body = new TextEncoder().encode(JSON.stringify(payload));
+  return {
+    ok: init.ok ?? true,
+    status: init.status ?? 200,
+    arrayBuffer: async () =>
+      body.buffer.slice(body.byteOffset, body.byteOffset + body.byteLength),
+  };
+}
+
 describe("AskChatWidget", () => {
   it("starts closed and can be opened then closed", async () => {
     const user = userEvent.setup();
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        status: 200,
-        text: async () => JSON.stringify({ files: [], embedding_model: "local/x" }),
-      }),
+      vi.fn().mockResolvedValue(jsonResponse({ files: [], embedding_model: "local/x" })),
     );
     render(<AskChatWidget strings={strings} />);
     expect(screen.getByRole("button", { name: copy.en.askWidgetOpen })).toBeInTheDocument();
@@ -81,18 +88,13 @@ describe("AskChatWidget", () => {
     const user = userEvent.setup();
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        status: 200,
-        text: async () =>
-          JSON.stringify({
+      vi.fn().mockResolvedValue(jsonResponse({
             answer: "He builds products at his practice (experience.md).",
             citations: [{ source_path: "experience.md", chunk_index: 0, distance: 0.12 }],
             embedding_model: "local/x",
             chat_model: "claude",
             run_id: null,
-          }),
-      }),
+          })),
     );
     // Hash target must exist for close-for-navigation to land focus there.
     document.body.insertAdjacentHTML(
@@ -119,11 +121,11 @@ describe("AskChatWidget", () => {
     document.getElementById("work")?.remove();
   });
 
-  it("is a modal dialog labelled by the visible title", async () => {
+  it("is a non-modal dialog labelled by the visible title", async () => {
     rememberOpen();
     const { container } = render(<AskChatWidget strings={strings} />);
     const dialog = screen.getByRole("dialog");
-    expect(dialog).toHaveAttribute("aria-modal", "true");
+    expect(dialog).toHaveAttribute("aria-modal", "false");
     expect(dialog).toHaveAccessibleName(copy.en.askWidgetLauncher);
     const title = document.getElementById(dialog.getAttribute("aria-labelledby") ?? "");
     expect(title).toBeVisible();
@@ -143,38 +145,32 @@ describe("AskChatWidget", () => {
     expect(await axe(container)).toHaveNoViolations();
   });
 
-  it("inerts the page while the panel is open and clears it on close", async () => {
+  it("keeps the page interactive while the panel is open", async () => {
     const user = userEvent.setup();
     render(<PageWithAsk />);
 
     const page = document.querySelector("main");
-    const link = document.querySelector("main a");
     expect(page).not.toHaveAttribute("inert");
     expect(screen.getByRole("button", { name: copy.en.askWidgetOpen })).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
     const dialog = screen.getByRole("dialog");
-    expect(page).toHaveAttribute("inert");
-    expect(link?.closest("[inert]")).toBe(page);
-    expect(page).not.toHaveAttribute("hidden");
-    expect(page).toHaveTextContent("Work");
-    expect(dialog).not.toHaveAttribute("inert");
+    expect(page).not.toHaveAttribute("inert");
+    expect(page?.closest("[inert]")).toBeNull();
     expect(dialog.closest("[inert]")).toBeNull();
+    expect(screen.getByRole("link", { name: "Work" })).toBeEnabled();
     expect(screen.getByRole("textbox", { name: copy.en.askPlaceholder })).toHaveFocus();
+
+    await user.click(screen.getByRole("link", { name: "Work" }));
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
 
     await user.keyboard("{Escape}");
     expect(page).not.toHaveAttribute("inert");
-    expect(link?.closest("[inert]")).toBeNull();
     expect(screen.getByRole("link", { name: "Work" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: copy.en.askWidgetOpen })).toHaveFocus();
-
-    await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
-    expect(page).toHaveAttribute("inert");
-    expect(screen.getByRole("dialog").closest("[inert]")).toBeNull();
-    expect(screen.getByRole("textbox", { name: copy.en.askPlaceholder })).toHaveFocus();
   });
 
-  it("does not inert the page when the panel is closed or on the full Ask page", () => {
+  it("does not mark the page inert when closed or on the full Ask page", () => {
     const { unmount } = render(<PageWithAsk />);
     expect(document.querySelector("main")).not.toHaveAttribute("inert");
     expect(screen.getByRole("link", { name: "Work" })).toBeInTheDocument();
@@ -211,7 +207,44 @@ describe("AskChatWidget", () => {
     expect(screen.getByRole("textbox", { name: copy.en.askPlaceholder })).toHaveFocus();
   });
 
-  it("keeps Tab inside the open dialog", async () => {
+  it("lifts the fab with visualViewport insets while the panel is open", async () => {
+    const user = userEvent.setup();
+    const listeners = new Map<string, Set<() => void>>();
+    const vv = {
+      height: 400,
+      offsetTop: 0,
+      addEventListener: (type: string, listener: () => void) => {
+        const set = listeners.get(type) ?? new Set();
+        set.add(listener);
+        listeners.set(type, set);
+      },
+      removeEventListener: (type: string, listener: () => void) => {
+        listeners.get(type)?.delete(listener);
+      },
+    };
+    Object.defineProperty(window, "innerHeight", { configurable: true, value: 844 });
+    vi.stubGlobal("visualViewport", vv);
+
+    const { container } = render(<AskChatWidget strings={strings} />);
+    const fab = container.querySelector(".ask-fab") as HTMLElement;
+    expect(fab).toBeTruthy();
+    expect(fab.style.getPropertyValue("--ask-vv-bottom")).toBe("");
+
+    await user.click(screen.getByRole("button", { name: copy.en.askWidgetOpen }));
+    expect(fab.style.getPropertyValue("--ask-vv-bottom")).toBe("444px");
+    expect(fab.style.getPropertyValue("--ask-vv-height")).toBe("400px");
+
+    vv.height = 844;
+    for (const listener of listeners.get("resize") ?? []) listener();
+    expect(fab.style.getPropertyValue("--ask-vv-bottom")).toBe("0px");
+    expect(fab.style.getPropertyValue("--ask-vv-height")).toBe("844px");
+
+    await user.click(screen.getByRole("button", { name: copy.en.askWidgetClose }));
+    expect(fab.style.getPropertyValue("--ask-vv-bottom")).toBe("");
+    expect(fab.style.getPropertyValue("--ask-vv-height")).toBe("");
+  });
+
+  it("lets Tab leave the open panel so the rest of the page stays reachable", async () => {
     const user = userEvent.setup();
     rememberOpen();
     render(
@@ -220,19 +253,16 @@ describe("AskChatWidget", () => {
         <button type="button">After</button>
       </>,
     );
-    const close = screen.getByRole("button", { name: copy.en.askWidgetClose });
     const input = screen.getByRole("textbox", { name: copy.en.askPlaceholder });
     const after = screen.getByRole("button", { name: "After" });
     expect(screen.getByRole("button", { name: copy.en.askSubmit })).toBeDisabled();
 
     input.focus();
-    await user.tab();
-    expect(close).toHaveFocus();
-    expect(after).not.toHaveFocus();
-
-    await user.tab({ shift: true });
-    expect(input).toHaveFocus();
-    expect(after).not.toHaveFocus();
+    // No focus trap: keep tabbing until focus reaches the sibling control.
+    for (let i = 0; i < 8 && after !== document.activeElement; i += 1) {
+      await user.tab();
+    }
+    expect(after).toHaveFocus();
   });
 
   it("does not move focus on mount when a stored open state is restored", () => {
@@ -254,18 +284,13 @@ describe("AskChatWidget", () => {
     const user = userEvent.setup();
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        status: 200,
-        text: async () =>
-          JSON.stringify({
+      vi.fn().mockResolvedValue(jsonResponse({
             answer: "Embedded RAG retrieves portfolio pages.",
             citations: [],
             embedding_model: "local/x",
             chat_model: "claude",
             run_id: null,
-          }),
-      }),
+          })),
     );
     rememberOpen();
     render(<AskChatWidget strings={strings} />);

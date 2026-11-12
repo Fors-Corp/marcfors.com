@@ -5,7 +5,7 @@ export const SITE_VERSION = "0.27.1";
 /** Release date of the current SITE_VERSION. Feeds sitemap `lastModified` so it stays stable between builds. */
 export const RELEASE_DATE = "2026-11-09";
 /** Effective date of content/legal/privacy/*.mdx; bump whenever that prose changes. */
-export const PRIVACY_UPDATED = "2026-11-08";
+export const PRIVACY_UPDATED = "2026-11-11";
 export const DEV_EMAIL = "developer@marcfors.com";
 export const GITHUB_USER = "marcfs31";
 export const GITHUB_URL = `https://github.com/${GITHUB_USER}`;

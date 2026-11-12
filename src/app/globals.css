@@ -2015,24 +2015,13 @@ footer {
     display: grid;
     gap: 1.25rem 1.5rem;
     grid-template-columns: minmax(0, 1fr);
+    /* Chat first: samples → thread → composer. Sources are a footer disclosure. */
     grid-template-areas:
       "intro"
       "samples"
-      "sources"
       "thread"
-      "composer";
-  }
-
-  @media (min-width: 900px) {
-    .ask-shell {
-      grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr);
-      grid-template-areas:
-        "intro intro"
-        "sources samples"
-        "sources thread"
-        "composer composer";
-      align-items: start;
-    }
+      "composer"
+      "sources";
   }
 
   /* Site-wide `section { margin: 72px 0 }` must not apply inside Ask —
@@ -2060,7 +2049,7 @@ footer {
 
   .ask-samples { grid-area: samples; }
   .ask-samples-label,
-  .ask-sources h2,
+  .ask-sources-label,
   .ask-citations-label {
     margin: 0 0 0.55rem;
     font-size: 0.72rem;
@@ -2081,6 +2070,8 @@ footer {
   .ask-sources ul {
     flex-direction: column;
     gap: 0.35rem;
+    max-height: min(40vh, 18rem);
+    overflow: auto;
   }
   .ask-sample {
     appearance: none;
@@ -2109,16 +2100,51 @@ footer {
 
   .ask-sources {
     grid-area: sources;
-    padding: 0.9rem 1rem;
+    padding: 0.55rem 0.85rem 0.75rem;
     border: 1px solid var(--line);
     border-radius: var(--r-md);
     background:
       linear-gradient(160deg, color-mix(in srgb, var(--signal) 8%, transparent), transparent 55%),
       var(--panel);
   }
-  .ask-sources h2 { font: inherit; }
-  .ask-sources-note {
+  .ask-sources > summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 2.75rem;
+    user-select: none;
+  }
+  .ask-sources > summary::-webkit-details-marker { display: none; }
+  .ask-sources-label {
     margin: 0;
+    flex: 1 1 auto;
+  }
+  .ask-sources-count {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--paper-dim);
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    padding: 0.12rem 0.45rem;
+    line-height: 1.2;
+  }
+  .ask-sources > summary::after {
+    content: "+";
+    font-family: var(--mono);
+    font-size: 0.95rem;
+    color: var(--brass);
+    line-height: 1;
+  }
+  .ask-sources[open] > summary::after { content: "−"; }
+  .ask-sources[open] > summary {
+    margin-bottom: 0.55rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+    padding-bottom: 0.45rem;
+  }
+  .ask-sources-note {
+    margin: 0 0 0.55rem;
     color: var(--paper-dim);
     font-size: 0.9rem;
   }
@@ -2337,9 +2363,12 @@ footer {
     --ask-fab-pad: 1rem;
     --ask-edge: max(1.25rem, env(safe-area-inset-right, 0px));
     --ask-bottom: 0.75rem;
+    /* --ask-vv-* set from visualViewport so the sheet clears the soft keyboard. */
+    --ask-vv-bottom: 0px;
+    --ask-vv-height: 100dvh;
     position: fixed;
     inset-inline-end: var(--ask-edge);
-    inset-block-end: var(--ask-bottom);
+    inset-block-end: calc(var(--ask-bottom) + var(--ask-vv-bottom));
     z-index: 60;
     width: min(28rem, calc(100vw - (var(--ask-edge) * 2)));
     pointer-events: none;
@@ -2352,7 +2381,11 @@ footer {
     flex-direction: column;
     box-sizing: border-box;
     height: auto;
-    max-height: min(70dvh, 34rem, calc(100dvh - var(--ask-bottom) - 0.75rem));
+    max-height: min(
+      70dvh,
+      34rem,
+      calc(var(--ask-vv-height) - var(--ask-bottom) - 0.75rem)
+    );
     overflow: hidden;
     border: 1px solid var(--line);
     border-radius: var(--r-md);
@@ -2538,11 +2571,15 @@ footer {
     }
     .ask-fab-panel {
       height: auto;
-      max-height: min(64dvh, 30rem, calc(100dvh - var(--ask-bottom) - 0.75rem));
+      max-height: min(
+        64dvh,
+        30rem,
+        calc(var(--ask-vv-height) - var(--ask-bottom) - 0.75rem)
+      );
     }
   }
 
-  /* Phone: full-width sheet above the home indicator. */
+  /* Phone: full-width sheet above the home indicator / soft keyboard. */
   @media (max-width: 640px) {
     .ask-fab {
       --ask-edge: max(0.5rem, env(safe-area-inset-right, 0px));
@@ -2552,8 +2589,9 @@ footer {
       width: auto;
     }
     .ask-fab-panel {
-      height: 75dvh;
-      max-height: calc(100dvh - var(--ask-bottom) - 0.5rem);
+      /* Cap to the visible viewport — a fixed 75dvh sheet sits under the keys. */
+      height: min(75dvh, calc(var(--ask-vv-height) - var(--ask-bottom) - 0.5rem));
+      max-height: calc(var(--ask-vv-height) - var(--ask-bottom) - 0.5rem);
     }
     .ask-shell.ask-shell-widget .ask-sample {
       min-width: 44px;

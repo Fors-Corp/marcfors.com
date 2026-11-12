@@ -2,7 +2,7 @@
 
 ## Problem
 
-A personal site that recruiters actually scan needed to prove engineering taste without third-party analytics, cookie banners or a fragile CMS.
+A personal site that recruiters actually scan needed to prove engineering taste without advertising or cross-site analytics, cookie banners or a fragile CMS.
 
 ## Approach
 

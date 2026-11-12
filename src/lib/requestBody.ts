@@ -16,7 +16,7 @@ export async function readJsonBody(request: Request, maxBytes: number): Promise<
   if (!request.body) return INVALID;
 
   const reader = request.body.getReader();
-  const decoder = new TextDecoder();
+  const decoder = new TextDecoder("utf-8");
   let text = "";
   let total = 0;
   try {

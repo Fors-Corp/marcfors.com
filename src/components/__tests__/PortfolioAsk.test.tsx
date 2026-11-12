@@ -5,6 +5,17 @@ import { axe } from "vitest-axe";
 import { PortfolioAsk } from "@/components/PortfolioAsk";
 import { copy } from "@/data/copy";
 
+
+function jsonResponse(payload: unknown, init: { ok?: boolean; status?: number } = {}) {
+  const body = new TextEncoder().encode(JSON.stringify(payload));
+  return {
+    ok: init.ok ?? true,
+    status: init.status ?? 200,
+    arrayBuffer: async () =>
+      body.buffer.slice(body.byteOffset, body.byteOffset + body.byteLength),
+  };
+}
+
 const strings = {
   title: copy.en.askTitle,
   lede: copy.en.askLede,
@@ -31,17 +42,45 @@ describe("PortfolioAsk", () => {
   it("renders sample prompts and has no serious a11y violations", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        status: 200,
-        text: async () => JSON.stringify({ files: ["about.md"], embedding_model: "local/x" }),
-      }),
+      vi.fn().mockResolvedValue(jsonResponse({ files: ["about.md"], embedding_model: "local/x" })),
     );
     const { container } = render(<PortfolioAsk strings={strings} />);
     expect(screen.getByRole("heading", { level: 1, name: copy.en.askTitle })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: copy.en.askSamples[0] })).toBeInTheDocument();
     await waitFor(() => expect(screen.getByText("about.md")).toBeInTheDocument());
     expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it("keeps indexed sources collapsed by default and reveals them on demand", async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(jsonResponse({
+            files: ["about.md", "experience.md", "work/embedded-rag.md"],
+            embedding_model: "local/x",
+          })),
+    );
+    const { container } = render(<PortfolioAsk strings={strings} />);
+    const sources = await waitFor(() => {
+      const node = container.querySelector("details.ask-sources");
+      expect(node).not.toBeNull();
+      return node as HTMLDetailsElement;
+    });
+    expect(sources.open).toBe(false);
+    expect(screen.getByText("3")).toBeInTheDocument();
+    await user.click(screen.getByText(copy.en.askSourcesLabel));
+    expect(sources.open).toBe(true);
+    expect(screen.getByText("work/embedded-rag.md")).toBeVisible();
+  });
+
+  it("hides the sources disclosure in the floating widget variant", () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(jsonResponse({ files: ["about.md"], embedding_model: "local/x" })),
+    );
+    const { container } = render(<PortfolioAsk strings={strings} variant="widget" />);
+    expect(container.querySelector("details.ask-sources")).toBeNull();
+    expect(screen.queryByText(copy.en.askSourcesLabel)).not.toBeInTheDocument();
   });
 
   it("shows the localized askError instead of English API machine text", async () => {
@@ -67,17 +106,9 @@ describe("PortfolioAsk", () => {
       vi.fn(async (input: RequestInfo | URL) => {
         const url = String(input);
         if (url.includes("/api/rag-sources")) {
-          return {
-            ok: true,
-            status: 200,
-            text: async () => JSON.stringify({ files: ["about.md"], embedding_model: "local/x" }),
-          };
+          return jsonResponse({ files: ["about.md"], embedding_model: "local/x" });
         }
-        return {
-          ok: false,
-          status: 500,
-          text: async () => JSON.stringify({ error: "request failed" }),
-        };
+        return jsonResponse({ error: "request failed" }, { ok: false, status: 500 });
       }),
     );
     render(<PortfolioAsk strings={es} locale="es" />);
@@ -109,17 +140,9 @@ describe("PortfolioAsk", () => {
       vi.fn(async (input: RequestInfo | URL) => {
         const url = String(input);
         if (url.includes("/api/rag-sources")) {
-          return {
-            ok: true,
-            status: 200,
-            text: async () => JSON.stringify({ files: [], embedding_model: "local/x" }),
-          };
+          return jsonResponse({ files: [], embedding_model: "local/x" });
         }
-        return {
-          ok: false,
-          status: 503,
-          text: async () => JSON.stringify({ error: "DATABASE_URL is not configured" }),
-        };
+        return jsonResponse({ error: "DATABASE_URL is not configured" }, { ok: false, status: 503 });
       }),
     );
     render(<PortfolioAsk strings={de} locale="de" variant="widget" />);
@@ -133,25 +156,16 @@ describe("PortfolioAsk", () => {
     const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input);
       if (url.includes("/api/rag-sources")) {
-        return {
-          ok: true,
-          status: 200,
-          text: async () => JSON.stringify({ files: ["projects.md"], embedding_model: "local/x" }),
-        };
+        return jsonResponse({ files: ["projects.md"], embedding_model: "local/x" });
       }
       expect(init?.method).toBe("POST");
-      return {
-        ok: true,
-        status: 200,
-        text: async () =>
-          JSON.stringify({
+      return jsonResponse({
             answer: "Embedded RAG is classic retrieval-augmented generation.",
             citations: [{ source_path: "work/embedded-rag.md", chunk_index: 0, distance: 0.12 }],
             embedding_model: "local/x",
             chat_model: "claude-sonnet-5-5",
             run_id: null,
-          }),
-      };
+          });
     });
     vi.stubGlobal("fetch", fetchMock);
     render(<PortfolioAsk strings={strings} locale="es" />);
@@ -168,6 +182,71 @@ describe("PortfolioAsk", () => {
     });
   });
 
+  it("renders accented Spanish answers from UTF-8 JSON without mojibake", async () => {
+    const user = userEvent.setup();
+    const answer =
+      "Sí, Marc está abierto. Consulta la página; el único correo público.";
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL) => {
+        if (String(input).includes("/api/rag-sources")) {
+          return jsonResponse({ files: ["about.md"], embedding_model: "local/x" });
+        }
+        return jsonResponse({
+          answer,
+          citations: [{ source_path: "about.md", chunk_index: 0, distance: 0.1 }],
+          embedding_model: "local/x",
+          chat_model: "claude-sonnet-5-5",
+          run_id: null,
+        });
+      }),
+    );
+    const es = {
+      ...strings,
+      title: copy.es.askTitle,
+      lede: copy.es.askLede,
+      placeholder: copy.es.askPlaceholder,
+      submit: copy.es.askSubmit,
+      busy: copy.es.askBusy,
+      empty: copy.es.askEmpty,
+      error: copy.es.askError,
+      unavailable: copy.es.askUnavailable,
+      citations: copy.es.askCitations,
+      samplesLabel: copy.es.askSamplesLabel,
+      samples: copy.es.askSamples,
+      sourcesLabel: copy.es.askSourcesLabel,
+      sourcesEmpty: copy.es.askSourcesEmpty,
+      sourcesUnavailable: copy.es.askSourcesUnavailable,
+    };
+    render(<PortfolioAsk strings={es} locale="es" variant="widget" />);
+    await user.type(screen.getByPlaceholderText(copy.es.askPlaceholder), "¿Marc acepta remoto?");
+    await user.click(screen.getByRole("button", { name: copy.es.askSubmit }));
+    expect(await screen.findByText(answer)).toBeInTheDocument();
+    expect(screen.queryByText(/Ă|Ã/)).not.toBeInTheDocument();
+  });
+
+  it("blurs the composer after send so the mobile keyboard dismisses", async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(jsonResponse({
+            answer: "Madrid.",
+            citations: [],
+            embedding_model: "local/x",
+            chat_model: "claude",
+            run_id: null,
+          })),
+    );
+    render(<PortfolioAsk strings={strings} variant="widget" />);
+    const input = screen.getByRole("textbox", { name: copy.en.askPlaceholder });
+    await user.click(input);
+    expect(input).toHaveFocus();
+    await user.type(input, "Where does Marc live?");
+    await user.click(screen.getByRole("button", { name: copy.en.askSubmit }));
+    expect(input).not.toHaveFocus();
+    expect(await screen.findByText("Madrid.")).toBeInTheDocument();
+  });
+
   it("renders markdown in assistant answers", async () => {
     const user = userEvent.setup();
     vi.stubGlobal(
@@ -175,24 +254,15 @@ describe("PortfolioAsk", () => {
       vi.fn(async (input: RequestInfo | URL) => {
         const url = String(input);
         if (url.includes("/api/rag-sources")) {
-          return {
-            ok: true,
-            status: 200,
-            text: async () => JSON.stringify({ files: ["about.md"], embedding_model: "local/x" }),
-          };
+          return jsonResponse({ files: ["about.md"], embedding_model: "local/x" });
         }
-        return {
-          ok: true,
-          status: 200,
-          text: async () =>
-            JSON.stringify({
+        return jsonResponse({
               answer: "Marc works on **agents**.\n\n- **Focus:** LLM tooling (about.md).",
               citations: [{ source_path: "about.md", chunk_index: 0, distance: 0.2 }],
               embedding_model: "local/x",
               chat_model: "claude-sonnet-5-5",
               run_id: null,
-            }),
-        };
+            });
       }),
     );
     render(<PortfolioAsk strings={strings} />);
@@ -223,24 +293,15 @@ describe("PortfolioAsk", () => {
       vi.fn(async (input: RequestInfo | URL) => {
         const url = String(input);
         if (url.includes("/api/rag-sources")) {
-          return {
-            ok: true,
-            status: 200,
-            text: async () => JSON.stringify({ files: ["about.md"], embedding_model: "local/x" }),
-          };
+          return jsonResponse({ files: ["about.md"], embedding_model: "local/x" });
         }
-        return {
-          ok: true,
-          status: 200,
-          text: async () =>
-            JSON.stringify({
+        return jsonResponse({
               answer: "Marc works on agents.",
               citations: [],
               embedding_model: "local/x",
               chat_model: "claude",
               run_id: null,
-            }),
-        };
+            });
       }),
     );
     try {
@@ -264,11 +325,7 @@ describe("PortfolioAsk", () => {
     const scrollIntoView = vi.spyOn(Element.prototype, "scrollIntoView").mockImplementation(() => {});
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        status: 200,
-        text: async () => JSON.stringify({ files: [], embedding_model: "local/x" }),
-      }),
+      vi.fn().mockResolvedValue(jsonResponse({ files: [], embedding_model: "local/x" })),
     );
     try {
       render(<PortfolioAsk strings={strings} />);

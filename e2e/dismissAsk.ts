@@ -3,7 +3,7 @@ import { expect, type Page } from "@playwright/test";
 /**
  * The Ask panel is not in the first paint. It mounts on the first pointer/key,
  * or after load plus a post-TTI idle delay, then shows the launcher (closed by
- * default). A stored open session still marks the page inert.
+ * default). An open panel is non-modal (page stays interactive).
  *
  * A single synthetic event can race the DeferredAskWidget effect (listeners
  * not attached yet). Keep nudging until the FAB is visible so e2e does not

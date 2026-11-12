@@ -108,6 +108,7 @@ describe("POST /api/ask", () => {
     });
     expect(response.status).toBe(200);
     expect(response.headers.get("cache-control")).toBe("private, no-store");
+    expect(response.headers.get("content-type")).toMatch(/application\/json;\s*charset=utf-8/i);
     const body = await response.json();
     expect(body.answer).toMatch(/Wordkeep/);
     expect(body.citations[0].source_path).toBe("projects.md");

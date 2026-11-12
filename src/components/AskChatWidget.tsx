@@ -4,7 +4,6 @@ import {
   useCallback,
   useEffect,
   useId,
-  useLayoutEffect,
   useRef,
   useSyncExternalStore,
 } from "react";
@@ -14,17 +13,10 @@ import {
   PortfolioAsk,
   type PortfolioAskStrings,
 } from "@/components/PortfolioAsk";
+import { askFabViewportInsets } from "@/lib/askFabViewport";
 import type { Locale } from "@/lib/locale";
 
 const STORAGE_KEY = "marcfors-ask-widget-open";
-
-const TABBABLE = [
-  "a[href]",
-  "button:not([disabled])",
-  "input:not([type='hidden']):not([disabled])",
-  "select:not([disabled])",
-  "textarea:not([disabled])",
-].join(", ");
 
 export type AskChatWidgetStrings = PortfolioAskStrings & {
   open: string;
@@ -38,10 +30,9 @@ const openListeners = new Set<() => void>();
 let openFallback: boolean | null = null;
 
 function readOpenDefault(): boolean {
-  // Closed by default: an open modal marks the page inert and traps Tab. Auto-
-  // opening after a deferred mount (pointer/key/idle) locked keyboard users out
-  // of the portfolio without an intentional Open. sessionStorage still remembers
-  // an explicit open for the tab.
+  // Closed by default: the panel is a non-blocking companion, but still starts
+  // shut so the first viewport stays the portfolio. sessionStorage remembers an
+  // explicit open for the tab.
   if (typeof window === "undefined") return false;
   try {
     const stored = window.sessionStorage.getItem(STORAGE_KEY);
@@ -92,59 +83,12 @@ function writeOpen(next: boolean) {
   emitOpen();
 }
 
-function tabbableIn(panel: HTMLElement): HTMLElement[] {
-  return Array.from(panel.querySelectorAll<HTMLElement>(TABBABLE)).filter((el) => {
-    if (el.getAttribute("tabindex") === "-1") return false;
-    const hidden = el.closest("[hidden]");
-    return hidden === null || hidden === el;
-  });
-}
-
 function focusField(panel: HTMLElement) {
   const field = panel.querySelector<HTMLElement>(
     "input:not([disabled]), textarea:not([disabled])",
   );
-  const target = field ?? tabbableIn(panel)[0] ?? panel;
+  const target = field ?? panel;
   target.focus({ preventScroll: true });
-}
-
-function setInert(element: HTMLElement, next: boolean) {
-  // Content attribute, not the IDL property: jsdom does not reflect `inert`,
-  // and browsers treat the attribute as the inert flag.
-  element.toggleAttribute("inert", next);
-}
-
-function pageRootsBeside(host: HTMLElement): HTMLElement[] {
-  const parent = host.parentElement;
-  if (!parent) return [];
-  return Array.from(parent.children).filter((node): node is HTMLElement => {
-    return node instanceof HTMLElement && node !== host && node.hasAttribute("data-page-root");
-  });
-}
-
-function trapTab(event: KeyboardEvent, panel: HTMLElement) {
-  if (event.key !== "Tab" || event.altKey || event.ctrlKey || event.metaKey) return;
-  const items = tabbableIn(panel);
-  if (items.length === 0) {
-    event.preventDefault();
-    panel.focus({ preventScroll: true });
-    return;
-  }
-  const first = items[0]!;
-  const last = items[items.length - 1]!;
-  const active = document.activeElement;
-  const inside = active instanceof Node && panel.contains(active);
-  if (event.shiftKey) {
-    if (!inside || active === first) {
-      event.preventDefault();
-      last.focus({ preventScroll: true });
-    }
-    return;
-  }
-  if (!inside || active === last) {
-    event.preventDefault();
-    first.focus({ preventScroll: true });
-  }
 }
 
 export function AskChatWidget({
@@ -157,8 +101,8 @@ export function AskChatWidget({
   const panelId = useId();
   const titleId = useId();
   const pathname = usePathname();
+  const fabRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLElement>(null);
-  const hostRef = useRef<HTMLDivElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
   // Focus moves only when the visitor opens or closes the panel, or follows a
   // source link (hash target). Passive mount stays closed so focus is untouched.
@@ -183,6 +127,42 @@ export function AskChatWidget({
     writeOpen(false);
   }, []);
 
+  // Keep the sheet inside the visual viewport so the composer is not trapped
+  // under the iOS keyboard (layout viewport stays tall; fixed bottom UI does not).
+  useEffect(() => {
+    const fab = fabRef.current;
+    if (!fab) return;
+
+    const clear = () => {
+      fab.style.removeProperty("--ask-vv-bottom");
+      fab.style.removeProperty("--ask-vv-height");
+    };
+
+    if (!open || onAskPage) {
+      clear();
+      return;
+    }
+
+    const vv = window.visualViewport;
+    if (!vv) return;
+
+    const sync = () => {
+      const { bottom, height } = askFabViewportInsets(vv, window.innerHeight);
+      fab.style.setProperty("--ask-vv-bottom", `${bottom}px`);
+      fab.style.setProperty("--ask-vv-height", `${height}px`);
+    };
+    sync();
+    vv.addEventListener("resize", sync);
+    vv.addEventListener("scroll", sync);
+    window.addEventListener("resize", sync);
+    return () => {
+      vv.removeEventListener("resize", sync);
+      vv.removeEventListener("scroll", sync);
+      window.removeEventListener("resize", sync);
+      clear();
+    };
+  }, [onAskPage, open]);
+
   useEffect(() => {
     if (onAskPage) return;
     if (!open) {
@@ -204,33 +184,17 @@ export function AskChatWidget({
       focusField(panel);
     }
 
+    // Escape closes the panel; Tab is free to leave so the rest of the site
+    // stays usable (non-modal companion panel, not a blocking dialog).
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        closePanel();
-        return;
-      }
-      const current = panelRef.current;
-      if (current) trapTab(event, current);
+      if (event.key !== "Escape") return;
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
+      event.preventDefault();
+      closePanel();
     };
     document.addEventListener("keydown", onKeyDown, true);
     return () => document.removeEventListener("keydown", onKeyDown, true);
   }, [closePanel, onAskPage, open]);
-
-  // aria-modal hides the background from assistive tech. The page root is a
-  // sibling of this widget, so marking it inert blocks pointer and keyboard
-  // use without disabling the dialog or covering the portfolio. Re-apply on
-  // pathname so a client navigation cannot drop the attribute.
-  useLayoutEffect(() => {
-    if (onAskPage || !open) return;
-    const host = hostRef.current;
-    if (!host) return;
-    const pages = pageRootsBeside(host);
-    for (const page of pages) setInert(page, true);
-    return () => {
-      for (const page of pages) setInert(page, false);
-    };
-  }, [onAskPage, open, pathname]);
 
   // Full /ask page already hosts the chat — skip the floating duplicate.
   if (onAskPage) {
@@ -238,13 +202,13 @@ export function AskChatWidget({
   }
 
   return (
-    <div ref={hostRef} className={`ask-fab${open ? " ask-fab-open" : ""}`}>
+    <div ref={fabRef} className={`ask-fab${open ? " ask-fab-open" : ""}`}>
       <section
         ref={panelRef}
         id={panelId}
         className="ask-fab-panel"
         role="dialog"
-        aria-modal="true"
+        aria-modal="false"
         aria-labelledby={titleId}
         tabIndex={-1}
         hidden={!open}

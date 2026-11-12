@@ -30,20 +30,22 @@ describe("featured work", () => {
     expect(gatto?.blurb.en).toMatch(/Spanish, Catalan and English/);
   });
 
-  it("features Embedded RAG first in selected work", () => {
+  it("features Embedded RAG first in selected work without linking private source", () => {
     expect(featured[0]?.name).toBe("Embedded RAG");
     const embedded = featured[0];
     expect(embedded).toMatchObject({
       stack: ["Python", "React", "TypeScript", "Neon", "Claude API"],
       live: "https://embedded-rag.vercel.app",
-      repo: "https://github.com/Fors-Corp/embedded-rag",
       caseStudy: "embedded-rag",
+      private: true,
       spotlight: true,
     });
-    expect(embedded?.private).toBeUndefined();
+    expect(embedded?.repo).toBeUndefined();
     for (const blurb of Object.values(embedded!.blurb)) {
       expect(blurb).toMatch(/pgvector|MiniLM|Claude/);
+      expect(blurb).toMatch(/RRF|híbrid|hibrid|ibrido|hybride|hybridem/i);
       expect(blurb).toMatch(/abstain|negativa|rifiuto|recusa|Ablehnung|refus/i);
+      expect(blurb).not.toMatch(/public source|código público|codi públic|codice pubblico|código público|öffentlicher Quellcode|code source public/i);
     }
   });
 
@@ -62,6 +64,10 @@ describe("featured work", () => {
       expect(blurb).toMatch(/Claude/);
       expect(blurb).toMatch(/3D/);
       expect(blurb).toMatch(/App Store|App-Store/);
+      // Live wordkeep.me ships eight course languages including Latin.
+      expect(blurb).toMatch(/eight|ocho|vuit|otto|oito|acht|huit/);
+      expect(blurb).toMatch(/Latin|latín|llatí|latino|latim|Latein|latin/);
+      expect(blurb).not.toMatch(/seven languages|siete lenguas|set llengües|sette lingue|sete línguas|sieben Sprachen|sept langues/);
     }
   });
 
