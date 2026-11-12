@@ -58,7 +58,7 @@ describe("Desk", () => {
     expect(within(nav).getByRole("link", { name: copy.en.askNav })).toHaveAttribute("href", "/ask");
   });
 
-  it("puts Embedded RAG first in featured work with live demo, public source and case study", () => {
+  it("puts Embedded RAG first in featured work with live demo, private source and case study", () => {
     renderDesk();
     const firstCard = document.querySelector("#projects .project-card") as HTMLElement;
     expect(firstCard).toBeTruthy();
@@ -71,11 +71,8 @@ describe("Desk", () => {
       "href",
       "/work/embedded-rag",
     );
-    expect(within(firstCard).getByRole("link", { name: /source code for embedded rag/i })).toHaveAttribute(
-      "href",
-      "https://github.com/Fors-Corp/embedded-rag",
-    );
-    expect(within(firstCard).queryByText(copy.en.private)).toBeNull();
+    expect(within(firstCard).queryByRole("link", { name: /source code for embedded rag/i })).toBeNull();
+    expect(within(firstCard).getByText(copy.en.private)).toHaveClass("private");
   });
 
   it("features Wordkeep second and Fors Photography third with case studies", () => {

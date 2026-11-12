@@ -7,9 +7,8 @@ stack:
   - "Neon"
   - "Claude API"
 live: "https://embedded-rag.vercel.app"
-repo: "https://github.com/Fors-Corp/embedded-rag"
 order: -1
-description: "RAG classico con una ricerca pgvector e una risposta Claude: embedding MiniLM, citazioni e un rifiuto fisso quando il corpus non sostiene la domanda."
+description: "RAG classico con retrieve ibrido su pgvector e una risposta Claude: embedding MiniLM multilingue, citazioni e un rifiuto fisso quando il corpus non sostiene la domanda."
 ---
 
 ## Problema
@@ -18,8 +17,8 @@ I visitatori della demo che valutano il lavoro di Fors Corp avevano bisogno di r
 
 ## Approccio
 
-Embedded RAG è generazione aumentata dal recupero classica: una ricerca pgvector, poi una generazione Claude. Lo stack duale Python e Vercel/Neon condivide chunking, embedding MiniLM, una soglia di distanza e lo stesso testo di rifiuto. L'ingest multi-formato copre file e URL pubbliche; il percorso ask restituisce citazioni o il rifiuto fisso: "The answer is not in the documents."
+Embedded RAG è generazione aumentata dal recupero classica: retrieve ibrido su pgvector — similarità vettoriale e match lessicale fusi con Reciprocal Rank Fusion — poi una generazione Claude. Lo stack duale Python e Vercel/Neon condivide chunking, embedding paraphrase-multilingual MiniLM, una soglia di distanza e lo stesso testo di rifiuto. L'ingest multi-formato copre file (incluse immagini e SQLite), URL pubbliche e storage Vercel Blob; il percorso ask restituisce citazioni o il rifiuto fisso: "The answer is not in the documents."
 
 ## Risultato
 
-Una demo live su embedded-rag.vercel.app dove un visitatore può provare prompt di esempio o caricare il proprio materiale e ottenere una risposta citata — o un rifiuto onesto — in pochi secondi. Codice pubblico sotto Fors-Corp.
+Una demo live su embedded-rag.vercel.app dove un visitatore può provare il corpus demo pre-indicizzato o aggiungere i propri file e siti web e ottenere una risposta citata — o un rifiuto onesto — in pochi secondi.

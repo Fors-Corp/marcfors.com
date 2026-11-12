@@ -7,9 +7,8 @@ stack:
   - "Neon"
   - "Claude API"
 live: "https://embedded-rag.vercel.app"
-repo: "https://github.com/Fors-Corp/embedded-rag"
 order: -1
-description: "RAG classique avec une recherche pgvector et une réponse Claude : embeddings MiniLM, citations et un refus fixe lorsque le corpus ne soutient pas la question."
+description: "RAG classique avec retrieve hybride sur pgvector et une réponse Claude : embeddings MiniLM multilingues, citations et un refus fixe lorsque le corpus ne soutient pas la question."
 ---
 
 ## Problème
@@ -18,8 +17,8 @@ Les visiteurs de la démo qui évaluent le travail de Fors Corp avaient besoin d
 
 ## Approche
 
-Embedded RAG est de la génération augmentée par récupération classique : une recherche pgvector, puis une génération Claude. La double pile Python et Vercel/Neon partage le découpage, les embeddings MiniLM, un seuil de distance et le même texte de refus. L'ingestion multi-format couvre fichiers et URL publiques ; le chemin ask renvoie des citations ou le refus fixe : "The answer is not in the documents."
+Embedded RAG est de la génération augmentée par récupération classique : retrieve hybride sur pgvector — similarité vectorielle et correspondance lexicale fusionnées par Reciprocal Rank Fusion — puis une génération Claude. La double pile Python et Vercel/Neon partage le découpage, les embeddings paraphrase-multilingual MiniLM, un seuil de distance et le même texte de refus. L'ingestion multi-format couvre fichiers (y compris images et SQLite), URL publiques et stockage Vercel Blob ; le chemin ask renvoie des citations ou le refus fixe : "The answer is not in the documents."
 
 ## Résultat
 
-Une démo en direct sur embedded-rag.vercel.app où un visiteur peut essayer des invites d'exemple ou téléverser son propre matériel et obtenir une réponse citée — ou un refus honnête — en quelques secondes. Code source public sous Fors-Corp.
+Une démo en direct sur embedded-rag.vercel.app où un visiteur peut essayer le corpus de démo pré-indexé ou ajouter ses propres fichiers et sites web et obtenir une réponse citée — ou un refus honnête — en quelques secondes.

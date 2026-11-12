@@ -7,9 +7,8 @@ stack:
   - "Neon"
   - "Claude API"
 live: "https://embedded-rag.vercel.app"
-repo: "https://github.com/Fors-Corp/embedded-rag"
 order: -1
-description: "RAG clássico com uma pesquisa pgvector e uma resposta Claude: embeddings MiniLM, citações e uma recusa fixa quando o corpus não sustenta a pergunta."
+description: "RAG clássico com retrieve híbrido sobre pgvector e uma resposta Claude: embeddings MiniLM multilingues, citações e uma recusa fixa quando o corpus não sustenta a pergunta."
 ---
 
 ## Problema
@@ -18,8 +17,8 @@ Os visitantes da demo que avaliam o trabalho da Fors Corp precisavam de resposta
 
 ## Abordagem
 
-Embedded RAG é geração aumentada por recuperação clássica: uma pesquisa pgvector e depois uma geração com Claude. A pilha dupla Python e Vercel/Neon partilha chunking, embeddings MiniLM, um limiar de distância e o mesmo texto de recusa. A ingestão multi-formato cobre ficheiros e URLs públicas; o caminho ask devolve citações ou a recusa fixa: "The answer is not in the documents."
+Embedded RAG é geração aumentada por recuperação clássica: retrieve híbrido sobre pgvector — similaridade vetorial e correspondência lexical fundidas com Reciprocal Rank Fusion — e depois uma geração com Claude. A pilha dupla Python e Vercel/Neon partilha chunking, embeddings paraphrase-multilingual MiniLM, um limiar de distância e o mesmo texto de recusa. A ingestão multi-formato cobre ficheiros (incluindo imagens e SQLite), URLs públicas e armazenamento Vercel Blob; o caminho ask devolve citações ou a recusa fixa: "The answer is not in the documents."
 
 ## Resultado
 
-Uma demo em direto em embedded-rag.vercel.app onde um visitante pode experimentar prompts de amostra ou carregar o seu próprio material e obter uma resposta citada — ou uma recusa honesta — em segundos. Código público sob Fors-Corp.
+Uma demo em direto em embedded-rag.vercel.app onde um visitante pode experimentar o corpus de demo pré-indexado ou adicionar os seus próprios ficheiros e websites e obter uma resposta citada — ou uma recusa honesta — em segundos.
