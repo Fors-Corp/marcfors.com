@@ -4,6 +4,13 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+### Changed
+
+- Sync Embedded RAG featured work with the live product: hybrid RRF retrieve
+  (vector + lexical) over pgvector, paraphrase-multilingual MiniLM embeddings,
+  broader ingest (images, SQLite, Vercel Blob), and drop the public-repo claim
+  now that Fors-Corp/embedded-rag is private/proprietary.
+
 ### Added
 
 - Generative-engine optimization: `robots.txt` now names AI search, user-fetch and

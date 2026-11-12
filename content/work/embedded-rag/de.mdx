@@ -7,9 +7,8 @@ stack:
   - "Neon"
   - "Claude API"
 live: "https://embedded-rag.vercel.app"
-repo: "https://github.com/Fors-Corp/embedded-rag"
 order: -1
-description: "Klassisches RAG mit einer pgvector-Suche und einer Claude-Antwort: MiniLM-Embeddings, Zitate und eine feste Ablehnung, wenn der Corpus die Frage nicht stützt."
+description: "Klassisches RAG mit hybridem pgvector-Retrieve und einer Claude-Antwort: mehrsprachige MiniLM-Embeddings, Zitate und eine feste Ablehnung, wenn der Corpus die Frage nicht stützt."
 ---
 
 ## Problem
@@ -18,8 +17,8 @@ Demo-Besucher, die Fors-Corp-Arbeit bewerten, brauchten begründete Antworten au
 
 ## Ansatz
 
-Embedded RAG ist klassische retrieval-augmentierte Generierung: eine pgvector-Suche, danach eine Claude-Generierung. Der Dual-Stack aus Python und Vercel/Neon teilt Chunking, MiniLM-Embeddings, eine Distanzschwelle und denselben Ablehnungstext. Multi-Format-Ingest deckt Dateien und öffentliche URLs ab; der Ask-Pfad liefert Zitate oder die feste Ablehnung: "The answer is not in the documents."
+Embedded RAG ist klassische retrieval-augmentierte Generierung: hybrides Retrieve über pgvector — Vektorähnlichkeit und lexikalischer Treffer, fusioniert mit Reciprocal Rank Fusion — danach eine Claude-Generierung. Der Dual-Stack aus Python und Vercel/Neon teilt Chunking, paraphrase-multilingual MiniLM-Embeddings, eine Distanzschwelle und denselben Ablehnungstext. Multi-Format-Ingest deckt Dateien (einschließlich Bilder und SQLite), öffentliche URLs und Vercel-Blob-Speicher ab; der Ask-Pfad liefert Zitate oder die feste Ablehnung: "The answer is not in the documents."
 
 ## Ergebnis
 
-Eine Live-Demo unter embedded-rag.vercel.app, in der Besucher Beispielprompts testen oder eigenes Material hochladen und in Sekunden eine zitierte Antwort — oder eine ehrliche Ablehnung — erhalten. Öffentlicher Quellcode unter Fors-Corp.
+Eine Live-Demo unter embedded-rag.vercel.app, in der Besucher den vorausindexierten Demo-Corpus testen oder eigene Dateien und Websites hinzufügen und in Sekunden eine zitierte Antwort — oder eine ehrliche Ablehnung — erhalten.

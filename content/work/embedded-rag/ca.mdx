@@ -7,9 +7,8 @@ stack:
   - "Neon"
   - "Claude API"
 live: "https://embedded-rag.vercel.app"
-repo: "https://github.com/Fors-Corp/embedded-rag"
 order: -1
-description: "RAG clàssic amb una cerca pgvector i una resposta de Claude: embeddings MiniLM, citacions i una negativa fixa quan el corpus no sosté la pregunta."
+description: "RAG clàssic amb recuperació híbrida sobre pgvector i una resposta de Claude: embeddings MiniLM multilingües, citacions i una negativa fixa quan el corpus no sosté la pregunta."
 ---
 
 ## Problema
@@ -18,8 +17,8 @@ Els visitants de la demo que avaluen la feina de Fors Corp necessitaven resposte
 
 ## Enfocament
 
-Embedded RAG és generació augmentada per recuperació clàssica: una cerca pgvector i després una generació amb Claude. La doble pila Python i Vercel/Neon comparteix trossejat, embeddings MiniLM, un llindar de distància i el mateix text de negativa. La ingestió multi-format cobreix fitxers i URL públiques; la ruta de pregunta retorna citacions o la negativa fixa: "The answer is not in the documents."
+Embedded RAG és generació augmentada per recuperació clàssica: recuperació híbrida sobre pgvector — similitud vectorial i coincidència lèxica fusionades amb Reciprocal Rank Fusion — i després una generació amb Claude. La doble pila Python i Vercel/Neon comparteix trossejat, embeddings paraphrase-multilingual MiniLM, un llindar de distància i el mateix text de negativa. La ingestió multi-format cobreix fitxers (incloses imatges i SQLite), URL públiques i emmagatzematge a Vercel Blob; la ruta de pregunta retorna citacions o la negativa fixa: "The answer is not in the documents."
 
 ## Resultat
 
-Una demo en viu a embedded-rag.vercel.app on un visitant pot provar prompts de mostra o pujar el seu propi material i obtenir una resposta citada — o una negativa honesta — en segons. Codi públic a Fors-Corp.
+Una demo en viu a embedded-rag.vercel.app on un visitant pot provar el corpus de demo preindexat o afegir els seus propis fitxers i llocs web i obtenir una resposta citada — o una negativa honesta — en segons.

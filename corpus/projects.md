@@ -1,11 +1,11 @@
 # Selected work
 
 ## Embedded RAG
-Classic RAG: one pgvector search, then one Claude answer with citations — or a fixed abstain when the corpus does not support the question. Python and Vercel/Neon share MiniLM embeddings and the same grounding rules. Live demo; public source.
+Classic RAG with hybrid retrieve: vector and lexical channels fused with RRF over pgvector, then one Claude answer with citations — or a fixed abstain when the corpus does not support the question. Python and Vercel/Neon share multilingual MiniLM embeddings and the same grounding rules. Live demo.
 Stack: Python, React, TypeScript, Neon, Claude API.
 Live: https://embedded-rag.vercel.app
-Repo: https://github.com/Fors-Corp/embedded-rag
 Case study: /work/embedded-rag
+Private source.
 
 ## Wordkeep
 A language app that teaches eight languages by playing (including Latin), keeps a personal lexicon from Wiktionary with spaced review, and has Claude break whole phrases down grammatically. Words link across languages in a 3D atlas. Your lexicon stays on the device; optional accounts are end-to-end encrypted. App Store release pending.
