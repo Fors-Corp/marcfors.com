@@ -2,12 +2,11 @@ import { expect, type Page } from "@playwright/test";
 
 /**
  * The Ask panel is not in the first paint. It mounts on the first pointer/key,
- * or after load plus a post-TTI idle delay, then shows the launcher (closed by
- * default). An open panel is non-modal (page stays interactive).
+ * or shortly after `load` via requestIdleCallback (≤1.5s timeout), then shows
+ * the launcher (closed by default). An open panel is non-modal.
  *
  * A single synthetic event can race the DeferredAskWidget effect (listeners
- * not attached yet). Keep nudging until the FAB is visible so e2e does not
- * wait the 45s idle path — without putting Ask back on the Lighthouse path.
+ * not attached yet). Keep nudging until the FAB is visible.
  */
 export async function dismissAsk(page: Page): Promise<void> {
   const visible = page.locator(".ask-fab-close:visible, .ask-fab-launcher:visible");

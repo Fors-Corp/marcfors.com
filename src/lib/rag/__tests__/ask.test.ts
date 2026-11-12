@@ -29,8 +29,10 @@ describe("citationsForAnswer", () => {
     expect(cited[0]?.source_path).toBe("about.md");
   });
 
-  it("falls back to retrieved rows when none are named", () => {
+  it("returns no citations when the answer names none of the retrieved paths", () => {
+    // Fail-closed: do not decorate uncited prose with every retrieved row
+    // (aligned with embedded-rag citationsFromMentions).
     const cited = citationsForAnswer("Marc builds language apps.", rows);
-    expect(cited.map((c) => c.source_path)).toEqual(["projects.md", "about.md"]);
+    expect(cited).toEqual([]);
   });
 });

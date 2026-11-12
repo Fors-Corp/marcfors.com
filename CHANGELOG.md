@@ -23,6 +23,9 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Ask launcher mounts shortly after load (idle ≤1.5s) instead of waiting 45s
+  for Lighthouse TTI; pointer/key still mounts immediately. Citations are
+  fail-closed like current Embedded RAG: only paths named in the answer.
 - Align visitor-facing claims with the live product and privacy notice: Wordkeep
   blurbs/case studies/corpus say eight languages including Latin and A1–C2;
   Signal / CSP / `llms.txt` / marcfors.com case study / privacy “In short” no
