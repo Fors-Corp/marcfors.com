@@ -37,7 +37,9 @@ Ask defaults to `claude-sonnet-5-5`. That model’s adaptive thinking counts tow
 
 ## Encoding
 
-`/api/ask` responds with `Content-Type: application/json; charset=utf-8`. Answers are passed through `repairUtf8Mojibake` so intermittent UTF-8-as-Windows-1250/1252 digraphs (`SĂ\xad`, `estĂˇ`, `pĂˇgina`) are restored to proper Spanish/Catalan accents before the client renders them.
+JSON for Ask is always decoded as UTF-8 bytes (`arrayBuffer` + `TextDecoder("utf-8")`) on both the Anthropic hop and the browser `/api/ask` hop — never via locale-default text decoding. `/api/ask` also responds with `Content-Type: application/json; charset=utf-8`.
+
+If an upstream hop already turned UTF-8 into ISO-8859-2 / Windows-1250 / Windows-1252 digraphs (`estĂĄ`, `estĂˇ`, `estÃ¡`), `repairUtf8Mojibake` round-trips the answer back to proper Spanish/Catalan accents before the client renders them.
 
 ## Ops notes
 

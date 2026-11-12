@@ -43,8 +43,9 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
   the composer after send so the keyboard dismisses until the field is tapped
   again.
 - Ask answers with Spanish/Catalan accents no longer render as mojibake
-  (`SĂ­` / `estĂˇ` / `pĂˇgina`): repair UTF-8-as-Windows-1250/1252 digraphs in
-  `askClaude`, and send/accept JSON with an explicit `charset=utf-8`.
+  (`estĂĄ` / `estĂˇ` / `estÃ¡`): decode Anthropic and `/api/ask` JSON as UTF-8
+  bytes explicitly, and round-trip any leftover ISO-8859-2 / Windows-1250 /
+  Windows-1252 digraphs in `repairUtf8Mojibake` before render.
 - Floating Ask panel is non-blocking again: drop page `inert`, set
   `aria-modal="false"`, and let Tab leave the panel so the rest of the site
   stays clickable while Ask is open (Escape still closes).

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { AskAnswer } from "@/components/AskAnswer";
 import type { Locale } from "@/lib/locale";
 import { sourceHref } from "@/lib/rag/sourceHref";
+import { readUtf8Json } from "@/lib/utf8Json";
 
 export type AskCitation = {
   source_path: string;
@@ -61,9 +62,10 @@ type SourcesResponse = {
 };
 
 async function readJson<T>(response: Response): Promise<T> {
-  const rawBody = await response.text();
   try {
-    return JSON.parse(rawBody) as T;
+    // arrayBuffer + UTF-8 avoids locale Latin-2/CP125x text decoding that
+    // turns accented Ask answers into digraphs like "estĂĄ".
+    return (await readUtf8Json(response)) as T;
   } catch {
     // Machine English belongs in the API contract, not the Ask alert.
     throw new Error("non-json");
