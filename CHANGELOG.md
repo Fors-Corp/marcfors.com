@@ -30,6 +30,9 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Fixed
 
+- Show the floating Ask Marc launcher earlier for passive visitors: mount after
+  `load` plus an 8s settle delay (then idle), down from 45s, while keeping
+  first-paint deferral, closed-on-mount, and pointer/key immediate mount.
 - Align visitor-facing claims with the live product and privacy notice: Wordkeep
   blurbs/case studies/corpus say eight languages including Latin and A1–C2;
   Signal / CSP / `llms.txt` / marcfors.com case study / privacy “In short” no
