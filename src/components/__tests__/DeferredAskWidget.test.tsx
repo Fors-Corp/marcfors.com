@@ -63,6 +63,14 @@ afterEach(() => {
 });
 
 describe("DeferredAskWidget", () => {
+  it("keeps a short post-load settle delay before idle mount", () => {
+    // Passive visitors should see Ask well before the old 45s Lighthouse
+    // quiet-window padding, without mounting on the first paint.
+    expect(ASK_POST_LOAD_DELAY_MS).toBe(8_000);
+    expect(ASK_POST_LOAD_DELAY_MS).toBeGreaterThan(0);
+    expect(ASK_POST_LOAD_DELAY_MS).toBeLessThan(45_000);
+  });
+
   it("stays off the first paint, then mounts closed after load delay + idle without locking the page", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     const idle = installIdleGate();
@@ -76,7 +84,12 @@ describe("DeferredAskWidget", () => {
     expect(screen.queryByRole("button", { name: copy.en.askWidgetOpen })).not.toBeInTheDocument();
 
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(ASK_POST_LOAD_DELAY_MS);
+      await vi.advanceTimersByTimeAsync(ASK_POST_LOAD_DELAY_MS - 1);
+    });
+    expect(screen.queryByRole("button", { name: copy.en.askWidgetOpen })).not.toBeInTheDocument();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1);
     });
     expect(screen.queryByRole("button", { name: copy.en.askWidgetOpen })).not.toBeInTheDocument();
 
