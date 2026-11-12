@@ -35,15 +35,19 @@ export function answerLanguageInstruction(locale: Locale = DEFAULT_LOCALE): stri
   return `Answer in ${language}. Cite each corpus source path exactly as written in the context (English filenames). If the context does not support an answer, reply with exactly this English sentence and nothing else:\n${REFUSAL}`;
 }
 
+/**
+ * Fail-closed citations (aligned with Fors-Corp/embedded-rag askLoop):
+ * only paths that appear in the answer — never fall back to every retrieved row.
+ */
 export function citationsForAnswer(answer: string, rows: ChunkRow[]): Citation[] {
   if (answer === REFUSAL) return [];
-  const mentioned = rows.filter((row) => answer.includes(row.source_path));
-  const chosen = mentioned.length > 0 ? mentioned : rows;
-  return chosen.map((row) => ({
-    source_path: row.source_path,
-    chunk_index: row.chunk_index,
-    distance: row.distance,
-  }));
+  return rows
+    .filter((row) => answer.includes(row.source_path))
+    .map((row) => ({
+      source_path: row.source_path,
+      chunk_index: row.chunk_index,
+      distance: row.distance,
+    }));
 }
 
 export async function askClaude(

@@ -31,9 +31,10 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 ### Fixed
 
 - Phones: the Ask and Trace text boxes use 16px text on touch screens, so iOS no longer zooms the page when one is focused; the hero and contact email links and the Trace page's home link are 44px tall to tap.
-- Show the floating Ask Marc launcher earlier for passive visitors: mount after
-  `load` plus an 8s settle delay (then idle), down from 45s, while keeping
-  first-paint deferral, closed-on-mount, and pointer/key immediate mount.
+- Ask launcher mounts shortly after load (idle ≤1.5s) instead of the prior 45s
+  Lighthouse-TBT deferral / interim 8s settle; pointer/key still mounts
+  immediately. Citations are fail-closed like current Embedded RAG: only paths
+  named in the answer (no fallback to every retrieved row).
 - Align visitor-facing claims with the live product and privacy notice: Wordkeep
   blurbs/case studies/corpus say eight languages including Latin and A1–C2;
   Signal / CSP / `llms.txt` / marcfors.com case study / privacy “In short” no

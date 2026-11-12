@@ -49,8 +49,9 @@ test("every section is on the page at once, and a nav link jumps to one", async 
     await expect(page.locator(`#${id}`)).toBeVisible();
   }
   // No accordion: section headings are plain, not expand/collapse controls.
+  // Ask's launcher mounts after load (idle ≤1.5s) with aria-expanded — exclude it.
   await expect(page.locator(".fold-head")).toHaveCount(0);
-  await expect(page.locator("[aria-expanded]")).toHaveCount(0);
+  await expect(page.locator("[aria-expanded]:not(.ask-fab-launcher)")).toHaveCount(0);
   await expect(page.locator("details#more")).toHaveCount(0);
 
   await dismissAsk(page);
