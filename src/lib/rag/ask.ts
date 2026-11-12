@@ -1,4 +1,5 @@
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
+import { readUtf8Json } from "@/lib/utf8Json";
 import {
   ASK_INSTRUCTIONS,
   ASK_MAX_TOKENS,
@@ -83,7 +84,10 @@ export async function askClaude(
     }),
   });
 
-  const payload = (await response.json()) as {
+  // Decode the Anthropic body as UTF-8 bytes explicitly. response.json() can
+  // inherit a locale single-byte default in some hosts; that turns "está" into
+  // ISO-8859-2 digraphs ("estĂĄ") before we ever touch the answer string.
+  const payload = (await readUtf8Json(response)) as {
     content?: Array<{ type?: string; text?: string }>;
     stop_reason?: string;
     error?: { message?: string };
@@ -108,8 +112,8 @@ export async function askClaude(
   if (!text) {
     throw new Error("chat model returned no text");
   }
-  // Chat answers sometimes arrive with UTF-8 bytes already misread as
-  // Windows-1250/1252 ("SĂ\xad" / "estĂˇ"). Repair before the JSON response.
+  // Safety net: if an upstream hop already mis-decoded UTF-8 as Latin-2 /
+  // CP1250 / CP1252, restore accents before we JSON-encode the Ask response.
   return repairUtf8Mojibake(text);
 }
 

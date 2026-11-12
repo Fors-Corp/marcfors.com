@@ -9,6 +9,19 @@ import { answerLanguageInstruction, askClaude, runAsk } from "@/lib/rag/ask";
 import { ASK_INSTRUCTIONS, ASK_MAX_TOKENS, REFUSAL } from "@/lib/rag/constants";
 import { retrieve } from "@/lib/rag/retrieve";
 
+function jsonResponse(
+  payload: unknown,
+  init: { ok?: boolean; status?: number } = {},
+) {
+  const body = new TextEncoder().encode(JSON.stringify(payload));
+  return {
+    ok: init.ok ?? true,
+    status: init.status ?? 200,
+    arrayBuffer: async () =>
+      body.buffer.slice(body.byteOffset, body.byteOffset + body.byteLength),
+  };
+}
+
 describe("runAsk", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -33,13 +46,12 @@ describe("runAsk", () => {
     ]);
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => ({
+      vi.fn().mockResolvedValue(
+        jsonResponse({
           content: [{ type: "text", text: "Marc is based in Barcelona (about.md)." }],
           stop_reason: "end_turn",
         }),
-      }),
+      ),
     );
     const result = await runAsk("Where is Marc based?", "key", "es");
     expect(result.answer).toMatch(/Barcelona/);
@@ -72,23 +84,20 @@ describe("askClaude", () => {
   it("surfaces Anthropic HTTP failures", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: false,
-        status: 500,
-        json: async () => ({ error: { message: "boom" } }),
-      }),
+      vi.fn().mockResolvedValue(
+        jsonResponse({ error: { message: "boom" } }, { ok: false, status: 500 }),
+      ),
     );
     await expect(askClaude("key", "q", "ctx")).rejects.toThrow(/boom/);
   });
 
   it("passes the locale into the model instructions", async () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
+    const fetchMock = vi.fn().mockResolvedValue(
+      jsonResponse({
         content: [{ type: "text", text: "D'accord." }],
         stop_reason: "end_turn",
       }),
-    });
+    );
     vi.stubGlobal("fetch", fetchMock);
     await askClaude("key", "Où est basé Marc ?", "ctx", "fr");
     const body = JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body));
@@ -102,13 +111,12 @@ describe("askClaude", () => {
   });
 
   it("reserves output budget and skips up-front thinking so answers are not cut mid-sentence", async () => {
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
+    const fetchMock = vi.fn().mockResolvedValue(
+      jsonResponse({
         content: [{ type: "text", text: "Marc builds Wordkeep (projects.md)." }],
         stop_reason: "end_turn",
       }),
-    });
+    );
     vi.stubGlobal("fetch", fetchMock);
     await askClaude("key", "What is Wordkeep?", "ctx");
     const body = JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body));
@@ -121,51 +129,71 @@ describe("askClaude", () => {
   it("refuses a max_tokens stop instead of returning a clipped answer", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => ({
+      vi.fn().mockResolvedValue(
+        jsonResponse({
           content: [{ type: "text", text: "- Es un C" }],
           stop_reason: "max_tokens",
         }),
-      }),
+      ),
     );
     await expect(askClaude("key", "q", "ctx")).rejects.toThrow(
       /output limit before finishing/,
     );
   });
 
-  it("repairs UTF-8 mojibake in Spanish answers before returning", async () => {
+  it("repairs ISO-8859-2 Spanish mojibake before returning", async () => {
+    const answer = "Sí, Marc está abierto a puestos en remoto (about.md).";
+    const mangled = new TextDecoder("iso-8859-2").decode(
+      new TextEncoder().encode(answer),
+    );
+    expect(mangled).toContain("estĂĄ");
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        jsonResponse({
+          content: [{ type: "text", text: mangled }],
+          stop_reason: "end_turn",
+        }),
+      ),
+    );
+    await expect(askClaude("key", "¿Marc acepta remoto?", "ctx", "es")).resolves.toBe(
+      answer,
+    );
+  });
+
+  it("decodes Anthropic JSON as UTF-8 bytes even when accents are present", async () => {
+    const answer = "Sí, Marc está abierto. Página único público.";
+    const utf8Body = new TextEncoder().encode(
+      JSON.stringify({
+        content: [{ type: "text", text: answer }],
+        stop_reason: "end_turn",
+      }),
+    );
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue({
         ok: true,
-        json: async () => ({
-          content: [
-            {
-              type: "text",
-              text: "SĂ\xAD, Marc estĂˇ abierto a puestos en remoto (about.md).",
-            },
-          ],
-          stop_reason: "end_turn",
-        }),
+        status: 200,
+        arrayBuffer: async () =>
+          utf8Body.buffer.slice(
+            utf8Body.byteOffset,
+            utf8Body.byteOffset + utf8Body.byteLength,
+          ),
       }),
     );
-    await expect(askClaude("key", "¿Marc acepta remoto?", "ctx", "es")).resolves.toBe(
-      "Sí, Marc está abierto a puestos en remoto (about.md).",
-    );
+    await expect(askClaude("key", "q", "ctx", "es")).resolves.toBe(answer);
   });
 
   it("leaves already-correct accented answers unchanged", async () => {
     const answer = "Sí, Marc está abierto a puestos en remoto (about.md).";
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => ({
+      vi.fn().mockResolvedValue(
+        jsonResponse({
           content: [{ type: "text", text: answer }],
           stop_reason: "end_turn",
         }),
-      }),
+      ),
     );
     await expect(askClaude("key", "q", "ctx", "es")).resolves.toBe(answer);
   });
