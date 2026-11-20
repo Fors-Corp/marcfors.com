@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -5,6 +6,9 @@ import { describe, expect, it } from "vitest";
 const config = require(path.resolve(__dirname, "../../../lighthouserc.cjs"));
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const mobile = require(path.resolve(__dirname, "../../../lighthouserc.mobile.cjs"));
+
+const root = path.resolve(__dirname, "../../..");
+const readRoot = (rel: string) => readFileSync(path.join(root, rel), "utf8");
 
 describe("lighthouse budget", () => {
   it("runs against a local build, not production", () => {
@@ -32,30 +36,17 @@ describe("lighthouse budget", () => {
   });
 
   it("ships a pre-push Lighthouse Perf 100 gate for desktop and mobile", () => {
-    const pkg = JSON.parse(
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      require("node:fs").readFileSync(path.resolve(__dirname, "../../../package.json"), "utf8"),
-    );
+    const pkg = JSON.parse(readRoot("package.json"));
     expect(pkg.scripts["lighthouse:gate"]).toContain("lighthouse-gate.mjs");
     expect(pkg.scripts.postinstall).toContain("install-git-hooks.mjs");
-    const hook = require("node:fs").readFileSync(
-      path.resolve(__dirname, "../../../scripts/git-hooks/pre-push"),
-      "utf8",
-    );
-    expect(hook).toContain("lighthouse-gate.mjs");
-    const gate = require("node:fs").readFileSync(
-      path.resolve(__dirname, "../../../scripts/lighthouse-gate.mjs"),
-      "utf8",
-    );
+    expect(readRoot("scripts/git-hooks/pre-push")).toContain("lighthouse-gate.mjs");
+    const gate = readRoot("scripts/lighthouse-gate.mjs");
     expect(gate).toContain("lighthouserc.cjs");
     expect(gate).toContain("lighthouserc.mobile.cjs");
     expect(gate).toContain("SKIP_LIGHTHOUSE");
-    const installer = require("node:fs").readFileSync(
-      path.resolve(__dirname, "../../../scripts/install-git-hooks.mjs"),
-      "utf8",
-    );
+    const installer = readRoot("scripts/install-git-hooks.mjs");
     expect(installer).toContain(".cursor-original-hooks-path");
-    expect(installer).toContain('pre-push');
+    expect(installer).toContain("pre-push");
   });
 
   it("covers a translated home page and runs the same gates under mobile throttling", () => {
