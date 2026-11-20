@@ -1452,6 +1452,7 @@ footer {
 .atlas-hero-title h1 {
   margin: 0;
   font-size: clamp(2.4rem, 6vw, 4.4rem);
+  font-weight: 600;
   line-height: 0.95;
   letter-spacing: -0.02em;
   color: var(--paper);
@@ -1868,23 +1869,25 @@ footer {
     transition: border-color 160ms ease, background 160ms ease, translate 160ms ease;
   }
 
-  /* Blur Text: hero lines come into focus in sequence. No opacity change, so the
-     LCP element is painted on the first frame. */
+  /* Hero entrance: transform/translate only (compositor-friendly). No filter
+     blur — that forced main-thread paint and delayed LCP on the pending ribbon
+     / tagline. No opacity — LCP stays painted on the first frame. */
   .hero > * {
-    animation: focus-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: focus-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
-  .hero > :nth-child(2) { animation-delay: 60ms; }
-  .hero > :nth-child(3) { animation-delay: 120ms; }
-  .hero > :nth-child(4) { animation-delay: 180ms; }
-  .hero > :nth-child(5) { animation-delay: 240ms; }
-  .hero > :nth-child(6) { animation-delay: 300ms; }
-  .hero > :nth-child(n + 7) { animation-delay: 360ms; }
+  .hero > :nth-child(2) { animation-delay: 40ms; }
+  .hero > :nth-child(3) { animation-delay: 80ms; }
+  .hero > :nth-child(4) { animation-delay: 120ms; }
+  .hero > :nth-child(5) { animation-delay: 160ms; }
+  .hero > :nth-child(6) { animation-delay: 200ms; }
+  .hero > :nth-child(n + 7) { animation-delay: 240ms; }
 
   .atlas-hero-stage {
-    animation: atlas-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: atlas-rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
+  /* LCP candidate (`p.atlas-pending` / tagline path): no delay, transform only. */
   .atlas-pending {
-    animation: focus-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 120ms both;
+    animation: focus-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
   .atlas-legend-strip a {
     transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease, translate 0.2s ease;
@@ -1898,13 +1901,14 @@ footer {
     animation: pip-pulse 2.4s ease-out infinite;
   }
 
-  /* Shiny Text */
+  /* Role accent: static clipped gradient (no background-position animation —
+     that property is not compositor-friendly and was the last non-composited
+     hero animation Lighthouse flagged). */
   .role {
-    background: linear-gradient(110deg, var(--signal) 40%, var(--paper) 50%, var(--brass) 60%) 0 0 / 250% 100%;
+    background: linear-gradient(110deg, var(--signal) 35%, var(--paper) 52%, var(--brass) 68%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    animation: shine 7s linear infinite;
   }
 
   /* Highlighted chips catch the light one after another, then rest. */
@@ -1963,17 +1967,18 @@ footer {
 }
 
 @keyframes atlas-rise {
-  from { filter: blur(6px); translate: 0 10px; }
-  to { filter: none; translate: 0 0; }
+  from { translate: 0 12px; }
+  to { translate: 0 0; }
 }
 
 @keyframes ask-rise {
-  from { filter: blur(4px); translate: 0 8px; }
-  to { filter: none; translate: 0 0; }
+  from { translate: 0 8px; }
+  to { translate: 0 0; }
 }
 
 @keyframes focus-in {
-  from { filter: blur(10px); transform: translateY(14px); }
+  from { transform: translateY(12px); }
+  to { transform: translateY(0); }
 }
 @keyframes shine {
   to { background-position: -250% 0; }
@@ -1986,7 +1991,7 @@ footer {
   to { --orbit: 360deg; }
 }
 @keyframes rise {
-  from { filter: blur(6px); transform: translateY(28px) scale(0.98); }
+  from { transform: translateY(28px) scale(0.98); }
 }
 @keyframes pip-pulse {
   0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--signal) 55%, transparent); }
@@ -1999,7 +2004,12 @@ footer {
   .tip { transform: none; }
   .atlas-readout { transition: none; transform: none; }
   .atlas-hero-stage,
-  .atlas-pending { filter: none !important; translate: none !important; }
+  .atlas-pending,
+  .hero > * {
+    animation: none !important;
+    translate: none !important;
+    transform: none !important;
+  }
   .atlas-legend-strip a { transition: none !important; translate: none !important; }
   .signal-pip { box-shadow: none; }
   .top { backdrop-filter: none; }
@@ -2204,12 +2214,12 @@ footer {
     margin: 0;
   }
   .ask-answer strong {
-    font-weight: 650;
+    font-weight: 600;
     color: var(--paper);
   }
   .ask-answer a {
     color: var(--brass);
-    font-weight: 650;
+    font-weight: 600;
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.16em;
@@ -2225,7 +2235,7 @@ footer {
   /* Inline corpus paths stay in the sentence and wrap instead of clipping. */
   a.ask-source {
     color: var(--brass);
-    font-weight: 650;
+    font-weight: 600;
     font-size: inherit;
     font-family: inherit;
     text-decoration: underline;
@@ -2245,7 +2255,7 @@ footer {
     font-style: normal;
     font-family: var(--mono);
     font-size: 0.84em;
-    font-weight: 650;
+    font-weight: 600;
     line-height: 1.35;
     color: var(--brass);
     background: color-mix(in srgb, var(--brass) 18%, transparent);
@@ -2293,7 +2303,7 @@ footer {
   }
   .ask-distance {
     font-size: 0.78rem;
-    font-weight: 650;
+    font-weight: 600;
     color: var(--brass);
     letter-spacing: 0.04em;
   }

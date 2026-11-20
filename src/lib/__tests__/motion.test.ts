@@ -22,7 +22,8 @@ describe("motion", () => {
     const optIn = blockAfter(css, css.indexOf(OPT_IN));
     const outside = css.replace(optIn, "");
     expect(optIn).toMatch(/\banimation:\s*[a-z]/);
-    expect(outside).not.toMatch(/(^|[\s;{])animation:\s*[a-z]/m);
+    // `animation: none` in the reduced-motion block is the kill switch, not motion.
+    expect(outside).not.toMatch(/(^|[\s;{])animation:\s*(?!none\b)[a-z]/m);
   });
 
   it("keeps the orbiting border off the plain-text nav hire link", () => {

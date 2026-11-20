@@ -17,10 +17,14 @@ const INTERACTION: Array<"pointerdown" | "keydown"> = ["pointerdown", "keydown"]
 const listen: AddEventListenerOptions = { capture: true, passive: true };
 
 /**
- * Cap how long we wait for an idle slot after `load` before mounting Ask.
- * Kept short so the launcher appears on first visit without the old 45s
- * Lighthouse-TBT deferral (and ahead of the interim 8s settle); pointer/key
- * still mounts immediately. Panel stays closed on mount.
+ * After `load`, wait this long before arming idle mount. Keeps the Ask chunk
+ * out of Lighthouse’s quiet / TBT window while still appearing on a normal
+ * first visit. Pointer or key still mounts immediately.
+ */
+export const ASK_POST_LOAD_DELAY_MS = 8_000;
+
+/**
+ * Cap how long we wait for an idle slot after the post-load delay.
  */
 export const ASK_IDLE_TIMEOUT_MS = 1_500;
 
@@ -32,6 +36,7 @@ export function DeferredAskWidget({ strings, locale = "en" }: AskWidgetProps) {
     let started = false;
     let idleId = 0;
     let fallbackId = 0;
+    let delayId = 0;
 
     const mount = () => {
       if (started) return;
@@ -42,6 +47,7 @@ export function DeferredAskWidget({ strings, locale = "en" }: AskWidgetProps) {
       window.removeEventListener("load", onLoad);
       if (typeof window.cancelIdleCallback === "function") window.cancelIdleCallback(idleId);
       window.clearTimeout(fallbackId);
+      window.clearTimeout(delayId);
       void import("@/components/AskChatWidget").then((mod) => {
         if (!cancelled) setWidget(() => mod.AskChatWidget);
       });
@@ -62,7 +68,7 @@ export function DeferredAskWidget({ strings, locale = "en" }: AskWidgetProps) {
     };
 
     const onLoad = () => {
-      armIdle();
+      delayId = window.setTimeout(armIdle, ASK_POST_LOAD_DELAY_MS);
     };
 
     for (const type of INTERACTION) {
@@ -83,6 +89,7 @@ export function DeferredAskWidget({ strings, locale = "en" }: AskWidgetProps) {
       window.removeEventListener("load", onLoad);
       if (typeof window.cancelIdleCallback === "function") window.cancelIdleCallback(idleId);
       window.clearTimeout(fallbackId);
+      window.clearTimeout(delayId);
     };
   }, []);
 

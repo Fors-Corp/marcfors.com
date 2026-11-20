@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Blocks `git push` unless desktop + mobile Lighthouse Performance score 100.
+# Bypass: `git push --no-verify` or `SKIP_LIGHTHOUSE=1 git push`.
+set -euo pipefail
+root="$(cd "$(dirname "$0")/../.." && pwd)"
+cd "$root"
+exec node scripts/lighthouse-gate.mjs
