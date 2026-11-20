@@ -22,7 +22,7 @@ module.exports = {
     },
     assert: {
       assertions: {
-        "categories:performance": ["error", { minScore: 0.9 }],
+        "categories:performance": ["error", { minScore: 1 }],
         "categories:accessibility": ["error", { minScore: 1 }],
         "categories:seo": ["error", { minScore: 0.9 }],
         "categories:best-practices": ["warn", { minScore: 0.95 }],

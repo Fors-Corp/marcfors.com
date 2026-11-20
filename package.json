@@ -1,6 +1,6 @@
 {
   "name": "marcfors.com",
-  "version": "0.27.1",
+  "version": "0.27.2",
   "private": true,
   "type": "module",
   "engines": {
@@ -11,7 +11,7 @@
     "build": "next build",
     "start": "next start",
     "prebuild": "node scripts/copy-pdf-worker.mjs && node scripts/gen-tokens.mjs && node scripts/audit-snapshot.mjs",
-    "postinstall": "node scripts/copy-pdf-worker.mjs",
+    "postinstall": "node scripts/copy-pdf-worker.mjs && node scripts/install-git-hooks.mjs",
     "gen:tokens": "node scripts/gen-tokens.mjs",
     "rag:seed": "tsx scripts/rag/seed.ts",
     "rag:extract-cv": "tsx scripts/rag/extract-cv-cli.ts",
@@ -24,7 +24,11 @@
     "ci": "npm run privacy && npm run test:coverage && npm run typecheck && npm run lint && npm run audit && npm run build",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "pretest:e2e": "next build"
+    "pretest:e2e": "next build",
+    "lighthouse": "npx --yes @lhci/cli@0.15.1 autorun --config=lighthouserc.cjs",
+    "lighthouse:mobile": "npx --yes @lhci/cli@0.15.1 autorun --config=lighthouserc.mobile.cjs",
+    "lighthouse:gate": "node scripts/lighthouse-gate.mjs",
+    "hooks:install": "node scripts/install-git-hooks.mjs"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.3.2",

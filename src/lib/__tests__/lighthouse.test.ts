@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -5,6 +6,9 @@ import { describe, expect, it } from "vitest";
 const config = require(path.resolve(__dirname, "../../../lighthouserc.cjs"));
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const mobile = require(path.resolve(__dirname, "../../../lighthouserc.mobile.cjs"));
+
+const root = path.resolve(__dirname, "../../..");
+const readRoot = (rel: string) => readFileSync(path.join(root, rel), "utf8");
 
 describe("lighthouse budget", () => {
   it("runs against a local build, not production", () => {
@@ -15,16 +19,34 @@ describe("lighthouse budget", () => {
     expect(config.ci.collect.numberOfRuns).toBeGreaterThanOrEqual(3);
   });
 
-  it("keeps CLS at the good ceiling and gates LCP, TBT and the perf score", () => {
+  it("keeps CLS at the good ceiling and gates LCP, TBT and Perf 100", () => {
     const a = config.ci.assert.assertions;
     expect(a["cumulative-layout-shift"]).toEqual(["error", { maxNumericValue: 0.1 }]);
     expect(a["largest-contentful-paint"][1].maxNumericValue).toBeLessThanOrEqual(2500);
     expect(a["total-blocking-time"][1].maxNumericValue).toBeLessThanOrEqual(300);
-    expect(a["categories:performance"]).toEqual(["error", { minScore: 0.9 }]);
+    expect(a["categories:performance"]).toEqual(["error", { minScore: 1 }]);
     expect(a["categories:accessibility"]).toEqual(["error", { minScore: 1 }]);
+    expect(mobile.ci.assert.assertions["categories:performance"]).toEqual([
+      "error",
+      { minScore: 1 },
+    ]);
     for (const audit of ["color-contrast", "button-name", "link-name", "label-content-name-mismatch"]) {
       expect(a[audit]).toBe("error");
     }
+  });
+
+  it("ships a pre-push Lighthouse Perf 100 gate for desktop and mobile", () => {
+    const pkg = JSON.parse(readRoot("package.json"));
+    expect(pkg.scripts["lighthouse:gate"]).toContain("lighthouse-gate.mjs");
+    expect(pkg.scripts.postinstall).toContain("install-git-hooks.mjs");
+    expect(readRoot("scripts/git-hooks/pre-push")).toContain("lighthouse-gate.mjs");
+    const gate = readRoot("scripts/lighthouse-gate.mjs");
+    expect(gate).toContain("lighthouserc.cjs");
+    expect(gate).toContain("lighthouserc.mobile.cjs");
+    expect(gate).toContain("SKIP_LIGHTHOUSE");
+    const installer = readRoot("scripts/install-git-hooks.mjs");
+    expect(installer).toContain(".cursor-original-hooks-path");
+    expect(installer).toContain("pre-push");
   });
 
   it("covers a translated home page and runs the same gates under mobile throttling", () => {

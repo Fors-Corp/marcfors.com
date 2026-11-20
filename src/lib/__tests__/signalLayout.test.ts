@@ -40,6 +40,19 @@ describe("displayed signals keep a stable layout", () => {
     expect(css).toContain(".signal-rail");
   });
 
+  it("keeps hero entrance animations compositor-friendly (no filter blur)", () => {
+    const block = (name: string) => {
+      const match = css.match(new RegExp(`@keyframes ${name} \\{[\\s\\S]*?\\n\\}`));
+      expect(match, `missing @keyframes ${name}`).toBeTruthy();
+      return match![0];
+    };
+    expect(block("focus-in")).toMatch(/transform:\s*translateY/);
+    expect(block("atlas-rise")).toMatch(/translate:\s*0 12px/);
+    for (const name of ["focus-in", "atlas-rise", "ask-rise", "rise"]) {
+      expect(block(name)).not.toMatch(/filter:\s*blur/);
+    }
+  });
+
   it("keeps every displayed vital's good ceiling at the Core Web Vitals bar", () => {
     for (const name of VITAL_NAMES) {
       expect(ratingFor(name, VITAL_GOOD[name])).toBe("good");
