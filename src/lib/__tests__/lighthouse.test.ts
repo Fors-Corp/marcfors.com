@@ -50,6 +50,12 @@ describe("lighthouse budget", () => {
     expect(gate).toContain("lighthouserc.cjs");
     expect(gate).toContain("lighthouserc.mobile.cjs");
     expect(gate).toContain("SKIP_LIGHTHOUSE");
+    const installer = require("node:fs").readFileSync(
+      path.resolve(__dirname, "../../../scripts/install-git-hooks.mjs"),
+      "utf8",
+    );
+    expect(installer).toContain(".cursor-original-hooks-path");
+    expect(installer).toContain('pre-push');
   });
 
   it("covers a translated home page and runs the same gates under mobile throttling", () => {
