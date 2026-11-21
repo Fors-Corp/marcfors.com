@@ -76,13 +76,17 @@ npm run lint
 npm run privacy        # fails if a Gmail address or the old .me host lands in source
 npm run build
 npm run ci             # privacy + test:coverage + typecheck + lint + audit + build
+npm run lighthouse:gate # build + desktop/mobile LHCI (Perf must be 100); also on git pre-push
 ```
 
 Every copy, project, or privacy change needs a test in the same PR. Component and
 hook behaviour lives in `src/**/__tests__/*.test.tsx` / `*.dom.test.ts` (jsdom);
 pure logic stays in `*.test.ts` (node). CI is `.github/workflows/ci.yml` — a
 `verify` job (checks + Lighthouse budgets against a local build) and an `e2e` job
-(Playwright). Lighthouse asserts performance/a11y/SEO scores plus CLS, LCP and TBT.
+(Playwright). Lighthouse asserts Performance **100** (desktop + mobile), plus
+a11y/SEO/CLS/LCP/TBT. A local `pre-push` hook runs the same Perf 100 gate
+(`npm run hooks:install` / `postinstall`; bypass with `--no-verify` or
+`SKIP_LIGHTHOUSE=1`).
 
 <!-- BEGIN:nextjs-agent-rules -->
 

@@ -58,8 +58,26 @@ describe("static rendering invariants", () => {
     expect(localeLayout).toContain("DeferredAskWidget");
     expect(defer).toContain("ASK_IDLE_TIMEOUT_MS");
     expect(defer).toMatch(/ASK_IDLE_TIMEOUT_MS\s*=\s*1_500/);
-    expect(defer).not.toMatch(/ASK_POST_LOAD_DELAY_MS\s*=\s*(8|45)_000/);
+    // Post-load delay keeps the Ask chunk out of Lighthouse’s TBT window;
+    // pointer/key still mounts immediately for real visitors.
+    expect(defer).toMatch(/ASK_POST_LOAD_DELAY_MS\s*=\s*8_000/);
     expect(desk).toMatch(/withLocale\(locale,\s*"\/ask"\)[^>]{0,80}prefetch=\{false\}/);
+  });
+
+  it("gates Vercel Analytics to deployed Vercel runtimes", () => {
+    const localeLayout = read("app/[locale]/layout.tsx");
+    expect(localeLayout).toMatch(/process\.env\.VERCEL\s*\?\s*<Analytics/);
+  });
+
+  it("inlines CSS on production builds to cut the render-blocking waterfall", () => {
+    const config = readFileSync(path.resolve(srcRoot, "../next.config.ts"), "utf8");
+    expect(config).toMatch(/experimental:\s*\{[\s\S]*inlineCss:\s*true/);
+  });
+
+  it("defers the Wordkeep atlas until after load idle", () => {
+    const lazy = read("components/WordAtlasLazy.tsx");
+    expect(lazy).toMatch(/ATLAS_IDLE_TIMEOUT_MS\s*=\s*4_000/);
+    expect(lazy).toContain('window.addEventListener("load"');
   });
 
   it("keeps the signal board off the first homepage JS", () => {

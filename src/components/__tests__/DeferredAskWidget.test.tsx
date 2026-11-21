@@ -5,6 +5,7 @@ import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
   ASK_IDLE_TIMEOUT_MS,
+  ASK_POST_LOAD_DELAY_MS,
   DeferredAskWidget,
 } from "@/components/DeferredAskWidget";
 import { askChatWidgetStrings } from "@/lib/askStrings";
@@ -69,16 +70,25 @@ afterEach(() => {
 });
 
 describe("DeferredAskWidget", () => {
-  it("stays off the first paint, then mounts closed after load idle without locking the page", async () => {
+  it("stays off the first paint, then mounts closed after post-load delay + idle", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
     const idle = installIdleGate();
     render(<Page />);
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(document.querySelector("main")).not.toHaveAttribute("inert");
     expect(screen.getByRole("button", { name: "Outside" })).toHaveFocus();
-    expect(idle.timeoutMs()).toBe(ASK_IDLE_TIMEOUT_MS);
+    expect(idle.timeoutMs()).toBe(0);
 
-    idle.fire();
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(ASK_POST_LOAD_DELAY_MS);
+    });
+    expect(idle.timeoutMs()).toBe(ASK_IDLE_TIMEOUT_MS);
+    expect(screen.queryByRole("button", { name: copy.en.askWidgetOpen })).not.toBeInTheDocument();
+
+    await act(async () => {
+      idle.fire();
+    });
     expect(await screen.findByRole("button", { name: copy.en.askWidgetOpen })).toBeInTheDocument();
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(document.querySelector("main")).not.toHaveAttribute("inert");
@@ -119,10 +129,16 @@ describe("DeferredAskWidget", () => {
   });
 
   it("does not inert the page when a stored closed state mounts after idle", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
     sessionStorage.setItem("marcfors-ask-widget-open", "0");
     const idle = installIdleGate();
     render(<Page />);
-    idle.fire();
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(ASK_POST_LOAD_DELAY_MS);
+    });
+    await act(async () => {
+      idle.fire();
+    });
 
     expect(await screen.findByRole("button", { name: copy.en.askWidgetOpen })).toBeInTheDocument();
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -131,21 +147,30 @@ describe("DeferredAskWidget", () => {
   });
 
   it("restores a stored open panel after idle without stealing focus or double-mounting", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
     sessionStorage.setItem("marcfors-ask-widget-open", "1");
     const idle = installIdleGate();
     render(<Page />);
-    idle.fire();
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(ASK_POST_LOAD_DELAY_MS);
+    });
+    await act(async () => {
+      idle.fire();
+    });
     expect(await screen.findByRole("dialog")).toBeInTheDocument();
     expect(document.querySelector("main")).not.toHaveAttribute("inert");
     expect(screen.getByRole("button", { name: "Outside" })).toHaveFocus();
     expect(screen.getByRole("textbox", { name: copy.en.askPlaceholder })).not.toHaveFocus();
   });
 
-  it("mounts after load when the browser has no requestIdleCallback", async () => {
+  it("mounts after the post-load delay when the browser has no requestIdleCallback", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     vi.stubGlobal("requestIdleCallback", undefined);
     render(<Page />);
     expect(screen.queryByRole("button", { name: copy.en.askWidgetOpen })).not.toBeInTheDocument();
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(ASK_POST_LOAD_DELAY_MS);
+    });
     await act(async () => {
       await vi.advanceTimersByTimeAsync(0);
     });
@@ -154,9 +179,13 @@ describe("DeferredAskWidget", () => {
     expect(document.querySelector("main")).not.toHaveAttribute("inert");
   });
 
-  it("cancels a pending idle mount on unmount", () => {
+  it("cancels a pending idle mount on unmount", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
     const idle = installIdleGate();
     const { unmount } = render(<Page />);
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(ASK_POST_LOAD_DELAY_MS);
+    });
     unmount();
     expect(idle.cancel).toHaveBeenCalled();
     idle.fire();

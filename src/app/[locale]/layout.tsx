@@ -30,19 +30,25 @@ export function generateStaticParams() {
 // browser fetches that file lazily instead of showing tofu. `fontSubset.test.ts`
 // guards the assumption. Manrope carries the UI/body voice; Spectral is display. `font-synthesis: none`
 // (globals.css) forbids faux-bold fallbacks.
+// Weight 700 is unused in CSS (`font-synthesis: none` + explicit 400/500/600).
+// Dropping it removes a High-priority latin preload (~15 KiB) from the FCP path.
+// `optional` (not `swap`): with inlined CSS, first paint is early enough that a
+// late swap was shifting the hero ~0.19 CLS. Optional keeps metric overrides and
+// skips the swap when the face is not ready in time — no CLS, brand fonts still
+// apply on warm/fast loads.
 const serif = Spectral({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["400", "600"],
   variable: "--font-serif-loaded",
-  display: "swap",
+  display: "optional",
   adjustFontFallback: true,
 });
 
 const mono = Manrope({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   variable: "--font-mono-loaded",
-  display: "swap",
+  display: "optional",
   adjustFontFallback: true,
 });
 
@@ -130,7 +136,8 @@ export default async function LocaleLayout({
           {/* application/ld+json: WebSite + Person graph, shared by every page. */}
           <JsonLd data={siteJsonLd()} />
           {children}
-          <Analytics />
+          {/* Skip off-Vercel so local / LHCI builds do not 404 `/_vercel/insights`. */}
+          {process.env.VERCEL ? <Analytics /> : null}
         </div>
         <DeferredAskWidget strings={askChatWidgetStrings(t)} locale={locale} />
       </body>

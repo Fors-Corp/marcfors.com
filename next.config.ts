@@ -35,6 +35,12 @@ const noindexSources = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   devIndicators: false,
+  // Inline CSS into the document to remove the render-blocking stylesheet
+  // waterfall on first visit (mobile FCP/LCP). External CSS still used on
+  // client navigations to prerendered routes — see Next `inlineCss` docs.
+  experimental: {
+    inlineCss: true,
+  },
   // MiniLM / onnxruntime must stay external — bundling them into the Ask route
   // breaks native bindings and blows past the serverless size budget.
   serverExternalPackages: [

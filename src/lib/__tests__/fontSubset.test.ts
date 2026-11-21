@@ -73,8 +73,12 @@ describe("font subset", () => {
     expect(layout).not.toMatch(/subsets: \[[^\]]*latin-ext/);
     // `body { font-family: var(--mono) }` plus `font-synthesis: none` means a
     // missing 500 renders as 400 with no faux-bold — dropping it is a silent
-    // visual regression, not an optimisation.
-    expect(layout).toMatch(/weight: \["400", "500", "600", "700"\]/);
+    // visual regression, not an optimisation. Weight 700 is unused in CSS and
+    // was trimmed to cut a High-priority preload off the FCP path.
+    expect(layout).toMatch(/Spectral\(\{[\s\S]*?weight: \["400", "600"\]/);
+    expect(layout).toMatch(/Manrope\(\{[\s\S]*?weight: \["400", "500", "600"\]/);
+    expect(layout).not.toMatch(/weight: \[[^\]]*700/);
+    expect(layout.match(/display: "optional"/g)).toHaveLength(2);
     expect(readFileSync(path.join(SRC, "app/globals.css"), "utf8")).toMatch(/font-synthesis: none/);
   });
 });

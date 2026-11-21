@@ -31,10 +31,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 ### Fixed
 
 - Phones: the Ask and Trace text boxes use 16px text on touch screens, so iOS no longer zooms the page when one is focused; the hero and contact email links and the Trace page's home link are 44px tall to tap.
-- Ask launcher mounts shortly after load (idle ≤1.5s) instead of the prior 45s
-  Lighthouse-TBT deferral / interim 8s settle; pointer/key still mounts
-  immediately. Citations are fail-closed like current Embedded RAG: only paths
-  named in the answer (no fallback to every retrieved row).
+- Citations are fail-closed like current Embedded RAG: only paths named in the
+  answer (no fallback to every retrieved row).
 - Align visitor-facing claims with the live product and privacy notice: Wordkeep
   blurbs/case studies/corpus say eight languages including Latin and A1–C2;
   Signal / CSP / `llms.txt` / marcfors.com case study / privacy “In short” no
@@ -150,6 +148,23 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 - Give the phone Ask panel about three quarters of the viewport.
 - Answer the remote-roles question from about.md and experience.md when the
   nearest vector chunks do not contain that fact.
+
+## 0.27.2 — 2026-11-20
+
+### Fixed
+
+- Raise mobile Lighthouse Performance to 100 on a clean lab run: compositor-only
+  hero entrance (no filter blur), Ask mounts after an 8s post-load delay then idle
+  (pointer/key still immediate), idle-load the atlas after `window.load`, inline
+  CSS (`experimental.inlineCss`), drop unused Spectral/Manrope 700 preloads, and
+  use `font-display: optional` so early paint does not swap into a 0.19 CLS shift.
+  Gate `<Analytics />` to `process.env.VERCEL` so local / LHCI builds do not 404
+  `/_vercel/insights`. Next’s unconditional legacy polyfill chunk is unchanged
+  (documented since 0.13.1).
+- Gate Performance at 100 in CI (`lighthouserc*.cjs` minScore 1) and before every
+  local `git push` via `scripts/git-hooks/pre-push` → `npm run lighthouse:gate`
+  (desktop + mobile LHCI). Bypass with `git push --no-verify` or
+  `SKIP_LIGHTHOUSE=1`. Hooks install on `npm ci` / `npm run hooks:install`.
 
 ## 0.27.1 — 2026-11-09
 
