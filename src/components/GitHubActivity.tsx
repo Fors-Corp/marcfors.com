@@ -55,7 +55,7 @@ function Calendar({ days, locale, strings: t }: {
         <summary>{t.daily}</summary>
         {showDays ? (
           <ul className="activity-days">
-            {[...days].reverse().map((day) => (
+            {days.toReversed().map((day) => (
               <li key={day.date}>
                 <time dateTime={day.date}>{dateFormat.format(new Date(day.date))}</time>
                 <span>{number.format(day.count)} {t.contributions}</span>
