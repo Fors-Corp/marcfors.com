@@ -1,0 +1,28 @@
+---
+project: "MeditateIt"
+stack:
+  - "Vite"
+  - "React"
+  - "TypeScript"
+  - "Web Audio"
+live: "https://marcfs31.github.io/MeditateIt/"
+repo: "https://github.com/marcfs31/MeditateIt"
+order: 16
+description: "Una PWA local-first que genera paisatges sonors de meditació al navegador a partir de soroll, tons, pulsos i capes de natura. Sense comptes, sense rastrejadors, sense fitxers d'àudio. Codi públic."
+---
+
+## Problema
+
+La majoria d'apps de meditació i son serveixen àudio gravat darrere d'un compte, una subscripció i analítica, i moltes es recolzen en afirmacions de salut que no poden sostenir. Volia una eina de so tranquil·la que funcioni sense connexió, guardi tot al dispositiu i digui només el que és: una ajuda per escoltar, no un tractament.
+
+## Enfocament
+
+El so es genera en directe amb la Web Audio API, així que no hi ha fitxers d'àudio per baixar. Un motor apila quatre tipus de capa: soroll (blanc, rosa, marró, amb un processador AudioWorklet), tons amb nom en Hz, pulsos binaurals o isocrònics i textures de natura (pluja, bosc, vora de mar, vent). Cada capa té el seu equalitzador i els seus fosos, i en canviar de preset hi ha un fos encadenat d'uns dos segons en lloc d'un tall. Els presets s'agrupen per categoria, qualsevol es pot clonar com a preset personal i les seqüències de diverses etapes avancen soles, amb el temporitzador de l'etapa congelat durant la pausa.
+
+És una PWA instal·lable amb shell sense connexió i fonts pròpies. Un service worker nou només s'aplica després d'un moment de calma i mai mentre sona l'àudio, de manera que una actualització no interromp una sessió. Preferències, presets, seqüències i historial de sessions viuen a `localStorage`, amb còpia de seguretat i restauració en JSON (combinar o substituir), un termini de retenció i un botó d'esborrat total. La interfície és en cinc llengües (anglès, castellà, català, francès, portuguès) i cinc temes més seguir el del sistema.
+
+El text es verifica amb proves: els catàlegs es rebutgen si contenen vocabulari de tractament o diagnòstic, i els noms de banda se suavitzen (un «~10 Hz glide» en lloc d'una etiqueta clínica). La bateria de proves són scripts `*.check.ts` simples que cobreixen l'anàlisi de còpies, l'esborrat i la retenció, els límits de fos i equalitzador i la CSP de l'HTML compilat; un workflow de GitHub Pages executa lint, proves i build abans de cada desplegament.
+
+## Resultat
+
+Una app funcional que qualsevol pot obrir i instal·lar, sense compte i sense que les dades surtin del navegador. Els límits es diuen en lloc d'amagar-se: els navegadors mòbils poden suspendre l'àudio en bloquejar la pantalla, així que no és un reproductor natiu, i els pulsos binaurals requereixen auriculars estèreo. El repositori no té fitxer de llicència, de manera que el codi és públic per consultar-lo, no per reutilitzar-lo.

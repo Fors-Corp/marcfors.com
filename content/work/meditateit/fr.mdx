@@ -1,0 +1,28 @@
+---
+project: "MeditateIt"
+stack:
+  - "Vite"
+  - "React"
+  - "TypeScript"
+  - "Web Audio"
+live: "https://marcfs31.github.io/MeditateIt/"
+repo: "https://github.com/marcfs31/MeditateIt"
+order: 16
+description: "Une PWA local-first qui génère des paysages sonores de méditation dans le navigateur à partir de bruit, de tonalités, de battements et de couches de nature. Pas de compte, pas de traceur, pas de fichier audio. Code source public."
+---
+
+## Problème
+
+La plupart des applications de méditation et de sommeil diffusent de l'audio enregistré derrière un compte, un abonnement et des analytics, et beaucoup s'appuient sur des promesses de santé qu'elles ne peuvent pas tenir. Je voulais un outil sonore calme qui fonctionne hors ligne, garde tout sur l'appareil et dise seulement ce qu'il est : une aide à l'écoute, pas un traitement.
+
+## Approche
+
+Le son est généré en direct avec la Web Audio API : aucun fichier audio à télécharger. Un moteur empile quatre types de couches : bruit (blanc, rose, brun, avec un processeur AudioWorklet), tonalités nommées en Hz, battements binauraux ou isochrones et textures naturelles (pluie, forêt, rivage, vent). Chaque couche a son propre égaliseur et ses fondus, et changer de preset déclenche un fondu enchaîné d'environ deux secondes plutôt qu'une coupure. Les presets sont classés par catégorie, chacun peut être cloné en preset personnel et les séquences à plusieurs étapes avancent seules, le minuteur d'étape étant figé pendant la pause.
+
+C'est une PWA installable avec une coque hors ligne et des polices auto-hébergées. Un nouveau service worker n'est appliqué qu'après un moment de calme et jamais pendant la lecture, si bien qu'une mise à jour n'interrompt pas une séance. Préférences, presets, séquences et historique de séances vivent dans `localStorage`, avec sauvegarde et restauration JSON (fusionner ou remplacer), une durée de conservation et une commande pour tout effacer. L'interface existe en cinq langues (anglais, espagnol, catalan, français, portugais) et cinq thèmes, plus le suivi du système.
+
+Les textes sont vérifiés par des tests : les catalogues sont rejetés s'ils contiennent un vocabulaire de traitement ou de diagnostic, et les noms de bandes sont adoucis (un « ~10 Hz glide » plutôt qu'une étiquette clinique). La suite se compose de simples scripts `*.check.ts` couvrant l'analyse des sauvegardes, l'effacement et la conservation, les limites de fondu et d'égaliseur et la CSP du HTML compilé ; un workflow GitHub Pages lance lint, tests et build avant chaque déploiement.
+
+## Résultat
+
+Une application fonctionnelle que chacun peut ouvrir et installer, sans compte et sans que les données quittent le navigateur. Les limites sont dites plutôt que cachées : les navigateurs mobiles peuvent suspendre l'audio au verrouillage de l'écran, ce n'est donc pas un lecteur natif, et les battements binauraux exigent un casque stéréo. Le dépôt n'a pas de fichier de licence : le code est public pour être consulté, non réutilisé.

@@ -1,0 +1,28 @@
+---
+project: "MeditateIt"
+stack:
+  - "Vite"
+  - "React"
+  - "TypeScript"
+  - "Web Audio"
+live: "https://marcfs31.github.io/MeditateIt/"
+repo: "https://github.com/marcfs31/MeditateIt"
+order: 16
+description: "Eine Local-first-PWA, die Meditations-Klanglandschaften im Browser aus Rauschen, Tönen, Beats und Naturschichten erzeugt. Keine Konten, keine Tracker, keine Audiodateien. Öffentlicher Quellcode."
+---
+
+## Problem
+
+Die meisten Meditations- und Schlaf-Apps streamen aufgenommenes Audio hinter Konto, Abo und Analytics, und viele stützen sich auf Gesundheitsversprechen, die sie nicht belegen können. Ich wollte ein ruhiges Klangwerkzeug, das offline funktioniert, alles auf dem Gerät hält und nur sagt, was es ist: eine Hörhilfe, keine Behandlung.
+
+## Ansatz
+
+Der Klang wird live mit der Web Audio API erzeugt, es gibt also keine Audiodateien zum Herunterladen. Eine Engine stapelt vier Schichttypen: Rauschen (weiß, rosa, braun, mit einem AudioWorklet-Prozessor), benannte Töne in Hz, binaurale oder isochrone Beats und Naturtexturen (Regen, Wald, Küste, Wind). Jede Schicht hat einen eigenen Equalizer und eigene Fades, und beim Wechsel des Presets wird etwa zwei Sekunden lang übergeblendet statt hart geschnitten. Presets sind nach Kategorien gruppiert, jedes lässt sich als eigenes Preset klonen, und mehrstufige Sequenzen laufen selbstständig weiter, wobei der Stufentimer in der Pause stehen bleibt.
+
+Es ist eine installierbare PWA mit Offline-Shell und selbst gehosteten Schriften. Ein neuer Service Worker wird erst nach einer ruhigen Phase und nie während der Wiedergabe angewendet, sodass ein Update keine Sitzung unterbricht. Einstellungen, Presets, Sequenzen und Sitzungsverlauf liegen in `localStorage`, mit JSON-Sicherung und -Wiederherstellung (zusammenführen oder ersetzen), einer Aufbewahrungsfrist und einer Funktion zum Löschen aller Daten. Die Oberfläche gibt es in fünf Sprachen (Englisch, Spanisch, Katalanisch, Französisch, Portugiesisch) und fünf Themes plus „System folgen“.
+
+Die Texte werden von Tests geprüft: Kataloge mit Behandlungs- oder Diagnosevokabular werden abgelehnt, und Bandnamen sind entschärft (ein „~10 Hz glide“ statt einer klinischen Bezeichnung). Die Tests sind schlichte `*.check.ts`-Skripte für das Einlesen von Sicherungen, Löschen und Aufbewahrung, Fade- und EQ-Grenzen sowie die CSP des gebauten HTML; ein GitHub-Pages-Workflow führt vor jedem Deployment Lint, Tests und Build aus.
+
+## Ergebnis
+
+Eine funktionierende App, die jeder öffnen und installieren kann, ohne Konto und ohne dass Daten den Browser verlassen. Die Grenzen werden benannt statt versteckt: Mobile Browser können das Audio bei gesperrtem Bildschirm anhalten, daher ist es kein nativer Player, und binaurale Beats brauchen Stereo-Kopfhörer. Das Repository hat keine Lizenzdatei, der Quellcode ist also zum Ansehen öffentlich, nicht zur Wiederverwendung.

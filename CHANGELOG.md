@@ -4,6 +4,12 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+### Added
+
+- Feature **small-llm-in-c** (C99 CPU inference for Qwen3.5-4B and Gemma 4 E4B) and
+  **MeditateIt** (local-first generative meditation PWA) as public-source selected
+  work, each with a seven-locale case study and an Ask corpus entry.
+
 ## 0.28.0 — 2026-11-21
 
 ### Changed

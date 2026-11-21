@@ -136,3 +136,18 @@ Configurable business management platform: sales, stock, users and cash register
 Stack: Next.js, TypeScript.
 Live: https://business-management-system-omega-sepia.vercel.app
 Private source.
+
+## small-llm-in-c
+A from-scratch C99 inference engine that runs Qwen3.5-4B and Gemma 4 E4B on a 2016 desktop CPU with no GPU: about 4 tokens/s in q8, an OpenAI-compatible server, and every kernel checked against a float64 oracle.
+Stack: C99, AVX2, Python.
+Repo: https://github.com/marcfs31/small-llm-in-c
+Public source.
+Case study: /work/small-llm-in-c
+
+## MeditateIt
+Generative meditation soundscapes built live in the browser from noise, tones, beats and nature layers. An installable offline PWA in five languages and five themes; no accounts, no trackers, no audio files.
+Stack: Vite, React, TypeScript, Web Audio.
+Live: https://marcfs31.github.io/MeditateIt/
+Repo: https://github.com/marcfs31/MeditateIt
+Public source.
+Case study: /work/meditateit

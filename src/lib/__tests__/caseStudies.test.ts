@@ -22,6 +22,8 @@ describe("case studies", () => {
       "lmaas",
       "forsight",
       "fors-design-system",
+      "small-llm-in-c",
+      "meditateit",
     ]);
   });
 
@@ -94,6 +96,33 @@ describe("case studies", () => {
       expect(body, `${locale}: Latin`).toMatch(/Latin|latín|llatí|latino|latim|Latein|latin/);
       expect(body).not.toMatch(/A1 to C1|A1 a C1|A1 à C1|A1 bis C1|d’A1 a C1|da A1 a C1/);
       expect(body).not.toMatch(/github\.com|vercel\.app|@gmail\.com|mailto:|tel:/i);
+    }
+  });
+
+  it("documents small-llm-in-c with its public source, measured speeds and verification, in every locale", () => {
+    for (const locale of LOCALES) {
+      const study = caseStudyBySlug("small-llm-in-c", locale);
+      expect(study?.repo).toBe("https://github.com/marcfs31/small-llm-in-c");
+      expect(study?.live).toBeUndefined();
+      expect(study?.stack).toEqual(["C99", "AVX2", "Python"]);
+      const body = caseStudyBody("small-llm-in-c", locale)!;
+      for (const fact of ["Qwen3.5-4B", "Gemma 4 E4B", "float64", "Apache-2.0", "800 MHz", "5e-9", "1,35|1\\.35"]) {
+        expect(body, `${locale}: ${fact}`).toMatch(new RegExp(fact));
+      }
+      expect(body).not.toMatch(/@gmail\.com|mailto:|tel:/i);
+    }
+  });
+
+  it("documents MeditateIt's local-first PWA with its live site and public source, without medical claims", () => {
+    for (const locale of LOCALES) {
+      const study = caseStudyBySlug("meditateit", locale);
+      expect(study?.live).toBe("https://marcfs31.github.io/MeditateIt/");
+      expect(study?.repo).toBe("https://github.com/marcfs31/MeditateIt");
+      const body = caseStudyBody("meditateit", locale)!;
+      for (const fact of ["Web Audio", "localStorage", "AudioWorklet", "CSP"]) {
+        expect(body, `${locale}: ${fact}`).toContain(fact);
+      }
+      expect(body).not.toMatch(/Fors-Corp|@gmail\.com|mailto:|tel:/i);
     }
   });
 

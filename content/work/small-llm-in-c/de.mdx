@@ -1,0 +1,28 @@
+---
+project: "small-llm-in-c"
+stack:
+  - "C99"
+  - "AVX2"
+  - "Python"
+repo: "https://github.com/marcfs31/small-llm-in-c"
+order: 15
+description: "Eine von Grund auf in C99 geschriebene Inferenz-Engine, die Qwen3.5-4B und Gemma 4 E4B auf der CPU eines Desktops von 2016 ohne GPU ausführt: rund 4 Tokens/s, gegen ein float64-Orakel geprüft. Öffentlicher Quellcode."
+---
+
+## Problem
+
+Kleine Sprachmodelle laufen meist auf großen Frameworks und mit einer GPU. Ich wollte wissen, was nötig ist, um ein aktuelles Modell mit 4 Milliarden Parametern auf einer billigen, alten Maschine zu betreiben, und jedes Byte auf dem Weg zu verstehen: ein Dell OptiPlex 3050 mit i5-6500T (vier Kerne, AVX2, kein AVX-512), etwa 11 GB RAM und ohne nutzbare GPU.
+
+## Ansatz
+
+Eine von Grund auf geschriebene C99-Engine mit rund 12.600 Zeilen, ohne BLAS und ohne Framework. Sie implementiert zwei Architekturen: Qwen3.5-4B (lineare Gated-DeltaNet-Attention, drei Schichten auf eine volle Attention) und Gemma 4 E4B (Embeddings pro Schicht, KV-Sharing über Schichten, Logit-Softcap). Die Gewichte werden entweder als originale bf16-Safetensors geladen, exakt, aber langsamer, oder als q8-Datei mit int8-Gewichten und einer f32-Skala je 32 Gewichte, speicherabgebildet und resident gehalten.
+
+Korrektheit geht vor Geschwindigkeit. Jedes Modell besteht einen Golden-Test an einem winzigen synthetischen Checkpoint, geprüft gegen ein Python-Orakel in float64; das Gemma-Orakel stimmt mit Hugging Face transformers auf 5e-9 überein. Die AVX2- und NEON-Kernels werden bitweise mit dem skalaren Pfad verglichen, dazu kommen 26 Unit-Test-Dateien, Sanitizer-Builds und Shell-Tests für die Kommandozeilenwerkzeuge.
+
+Um die Engine herum liegen `lm-chat`, ein OpenAI-kompatibler `lm-serve` mit Streaming, ein Präfix-Cache, der einen gemeinsamen System-Prompt wiederherstellt statt ihn erneut zu verarbeiten, und `lm-quant`. Das Kontextfenster wird nach freiem Speicher gewählt, nicht per fester Konstante.
+
+## Ergebnis
+
+Beide Modelle laufen auf den echten Checkpoints der Zielmaschine. Qwen3.5-4B in q8 erzeugt 3,4 bis 4,0 Tokens/s und liest einen Prompt mit 11,6 bis 13,5 Tokens/s; Gemma 4 E4B erzeugt 2,8 bis 3,1 Tokens/s bei rund 5 GiB resident. Jede Antwort liest etwa 4,75 GB pro Token und ist damit durch die Speicherbandbreite begrenzt, nicht durch die Kerne.
+
+Das Messen deckte echte Probleme auf. Die ersten AVX2-Kernels wurden zu etwa dreimal so vielen Instruktionen wie nötig kompiliert; das Bündeln des Prompts, damit die Eingaben im L1-Cache bleiben, machte die Multiplikation 1,35-mal schneller. Ein nicht originales Netzteil hatte die CPU unbemerkt auf 800 MHz gehalten, wodurch jede Antwort etwa dreimal langsamer war, bis es gefunden und ersetzt wurde. Spekulatives Decoding mit Qwens eigenem Draft-Kopf akzeptierte 78 % der Entwürfe, lief auf dieser CPU aber mit nur 0,91-facher Geschwindigkeit und bleibt daher optional. Der Quellcode ist unter Apache-2.0 öffentlich, samt den Messwerkzeugen, die jede Zahl reproduzieren.
