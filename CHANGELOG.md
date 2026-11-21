@@ -4,6 +4,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+## 0.29.0 — 2026-11-21
+
 ### Added
 
 - Feature **small-llm-in-c** (C99 CPU inference for Qwen3.5-4B and Gemma 4 E4B) and
