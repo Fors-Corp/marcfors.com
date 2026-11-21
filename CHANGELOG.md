@@ -6,6 +6,7 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Changed
 
+- Bump `simple-icons` to `^16.37.0` (Dependabot #125; minor, new icons only).
 - Sync Embedded RAG featured work with the live product: hybrid RRF retrieve
   (vector + lexical) over pgvector, paraphrase-multilingual MiniLM embeddings,
   broader ingest (images, SQLite, Vercel Blob), and drop the public-repo claim
