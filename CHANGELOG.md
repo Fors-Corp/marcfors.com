@@ -4,6 +4,8 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+## 0.28.0 — 2026-11-21
+
 ### Changed
 
 - Bump `simple-icons` to `^16.37.0` (Dependabot #125; minor, new icons only).
