@@ -1,0 +1,28 @@
+---
+project: "small-llm-in-c"
+stack:
+  - "C99"
+  - "AVX2"
+  - "Python"
+repo: "https://github.com/marcfs31/small-llm-in-c"
+order: 15
+description: "Um motor de inferência em C99, escrito de raiz, que executa Qwen3.5-4B e Gemma 4 E4B no CPU de um desktop de 2016, sem GPU: cerca de 4 tokens/s, verificado contra um oráculo em float64. Código público."
+---
+
+## Problema
+
+Os modelos de linguagem pequenos costumam correr em frameworks enormes e com GPU. Queria saber o que é preciso para correr um modelo atual de 4 mil milhões de parâmetros numa máquina barata e velha, e perceber cada byte do caminho: um Dell OptiPlex 3050 com um i5-6500T (quatro núcleos, AVX2, sem AVX-512), cerca de 11 GB de RAM e sem GPU utilizável.
+
+## Abordagem
+
+Um motor em C99 escrito de raiz, com cerca de 12 600 linhas, sem BLAS nem framework. Implementa duas arquiteturas: Qwen3.5-4B (atenção linear Gated DeltaNet, três camadas por cada uma de atenção completa) e Gemma 4 E4B (embeddings por camada, KV partilhado entre camadas, logit softcap). Os pesos carregam-se como safetensors bf16 originais, exatos mas mais lentos, ou como um ficheiro q8 de pesos int8 com uma escala f32 a cada 32 pesos, mapeado em memória e residente.
+
+A correção vem antes da velocidade. Cada modelo passa um teste de referência num checkpoint sintético minúsculo, confrontado com um oráculo Python em float64; o oráculo do Gemma coincide com o Hugging Face transformers até 5e-9. Os kernels AVX2 e NEON são comparados bit a bit com o caminho escalar, e há 26 ficheiros de testes unitários, compilações com sanitizers e testes de shell para as ferramentas de linha de comandos.
+
+Em volta do motor há o `lm-chat`, um `lm-serve` compatível com a OpenAI com streaming, uma cache de prefixos que repõe um prompt de sistema partilhado em vez de o reprocessar, e o `lm-quant`. A janela de contexto escolhe-se pela memória livre, não por uma constante fixa.
+
+## Resultado
+
+Ambos os modelos funcionam com os checkpoints reais na máquina de destino. O Qwen3.5-4B em q8 gera 3,4–4,0 tokens/s e lê um prompt a 11,6–13,5 tokens/s; o Gemma 4 E4B gera 2,8–3,1 tokens/s, com cerca de 5 GiB residentes. Cada resposta lê cerca de 4,75 GB por token, por isso está limitada pela largura de banda da memória, não pelos núcleos.
+
+Medir revelou problemas reais. Os primeiros kernels AVX2 compilavam para cerca de três vezes mais instruções do que o necessário; agrupar o prompt para que as entradas caibam na cache L1 tornou a multiplicação 1,35 vezes mais rápida. Um transformador de corrente não original tinha deixado o CPU em silêncio a 800 MHz, com respostas cerca de três vezes mais lentas até ser encontrado e trocado. A descodificação especulativa com a própria cabeça de rascunho do Qwen aceitava 78% dos rascunhos mas andava a 0,91 vezes a velocidade normal neste CPU, por isso continua opcional. O código é público sob licença Apache-2.0, com as ferramentas de medição que reproduzem cada valor.

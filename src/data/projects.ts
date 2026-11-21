@@ -184,6 +184,23 @@ export const featured: Project[] = [
     spotlight: true,
   },
   {
+    name: "MeditateIt",
+    blurb: {
+      en: "Generative meditation soundscapes built live in the browser from noise, tones, beats and nature layers. An installable offline PWA in five languages and five themes; no accounts, no trackers, no audio files. Public source.",
+      es: "Paisajes sonoros de meditación generados en directo en el navegador con ruido, tonos, pulsos y capas de naturaleza. Una PWA instalable y sin conexión en cinco idiomas y cinco temas; sin cuentas, rastreadores ni archivos de audio. Código público.",
+      ca: "Paisatges sonors de meditació generats en directe al navegador amb soroll, tons, pulsos i capes de natura. Una PWA instal·lable i sense connexió en cinc llengües i cinc temes; sense comptes, rastrejadors ni fitxers d'àudio. Codi públic.",
+      it: "Paesaggi sonori di meditazione generati dal vivo nel browser con rumore, toni, battimenti e livelli di natura. Una PWA installabile e offline in cinque lingue e cinque temi; niente account, tracker né file audio. Codice pubblico.",
+      pt: "Paisagens sonoras de meditação geradas em direto no navegador com ruído, tons, batimentos e camadas de natureza. Uma PWA instalável e offline em cinco línguas e cinco temas; sem contas, rastreadores nem ficheiros de áudio. Código público.",
+      de: "Meditations-Klanglandschaften, live im Browser aus Rauschen, Tönen, Beats und Naturschichten erzeugt. Eine installierbare Offline-PWA in fünf Sprachen und fünf Themes; keine Konten, Tracker oder Audiodateien. Öffentlicher Quellcode.",
+      fr: "Des paysages sonores de méditation générés en direct dans le navigateur à partir de bruit, de tonalités, de battements et de couches de nature. Une PWA installable hors ligne en cinq langues et cinq thèmes ; ni compte, ni traceur, ni fichier audio. Code source public.",
+    },
+    stack: ["Vite", "React", "TypeScript", "Web Audio"],
+    repo: "https://github.com/marcfs31/MeditateIt",
+    live: "https://marcfs31.github.io/MeditateIt/",
+    caseStudy: "meditateit",
+    spotlight: true,
+  },
+  {
     name: "Agent Switchboard",
     blurb: {
       en: "Local ops desk for Claude, Codex, Cursor and Grok sessions: last prompt, git dirt, Vercel health, encrypted env vault, a macOS menu extra.",
@@ -290,6 +307,22 @@ export const featured: Project[] = [
     live: "https://mlaas-console.vercel.app",
     caseStudy: "lmaas",
     private: true,
+    spotlight: true,
+  },
+  {
+    name: "small-llm-in-c",
+    blurb: {
+      en: "A from-scratch C99 engine that runs Qwen3.5-4B and Gemma 4 E4B on a 2016 desktop CPU with no GPU: about 4 tokens/s, an OpenAI-compatible server, and every kernel checked against a float64 oracle. Public source.",
+      es: "Un motor en C99 escrito desde cero que ejecuta Qwen3.5-4B y Gemma 4 E4B en la CPU de un sobremesa de 2016, sin GPU: unos 4 tokens/s, un servidor compatible con OpenAI y cada kernel contrastado con un oráculo en float64. Código público.",
+      ca: "Un motor en C99 escrit des de zero que executa Qwen3.5-4B i Gemma 4 E4B a la CPU d'un sobretaula de 2016, sense GPU: uns 4 tokens/s, un servidor compatible amb OpenAI i cada kernel contrastat amb un oracle en float64. Codi públic.",
+      it: "Un motore in C99 scritto da zero che esegue Qwen3.5-4B e Gemma 4 E4B sulla CPU di un desktop del 2016, senza GPU: circa 4 token/s, un server compatibile con OpenAI e ogni kernel verificato con un oracolo in float64. Codice pubblico.",
+      pt: "Um motor em C99 escrito de raiz que executa Qwen3.5-4B e Gemma 4 E4B no CPU de um desktop de 2016, sem GPU: cerca de 4 tokens/s, um servidor compatível com a OpenAI e cada kernel confrontado com um oráculo em float64. Código público.",
+      de: "Eine von Grund auf geschriebene C99-Engine, die Qwen3.5-4B und Gemma 4 E4B auf der CPU eines Desktops von 2016 ohne GPU ausführt: rund 4 Tokens/s, ein OpenAI-kompatibler Server und jeder Kernel gegen ein float64-Orakel geprüft. Öffentlicher Quellcode.",
+      fr: "Un moteur C99 écrit de zéro qui exécute Qwen3.5-4B et Gemma 4 E4B sur le processeur d'un ordinateur de bureau de 2016, sans GPU : environ 4 tokens/s, un serveur compatible OpenAI et chaque noyau vérifié contre un oracle en float64. Code source public.",
+    },
+    stack: ["C99", "AVX2", "Python"],
+    repo: "https://github.com/marcfs31/small-llm-in-c",
+    caseStudy: "small-llm-in-c",
     spotlight: true,
   },
   {

@@ -1,0 +1,28 @@
+---
+project: "MeditateIt"
+stack:
+  - "Vite"
+  - "React"
+  - "TypeScript"
+  - "Web Audio"
+live: "https://marcfs31.github.io/MeditateIt/"
+repo: "https://github.com/marcfs31/MeditateIt"
+order: 16
+description: "Una PWA local-first che genera paesaggi sonori di meditazione nel browser da rumore, toni, battimenti e livelli di natura. Niente account, niente tracker, niente file audio. Codice pubblico."
+---
+
+## Problema
+
+La maggior parte delle app di meditazione e sonno trasmette audio registrato dietro un account, un abbonamento e analytics, e molte si appoggiano a promesse di salute che non possono sostenere. Volevo uno strumento sonoro calmo che funzioni offline, tenga tutto sul dispositivo e dica solo ciò che è: un aiuto all'ascolto, non una terapia.
+
+## Approccio
+
+Il suono è generato dal vivo con la Web Audio API, quindi non ci sono file audio da scaricare. Un motore impila quattro tipi di livello: rumore (bianco, rosa, marrone, con un processore AudioWorklet), toni con nome in Hz, battimenti binaurali o isocroni e texture naturali (pioggia, bosco, riva, vento). Ogni livello ha il proprio equalizzatore e le proprie dissolvenze, e cambiando preset c'è una dissolvenza incrociata di circa due secondi invece di un taglio. I preset sono raggruppati per categoria, ognuno può essere clonato come preset personale e le sequenze a più fasi avanzano da sole, con il timer di fase fermo durante la pausa.
+
+È una PWA installabile con shell offline e font ospitati in proprio. Un nuovo service worker viene applicato solo dopo un momento di quiete e mai mentre l'audio suona, così un aggiornamento non interrompe una sessione. Preferenze, preset, sequenze e cronologia delle sessioni stanno in `localStorage`, con backup e ripristino JSON (unisci o sostituisci), una finestra di conservazione e un comando per cancellare tutto. L'interfaccia è in cinque lingue (inglese, spagnolo, catalano, francese, portoghese) e cinque temi più il tema di sistema.
+
+Il testo è verificato dai test: i cataloghi vengono rifiutati se contengono vocabolario di cura o diagnosi, e i nomi delle bande sono ammorbiditi (un «~10 Hz glide» invece di un'etichetta clinica). La suite è un insieme di semplici script `*.check.ts` che coprono l'analisi dei backup, la cancellazione e la conservazione, i limiti di dissolvenza ed equalizzatore e la CSP dell'HTML compilato; un workflow di GitHub Pages esegue lint, test e build prima di ogni rilascio.
+
+## Risultato
+
+Un'app funzionante che chiunque può aprire e installare, senza account e senza che i dati lascino il browser. I limiti sono dichiarati, non nascosti: i browser mobili possono sospendere l'audio al blocco dello schermo, quindi non è un lettore nativo, e i battimenti binaurali richiedono cuffie stereo. Il repository non ha un file di licenza, quindi il codice è pubblico da consultare, non da riutilizzare.

@@ -30,6 +30,28 @@ describe("featured work", () => {
     expect(gatto?.blurb.en).toMatch(/Spanish, Catalan and English/);
   });
 
+  it("features small-llm-in-c and MeditateIt with their public source and case studies", () => {
+    const llm = featured.find((item) => item.name === "small-llm-in-c");
+    expect(llm).toMatchObject({
+      repo: "https://github.com/marcfs31/small-llm-in-c",
+      caseStudy: "small-llm-in-c",
+      spotlight: true,
+    });
+    expect(llm?.private).toBeUndefined();
+    const med = featured.find((item) => item.name === "MeditateIt");
+    expect(med).toMatchObject({
+      repo: "https://github.com/marcfs31/MeditateIt",
+      live: "https://marcfs31.github.io/MeditateIt/",
+      caseStudy: "meditateit",
+      spotlight: true,
+    });
+    expect(med?.private).toBeUndefined();
+    for (const item of [llm!, med!]) {
+      expect(Object.keys(item.blurb).sort()).toEqual(["ca", "de", "en", "es", "fr", "it", "pt"]);
+      expect(item.blurb.en).toMatch(/public source/i);
+    }
+  });
+
   it("features Embedded RAG first in selected work without linking private source", () => {
     expect(featured[0]?.name).toBe("Embedded RAG");
     const embedded = featured[0];
