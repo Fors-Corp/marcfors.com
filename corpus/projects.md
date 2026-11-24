@@ -23,7 +23,7 @@ Private source.
 
 ## Kevin AI
 A from-scratch C99 inference engine that runs Qwen3.5-4B and Gemma 4 E4B on a 2016 desktop CPU with no GPU: about 4 tokens/s in q8, an OpenAI-compatible server, and every kernel checked against a float64 oracle. It comes with a chat interface built with Vite, React and TypeScript: conversations stay in the browser, it reads files and images, renders Markdown and math, can use tools and web search, and scores 100 in every Lighthouse category.
-Stack: C99, AVX2, Python, Vite, React, TypeScript.
+Stack: C99, AVX2, Python, Vite, React, TypeScript, Qwen3.5, Gemma 4, MCP, SearXNG.
 Repo: https://github.com/marcfs31/kevin-ai
 Public source.
 Case study: /work/kevin-ai

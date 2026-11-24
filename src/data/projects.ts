@@ -75,7 +75,7 @@ export const featured: Project[] = [
       de: "Eine von Grund auf geschriebene C99-Engine, die Qwen3.5-4B und Gemma 4 E4B auf der CPU eines Desktops von 2016 ohne GPU ausführt: rund 4 Tokens/s, ein OpenAI-kompatibler Server und jeder Kernel gegen ein float64-Orakel geprüft. Dazu gehört eine Chat-Oberfläche mit Vite, React und TypeScript: Gespräche bleiben im Browser, sie liest Dateien und Bilder, zeigt Markdown und Formeln an, kann Werkzeuge und Websuche nutzen und erreicht in jeder Lighthouse-Kategorie 100. Öffentlicher Quellcode.",
       fr: "Un moteur C99 écrit de zéro qui exécute Qwen3.5-4B et Gemma 4 E4B sur le processeur d'un ordinateur de bureau de 2016, sans GPU : environ 4 tokens/s, un serveur compatible OpenAI et chaque noyau vérifié contre un oracle en float64. Elle inclut une interface de chat réalisée avec Vite, React et TypeScript : les conversations restent dans le navigateur, elle lit fichiers et images, affiche Markdown et formules, peut utiliser des outils et la recherche web et obtient 100 dans chaque catégorie Lighthouse. Code source public.",
     },
-    stack: ["C99", "AVX2", "Python", "Vite", "React", "TypeScript"],
+    stack: ["C99", "AVX2", "Python", "Vite", "React", "TypeScript", "Qwen3.5", "Gemma 4", "MCP", "SearXNG"],
     repo: "https://github.com/marcfs31/kevin-ai",
     caseStudy: "kevin-ai",
     spotlight: true,
