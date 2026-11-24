@@ -6,6 +6,11 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ### Changed
 
+- Kevin AI's card and case study (all seven locales) now describe its Vite, React and
+  TypeScript chat interface and what it does.
+
+### Changed
+
 - Rename the **small-llm-in-c** entry to **Kevin AI** (repo `marcfs31/kevin-ai`) and move it
   to third in selected work.
 
