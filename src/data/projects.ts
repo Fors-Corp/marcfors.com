@@ -48,6 +48,22 @@ export const featured: Project[] = [
     spotlight: true,
   },
   {
+    name: "Kevin AI",
+    blurb: {
+      en: "A from-scratch C99 engine that runs Qwen3.5-4B and Gemma 4 E4B on a 2016 desktop CPU with no GPU: about 4 tokens/s, an OpenAI-compatible server, and every kernel checked against a float64 oracle. Public source.",
+      es: "Un motor en C99 escrito desde cero que ejecuta Qwen3.5-4B y Gemma 4 E4B en la CPU de un sobremesa de 2016, sin GPU: unos 4 tokens/s, un servidor compatible con OpenAI y cada kernel contrastado con un oráculo en float64. Código público.",
+      ca: "Un motor en C99 escrit des de zero que executa Qwen3.5-4B i Gemma 4 E4B a la CPU d'un sobretaula de 2016, sense GPU: uns 4 tokens/s, un servidor compatible amb OpenAI i cada kernel contrastat amb un oracle en float64. Codi públic.",
+      it: "Un motore in C99 scritto da zero che esegue Qwen3.5-4B e Gemma 4 E4B sulla CPU di un desktop del 2016, senza GPU: circa 4 token/s, un server compatibile con OpenAI e ogni kernel verificato con un oracolo in float64. Codice pubblico.",
+      pt: "Um motor em C99 escrito de raiz que executa Qwen3.5-4B e Gemma 4 E4B no CPU de um desktop de 2016, sem GPU: cerca de 4 tokens/s, um servidor compatível com a OpenAI e cada kernel confrontado com um oráculo em float64. Código público.",
+      de: "Eine von Grund auf geschriebene C99-Engine, die Qwen3.5-4B und Gemma 4 E4B auf der CPU eines Desktops von 2016 ohne GPU ausführt: rund 4 Tokens/s, ein OpenAI-kompatibler Server und jeder Kernel gegen ein float64-Orakel geprüft. Öffentlicher Quellcode.",
+      fr: "Un moteur C99 écrit de zéro qui exécute Qwen3.5-4B et Gemma 4 E4B sur le processeur d'un ordinateur de bureau de 2016, sans GPU : environ 4 tokens/s, un serveur compatible OpenAI et chaque noyau vérifié contre un oracle en float64. Code source public.",
+    },
+    stack: ["C99", "AVX2", "Python"],
+    repo: "https://github.com/marcfs31/kevin-ai",
+    caseStudy: "kevin-ai",
+    spotlight: true,
+  },
+  {
     name: "Fors Photography",
     blurb: {
       en: "My own print shop on forsphoto.com: 18 signed fine-art prints in four collections, from the Pacific coast, the desert Southwest and Europe, printed to order in four sizes. Six languages, Stripe-hosted checkout, no database, accounts or analytics.",
@@ -167,23 +183,6 @@ export const featured: Project[] = [
     spotlight: true,
   },
   {
-    name: "Habit Breaker",
-    blurb: {
-      en: "Weekly habit and schedule planner. Day templates, busy intervals, push reminders, Spanish/English, a public marketplace of routines.",
-      es: "Planificador semanal de hábitos. Plantillas de día, huecos ocupados, recordatorios push, castellano/inglés, marketplace de rutinas.",
-      ca: "Planificador setmanal d'hàbits. Plantilles de dia, forats ocupats, recordatoris push, català/castellà/anglès, marketplace de rutines.",
-      it: "Planner settimanale di abitudini. Template di giornata, impegni fissi, reminder push, spagnolo/inglese, marketplace di routine.",
-      pt: "Planeador semanal de hábitos. Modelos de dia, intervalos ocupados, lembretes push, castelhano/inglês, marketplace de rotinas.",
-      de: "Wöchentlicher Habit- und Terminplaner. Tagesvorlagen, belegte Intervalle, Push-Erinnerungen, Spanisch/Englisch, öffentlicher Marktplatz für Routinen.",
-      fr: "Planificateur hebdomadaire d’habitudes et d’emploi du temps. Modèles de journée, plages occupées, rappels push, espagnol/anglais, une place de marché publique de routines.",
-    },
-    stack: ["Next.js 16", "Clerk", "Neon", "Drizzle"],
-    live: "https://habit-breaker-blush.vercel.app",
-    private: true,
-    caseStudy: "habit-breaker",
-    spotlight: true,
-  },
-  {
     name: "MeditateIt",
     blurb: {
       en: "Generative meditation soundscapes built live in the browser from noise, tones, beats and nature layers. An installable offline PWA in five languages and five themes; no accounts, no trackers, no audio files. Public source.",
@@ -198,22 +197,6 @@ export const featured: Project[] = [
     repo: "https://github.com/marcfs31/MeditateIt",
     live: "https://marcfs31.github.io/MeditateIt/",
     caseStudy: "meditateit",
-    spotlight: true,
-  },
-  {
-    name: "Agent Switchboard",
-    blurb: {
-      en: "Local ops desk for Claude, Codex, Cursor and Grok sessions: last prompt, git dirt, Vercel health, encrypted env vault, a macOS menu extra.",
-      es: "Mesa de operaciones local para sesiones de Claude, Codex, Cursor y Grok: último prompt, git sucio, salud de Vercel, bóveda de env, extra de menú en macOS.",
-      ca: "Taula d'operacions local per a sessions de Claude, Codex, Cursor i Grok: darrer prompt, git brut, salut de Vercel, volta d'env, extra de menú a macOS.",
-      it: "Desk ops locale per sessioni Claude, Codex, Cursor e Grok: ultimo prompt, git sporco, salute Vercel, vault env cifrato, extra di menu macOS.",
-      pt: "Mesa de operações local para sessões Claude, Codex, Cursor e Grok: último prompt, git sujo, saúde Vercel, cofre de env, extra de menu no macOS.",
-      de: "Lokales Ops-Desk für Claude-, Codex-, Cursor- und Grok-Sessions: letzter Prompt, schmutziges Git, Vercel-Health, verschlüsselter Env-Tresor, macOS-Menüleiste.",
-      fr: "Bureau d’exploitation local pour les sessions Claude, Codex, Cursor et Grok : dernier prompt, état git sale, santé Vercel, coffre d’env chiffré, un extra de barre de menus macOS.",
-    },
-    stack: ["React", "Express", "Swift"],
-    caseStudy: "agent-switchboard",
-    private: true,
     spotlight: true,
   },
   {
@@ -307,22 +290,6 @@ export const featured: Project[] = [
     live: "https://mlaas-console.vercel.app",
     caseStudy: "lmaas",
     private: true,
-    spotlight: true,
-  },
-  {
-    name: "small-llm-in-c",
-    blurb: {
-      en: "A from-scratch C99 engine that runs Qwen3.5-4B and Gemma 4 E4B on a 2016 desktop CPU with no GPU: about 4 tokens/s, an OpenAI-compatible server, and every kernel checked against a float64 oracle. Public source.",
-      es: "Un motor en C99 escrito desde cero que ejecuta Qwen3.5-4B y Gemma 4 E4B en la CPU de un sobremesa de 2016, sin GPU: unos 4 tokens/s, un servidor compatible con OpenAI y cada kernel contrastado con un oráculo en float64. Código público.",
-      ca: "Un motor en C99 escrit des de zero que executa Qwen3.5-4B i Gemma 4 E4B a la CPU d'un sobretaula de 2016, sense GPU: uns 4 tokens/s, un servidor compatible amb OpenAI i cada kernel contrastat amb un oracle en float64. Codi públic.",
-      it: "Un motore in C99 scritto da zero che esegue Qwen3.5-4B e Gemma 4 E4B sulla CPU di un desktop del 2016, senza GPU: circa 4 token/s, un server compatibile con OpenAI e ogni kernel verificato con un oracolo in float64. Codice pubblico.",
-      pt: "Um motor em C99 escrito de raiz que executa Qwen3.5-4B e Gemma 4 E4B no CPU de um desktop de 2016, sem GPU: cerca de 4 tokens/s, um servidor compatível com a OpenAI e cada kernel confrontado com um oráculo em float64. Código público.",
-      de: "Eine von Grund auf geschriebene C99-Engine, die Qwen3.5-4B und Gemma 4 E4B auf der CPU eines Desktops von 2016 ohne GPU ausführt: rund 4 Tokens/s, ein OpenAI-kompatibler Server und jeder Kernel gegen ein float64-Orakel geprüft. Öffentlicher Quellcode.",
-      fr: "Un moteur C99 écrit de zéro qui exécute Qwen3.5-4B et Gemma 4 E4B sur le processeur d'un ordinateur de bureau de 2016, sans GPU : environ 4 tokens/s, un serveur compatible OpenAI et chaque noyau vérifié contre un oracle en float64. Code source public.",
-    },
-    stack: ["C99", "AVX2", "Python"],
-    repo: "https://github.com/marcfs31/small-llm-in-c",
-    caseStudy: "small-llm-in-c",
     spotlight: true,
   },
   {

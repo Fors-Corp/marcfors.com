@@ -47,7 +47,7 @@ Tests keep this honest: `copy.test.ts` checks that every locale has the same key
 
 ## MDX case studies
 
-Prose lives in `content/work/<slug>/<locale>.mdx`, one self-contained file per locale. Slugs are discovered from the directory names (`ls content/work`); at the time of writing: `wordkeep`, `habit-breaker`, `iterm-studio`, `gatto`.
+Prose lives in `content/work/<slug>/<locale>.mdx`, one self-contained file per locale. Slugs are discovered from the directory names (`ls content/work`); at the time of writing: `wordkeep`, `kevin-ai`, `iterm-studio`, `gatto`.
 
 - `src/data/caseStudies.ts` reads only the YAML frontmatter (`project`, `stack`, `live`, `repo`, `order`, `description`) for listings, metadata and the sitemap. It validates the shape and throws on a mismatch.
 - `src/app/[locale]/work/[slug]/page.tsx` dynamically `import()`s the matching `.mdx` body.

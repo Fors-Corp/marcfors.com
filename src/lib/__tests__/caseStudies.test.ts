@@ -8,6 +8,7 @@ describe("case studies", () => {
     expect(slugs).toEqual([
       "embedded-rag",
       "fors-photography",
+      "kevin-ai",
       "mensura",
       "wordkeep",
       "marcfors-com",
@@ -15,14 +16,11 @@ describe("case studies", () => {
       "francesc-cescju",
       "fors-corp",
       "ferretodo-lepant",
-      "habit-breaker",
-      "agent-switchboard",
       "iterm-studio",
       "finance-dashboard",
       "lmaas",
       "forsight",
       "fors-design-system",
-      "small-llm-in-c",
       "meditateit",
     ]);
   });
@@ -99,13 +97,13 @@ describe("case studies", () => {
     }
   });
 
-  it("documents small-llm-in-c with its public source, measured speeds and verification, in every locale", () => {
+  it("documents kevin-ai with its public source, measured speeds and verification, in every locale", () => {
     for (const locale of LOCALES) {
-      const study = caseStudyBySlug("small-llm-in-c", locale);
-      expect(study?.repo).toBe("https://github.com/marcfs31/small-llm-in-c");
+      const study = caseStudyBySlug("kevin-ai", locale);
+      expect(study?.repo).toBe("https://github.com/marcfs31/kevin-ai");
       expect(study?.live).toBeUndefined();
       expect(study?.stack).toEqual(["C99", "AVX2", "Python"]);
-      const body = caseStudyBody("small-llm-in-c", locale)!;
+      const body = caseStudyBody("kevin-ai", locale)!;
       for (const fact of ["Qwen3.5-4B", "Gemma 4 E4B", "float64", "Apache-2.0", "800 MHz", "5e-9", "1,35|1\\.35"]) {
         expect(body, `${locale}: ${fact}`).toMatch(new RegExp(fact));
       }
@@ -124,12 +122,6 @@ describe("case studies", () => {
       }
       expect(body).not.toMatch(/Fors-Corp|@gmail\.com|mailto:|tel:/i);
     }
-  });
-
-  it("ships Habit Breaker as a live product without a private repo URL", () => {
-    const habit = caseStudyBySlug("habit-breaker", "en");
-    expect(habit?.live).toMatch(/^https:\/\//);
-    expect(habit?.repo).toBeUndefined();
   });
 
   it("documents Mensura's locally learned, history-validated forecast without linking its private source", () => {
@@ -207,7 +199,6 @@ describe("case studies", () => {
       "embedded-rag",
       "fors-corp",
       "ferretodo-lepant",
-      "agent-switchboard",
       "finance-dashboard",
       "lmaas",
       "forsight",

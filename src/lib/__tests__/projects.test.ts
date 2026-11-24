@@ -30,11 +30,11 @@ describe("featured work", () => {
     expect(gatto?.blurb.en).toMatch(/Spanish, Catalan and English/);
   });
 
-  it("features small-llm-in-c and MeditateIt with their public source and case studies", () => {
-    const llm = featured.find((item) => item.name === "small-llm-in-c");
+  it("features Kevin AI and MeditateIt with their public source and case studies", () => {
+    const llm = featured.find((item) => item.name === "Kevin AI");
     expect(llm).toMatchObject({
-      repo: "https://github.com/marcfs31/small-llm-in-c",
-      caseStudy: "small-llm-in-c",
+      repo: "https://github.com/marcfs31/kevin-ai",
+      caseStudy: "kevin-ai",
       spotlight: true,
     });
     expect(llm?.private).toBeUndefined();
@@ -167,14 +167,6 @@ describe("featured work", () => {
         expect(project.repo, project.name).toMatch(/^https:\/\/github\.com\/(marcfs31|Fors-Corp)\//);
       }
     }
-  });
-
-  it("gives Habit Breaker a live URL, a case study, and no repo", () => {
-    const habit = featured.find((item) => item.name === "Habit Breaker");
-    expect(habit?.live).toMatch(/^https:\/\//);
-    expect(habit?.caseStudy).toBe("habit-breaker");
-    expect(habit?.private).toBe(true);
-    expect(habit?.repo).toBeUndefined();
   });
 
   it("lists iTerm Studio with public source, gallery, and a case study", () => {

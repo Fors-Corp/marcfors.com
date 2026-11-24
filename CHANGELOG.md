@@ -4,6 +4,15 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+### Changed
+
+- Rename the **small-llm-in-c** entry to **Kevin AI** (repo `marcfs31/kevin-ai`) and move it
+  to third in selected work.
+
+### Removed
+
+- The **Habit Breaker** and **Agent Switchboard** entries, case studies and Ask corpus pages.
+
 ## 0.29.0 — 2026-11-21
 
 ### Added
