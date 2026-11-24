@@ -1,5 +1,12 @@
 # Selected work
 
+## Finance Dashboard
+Single-user metals, crypto and portfolio tracker with cost basis, interactive charts, price alerts, and optional Revolut X import. A floating Ask chat answers questions about the whole dashboard (holdings, prices, alerts and every chart) through embedded-rag, and each answer links to the card it came from. Read-only live demo with a sample €10,000 portfolio.
+Stack: Next.js, Prisma, SQLite, Claude API.
+Live: https://marcfors-finance.vercel.app
+Case study: /work/finance-dashboard
+Private source.
+
 ## Embedded RAG
 Classic RAG with hybrid retrieve: vector and lexical channels fused with RRF over pgvector, then one Claude answer with citations — or a fixed abstain when the corpus does not support the question. Python and Vercel/Neon share multilingual MiniLM embeddings and the same grounding rules. Live demo.
 Stack: Python, React, TypeScript, Neon, Claude API.
@@ -86,12 +93,6 @@ Case study: /work/iterm-studio
 Browser extension plus native host. Downloads media you can already view, via yt-dlp. No DRM circumvention.
 Stack: Python, TypeScript.
 Repo: https://github.com/Fors-Corp/media-downloader
-
-## Finance Dashboard
-Single-user metals, crypto and portfolio tracker with cost basis, alerts, and optional Revolut X import.
-Stack: Next.js, Prisma, SQLite.
-Private source.
-Case study: /work/finance-dashboard
 
 ## SpotiApp
 Angular app on the Spotify API. Early public front-end work.

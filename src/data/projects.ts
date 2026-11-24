@@ -14,6 +14,23 @@ export type Project = {
 
 export const featured: Project[] = [
   {
+    name: "Finance Dashboard",
+    blurb: {
+      en: "Single-user metals, crypto and portfolio tracker with cost basis, interactive charts, price alerts and optional Revolut X import. A floating Ask chat answers questions about the whole dashboard — holdings, prices, alerts and every chart — through my own embedded-rag, and each answer links to the card it came from.",
+      es: "Panel de metales, cripto y cartera para un solo usuario: coste, gráficos interactivos, alertas de precio e importación opcional de Revolut X. Un chat flotante responde preguntas sobre todo el panel —posiciones, precios, alertas y cada gráfico— con mi propio embedded-rag, y cada respuesta enlaza a la tarjeta de origen.",
+      ca: "Panell de metalls, cripto i cartera per a un sol usuari: cost, gràfics interactius, alertes de preu i importació opcional de Revolut X. Un xat flotant respon preguntes sobre tot el panell —posicions, preus, alertes i cada gràfic— amb el meu propi embedded-rag, i cada resposta enllaça a la targeta d'origen.",
+      it: "Dashboard monoutente di metalli, crypto e portafoglio: costo, grafici interattivi, alert di prezzo e import opzionale da Revolut X. Una chat flottante risponde a domande su tutta la dashboard — posizioni, prezzi, alert e ogni grafico — con il mio embedded-rag, e ogni risposta rimanda alla scheda da cui proviene.",
+      pt: "Painel de metais, cripto e carteira para um só utilizador: custo, gráficos interativos, alertas de preço e importação opcional do Revolut X. Um chat flutuante responde a perguntas sobre todo o painel — posições, preços, alertas e cada gráfico — com o meu próprio embedded-rag, e cada resposta liga ao cartão de origem.",
+      de: "Einzelnutzer-Tracker für Metalle, Krypto und Portfolio mit Einstandskosten, interaktiven Charts, Preis-Alerts und optionalem Revolut-X-Import. Ein schwebender Ask-Chat beantwortet Fragen zum ganzen Dashboard — Positionen, Preise, Alerts und jeder Chart — über mein eigenes embedded-rag; jede Antwort verlinkt auf die Karte, aus der sie stammt.",
+      fr: "Suivi mono-utilisateur de métaux, de crypto et de portefeuille avec prix de revient, graphiques interactifs, alertes de prix et import Revolut X optionnel. Un chat flottant répond aux questions sur tout le tableau de bord — positions, prix, alertes et chaque graphique — via mon propre embedded-rag, chaque réponse renvoyant à la carte d’origine.",
+    },
+    stack: ["Next.js", "Prisma", "SQLite", "Claude API"],
+    caseStudy: "finance-dashboard",
+    live: "https://marcfors-finance.vercel.app",
+    private: true,
+    spotlight: true,
+  },
+  {
     name: "Embedded RAG",
     blurb: {
       en: "Classic RAG with hybrid retrieve: vector and lexical channels fused with RRF over pgvector, then one Claude answer with citations — or a fixed abstain when the corpus does not support the question. Python and Vercel/Neon share multilingual MiniLM embeddings and the same grounding rules. Live demo.",
@@ -244,22 +261,6 @@ export const featured: Project[] = [
     },
     stack: ["Python", "TypeScript"],
     repo: "https://github.com/Fors-Corp/media-downloader",
-  },
-  {
-    name: "Finance Dashboard",
-    blurb: {
-      en: "Single-user metals, crypto and portfolio tracker with cost basis, alerts, and optional Revolut X import.",
-      es: "Panel de metales, crypto y cartera: coste, alertas e importación opcional de Revolut X.",
-      ca: "Panell de metalls, cripto i cartera: cost, alertes i importació opcional de Revolut X.",
-      it: "Dashboard metalli, crypto e portafoglio: costo, alert e import opzionale da Revolut X.",
-      pt: "Painel de metais, cripto e carteira: custo, alertas e importação opcional do Revolut X.",
-      de: "Einzelnutzer-Tracker für Metalle, Krypto und Portfolio mit Einstandskosten, Alerts und optionalem Revolut-X-Import.",
-      fr: "Suivi mono-utilisateur de métaux, de crypto et de portefeuille avec prix de revient, alertes et import Revolut X optionnel.",
-    },
-    stack: ["Next.js", "Prisma", "SQLite"],
-    caseStudy: "finance-dashboard",
-    private: true,
-    spotlight: true,
   },
   {
     name: "SpotiApp",

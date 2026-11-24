@@ -4,7 +4,9 @@ stack:
   - "Next.js"
   - "Prisma"
   - "SQLite"
-order: 11
+  - "Claude API"
+live: "https://marcfors-finance.vercel.app"
+order: -2
 description: "Single-user metals, crypto and portfolio tracker with cost basis, alerts and optional Revolut X import."
 ---
 ## Problem
@@ -14,6 +16,8 @@ Personal metals, crypto and portfolio positions needed cost basis and alerts wit
 ## Approach
 
 A single-user Next.js app on Prisma and SQLite tracks metals, crypto and portfolio rows, raises alerts, and can optionally import from Revolut X.
+
+An Ask side chat answers questions about the whole page in English or Spanish. The server indexes a snapshot of every section — net worth, holdings, prices, alerts and every chart range — in my embedded-rag; Claude answers only from it, and each source chip scrolls to the card it cites. A wide golden eval checks citations, numbers and abstains.
 
 ## Result
 
