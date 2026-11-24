@@ -1,13 +1,4 @@
----
-project: "small-llm-in-c"
-stack:
-  - "C99"
-  - "AVX2"
-  - "Python"
-repo: "https://github.com/marcfs31/small-llm-in-c"
-order: 15
-description: "A from-scratch C99 inference engine that runs Qwen3.5-4B and Gemma 4 E4B on a 2016 desktop CPU with no GPU: about 4 tokens/s, verified against a float64 oracle. Source is public."
----
+# Kevin AI
 
 ## Problem
 
@@ -26,3 +17,10 @@ Around the engine sit `lm-chat`, an OpenAI-compatible `lm-serve` with streaming,
 Both models run on the real checkpoints on the target machine. Qwen3.5-4B in q8 generates 3.4 to 4.0 tokens/s and reads a prompt at 11.6 to 13.5 tokens/s; Gemma 4 E4B generates 2.8 to 3.1 tokens/s, at about 5 GiB resident. Replies read about 4.75 GB per token, so they are bound by memory bandwidth, not by the cores.
 
 Measuring found real problems. The first AVX2 kernels compiled to about three times more instructions than needed; batching the prompt so inputs stay in the L1 cache made the multiply 1.35x faster. A non-genuine power adapter had silently held the CPU at 800 MHz, which made every reply about three times slower until it was found and replaced. Speculative decoding with Qwen's own draft head accepted 78% of drafts yet ran at 0.91x the plain speed on this CPU, so it stays opt-in. Source is public under Apache-2.0, with the benchmark tooling that reproduces every number.
+
+## Links
+
+Stack: C99, AVX2, Python.
+Repo: https://github.com/marcfs31/kevin-ai
+Public source.
+Case study: /work/kevin-ai

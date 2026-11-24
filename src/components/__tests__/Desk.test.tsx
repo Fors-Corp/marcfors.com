@@ -75,11 +75,12 @@ describe("Desk", () => {
     expect(within(firstCard).getByText(copy.en.private)).toHaveClass("private");
   });
 
-  it("features Wordkeep second and Fors Photography third with case studies", () => {
+  it("features Wordkeep second, Kevin AI third and Fors Photography fourth with case studies", () => {
     renderDesk();
     const cards = document.querySelectorAll("#projects .project-card");
     const wordkeep = cards[1] as HTMLElement;
-    const photo = cards[2] as HTMLElement;
+    const kevin = cards[2] as HTMLElement;
+    const photo = cards[3] as HTMLElement;
     expect(within(wordkeep).getByRole("heading", { name: "Wordkeep" })).toBeInTheDocument();
     expect(within(wordkeep).getByRole("link", { name: /view live: wordkeep/i })).toHaveAttribute(
       "href",
@@ -88,6 +89,11 @@ describe("Desk", () => {
     expect(within(wordkeep).getByRole("link", { name: /case study for wordkeep/i })).toHaveAttribute(
       "href",
       "/work/wordkeep",
+    );
+    expect(within(kevin).getByRole("heading", { name: "Kevin AI" })).toBeInTheDocument();
+    expect(within(kevin).getByRole("link", { name: /case study for kevin ai/i })).toHaveAttribute(
+      "href",
+      "/work/kevin-ai",
     );
     expect(within(photo).getByRole("heading", { name: "Fors Photography" })).toBeInTheDocument();
     expect(within(photo).getByRole("link", { name: /view live: fors photography/i })).toHaveAttribute(

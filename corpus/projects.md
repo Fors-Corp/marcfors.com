@@ -14,6 +14,13 @@ Live: https://wordkeep.me
 Case study: /work/wordkeep
 Private source.
 
+## Kevin AI
+A from-scratch C99 inference engine that runs Qwen3.5-4B and Gemma 4 E4B on a 2016 desktop CPU with no GPU: about 4 tokens/s in q8, an OpenAI-compatible server, and every kernel checked against a float64 oracle.
+Stack: C99, AVX2, Python.
+Repo: https://github.com/marcfs31/kevin-ai
+Public source.
+Case study: /work/kevin-ai
+
 ## Fors Photography
 Marc’s print shop on forsphoto.com: 18 signed fine-art prints in four collections, from the Pacific coast, the desert Southwest and Europe, printed to order in four sizes. Six languages, Stripe-hosted checkout, no database, accounts or analytics.
 Stack: Next.js 16, React 19, Tailwind CSS, Stripe.
@@ -62,19 +69,6 @@ Stack: Next.js 16, Tailwind CSS, TypeScript.
 Live: https://ferretodo-lepant.vercel.app
 Private source.
 Case study: /work/ferretodo-lepant
-
-## Habit Breaker
-Weekly habit and schedule planner. Day templates, busy intervals, push reminders, Spanish/English, a public marketplace of routines.
-Stack: Next.js 16, Clerk, Neon, Drizzle.
-Live: https://habit-breaker-blush.vercel.app
-Private source.
-Case study: /work/habit-breaker
-
-## Agent Switchboard
-Local ops desk for Claude, Codex, Cursor and Grok sessions: last prompt, git dirt, Vercel health, encrypted env vault, a macOS menu extra.
-Stack: React, Express, Swift.
-Private source.
-Case study: /work/agent-switchboard
 
 ## fileshelf
 Smart file organizer with a polished terminal UI. Public source.
@@ -136,13 +130,6 @@ Configurable business management platform: sales, stock, users and cash register
 Stack: Next.js, TypeScript.
 Live: https://business-management-system-omega-sepia.vercel.app
 Private source.
-
-## small-llm-in-c
-A from-scratch C99 inference engine that runs Qwen3.5-4B and Gemma 4 E4B on a 2016 desktop CPU with no GPU: about 4 tokens/s in q8, an OpenAI-compatible server, and every kernel checked against a float64 oracle.
-Stack: C99, AVX2, Python.
-Repo: https://github.com/marcfs31/small-llm-in-c
-Public source.
-Case study: /work/small-llm-in-c
 
 ## MeditateIt
 Generative meditation soundscapes built live in the browser from noise, tones, beats and nature layers. An installable offline PWA in five languages and five themes; no accounts, no trackers, no audio files.
