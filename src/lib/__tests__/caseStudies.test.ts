@@ -102,9 +102,9 @@ describe("case studies", () => {
       const study = caseStudyBySlug("kevin-ai", locale);
       expect(study?.repo).toBe("https://github.com/marcfs31/kevin-ai");
       expect(study?.live).toBeUndefined();
-      expect(study?.stack).toEqual(["C99", "AVX2", "Python"]);
+      expect(study?.stack).toEqual(["C99", "AVX2", "Python", "Vite", "React", "TypeScript"]);
       const body = caseStudyBody("kevin-ai", locale)!;
-      for (const fact of ["Qwen3.5-4B", "Gemma 4 E4B", "float64", "Apache-2.0", "800 MHz", "5e-9", "1,35|1\\.35"]) {
+      for (const fact of ["Qwen3.5-4B", "Gemma 4 E4B", "float64", "Apache-2.0", "800 MHz", "5e-9", "1,35|1\\.35", "Vite", "React", "TypeScript", "Lighthouse"]) {
         expect(body, `${locale}: ${fact}`).toMatch(new RegExp(fact));
       }
       expect(body).not.toMatch(/@gmail\.com|mailto:|tel:/i);

@@ -4,6 +4,11 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+### Changed
+
+- Kevin AI's card and case study (all seven locales) now describe its Vite, React and
+  TypeScript chat interface and what it does.
+
 ## 0.30.0 — 2026-11-26
 
 ### Changed

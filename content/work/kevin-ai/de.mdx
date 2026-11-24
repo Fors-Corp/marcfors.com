@@ -4,6 +4,9 @@ stack:
   - "C99"
   - "AVX2"
   - "Python"
+  - "Vite"
+  - "React"
+  - "TypeScript"
 repo: "https://github.com/marcfs31/kevin-ai"
 order: 0.5
 description: "Eine von Grund auf in C99 geschriebene Inferenz-Engine, die Qwen3.5-4B und Gemma 4 E4B auf der CPU eines Desktops von 2016 ohne GPU ausführt: rund 4 Tokens/s, gegen ein float64-Orakel geprüft. Öffentlicher Quellcode."
@@ -20,6 +23,8 @@ Eine von Grund auf geschriebene C99-Engine mit rund 12.600 Zeilen, ohne BLAS und
 Korrektheit geht vor Geschwindigkeit. Jedes Modell besteht einen Golden-Test an einem winzigen synthetischen Checkpoint, geprüft gegen ein Python-Orakel in float64; das Gemma-Orakel stimmt mit Hugging Face transformers auf 5e-9 überein. Die AVX2- und NEON-Kernels werden bitweise mit dem skalaren Pfad verglichen, dazu kommen 26 Unit-Test-Dateien, Sanitizer-Builds und Shell-Tests für die Kommandozeilenwerkzeuge.
 
 Um die Engine herum liegen `lm-chat`, ein OpenAI-kompatibler `lm-serve` mit Streaming, ein Präfix-Cache, der einen gemeinsamen System-Prompt wiederherstellt statt ihn erneut zu verarbeiten, und `lm-quant`. Das Kontextfenster wird nach freiem Speicher gewählt, nicht per fester Konstante.
+
+Das Repository enthält auch die Chat-Oberfläche, die tatsächlich benutzt wird, in `web/`: eine App mit Vite, React und TypeScript, die mit `lm-serve` spricht. Gespräche bleiben nur im Browser; sie liest PDFs, Textdateien und Bilder, zeigt Markdown, Tabellen und Formeln an und lässt das Modell Werkzeuge nutzen, darunter MCP-Server, eine selbst gehostete Websuche und ein registriertes Projekt, in dem es lesen, bearbeiten und committen darf, mit Freigabekarten und Regeln, die der Eigentümer setzt und der Agent nicht ändern kann. Sie lädt keine Skripte oder Schriften von außen, führt axe in den Tests aus und erreicht in jeder Lighthouse-Kategorie 100, auf Desktop und Mobilgerät.
 
 ## Ergebnis
 

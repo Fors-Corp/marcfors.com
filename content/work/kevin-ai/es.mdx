@@ -4,6 +4,9 @@ stack:
   - "C99"
   - "AVX2"
   - "Python"
+  - "Vite"
+  - "React"
+  - "TypeScript"
 repo: "https://github.com/marcfs31/kevin-ai"
 order: 0.5
 description: "Un motor de inferencia en C99, escrito desde cero, que ejecuta Qwen3.5-4B y Gemma 4 E4B en la CPU de un sobremesa de 2016, sin GPU: unos 4 tokens/s, verificado contra un oráculo en float64. Código público."
@@ -20,6 +23,8 @@ Un motor en C99 escrito desde cero, de unas 12.600 líneas, sin BLAS ni framewor
 La corrección va antes que la velocidad. Cada modelo pasa una prueba dorada sobre un checkpoint sintético diminuto, contrastada con un oráculo en Python de float64; el oráculo de Gemma coincide con Hugging Face transformers hasta 5e-9. Los kernels AVX2 y NEON se comparan bit a bit con la ruta escalar, y hay 26 archivos de pruebas unitarias, compilaciones con sanitizadores y pruebas de shell para las herramientas de línea de comandos.
 
 Alrededor del motor hay `lm-chat`, un `lm-serve` compatible con OpenAI con streaming, una caché de prefijos que restaura un prompt de sistema compartido en lugar de volver a procesarlo, y `lm-quant`. La ventana de contexto se elige según la memoria libre, no con una constante fija.
+
+El repositorio incluye además la interfaz de chat que se usa de verdad, en `web/`: una app con Vite, React y TypeScript que habla con `lm-serve`. Las conversaciones se guardan solo en el navegador; lee PDF, archivos de texto e imágenes, muestra Markdown, tablas y fórmulas, y deja que el modelo use herramientas, entre ellas servidores MCP, una búsqueda web autoalojada y un proyecto registrado en el que puede leer, editar y hacer commits, con tarjetas de aprobación y reglas que fija el propietario y el agente no puede cambiar. No carga scripts ni fuentes remotas, ejecuta axe en sus tests y saca 100 en todas las categorías de Lighthouse, en escritorio y en móvil.
 
 ## Resultado
 
