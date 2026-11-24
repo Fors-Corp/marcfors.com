@@ -58,9 +58,21 @@ describe("Desk", () => {
     expect(within(nav).getByRole("link", { name: copy.en.askNav })).toHaveAttribute("href", "/ask");
   });
 
-  it("puts Embedded RAG first in featured work with live demo, private source and case study", () => {
+  it("puts Finance Dashboard first in featured work with case study and private source", () => {
     renderDesk();
-    const firstCard = document.querySelector("#projects .project-card") as HTMLElement;
+    const first = document.querySelector("#projects .project-card") as HTMLElement;
+    expect(within(first).getByRole("heading", { name: "Finance Dashboard" })).toBeInTheDocument();
+    expect(within(first).getByRole("link", { name: /case study for finance dashboard/i })).toHaveAttribute(
+      "href",
+      "/work/finance-dashboard",
+    );
+    expect(within(first).queryByRole("link", { name: /source code for finance dashboard/i })).toBeNull();
+    expect(within(first).getByText(copy.en.private)).toHaveClass("private");
+  });
+
+  it("puts Embedded RAG second in featured work with live demo, private source and case study", () => {
+    renderDesk();
+    const firstCard = document.querySelectorAll("#projects .project-card")[1] as HTMLElement;
     expect(firstCard).toBeTruthy();
     expect(within(firstCard).getByRole("heading", { name: "Embedded RAG" })).toBeInTheDocument();
     expect(within(firstCard).getByRole("link", { name: /view live: embedded rag/i })).toHaveAttribute(
@@ -75,12 +87,12 @@ describe("Desk", () => {
     expect(within(firstCard).getByText(copy.en.private)).toHaveClass("private");
   });
 
-  it("features Wordkeep second, Kevin AI third and Fors Photography fourth with case studies", () => {
+  it("features Wordkeep third, Kevin AI fourth and Fors Photography fifth with case studies", () => {
     renderDesk();
     const cards = document.querySelectorAll("#projects .project-card");
-    const wordkeep = cards[1] as HTMLElement;
-    const kevin = cards[2] as HTMLElement;
-    const photo = cards[3] as HTMLElement;
+    const wordkeep = cards[2] as HTMLElement;
+    const kevin = cards[3] as HTMLElement;
+    const photo = cards[4] as HTMLElement;
     expect(within(wordkeep).getByRole("heading", { name: "Wordkeep" })).toBeInTheDocument();
     expect(within(wordkeep).getByRole("link", { name: /view live: wordkeep/i })).toHaveAttribute(
       "href",

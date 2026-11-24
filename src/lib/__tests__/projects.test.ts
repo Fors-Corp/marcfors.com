@@ -52,9 +52,24 @@ describe("featured work", () => {
     }
   });
 
-  it("features Embedded RAG first in selected work without linking private source", () => {
-    expect(featured[0]?.name).toBe("Embedded RAG");
-    const embedded = featured[0];
+  it("features Finance Dashboard first, with its embedded-rag Ask chat and no private source link", () => {
+    const finance = featured[0];
+    expect(finance).toMatchObject({
+      name: "Finance Dashboard",
+      stack: ["Next.js", "Prisma", "SQLite", "Claude API"],
+      caseStudy: "finance-dashboard",
+      private: true,
+      spotlight: true,
+    });
+    expect(finance?.repo).toBeUndefined();
+    expect(finance?.live).toBe("https://marcfors-finance.vercel.app");
+    expect(Object.keys(finance!.blurb).sort()).toEqual(["ca", "de", "en", "es", "fr", "it", "pt"]);
+    for (const blurb of Object.values(finance!.blurb)) expect(blurb).toMatch(/embedded-rag/);
+  });
+
+  it("features Embedded RAG second in selected work without linking private source", () => {
+    expect(featured[1]?.name).toBe("Embedded RAG");
+    const embedded = featured[1];
     expect(embedded).toMatchObject({
       stack: ["Python", "React", "TypeScript", "Neon", "Claude API"],
       live: "https://embedded-rag.vercel.app",
@@ -71,8 +86,8 @@ describe("featured work", () => {
     }
   });
 
-  it("features Wordkeep second on its own domain, without exposing source", () => {
-    expect(featured.findIndex((item) => item.name === "Wordkeep")).toBe(1);
+  it("features Wordkeep third on its own domain, without exposing source", () => {
+    expect(featured.findIndex((item) => item.name === "Wordkeep")).toBe(2);
     const wordkeep = featured.find((item) => item.name === "Wordkeep");
     expect(wordkeep).toMatchObject({
       stack: ["React", "TypeScript", "Three.js", "Hono", "Claude API"],
