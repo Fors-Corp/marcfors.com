@@ -4,7 +4,9 @@ stack:
   - "Next.js"
   - "Prisma"
   - "SQLite"
-order: 11
+  - "Claude API"
+live: "https://marcfors-finance.vercel.app"
+order: -2
 description: "Painel mono-utilizador de metais, cripto e carteira com custo, alertas e importação opcional do Revolut X."
 ---
 ## Problema
@@ -14,6 +16,8 @@ Posições pessoais em metais, cripto e carteira precisavam de custo e alertas s
 ## Abordagem
 
 Uma app Next.js mono-utilizador sobre Prisma e SQLite regista metais, cripto e linhas de carteira, dispara alertas e pode importar opcionalmente do Revolut X.
+
+Um chat lateral responde a perguntas sobre toda a página em inglês ou espanhol. O servidor indexa um instantâneo de cada secção — património, posições, preços, alertas e cada intervalo dos gráficos — no meu embedded-rag; o Claude responde só a partir dele e cada fonte leva ao cartão citado. Um golden eval amplo verifica citações, números e recusas.
 
 ## Resultado
 

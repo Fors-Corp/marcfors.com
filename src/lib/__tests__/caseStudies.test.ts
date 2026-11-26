@@ -6,6 +6,7 @@ describe("case studies", () => {
   it("lists every case study, sorted by order", () => {
     const slugs = listCaseStudySlugs();
     expect(slugs).toEqual([
+      "finance-dashboard",
       "embedded-rag",
       "fors-photography",
       "kevin-ai",
@@ -17,7 +18,6 @@ describe("case studies", () => {
       "fors-corp",
       "ferretodo-lepant",
       "iterm-studio",
-      "finance-dashboard",
       "lmaas",
       "forsight",
       "fors-design-system",
