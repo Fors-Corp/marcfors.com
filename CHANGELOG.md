@@ -4,10 +4,18 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+## 0.30.0 — 2026-11-26
+
 ### Changed
 
+- Feature **Finance Dashboard** first in selected work, with its live demo and Ask chat.
 - Rename the **small-llm-in-c** entry to **Kevin AI** (repo `marcfs31/kevin-ai`) and move it
   to third in selected work.
+- Bump `simple-icons` to `^16.38.0` (Dependabot #135; minor, new icons only).
+- Bump `@testing-library/jest-dom` to `^8.0.0` (Dependabot #134; major, drops vitest < 5 only).
+- Bump the dev-minor group (Dependabot #132): `vitest` and `@vitest/coverage-v8` 5.1.1,
+  `@playwright/test` 1.65.1, `@testing-library/user-event` 14.6.13, `eslint` 10.15.0.
+- Bump `github/codeql-action` init/analyze to 4.39.4 (Dependabot #131).
 
 ### Removed
 
