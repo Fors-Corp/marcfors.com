@@ -27,7 +27,7 @@ describe("llms.txt", () => {
 
   it("states experience with Fors Corp as the current role and no stale Dynatrace claim", () => {
     const text = llmsTxt();
-    expect(text).toContain("Dec 2025 — present: AI Software Engineer, Fors Corp");
+    expect(text).toContain("Dec 2025 — present: CEO & CTO · AI Software Engineer, Fors Corp");
     expect(text).toContain("May 2022 — Nov 2025: Software Engineer, Dynatrace");
     expect(text).not.toMatch(/currently at Dynatrace/i);
     expect(text).toContain("## Education and languages");

@@ -1,5 +1,12 @@
 # Selected work
 
+## Fors Corp
+We build smart, accessible and secure technology. From AI and digital assets to cyber defence, Fors Corp builds for ever. forscorp.es is the company site: it audits online shops for accessibility (WCAG 2.2 AA), speed and basic compliance in about a minute, sends a plain-language report, and fixes what fails.
+Stack: Next.js 16, React 19, TypeScript.
+Live: https://forscorp.es
+Private source.
+Case study: /work/fors-corp
+
 ## Finance Dashboard
 Single-user metals, crypto and portfolio tracker with cost basis, interactive charts, price alerts, and optional Revolut X import. A floating Ask chat answers questions about the whole dashboard (holdings, prices, alerts and every chart) through embedded-rag, and each answer links to the card it came from. Read-only live demo with a sample €10,000 portfolio.
 Stack: Next.js, Prisma, SQLite, Claude API.
@@ -62,13 +69,6 @@ Stack: HTML5, CSS3, JavaScript.
 Live: https://cescju-prototype.vercel.app
 Private source.
 Case study: /work/francesc-cescju
-
-## Fors Corp
-Fors Corp's own storefront: websites and AI assistants for Barcelona clinics and advisory firms. Spanish, Catalan and English, statically prerendered, built on the Fors design system, with no cookies or analytics.
-Stack: Next.js 16, React 19, TypeScript.
-Live: https://forscorp.es
-Private source.
-Case study: /work/fors-corp
 
 ## FerreTodo Lepant
 A one-page site for a neighbourhood hardware store on Carrer de Lepant in the Eixample, Barcelona. Spanish, Catalan, English and French; a live open-now status, WhatsApp contact, a light and dark theme drawn from the shop sign, and a map that loads only on request.

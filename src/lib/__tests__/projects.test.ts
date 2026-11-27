@@ -52,8 +52,8 @@ describe("featured work", () => {
     }
   });
 
-  it("features Finance Dashboard first, with its embedded-rag Ask chat and no private source link", () => {
-    const finance = featured[0];
+  it("features Finance Dashboard second, with its embedded-rag Ask chat and no private source link", () => {
+    const finance = featured[1];
     expect(finance).toMatchObject({
       name: "Finance Dashboard",
       stack: ["Next.js", "Prisma", "SQLite", "Claude API"],
@@ -67,9 +67,9 @@ describe("featured work", () => {
     for (const blurb of Object.values(finance!.blurb)) expect(blurb).toMatch(/embedded-rag/);
   });
 
-  it("features Embedded RAG second in selected work without linking private source", () => {
-    expect(featured[1]?.name).toBe("Embedded RAG");
-    const embedded = featured[1];
+  it("features Embedded RAG third in selected work without linking private source", () => {
+    expect(featured[2]?.name).toBe("Embedded RAG");
+    const embedded = featured[2];
     expect(embedded).toMatchObject({
       stack: ["Python", "React", "TypeScript", "Neon", "Claude API"],
       live: "https://embedded-rag.vercel.app",
@@ -86,8 +86,8 @@ describe("featured work", () => {
     }
   });
 
-  it("features Wordkeep third on its own domain, without exposing source", () => {
-    expect(featured.findIndex((item) => item.name === "Wordkeep")).toBe(2);
+  it("features Wordkeep fourth on its own domain, without exposing source", () => {
+    expect(featured.findIndex((item) => item.name === "Wordkeep")).toBe(3);
     const wordkeep = featured.find((item) => item.name === "Wordkeep");
     expect(wordkeep).toMatchObject({
       stack: ["React", "TypeScript", "Three.js", "Hono", "Claude API"],
@@ -108,8 +108,9 @@ describe("featured work", () => {
     }
   });
 
-  it("features forscorp.es as live work, linking the site but never its private source", () => {
-    const fors = featured.find((item) => item.name === "Fors Corp");
+  it("features forscorp.es first, linking the site but never its private source", () => {
+    const fors = featured[0];
+    expect(fors?.name).toBe("Fors Corp");
     expect(fors).toMatchObject({
       stack: ["Next.js 16", "React 19", "TypeScript"],
       live: "https://forscorp.es",
@@ -118,8 +119,13 @@ describe("featured work", () => {
       spotlight: true,
     });
     expect(fors?.repo).toBeUndefined();
-    expect(fors?.blurb.en).toMatch(/Spanish, Catalan and English/);
-    expect(fors?.blurb.en).toMatch(/no cookies or analytics/);
+    expect(fors?.blurb.en).toMatch(/^We build smart, accessible and secure technology\./);
+    expect(fors?.blurb.en).toMatch(/From AI and digital assets to cyber defence, Fors Corp builds for ever\./);
+    expect(Object.keys(fors!.blurb).sort()).toEqual(["ca", "de", "en", "es", "fr", "it", "pt"]);
+    for (const blurb of Object.values(fors!.blurb)) {
+      expect(blurb).toContain("forscorp.es");
+      expect(blurb).toContain("WCAG 2.2 AA");
+    }
   });
 
   it("features the FranCesc & Cescju redesign as a prototype with a case study, never its private source", () => {

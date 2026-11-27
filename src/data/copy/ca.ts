@@ -1,5 +1,5 @@
 import { SITE_HOST } from "@/lib/site";
-import type { Job, UiCopy } from "./types";
+import type { CareerBreak, Job, UiCopy } from "./types";
 
 export const ui: UiCopy = {
   activity: {
@@ -197,9 +197,10 @@ export const experience: readonly Job[] = [
   },
 ];
 
-export const careerBreak: { when: string; body: string } = {
+export const careerBreak: CareerBreak = {
   when: "Des 2025 — present",
-  body: "Construint productes complets amb agents LLM com a equip d'entrega: design systems, un agent d'observabilitat, un servei de models que es reentrena sol. Obert a rols d'enginyeria d'IA i a feina a mida.",
+  title: "CEO i CTO · Enginyer de programari IA",
+  body: "Entrego programari de nivell de producció de cap a cap amb un flux dirigit per agents: 5.742 contribucions l'últim any, 428 pull requests i releases contínues que passen per CodeQL, controls d'accessibilitat i auditories de dependències. Construint Wordkeep, Mensura, Fors, Forsight i sistemes RAG que citen les fonts. Els agents escriuen el codi. Jo fixo les regles, reparteixo per risc i només fusiono el que sobreviu.",
 };
 
 export const education: readonly string[] = [

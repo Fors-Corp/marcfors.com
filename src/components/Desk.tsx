@@ -341,6 +341,7 @@ export function Desk({
               <article className="job job-now">
                 <div>
                   <div className="org">{t.breakTitle}</div>
+                  <div className="title">{careerBreak[locale].title}</div>
                   <div className="when">{careerBreak[locale].when}</div>
                 </div>
                 <p>
