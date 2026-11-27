@@ -15,7 +15,7 @@ export function PrintDesk({ locale }: { locale: Locale }) {
       <h2>{t.workTitle}</h2>
       <section>
         <h3>
-          {t.breakTitle} · {careerBreak[locale].when}
+          {t.breakTitle} — {careerBreak[locale].title} · {careerBreak[locale].when}
         </h3>
         <p>{careerBreak[locale].body}</p>
       </section>

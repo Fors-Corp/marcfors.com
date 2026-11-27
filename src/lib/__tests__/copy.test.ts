@@ -35,10 +35,20 @@ describe("locale copy", () => {
   it("leads with independent practice, not a current Dynatrace role", () => {
     expect(copy.en.breakTitle).toMatch(/independent practice/i);
     expect(careerBreak.en.when).toMatch(/Dec 2025/i);
-    expect(careerBreak.en.body).toMatch(/LLM agents/i);
+    expect(careerBreak.en.body).toMatch(/^I ship production-grade software end to end with an agent-driven workflow/);
+    expect(careerBreak.en.body).toMatch(/Agents write the code\. I set the rules, route by risk, and only merge what survives\.$/);
     expect(experience.en[0]?.org).toBe("Dynatrace");
     expect(experience.en[0]?.when).toMatch(/Nov 2025/);
     expect(`${careerBreak.en.body} ${experience.en[0]?.body}`).not.toMatch(/currently at Dynatrace/i);
+  });
+
+  it("lists CEO and CTO of Fors Corp first in the current role, in every locale", () => {
+    expect(careerBreak.en.title).toBe("CEO & CTO · AI Software Engineer");
+    for (const locale of LOCALES) {
+      expect(careerBreak[locale].title, locale).toMatch(/^CEO (&|y|i|e|et) CTO · /);
+      expect(careerBreak[locale].body, locale).toMatch(/Wordkeep, Mensura, Fors, Forsight/);
+      expect(careerBreak[locale].body, locale).toMatch(/428/);
+    }
   });
 
   it("makes recruiter and custom-work paths obvious", () => {

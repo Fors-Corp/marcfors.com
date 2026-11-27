@@ -61,7 +61,7 @@ function experienceSection(withPoints: boolean): string[] {
   ]);
   return [
     "## Experience",
-    `- ${careerBreak.en.when}: AI Software Engineer, Fors Corp (independent practice). ${careerBreak.en.body}`,
+    `- ${careerBreak.en.when}: ${careerBreak.en.title}, Fors Corp (independent practice). ${careerBreak.en.body}`,
     ...jobs,
     "",
     "## Education and languages",

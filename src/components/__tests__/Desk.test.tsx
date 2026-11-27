@@ -58,9 +58,33 @@ describe("Desk", () => {
     expect(within(nav).getByRole("link", { name: copy.en.askNav })).toHaveAttribute("href", "/ask");
   });
 
-  it("puts Finance Dashboard first in featured work with case study and private source", () => {
+  it("shows CEO & CTO of Fors Corp as the first, current role", () => {
+    renderDesk();
+    const now = document.querySelector("#work .job") as HTMLElement;
+    expect(now).toHaveClass("job-now");
+    expect(within(now).getByText(copy.en.breakTitle)).toBeInTheDocument();
+    expect(within(now).getByText("CEO & CTO · AI Software Engineer")).toHaveClass("title");
+    expect(now).toHaveTextContent(/Agents write the code/);
+  });
+
+  it("puts Fors Corp first in featured work, linking forscorp.es but never its private source", () => {
     renderDesk();
     const first = document.querySelector("#projects .project-card") as HTMLElement;
+    expect(within(first).getByRole("heading", { name: "Fors Corp" })).toBeInTheDocument();
+    expect(within(first).getByRole("link", { name: /view live: fors corp/i })).toHaveAttribute(
+      "href",
+      "https://forscorp.es",
+    );
+    expect(within(first).getByRole("link", { name: /case study for fors corp/i })).toHaveAttribute(
+      "href",
+      "/work/fors-corp",
+    );
+    expect(within(first).queryByRole("link", { name: /source code for fors corp/i })).toBeNull();
+  });
+
+  it("puts Finance Dashboard second in featured work with case study and private source", () => {
+    renderDesk();
+    const first = document.querySelectorAll("#projects .project-card")[1] as HTMLElement;
     expect(within(first).getByRole("heading", { name: "Finance Dashboard" })).toBeInTheDocument();
     expect(within(first).getByRole("link", { name: /case study for finance dashboard/i })).toHaveAttribute(
       "href",
@@ -70,9 +94,9 @@ describe("Desk", () => {
     expect(within(first).getByText(copy.en.private)).toHaveClass("private");
   });
 
-  it("puts Embedded RAG second in featured work with live demo, private source and case study", () => {
+  it("puts Embedded RAG third in featured work with live demo, private source and case study", () => {
     renderDesk();
-    const firstCard = document.querySelectorAll("#projects .project-card")[1] as HTMLElement;
+    const firstCard = document.querySelectorAll("#projects .project-card")[2] as HTMLElement;
     expect(firstCard).toBeTruthy();
     expect(within(firstCard).getByRole("heading", { name: "Embedded RAG" })).toBeInTheDocument();
     expect(within(firstCard).getByRole("link", { name: /view live: embedded rag/i })).toHaveAttribute(
@@ -87,12 +111,12 @@ describe("Desk", () => {
     expect(within(firstCard).getByText(copy.en.private)).toHaveClass("private");
   });
 
-  it("features Wordkeep third, Kevin AI fourth and Fors Photography fifth with case studies", () => {
+  it("features Wordkeep fourth, Kevin AI fifth and Fors Photography sixth with case studies", () => {
     renderDesk();
     const cards = document.querySelectorAll("#projects .project-card");
-    const wordkeep = cards[2] as HTMLElement;
-    const kevin = cards[3] as HTMLElement;
-    const photo = cards[4] as HTMLElement;
+    const wordkeep = cards[3] as HTMLElement;
+    const kevin = cards[4] as HTMLElement;
+    const photo = cards[5] as HTMLElement;
     expect(within(wordkeep).getByRole("heading", { name: "Wordkeep" })).toBeInTheDocument();
     expect(within(wordkeep).getByRole("link", { name: /view live: wordkeep/i })).toHaveAttribute(
       "href",

@@ -1,5 +1,5 @@
 import { SITE_HOST } from "@/lib/site";
-import type { Job, UiCopy } from "./types";
+import type { CareerBreak, Job, UiCopy } from "./types";
 
 export const ui: UiCopy = {
   activity: {
@@ -197,9 +197,10 @@ export const experience: readonly Job[] = [
   },
 ];
 
-export const careerBreak: { when: string; body: string } = {
+export const careerBreak: CareerBreak = {
   when: "Dic 2025 — presente",
-  body: "Costruisco prodotti completi con agenti LLM come team di consegna: design system, un agente di observability, un servizio di modelli che si riaddestra da solo. Aperto a ruoli di ingegneria IA e a lavoro su misura.",
+  title: "CEO e CTO · Ingegnere software IA",
+  body: "Porto software di livello produzione dall'inizio alla fine con un flusso guidato da agenti: 5.742 contributi nell'ultimo anno, 428 pull request e rilasci continui vincolati a CodeQL, controlli di accessibilità e audit delle dipendenze. Sto costruendo Wordkeep, Mensura, Fors, Forsight e sistemi RAG che citano le fonti. Gli agenti scrivono il codice. Io fisso le regole, smisto per rischio e unisco solo ciò che sopravvive.",
 };
 
 export const education: readonly string[] = [
