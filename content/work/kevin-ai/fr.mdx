@@ -4,6 +4,13 @@ stack:
   - "C99"
   - "AVX2"
   - "Python"
+  - "Vite"
+  - "React"
+  - "TypeScript"
+  - "Qwen3.5"
+  - "Gemma 4"
+  - "MCP"
+  - "SearXNG"
 repo: "https://github.com/marcfs31/kevin-ai"
 order: 0.5
 description: "Un moteur d'inférence en C99, écrit de zéro, qui exécute Qwen3.5-4B et Gemma 4 E4B sur le processeur d'un ordinateur de bureau de 2016, sans GPU : environ 4 tokens/s, vérifié contre un oracle en float64. Code source public."
@@ -20,6 +27,8 @@ Un moteur C99 écrit de zéro, d'environ 12 600 lignes, sans BLAS ni framework. 
 La justesse passe avant la vitesse. Chaque modèle réussit un test de référence sur un minuscule checkpoint synthétique, comparé à un oracle Python en float64 ; l'oracle de Gemma concorde avec Hugging Face transformers à 5e-9 près. Les noyaux AVX2 et NEON sont comparés bit à bit au chemin scalaire, avec 26 fichiers de tests unitaires, des builds sous sanitizers et des tests shell pour les outils en ligne de commande.
 
 Autour du moteur : `lm-chat`, un `lm-serve` compatible OpenAI avec streaming, un cache de préfixes qui restaure un prompt système partagé au lieu de le retraiter, et `lm-quant`. La fenêtre de contexte est choisie selon la mémoire libre, et non par une constante fixe.
+
+Le dépôt contient aussi l'interface de chat réellement utilisée, dans `web/` : une application Vite, React et TypeScript qui parle à `lm-serve`. Les conversations restent uniquement dans le navigateur ; elle lit PDF, fichiers texte et images, affiche Markdown, tableaux et formules, et laisse le modèle utiliser des outils, dont des serveurs MCP, une recherche web auto-hébergée et un projet enregistré où il peut lire, modifier et faire des commits, avec des cartes d'approbation et des règles que le propriétaire fixe et que l'agent ne peut pas changer. Elle ne charge ni scripts ni polices distants, exécute axe dans ses tests et obtient 100 dans chaque catégorie Lighthouse, sur ordinateur et mobile.
 
 ## Résultat
 

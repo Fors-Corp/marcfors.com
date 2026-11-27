@@ -12,6 +12,8 @@ Correctness comes before speed. Each model passes a golden gate on a tiny synthe
 
 Around the engine sit `lm-chat`, an OpenAI-compatible `lm-serve` with streaming, a prefix cache that restores a shared system prompt instead of feeding it again, and `lm-quant`. The context window is chosen from free memory rather than a fixed constant.
 
+The repository also holds the chat interface people actually use, in `web/`: a Vite, React and TypeScript app that talks to `lm-serve`. Conversations are kept in the browser only; it reads PDFs, text files and images, renders Markdown, tables and math, and lets the model use tools, including MCP servers, a self-hosted web search and a registered project it can read, edit and commit to, with approval cards and rules the owner sets and the agent cannot change. It loads no remote scripts or fonts, runs axe in its test suite, and scores 100 in every Lighthouse category on desktop and mobile.
+
 ## Result
 
 Both models run on the real checkpoints on the target machine. Qwen3.5-4B in q8 generates 3.4 to 4.0 tokens/s and reads a prompt at 11.6 to 13.5 tokens/s; Gemma 4 E4B generates 2.8 to 3.1 tokens/s, at about 5 GiB resident. Replies read about 4.75 GB per token, so they are bound by memory bandwidth, not by the cores.

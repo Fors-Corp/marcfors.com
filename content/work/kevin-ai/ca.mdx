@@ -4,6 +4,13 @@ stack:
   - "C99"
   - "AVX2"
   - "Python"
+  - "Vite"
+  - "React"
+  - "TypeScript"
+  - "Qwen3.5"
+  - "Gemma 4"
+  - "MCP"
+  - "SearXNG"
 repo: "https://github.com/marcfs31/kevin-ai"
 order: 0.5
 description: "Un motor d'inferència en C99, escrit des de zero, que executa Qwen3.5-4B i Gemma 4 E4B a la CPU d'un sobretaula de 2016, sense GPU: uns 4 tokens/s, verificat contra un oracle en float64. Codi públic."
@@ -20,6 +27,8 @@ Un motor en C99 escrit des de zero, d'unes 12.600 línies, sense BLAS ni framewo
 La correcció va abans que la velocitat. Cada model passa una prova daurada sobre un checkpoint sintètic minúscul, contrastada amb un oracle en Python de float64; l'oracle de Gemma coincideix amb Hugging Face transformers fins a 5e-9. Els kernels AVX2 i NEON es comparen bit a bit amb la ruta escalar, i hi ha 26 fitxers de proves unitàries, compilacions amb sanejadors i proves de shell per a les eines de línia d'ordres.
 
 Al voltant del motor hi ha `lm-chat`, un `lm-serve` compatible amb OpenAI amb streaming, una memòria cau de prefixos que restaura un prompt de sistema compartit en lloc de tornar-lo a processar, i `lm-quant`. La finestra de context s'escull segons la memòria lliure, no amb una constant fixa.
+
+El repositori inclou també la interfície de xat que s'usa de debò, a `web/`: una app amb Vite, React i TypeScript que parla amb `lm-serve`. Les converses es guarden només al navegador; llegeix PDF, fitxers de text i imatges, mostra Markdown, taules i fórmules, i deixa que el model faci servir eines, entre elles servidors MCP, una cerca web autoallotjada i un projecte registrat en què pot llegir, editar i fer commits, amb targetes d'aprovació i regles que fixa el propietari i l'agent no pot canviar. No carrega scripts ni fonts remots, executa axe als tests i treu 100 a totes les categories de Lighthouse, en escriptori i en mòbil.
 
 ## Resultat
 

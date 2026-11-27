@@ -4,6 +4,13 @@ stack:
   - "C99"
   - "AVX2"
   - "Python"
+  - "Vite"
+  - "React"
+  - "TypeScript"
+  - "Qwen3.5"
+  - "Gemma 4"
+  - "MCP"
+  - "SearXNG"
 repo: "https://github.com/marcfs31/kevin-ai"
 order: 0.5
 description: "A from-scratch C99 inference engine that runs Qwen3.5-4B and Gemma 4 E4B on a 2016 desktop CPU with no GPU: about 4 tokens/s, verified against a float64 oracle. Source is public."
@@ -20,6 +27,8 @@ A C99 engine written from scratch, about 12,600 lines, with no BLAS and no frame
 Correctness comes before speed. Each model passes a golden gate on a tiny synthetic checkpoint, checked against a float64 Python oracle; the Gemma oracle agrees with Hugging Face transformers to 5e-9. The AVX2 and NEON kernels are checked bit for bit against the scalar path, and there are 26 unit-test files, sanitizer builds and shell tests for the command-line tools.
 
 Around the engine sit `lm-chat`, an OpenAI-compatible `lm-serve` with streaming, a prefix cache that restores a shared system prompt instead of feeding it again, and `lm-quant`. The context window is chosen from free memory rather than a fixed constant.
+
+The repository also holds the chat interface people actually use, in `web/`: a Vite, React and TypeScript app that talks to `lm-serve`. Conversations are kept in the browser only; it reads PDFs, text files and images, renders Markdown, tables and math, and lets the model use tools, including MCP servers, a self-hosted web search and a registered project it can read, edit and commit to, with approval cards and rules the owner sets and the agent cannot change. It loads no remote scripts or fonts, runs axe in its test suite, and scores 100 in every Lighthouse category on desktop and mobile.
 
 ## Result
 
