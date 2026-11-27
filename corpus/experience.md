@@ -1,7 +1,7 @@
 # Experience
 
-## Fors Corp · AI Software Engineer · independent practice — Dec 2025 — present
-Building complete products with LLM agents as the delivery team — design systems, an observability agent, a self-retraining model service. Open to AI engineering roles and to custom app work. Open to remote roles.
+## Fors Corp · CEO & CTO · AI Software Engineer · independent practice — Dec 2025 — present
+I ship production-grade software end to end with an agent-driven workflow — 5,742 contributions in the last year, 428 pull requests, and continuous releases gated by CodeQL, accessibility checks and dependency audits. Building Wordkeep, Mensura, Fors, Forsight and citation-first RAG systems. Agents write the code. I set the rules, route by risk, and only merge what survives. Open to AI engineering roles and to custom app work. Open to remote roles.
 
 ## Dynatrace — Software Engineer — May 2022 — Nov 2025
 Frontend for Dashboards and Notebooks — Angular, then React and TypeScript. Owned work from technical design through release.

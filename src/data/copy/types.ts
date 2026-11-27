@@ -165,4 +165,7 @@ export type UiCopy = {
   };
 };
 
+/** The current Fors Corp role: `breakTitle` names the practice, `title` the roles held. */
+export type CareerBreak = { when: string; title: string; body: string };
+
 export type Job = { org: string; title: string; when: string; body: string; points: readonly string[] };

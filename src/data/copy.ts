@@ -1,5 +1,5 @@
 import type { Locale } from "@/lib/locale";
-import type { Job, UiCopy } from "@/data/copy/types";
+import type { CareerBreak, Job, UiCopy } from "@/data/copy/types";
 import * as en from "@/data/copy/en";
 import * as es from "@/data/copy/es";
 import * as ca from "@/data/copy/ca";
@@ -32,7 +32,7 @@ export const experience: Record<Locale, readonly Job[]> = {
   fr: fr.experience,
 };
 
-export const careerBreak: Record<Locale, { when: string; body: string }> = {
+export const careerBreak: Record<Locale, CareerBreak> = {
   en: en.careerBreak,
   es: es.careerBreak,
   ca: ca.careerBreak,

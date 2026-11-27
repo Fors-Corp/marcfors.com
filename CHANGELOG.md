@@ -4,6 +4,14 @@ All notable changes to this project are versioned with [SemVer](https://semver.o
 
 ## Unreleased
 
+### Changed
+
+- Feature **Fors Corp** (forscorp.es) first in selected work, with the company taglines and
+  its current offer (accessibility, speed and compliance audits for online shops).
+- The current role now lists **CEO & CTO** of Fors Corp first, ahead of AI Software Engineer,
+  with new copy on the agent-driven delivery workflow, in all seven locales, `llms.txt`,
+  the print view and the Ask corpus.
+
 ## 0.30.0 — 2026-11-26
 
 ### Changed

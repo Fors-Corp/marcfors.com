@@ -1,5 +1,5 @@
 import { SITE_HOST } from "@/lib/site";
-import type { Job, UiCopy } from "./types";
+import type { CareerBreak, Job, UiCopy } from "./types";
 
 export const ui: UiCopy = {
   activity: {
@@ -197,9 +197,10 @@ export const experience: readonly Job[] = [
   },
 ];
 
-export const careerBreak: { when: string; body: string } = {
+export const careerBreak: CareerBreak = {
   when: "Dez 2025 — heute",
-  body: "Ich baue vollständige Produkte mit LLM-Agenten als Lieferteam: Design-Systeme, einen Observability-Agenten, einen Modelldienst, der sich selbst neu trainiert. Offen für Rollen im KI-Engineering und für Auftragsarbeiten.",
+  title: "CEO & CTO · KI-Softwareingenieur",
+  body: "Ich liefere produktionsreife Software von Anfang bis Ende mit einem agentengesteuerten Workflow: 5.742 Beiträge im letzten Jahr, 428 Pull-Requests und laufende Releases, abgesichert durch CodeQL, Barrierefreiheitsprüfungen und Abhängigkeits-Audits. Ich baue Wordkeep, Mensura, Fors, Forsight und RAG-Systeme, die ihre Quellen zitieren. Agenten schreiben den Code. Ich setze die Regeln, verteile nach Risiko und merge nur, was besteht.",
 };
 
 export const education: readonly string[] = [

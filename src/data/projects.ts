@@ -14,6 +14,23 @@ export type Project = {
 
 export const featured: Project[] = [
   {
+    name: "Fors Corp",
+    blurb: {
+      en: "We build smart, accessible and secure technology. From AI and digital assets to cyber defence, Fors Corp builds for ever. forscorp.es is the company site: it audits online shops for accessibility (WCAG 2.2 AA), speed and basic compliance in about a minute, sends a plain-language report, and fixes what fails.",
+      es: "Construimos tecnología inteligente, accesible y segura. De la IA y los activos digitales a la ciberdefensa, Fors Corp construye para siempre. forscorp.es es la web de la empresa: audita tiendas online en accesibilidad (WCAG 2.2 AA), velocidad y cumplimiento básico en un minuto, envía un informe en lenguaje claro y corrige lo que falla.",
+      ca: "Construïm tecnologia intel·ligent, accessible i segura. De la IA i els actius digitals a la ciberdefensa, Fors Corp construeix per sempre. forscorp.es és el web de l'empresa: audita botigues en línia en accessibilitat (WCAG 2.2 AA), velocitat i compliment bàsic en un minut, envia un informe en llenguatge clar i corregeix el que falla.",
+      it: "Costruiamo tecnologia intelligente, accessibile e sicura. Dall'IA e dagli asset digitali alla cyberdifesa, Fors Corp costruisce per sempre. forscorp.es è il sito dell'azienda: verifica i negozi online su accessibilità (WCAG 2.2 AA), velocità e conformità di base in circa un minuto, invia un report in linguaggio chiaro e corregge ciò che non va.",
+      pt: "Construímos tecnologia inteligente, acessível e segura. Da IA e dos ativos digitais à ciberdefesa, a Fors Corp constrói para sempre. forscorp.es é o site da empresa: audita lojas online em acessibilidade (WCAG 2.2 AA), velocidade e conformidade básica em cerca de um minuto, envia um relatório em linguagem clara e corrige o que falha.",
+      de: "Wir bauen intelligente, barrierefreie und sichere Technologie. Von KI und digitalen Assets bis zur Cyberabwehr: Fors Corp baut für immer. forscorp.es ist die Firmenwebsite: Sie prüft Onlineshops in etwa einer Minute auf Barrierefreiheit (WCAG 2.2 AA), Geschwindigkeit und grundlegende Compliance, schickt einen verständlichen Bericht und behebt, was fehlschlägt.",
+      fr: "Nous construisons une technologie intelligente, accessible et sûre. De l’IA et des actifs numériques à la cyberdéfense, Fors Corp construit pour toujours. forscorp.es est le site de l’entreprise : il audite les boutiques en ligne en accessibilité (WCAG 2.2 AA), vitesse et conformité de base en une minute environ, envoie un rapport en langage clair et corrige ce qui échoue.",
+    },
+    stack: ["Next.js 16", "React 19", "TypeScript"],
+    live: "https://forscorp.es",
+    caseStudy: "fors-corp",
+    private: true,
+    spotlight: true,
+  },
+  {
     name: "Finance Dashboard",
     blurb: {
       en: "Single-user metals, crypto and portfolio tracker with cost basis, interactive charts, price alerts and optional Revolut X import. A floating Ask chat answers questions about the whole dashboard — holdings, prices, alerts and every chart — through my own embedded-rag, and each answer links to the card it came from.",
@@ -162,23 +179,6 @@ export const featured: Project[] = [
     stack: ["HTML5", "CSS3", "JavaScript"],
     live: "https://cescju-prototype.vercel.app",
     caseStudy: "francesc-cescju",
-    private: true,
-    spotlight: true,
-  },
-  {
-    name: "Fors Corp",
-    blurb: {
-      en: "Fors Corp's own storefront: websites and AI assistants for Barcelona clinics and advisory firms. Spanish, Catalan and English, statically prerendered, built on the Fors design system, with no cookies or analytics.",
-      es: "El escaparate de Fors Corp: webs y asistentes de IA para clínicas y gestorías de Barcelona. Castellano, catalán e inglés, prerenderizado estático, sobre el sistema de diseño Fors, sin cookies ni analítica.",
-      ca: "L'aparador de Fors Corp: webs i assistents d'IA per a clíniques i gestories de Barcelona. Castellà, català i anglès, prerenderitzat estàtic, sobre el sistema de disseny Fors, sense galetes ni analítica.",
-      it: "La vetrina di Fors Corp: siti web e assistenti IA per cliniche e studi di consulenza di Barcellona. Spagnolo, catalano e inglese, prerenderizzato staticamente, basato sul design system Fors, senza cookie né analytics.",
-      pt: "A montra da Fors Corp: sites e assistentes de IA para clínicas e gestorias de Barcelona. Espanhol, catalão e inglês, pré-renderizado de forma estática, sobre o design system Fors, sem cookies nem analítica.",
-      de: "Das Schaufenster von Fors Corp: Websites und KI-Assistenten für Kliniken und Steuerkanzleien in Barcelona. Spanisch, Katalanisch und Englisch, statisch vorgerendert, auf dem Fors-Designsystem aufgebaut, ohne Cookies und ohne Analytics.",
-      fr: "La vitrine de Fors Corp : sites web et assistants IA pour les cliniques et cabinets de conseil de Barcelone. Espagnol, catalan et anglais, prérendu statique, bâti sur le design system Fors, sans cookies ni analytics.",
-    },
-    stack: ["Next.js 16", "React 19", "TypeScript"],
-    live: "https://forscorp.es",
-    caseStudy: "fors-corp",
     private: true,
     spotlight: true,
   },
